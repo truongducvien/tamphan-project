@@ -12,18 +12,18 @@ import { textareaStyles } from './components/textarea';
 import { breakpoints } from './foundations/breakpoints';
 import { globalStyles } from './styles';
 
-const theme = extendTheme({
-	...{ breakpoints },
-	...globalStyles,
-	...badgeStyles,
-	...buttonStyles,
-	...linkStyles,
-	...progressStyles,
-	...sliderStyles,
-	...inputStyles,
-	...textareaStyles,
-	...switchStyles,
-	...CardComponent,
-});
+const theme = extendTheme(
+	{ breakpoints },
+	globalStyles,
+	badgeStyles,
+	buttonStyles,
+	linkStyles,
+	progressStyles,
+	sliderStyles,
+	inputStyles,
+	textareaStyles,
+	switchStyles,
+	CardComponent,
+);
 
 export default theme;

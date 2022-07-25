@@ -1,12 +1,9 @@
 // Chakra imports
 import React from 'react';
 
-import { Box, Flex, Icon, Text, BackgroundProps } from '@chakra-ui/react';
+import { Flex, BackgroundProps } from '@chakra-ui/react';
 import FixedPlugin from 'components/fixedPlugin/FixedPlugin';
 import Footer from 'components/footer/FooterAuth';
-import { FaChevronLeft } from 'react-icons/fa';
-import { NavLink } from 'react-router-dom';
-// Assets
 
 export interface Props {
 	illustrationBackground?: BackgroundProps['bg'];
@@ -14,7 +11,7 @@ export interface Props {
 }
 
 const AuthIllustration: React.FC<Props> = props => {
-	const { children, illustrationBackground } = props;
+	const { children } = props;
 	// Chakra color mode
 	return (
 		<Flex position="relative" h="max-content">
@@ -30,11 +27,11 @@ const AuthIllustration: React.FC<Props> = props => {
 				mx="auto"
 				pt={{ sm: '50px', md: '0px' }}
 				px={{ lg: '30px', xl: '0px' }}
-				ps={{ xl: '70px' }}
-				justifyContent="start"
+				justifyContent="center"
 				direction="column"
+				align="center"
 			>
-				<NavLink
+				{/* <NavLink
 					to="/admin"
 					style={() => ({
 						width: 'fit-content',
@@ -47,29 +44,8 @@ const AuthIllustration: React.FC<Props> = props => {
 							Back to Simmmple
 						</Text>
 					</Flex>
-				</NavLink>
+				</NavLink> */}
 				{children}
-				<Box
-					display={{ base: 'none', md: 'block' }}
-					h="100%"
-					minH="100vh"
-					w={{ lg: '50vw', '2xl': '44vw' }}
-					position="absolute"
-					right="0px"
-				>
-					<Flex
-						// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-						bg={`url(${illustrationBackground})`}
-						justify="center"
-						align="end"
-						w="100%"
-						h="100%"
-						bgSize="cover"
-						bgPosition="50%"
-						position="absolute"
-						borderBottomLeftRadius={{ lg: '120px', xl: '200px' }}
-					/>
-				</Box>
 				<Footer />
 			</Flex>
 			<FixedPlugin />

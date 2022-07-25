@@ -31,7 +31,7 @@ const SignIn: React.FC = () => {
 
 	const textColor = useColorModeValue('navy.700', 'white');
 	const textColorSecondary = 'gray.400';
-	const textColorDetails = useColorModeValue('navy.700', 'secondaryGray.600');
+	// const textColorDetails = useColorModeValue('navy.700', 'secondaryGray.600');
 	const textColorBrand = useColorModeValue('brand.500', 'white');
 	const brandStars = useColorModeValue('brand.500', 'brand.400');
 	const googleBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.200');
@@ -48,7 +48,7 @@ const SignIn: React.FC = () => {
 				mx={{ base: 'auto', lg: '0px' }}
 				me="auto"
 				h="100%"
-				alignItems="start"
+				alignItems="center"
 				justifyContent="center"
 				mb={{ base: '30px', md: '60px' }}
 				px={{ base: '25px', md: '0px' }}
@@ -152,7 +152,7 @@ const SignIn: React.FC = () => {
 							Sign In
 						</Button>
 					</FormControl>
-					<Flex flexDirection="column" justifyContent="center" alignItems="start" maxW="100%" mt="0px">
+					{/* <Flex flexDirection="column" justifyContent="center" alignItems="start" maxW="100%" mt="0px">
 						<Text color={textColorDetails} fontWeight="400" fontSize="14px">
 							Not registered yet?
 							<NavLink to="/auth/sign-up">
@@ -161,7 +161,7 @@ const SignIn: React.FC = () => {
 								</Text>
 							</NavLink>
 						</Text>
-					</Flex>
+					</Flex> */}
 				</Flex>
 			</Flex>
 		</DefaultAuth>

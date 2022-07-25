@@ -28,7 +28,7 @@ export const inputStyles = {
 					field: {
 						fontWeight: '500',
 						color: mode('navy.700', 'white')(props),
-						bg: mode('transparent', 'transparent')(props),
+						bg: mode('gray.50', 'transparent')(props),
 						border: '1px solid',
 						borderColor: mode('secondaryGray.100', 'rgba(135, 140, 189, 0.3)')(props),
 						borderRadius: '16px',
