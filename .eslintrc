@@ -1,0 +1,91 @@
+{
+	"root": true,
+	"extends": [
+		"eslint:recommended",
+		"airbnb",
+		"airbnb-typescript",
+		"airbnb/hooks",
+		"plugin:react/jsx-runtime",
+		"plugin:prettier/recommended"
+	],
+	"plugins": [
+		"prettier",
+		"react",
+		"react-hooks",
+		"import" // eslint-plugin-import for custom configure
+	],
+	"parserOptions": {
+		"project": "./tsconfig.eslint.json"
+	},
+	// Limit TypeScript linting to TS/TSX
+	// https://github.com/typescript-eslint/typescript-eslint/issues/1928
+	"overrides": [
+		{
+			"files": ["src/**/*.{ts,tsx}"],
+			"extends": [
+				"plugin:@typescript-eslint/recommended",
+				"plugin:@typescript-eslint/recommended-requiring-type-checking"
+			],
+			"parser": "@typescript-eslint/parser",
+			"rules": {
+				"@typescript-eslint/no-unused-vars": [1],
+				"@typescript-eslint/explicit-module-boundary-types": 0,
+				"@typescript-eslint/no-floating-promises": 0,
+				"@typescript-eslint/no-loop-func": 0
+			}
+		}
+	],
+	"rules": {
+		"no-restricted-syntax": 0,
+		"no-param-reassign": 0,
+		"no-console": 1,
+		"no-tabs": 0,
+		"react/jsx-indent": ["error", "tab"],
+		"react/jsx-indent-props": ["error", "tab"],
+		"react/jsx-props-no-spreading": 0,
+		"react/no-array-index-key": 0,
+		"no-nested-ternary": 0,
+		"react/require-default-props": 0,
+		"react/no-unused-prop-types":0,
+		"react/forbid-elements": [
+			2,
+			{
+				"forbid": [
+					{
+						"element": "a",
+						"message": "use components/Utils/link instead"
+					}
+				]
+			}
+		],
+		"react/function-component-definition": 0,
+		"react/prop-types": 0,
+		"react/default-props-match-prop-types": 0,
+		"import/prefer-default-export": 0,
+		"import/no-extraneous-dependencies": [
+			"error",
+			{
+				"devDependencies": ["**/*.stories.tsx", "**/storybook.test.ts", "**/setupTests.ts"]
+			}
+		],
+		"import/order": [
+			2,
+			{
+				"groups": ["builtin", "external", "internal"],
+				"pathGroups": [
+					{
+						"pattern": "react",
+						"group": "external",
+						"position": "before"
+					}
+				],
+				"pathGroupsExcludedImportTypes": ["react"],
+				"newlines-between": "always",
+				"alphabetize": {
+					"order": "asc",
+					"caseInsensitive": true
+				}
+			}
+		]
+	}
+}
