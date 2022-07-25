@@ -6,8 +6,6 @@ import {
 	Button,
 	Flex,
 	Icon,
-	Image,
-	Link,
 	Menu,
 	MenuButton,
 	MenuItem,
@@ -17,13 +15,12 @@ import {
 	useColorMode,
 } from '@chakra-ui/react';
 // Custom Components
-import navImage from 'assets/img/layout/Navbar.png';
 import ItemContent from 'components/menu/ItemContent';
 import SearchBar from 'components/navbar/searchBar/SearchBar';
 // Assets
 import { FaEthereum } from 'react-icons/fa';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
-import { MdNotificationsNone, MdInfoOutline } from 'react-icons/md';
+import { MdNotificationsNone } from 'react-icons/md';
 
 export interface Props {
 	variant?: string;
@@ -50,7 +47,6 @@ const HeaderLinks: React.FC<Props> = props => {
 		'14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
 		'14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
 	);
-	const borderButton = useColorModeValue('secondaryGray.500', 'whiteAlpha.200');
 	return (
 		<Flex
 			w={{ sm: '100%', md: 'auto' }}
