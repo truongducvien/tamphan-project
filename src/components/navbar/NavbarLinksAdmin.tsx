@@ -20,12 +20,10 @@ import {
 import navImage from 'assets/img/layout/Navbar.png';
 import ItemContent from 'components/menu/ItemContent';
 import SearchBar from 'components/navbar/searchBar/SearchBar';
-import { SidebarResponsive } from 'components/sidebar/Sidebar';
 // Assets
 import { FaEthereum } from 'react-icons/fa';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { MdNotificationsNone, MdInfoOutline } from 'react-icons/md';
-import routes from 'routes';
 
 export interface Props {
 	variant?: string;
@@ -85,7 +83,6 @@ const HeaderLinks: React.FC<Props> = props => {
 					</Text>
 				</Text>
 			</Flex>
-			<SidebarResponsive routes={routes} />
 			<Menu>
 				<MenuButton p="0px">
 					<Icon mt="6px" as={MdNotificationsNone} color={navbarIcon} w="18px" h="18px" me="10px" />

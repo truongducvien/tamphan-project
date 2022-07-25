@@ -10,7 +10,7 @@ import {
 	PaginationContainer,
 	PaginationSeparator,
 } from '@ajna/pagination';
-import { Icon, Select } from '@chakra-ui/react';
+import { Icon, Select, useColorModeValue } from '@chakra-ui/react';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 
 const PAGE_SIZE_OPTIONS = [
@@ -64,6 +64,12 @@ const Pagination = ({
 		onPageChange?.(nextPage);
 	};
 
+	const textColor = useColorModeValue('black', 'white');
+	const activeTextColor = useColorModeValue('white', 'white');
+
+	const bgColor = useColorModeValue('secondaryGray.400', 'made.black');
+	const acticeBgColor = useColorModeValue('blue.500', 'blue.800');
+
 	if (isHidden) return null;
 
 	return (
@@ -88,13 +94,11 @@ const Pagination = ({
 				<PaginationPrevious
 					data-testid="previous-button"
 					disabled={!hasPreviousPage}
-					color="white"
-					bg="made.black"
+					color={textColor}
+					bg="made.100"
 					_hover={{ bg: 'made.80' }}
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					leftIcon={<Icon as={ChevronLeft} />}
 					size="lg"
-					onClick={() => console.warn("I'm clicking the previous")}
 					mr={1}
 				/>
 				<PaginationPageGroup
@@ -103,11 +107,10 @@ const Pagination = ({
 					separator={
 						<PaginationSeparator
 							isDisabled={!hasNextPage && !hasPreviousPage}
-							onClick={() => console.warn("I'm clicking the separator")}
-							color="white"
-							bg="made.black"
+							color={textColor}
+							bg={bgColor}
 							_hover={{ bg: 'made.80' }}
-							size="lg"
+							size="md"
 							w={7}
 							jumpSize={1}
 						/>
@@ -117,16 +120,17 @@ const Pagination = ({
 						<PaginationPage
 							key={`pagination_page_${page}`}
 							page={page}
-							onClick={() => console.warn('Im clicking the page')}
-							size="lg"
+							size="md"
 							fontSize="sm"
-							w="10"
+							w={10}
+							bg={bgColor}
 							_hover={{ bg: 'made.80' }}
 							_current={{
-								bg: 'made.black',
+								color: activeTextColor,
+								bg: acticeBgColor,
 								fontSize: 'sm',
-								color: 'white',
-								w: 7,
+								size: 'lg',
+								w: 10,
 							}}
 						/>
 					))}
@@ -134,9 +138,8 @@ const Pagination = ({
 				<PaginationNext
 					data-testid="next-button"
 					isDisabled={!hasNextPage}
-					onClick={() => console.warn("I'm clicking the next")}
-					color="white"
-					bg="made.black"
+					color={textColor}
+					bg="mediumslateblue.100"
 					_hover={{ bg: 'made.80' }}
 					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					rightIcon={<Icon as={ChevronRight} />}

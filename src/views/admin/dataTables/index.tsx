@@ -68,7 +68,6 @@ const Settings: React.FC = () => {
 						keyField="name"
 						columns={COLUMNS}
 						data={pokemons}
-						loading
 						pagination={{
 							total: Number(pageInfo?.total || 0),
 							pageSize: currentPageSize,
@@ -77,7 +76,6 @@ const Settings: React.FC = () => {
 							hasPreviousPage: pageInfo?.hasPreviousPage,
 							onPageChange: page => setCurrentPage(page),
 							onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
-							//  isHidden: pageInfo?.pageSize < currentPageSize,
 						}}
 					/>
 				</Card>

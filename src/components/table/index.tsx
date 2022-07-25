@@ -1,6 +1,19 @@
 import { useState, useEffect } from 'react';
 
-import { Table as ChakraTable, Thead, Tbody, Tr, Th, Td, Flex, Spinner, Center, Container } from '@chakra-ui/react';
+import {
+	Table as ChakraTable,
+	Thead,
+	Tbody,
+	Tr,
+	Th,
+	Td,
+	Flex,
+	Spinner,
+	Center,
+	Container,
+	useColorModeValue,
+	Text,
+} from '@chakra-ui/react';
 import Pagination, { PaginationProps } from 'components/pagination';
 
 type TableProps<T> = {
@@ -47,6 +60,8 @@ const Table = <T extends Record<string, string>>({
 		setSelectedKeys(toggleAllRowsSelected === true ? data.map(row => row[keyField]) : []);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [toggleAllRowsSelected]);
+	const textColor = useColorModeValue('secondaryGray.900', 'white');
+	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
 
 	return (
 		<Flex
@@ -60,11 +75,13 @@ const Table = <T extends Record<string, string>>({
 			boxSizing="border-box"
 		>
 			<ChakraTable variant="unstyled">
-				<Thead>
+				<Thead borderBottomColor={borderColor} borderBottomWidth={1}>
 					{columns && (
 						<Tr>
 							{columns.map((column, index) => (
-								<Th key={index}>{column.label}</Th>
+								<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" key={index}>
+									{column.label}
+								</Th>
 							))}
 						</Tr>
 					)}
@@ -84,7 +101,11 @@ const Table = <T extends Record<string, string>>({
 									data-testid={`row-${index}`}
 								>
 									{columns.map((column, colIndex) => (
-										<Td key={`${index}${colIndex}`}>{column.key ? row[column.key] : ''}</Td>
+										<Td key={`${index}${colIndex}`}>
+											<Text color={textColor} fontSize="sm" fontWeight="700">
+												{column.key ? row[column.key] : ''}
+											</Text>
+										</Td>
 									))}
 								</Tr>
 							);
