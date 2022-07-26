@@ -21,7 +21,7 @@ export const buttonStyles = {
 					borderRadius: '16px',
 				}),
 				brand: (props: StyleFunctionProps | Dict<string>) => ({
-					bg: mode('brand.500', 'brand.400')(props),
+					bg: mode('brand.500', 'brand.900')(props),
 					color: 'white',
 					_focus: {
 						bg: mode('brand.500', 'brand.400')(props),

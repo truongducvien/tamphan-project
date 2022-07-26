@@ -74,7 +74,7 @@ const Table = <T extends DataTable>({
 		setSelectedKeys(toggleAllRowsSelected === true ? data.map(row => row[keyField] as string) : []);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [toggleAllRowsSelected]);
-	const textColor = useColorModeValue('secondaryGray.900', 'white');
+	const textColor = useColorModeValue('secondaryGray.900', 'whiteSmoke.100');
 	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
 	const iconDelete = useColorModeValue('red.300', 'red.800');
 	return (

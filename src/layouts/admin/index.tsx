@@ -7,11 +7,14 @@ import Footer from 'components/footer/FooterAdmin';
 import Navbar from 'components/navbar/NavbarAdmin';
 import Sidebar from 'components/sidebar/Sidebar';
 import { SidebarContext } from 'contexts/SidebarContext';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import routes, { Route as RootRoute } from 'routes';
 
 // Custom Chakra theme
 const Dashboard: React.FC = props => {
+	const {
+		location: { pathname },
+	} = useHistory();
 	const { ...rest } = props;
 	// states and functions
 	const [fixed] = useState(false);
@@ -33,8 +36,10 @@ const Dashboard: React.FC = props => {
 				if (categoryActiveRoute !== activeRoute) {
 					return categoryActiveRoute;
 				}
-			} else if (window.location.href.indexOf(element.layout + element.path) !== -1) {
+			} else if (pathname === element.layout + element.path) {
 				return element.name;
+			} else if (element.items) {
+				return getActiveRoute(element?.items);
 			}
 		}
 		return activeRoute;
@@ -80,7 +85,23 @@ const Dashboard: React.FC = props => {
 	const getRoutes = (r: RootRoute[]): React.ReactNode => {
 		return r.map((prop, key) => {
 			if (prop.layout === '/admin') {
-				return <Route path={prop.layout + prop.path} component={prop.component} key={key} />;
+				if (prop.items) {
+					const routers = getRoutes(prop.items);
+					return (
+						<Route
+							path={prop.layout + prop.path}
+							render={({ match: { path } }) => (
+								<Switch>
+									<Route exact path={`${path}/`} component={prop.component} />
+									{routers}
+									<Redirect from={`${path}/*`} to={path} />
+								</Switch>
+							)}
+							key={key}
+						/>
+					);
+				}
+				return <Route exact path={prop.layout + prop.path} component={prop.component} key={key} />;
 			}
 			if (prop.collapse) {
 				return getRoutes(prop?.items || []);

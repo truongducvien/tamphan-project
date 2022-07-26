@@ -3,8 +3,10 @@ import React from 'react';
 import { Icon } from '@chakra-ui/react';
 import { FaUserAlt } from 'react-icons/fa';
 import { MdBarChart, MdLock } from 'react-icons/md';
+import { patchs } from 'variables/patch';
 import DataTables from 'views/admin/dataTables';
 import UserManagement from 'views/admin/userManangement';
+import UserManagementDetail from 'views/admin/userManangement/Detail';
 import SignInCentered from 'views/auth/signIn';
 
 export interface Route {
@@ -25,26 +27,26 @@ const routes: Route[] = [
 	{
 		name: 'Quản lí người dùng',
 		layout: '/admin',
-		path: '/user',
+		path: `/users`,
 		icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
 		component: UserManagement,
 		items: [
 			{
 				name: 'Thêm mới người dùng',
 				layout: '/admin',
-				path: '/user/create',
+				path: `/users/create`,
 				icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
-				component: UserManagement,
+				component: UserManagementDetail,
 			},
 		],
 	},
-	{
-		name: 'Data Tables',
-		layout: '/admin',
-		icon: <Icon as={MdBarChart} width="20px" height="20px" color="inherit" />,
-		path: '/data-tables',
-		component: DataTables,
-	},
+	// {
+	// 	name: 'Data Tables',
+	// 	layout: '/admin',
+	// 	icon: <Icon as={MdBarChart} width="20px" height="20px" color="inherit" />,
+	// 	path: '/data-tables',
+	// 	component: DataTables,
+	// },
 	{
 		name: 'Sign In',
 		layout: '/auth',
