@@ -74,7 +74,7 @@ const Pagination = ({
 
 	return (
 		<ChakraPagination pagesCount={total} currentPage={currentPage} onPageChange={handlePageChange}>
-			<PaginationContainer mt={5} align="center" justify="center" p={4} w="full">
+			<PaginationContainer mt={5} align="center" justify="center" w="full">
 				<Select
 					data-testid="page-size-dropdown"
 					onChange={handlePageSizeChange}

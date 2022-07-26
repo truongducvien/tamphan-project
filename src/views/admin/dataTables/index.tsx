@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, SimpleGrid } from '@chakra-ui/react';
 import Card from 'components/card/Card';
-import Table from 'components/table';
+import Table, { IColumn } from 'components/table';
 import { Column } from 'react-table';
 import CheckTable from 'views/admin/dataTables/components/CheckTable';
 import ColumnsTable from 'views/admin/dataTables/components/ColumnsTable';
@@ -23,14 +23,10 @@ const Settings: React.FC = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
 
-	const [pokemons, setPokemons] = useState<{ name: string }[]>([]);
+	const [pokemons, setPokemons] = useState<{ name: string; url: string }[]>([]);
 	const [pageInfo, setPageInfo] = useState<{ total: string; hasNextPage: boolean; hasPreviousPage: boolean } | null>(
 		null,
 	);
-
-	const selectedPokemons = useMemo(() => {
-		return pokemons?.filter(item => selectedKeys.indexOf(item.name) !== -1);
-	}, [pokemons, selectedKeys]);
 
 	const handleSelectionChange = (s: string[]) => {
 		setSelectedKeys(s);
@@ -39,18 +35,16 @@ const Settings: React.FC = () => {
 	useEffect(() => {
 		fetchPokemons(currentPageSize, currentPage)
 			.then(p => {
-				console.log(p);
-
 				setPageInfo({
 					total: p.count,
 					hasNextPage: p.next !== null,
 					hasPreviousPage: p.previous !== null,
 				});
-				setPokemons(p.results as unknown as { name: string }[]);
+				setPokemons(p.results as unknown as { name: string; url: string }[]);
 			})
 			.catch(error => console.error('App =>', error));
 	}, [currentPage, currentPageSize]);
-	const COLUMNS = [
+	const COLUMNS: Array<IColumn<{ name: string; url: string }>> = [
 		{ key: 'name', label: 'Name' },
 		{ key: 'url', label: 'url' },
 	];

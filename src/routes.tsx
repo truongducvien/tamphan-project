@@ -1,8 +1,10 @@
 import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
+import { FaUserAlt } from 'react-icons/fa';
 import { MdBarChart, MdLock } from 'react-icons/md';
 import DataTables from 'views/admin/dataTables';
+import UserManagement from 'views/admin/userManangement';
 import SignInCentered from 'views/auth/signIn';
 
 export interface Route {
@@ -20,28 +22,22 @@ export interface Route {
 }
 
 const routes: Route[] = [
-	// {
-	//   name: "Main Dashboard",
-	//   layout: "/admin",
-	//   path: "/default",
-	//   icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
-	//   component: MainDashboard,
-	// },
-	// {
-	//   name: "NFT Marketplace",
-	//   layout: "/admin",
-	//   path: "/nft-marketplace",
-	//   icon: (
-	//     <Icon
-	//       as={MdOutlineShoppingCart}
-	//       width="20px"
-	//       height="20px"
-	//       color="inherit"
-	//     />
-	//   ),
-	//   component: NFTMarketplace,
-	//   secondary: true,
-	// },
+	{
+		name: 'Quản lí người dùng',
+		layout: '/admin',
+		path: '/user',
+		icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
+		component: UserManagement,
+		items: [
+			{
+				name: 'Thêm mới người dùng',
+				layout: '/admin',
+				path: '/user/create',
+				icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
+				component: UserManagement,
+			},
+		],
+	},
 	{
 		name: 'Data Tables',
 		layout: '/admin',
@@ -49,13 +45,6 @@ const routes: Route[] = [
 		path: '/data-tables',
 		component: DataTables,
 	},
-	// {
-	//   name: "Profile",
-	//   layout: "/admin",
-	//   path: "/profile",
-	//   icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
-	//   component: Profile,
-	// },
 	{
 		name: 'Sign In',
 		layout: '/auth',
@@ -63,13 +52,6 @@ const routes: Route[] = [
 		icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
 		component: SignInCentered,
 	},
-	// {
-	//   name: "RTL Admin",
-	//   layout: "/rtl",
-	//   path: "/rtl-default",
-	//   icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-	//   component: RTL,
-	// },
 ];
 
 export default routes;
