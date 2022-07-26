@@ -81,7 +81,6 @@ const Pagination = ({
 					size="md"
 					ml={1}
 					value={pageSize === total ? 'ALL' : pageSize}
-					bg="made.5"
 					_hover={{ bg: 'made.80' }}
 					width={70}
 				>

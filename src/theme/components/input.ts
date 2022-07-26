@@ -12,16 +12,16 @@ export const inputStyles = {
 			},
 
 			variants: {
-				main: (props: StyleFunctionProps | Dict<string>) => ({
+				admin: (props: StyleFunctionProps | Dict<string>) => ({
 					field: {
-						bg: mode('transparent', 'navy.800')(props),
+						bg: mode('white', 'navy.900')(props),
 						border: '1px solid',
 						color: mode('secondaryGray.900', 'white')(props),
 						borderColor: mode('secondaryGray.100', 'whiteAlpha.100')(props),
 						borderRadius: '16px',
 						fontSize: 'sm',
 						p: '20px',
-						_placeholder: { color: 'secondaryGray.400' },
+						_placeholder: mode('secondaryGray.100', 'whiteAlpha.100')(props),
 					},
 				}),
 				auth: (props: StyleFunctionProps | Dict<string>) => ({
@@ -110,9 +110,9 @@ export const inputStyles = {
 			},
 
 			variants: {
-				main: (props: StyleFunctionProps | Dict<string>) => ({
+				admin: (props: StyleFunctionProps | Dict<string>) => ({
 					field: {
-						bg: mode('transparent', 'navy.800')(props),
+						bg: mode('white', 'navy.900')(props),
 						border: '1px solid',
 						color: 'secondaryGray.600',
 						borderColor: mode('secondaryGray.100', 'whiteAlpha.100')(props),
