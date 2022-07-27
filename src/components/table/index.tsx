@@ -12,6 +12,7 @@ import {
 	useColorModeValue,
 	Text,
 	Icon,
+	HStack,
 } from '@chakra-ui/react';
 import Pagination, { PaginationProps } from 'components/pagination';
 import { FaTrashAlt } from 'react-icons/fa';
@@ -128,14 +129,14 @@ const Table = <T extends DataTable>({
 									))}
 									{action && (
 										<Td>
-											<Flex justify="space-evenly" align="center">
+											<HStack justify="center" align="center">
 												{action.includes(PermistionActionBase.EDIT) && (
 													<Icon onClick={() => onClickEdit?.(row)} as={MdBorderColor} />
 												)}
 												{action.includes(PermistionActionBase.DETETE) && (
 													<Icon as={FaTrashAlt} onClick={() => onClickDelete?.(row)} color={iconDelete} />
 												)}
-											</Flex>
+											</HStack>
 										</Td>
 									)}
 								</Tr>
