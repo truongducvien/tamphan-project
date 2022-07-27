@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
-import { FaUserAlt } from 'react-icons/fa';
-import { MdBarChart, MdLock } from 'react-icons/md';
-import { patchs } from 'variables/patch';
-import DataTables from 'views/admin/dataTables';
+import { FaBuilding, FaUserAlt } from 'react-icons/fa';
+import { MdLock } from 'react-icons/md';
+import OfficeManagement from 'views/admin/office';
 import UserManagement from 'views/admin/userManangement';
 import UserManagementDetail from 'views/admin/userManangement/Detail';
 import SignInCentered from 'views/auth/signIn';
@@ -39,6 +38,13 @@ const routes: Route[] = [
 				component: UserManagementDetail,
 			},
 		],
+	},
+	{
+		name: 'Quản lí Đơn vị',
+		layout: '/admin',
+		path: `/office`,
+		icon: <Icon as={FaBuilding} width="20px" height="20px" color="inherit" />,
+		component: OfficeManagement,
 	},
 	// {
 	// 	name: 'Data Tables',
