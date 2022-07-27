@@ -3,6 +3,7 @@ import { extendTheme } from '@chakra-ui/react';
 import { CardComponent } from './additions/card/card';
 import { badgeStyles } from './components/badge';
 import { buttonStyles } from './components/button';
+import { headingStyles } from './components/heading';
 import { inputStyles } from './components/input';
 import { linkStyles } from './components/link';
 import { progressStyles } from './components/progress';
@@ -18,6 +19,7 @@ const theme = extendTheme(
 	badgeStyles,
 	buttonStyles,
 	linkStyles,
+	headingStyles,
 	progressStyles,
 	sliderStyles,
 	inputStyles,

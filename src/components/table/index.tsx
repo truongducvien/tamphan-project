@@ -97,7 +97,7 @@ const Table = <T extends DataTable>({
 									{column.label}
 								</Th>
 							))}
-							{action && <Th>Actions</Th>}
+							{action && <Th textAlign="center">Actions</Th>}
 						</Tr>
 					)}
 				</Thead>

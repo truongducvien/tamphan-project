@@ -24,7 +24,7 @@ const Dashboard: React.FC = props => {
 		return window.location.pathname !== '/admin/full-screen-maps';
 	};
 	const getActiveRoute = (r: RootRoute[]): string => {
-		const activeRoute = 'Default Brand Text';
+		const activeRoute = '';
 		for (const element of r) {
 			if (element.collapse) {
 				const collapseActiveRoute = getActiveRoute(element?.items || []);
@@ -39,7 +39,8 @@ const Dashboard: React.FC = props => {
 			} else if (pathname === element.layout + element.path) {
 				return element.name;
 			} else if (element.items) {
-				return getActiveRoute(element?.items);
+				const name = getActiveRoute(element?.items);
+				if (name) return name;
 			}
 		}
 		return activeRoute;
@@ -139,7 +140,6 @@ const Dashboard: React.FC = props => {
 						<Box>
 							<Navbar
 								onOpen={onOpen}
-								logoText="Horizon UI Dashboard PRO"
 								brandText={getActiveRoute(routes)}
 								secondary={getActiveNavbar(routes)}
 								message={getActiveNavbarText(routes)}

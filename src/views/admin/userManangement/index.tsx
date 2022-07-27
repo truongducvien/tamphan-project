@@ -1,7 +1,20 @@
 import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, FormControl, FormLabel, Input, Link, Select, SimpleGrid, Text } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Center,
+	Flex,
+	FormControl,
+	FormLabel,
+	Heading,
+	Input,
+	Link,
+	Select,
+	SimpleGrid,
+	Text,
+} from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import Table, { DataTable, IColumn } from 'components/table';
 import { MdLibraryAdd } from 'react-icons/md';
@@ -142,6 +155,11 @@ const UserManagement: React.FC = () => {
 						</SimpleGrid>
 					</FormControl>
 				</Box>
+				<Center m={5}>
+					<Heading as="h6" variant="admin" size="md">
+						Danh sách người dùng
+					</Heading>
+				</Center>
 				<Table
 					testId="consignments-dashboard"
 					// onSelectionChange={handleSelectionChange}
