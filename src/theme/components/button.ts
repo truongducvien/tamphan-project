@@ -22,7 +22,7 @@ export const buttonStyles = {
 				}),
 				brand: (props: StyleFunctionProps | Dict<string>) => ({
 					bg: mode('brand.500', 'brand.900')(props),
-					color: 'white',
+					color: 'whiteSmoke',
 					_focus: {
 						bg: mode('brand.500', 'brand.400')(props),
 					},
@@ -35,7 +35,7 @@ export const buttonStyles = {
 				}),
 				darkBrand: (props: StyleFunctionProps | Dict<string>) => ({
 					bg: mode('brand.900', 'brand.400')(props),
-					color: 'white',
+					color: 'whiteSmoke',
 					_focus: {
 						bg: mode('brand.900', 'brand.400')(props),
 					},
@@ -44,6 +44,19 @@ export const buttonStyles = {
 					},
 					_hover: {
 						bg: mode('brand.800', 'brand.400')(props),
+					},
+				}),
+				gray: (props: StyleFunctionProps | Dict<string>) => ({
+					bg: mode('gray.400', 'gray.700')(props),
+					color: 'whiteSmoke',
+					_focus: {
+						bg: mode('gray.500', 'gray.500')(props),
+					},
+					_active: {
+						bg: mode('gray.500', 'gray.500')(props),
+					},
+					_hover: {
+						bg: mode('gray.500', 'gray.500')(props),
 					},
 				}),
 				lightBrand: (props: StyleFunctionProps | Dict<string>) => ({
