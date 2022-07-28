@@ -32,12 +32,14 @@ export interface PullDownHookFormProps extends OptionBase {
 	tagVariant?: TagVariant;
 	label: string;
 	isRequired?: boolean;
+	placeholder?: string;
 }
 
 export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 	name,
 	defaultValue,
 	isRequired,
+	placeholder = 'Chọn ...',
 	label,
 	...innerProps
 }) => {
@@ -66,7 +68,7 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 	const borderRadius = '16px';
 	const fontSize = 'sm';
 	const bgMenu = useColorModeValue('white', 'navy.900');
-	const placeholder = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
+	const placeholderSt = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
 	return (
 		<Controller
 			control={control}
@@ -89,7 +91,7 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 									borderColor,
 									borderRadius,
 									fontSize,
-									_placeholder: placeholder,
+									_placeholder: placeholderSt,
 									'&:focus-within': {
 										borderWidth: 0,
 										boxShadow: '0 0 0 0px',
@@ -101,6 +103,7 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 									bg: bgMenu,
 								}),
 							}}
+							placeholder={placeholder}
 							defaultValue={defaultValue}
 						/>
 						<FormErrorMessage>
