@@ -1,12 +1,13 @@
 import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
-import { FaBuffer, FaBuilding, FaUserAlt } from 'react-icons/fa';
+import { FaBuffer, FaBuilding, FaMicrosoft, FaUserAlt } from 'react-icons/fa';
 import { MdLock } from 'react-icons/md';
 import OfficeManagement from 'views/admin/office';
 import OfficeForm from 'views/admin/office/form';
 import PositionManagement from 'views/admin/position';
 import PositionForm from 'views/admin/position/form';
+import SubdivisionManagement from 'views/admin/subdivision';
 import UserManagement from 'views/admin/userManangement';
 import UserManagementForm from 'views/admin/userManangement/form';
 import SignInCentered from 'views/auth/signIn';
@@ -70,6 +71,22 @@ const routes: Route[] = [
 				layout: '/admin',
 				path: `/position/create`,
 				icon: <Icon as={FaBuffer} width="20px" height="20px" color="inherit" />,
+				component: PositionForm,
+			},
+		],
+	},
+	{
+		name: 'Quản lí phân khu',
+		layout: '/admin',
+		path: `/subdivision`,
+		icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
+		component: SubdivisionManagement,
+		items: [
+			{
+				name: 'Thêm mới phân khu',
+				layout: '/admin',
+				path: `/subdivision/create`,
+				icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
 				component: PositionForm,
 			},
 		],

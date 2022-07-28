@@ -137,7 +137,7 @@ const UserManagement: React.FC = () => {
 									placeholder="Nhập tài khoản"
 									mb="24px"
 									fontWeight="500"
-									size="lg"
+									size="md"
 								/>
 							</Box>
 							<Box display="flex" justifySelf="flex-end">
