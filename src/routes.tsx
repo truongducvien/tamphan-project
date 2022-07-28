@@ -4,8 +4,9 @@ import { Icon } from '@chakra-ui/react';
 import { FaBuilding, FaUserAlt } from 'react-icons/fa';
 import { MdLock } from 'react-icons/md';
 import OfficeManagement from 'views/admin/office';
+import OfficeForm from 'views/admin/office/form';
 import UserManagement from 'views/admin/userManangement';
-import UserManagementDetail from 'views/admin/userManangement/Detail';
+import UserManagementForm from 'views/admin/userManangement/form';
 import SignInCentered from 'views/auth/signIn';
 
 export interface Route {
@@ -35,7 +36,7 @@ const routes: Route[] = [
 				layout: '/admin',
 				path: `/users/create`,
 				icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
-				component: UserManagementDetail,
+				component: UserManagementForm,
 			},
 		],
 	},
@@ -45,6 +46,15 @@ const routes: Route[] = [
 		path: `/office`,
 		icon: <Icon as={FaBuilding} width="20px" height="20px" color="inherit" />,
 		component: OfficeManagement,
+		items: [
+			{
+				name: 'Thêm mới đơn vị',
+				layout: '/admin',
+				path: `/office/create`,
+				icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
+				component: OfficeForm,
+			},
+		],
 	},
 	// {
 	// 	name: 'Data Tables',

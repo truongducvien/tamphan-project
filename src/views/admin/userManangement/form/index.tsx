@@ -24,7 +24,7 @@ interface DataForm {
 	address: string;
 }
 
-const Detail: React.FC = () => {
+const UserForm: React.FC = () => {
 	const onSubmit = (data: DataForm) => {
 		console.log(data);
 	};
@@ -116,4 +116,4 @@ const Detail: React.FC = () => {
 		</Box>
 	);
 };
-export default Detail;
+export default UserForm;

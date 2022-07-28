@@ -10,7 +10,6 @@ export const inputStyles = {
 					borderRadius: '8px',
 				},
 			},
-
 			variants: {
 				admin: (props: StyleFunctionProps | Dict<string>) => ({
 					field: {

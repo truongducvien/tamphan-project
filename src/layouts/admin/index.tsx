@@ -129,6 +129,9 @@ const Dashboard: React.FC = props => {
 					overflow="auto"
 					minH="100vh"
 					position="relative"
+					display=" flex"
+					flexDirection="column"
+					justifyContent="space-between"
 					w={{ base: '100%', xl: 'calc( 100% - 290px )' }}
 					maxWidth={{ base: '100%', xl: 'calc( 100% - 290px )' }}
 					transition="all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)"
@@ -150,7 +153,7 @@ const Dashboard: React.FC = props => {
 					</Portal>
 
 					{getRoute() ? (
-						<Box mx="auto" p={{ base: '20px', md: '30px' }} pe="20px" minH="100vh" pt="50px">
+						<Box p={{ base: '20px', md: '30px' }} pe="20px" pt="50px">
 							<Switch>{getRoutes(routes)}</Switch>
 						</Box>
 					) : null}
