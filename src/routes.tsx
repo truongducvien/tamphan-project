@@ -8,6 +8,7 @@ import OfficeForm from 'views/admin/office/form';
 import PositionManagement from 'views/admin/position';
 import PositionForm from 'views/admin/position/form';
 import SubdivisionManagement from 'views/admin/subdivision';
+import DetailSubdivision from 'views/admin/subdivision/form';
 import UserManagement from 'views/admin/userManangement';
 import UserManagementForm from 'views/admin/userManangement/form';
 import SignInCentered from 'views/auth/signIn';
@@ -87,7 +88,7 @@ const routes: Route[] = [
 				layout: '/admin',
 				path: `/subdivision/create`,
 				icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
-				component: PositionForm,
+				component: DetailSubdivision,
 			},
 		],
 	},

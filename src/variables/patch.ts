@@ -3,6 +3,7 @@ export const patchs = {
 	User: 'users',
 	Office: 'office',
 	Position: 'position',
+	Subdivision: 'subdivision',
 	//
 	Create: 'create',
 	Edit: 'edit',

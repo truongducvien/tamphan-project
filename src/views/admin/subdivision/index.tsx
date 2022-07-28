@@ -96,7 +96,7 @@ const SubdivisionManagement: React.FC = () => {
 								<Button variant="lightBrand" leftIcon={<SearchIcon />}>
 									Tìm kiếm
 								</Button>
-								<Link to={`${patchs.User}/${patchs.Create}`} as={RouterLink}>
+								<Link to={`${patchs.Subdivision}/${patchs.Create}`} as={RouterLink}>
 									<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
 										Thêm mới
 									</Button>
