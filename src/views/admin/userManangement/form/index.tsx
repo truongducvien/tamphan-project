@@ -1,4 +1,4 @@
-import { Box, Button, HStack } from '@chakra-ui/react';
+import { Box, Button, HStack, Stack } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { PullDowndHookForm } from 'components/form/PullDown';
@@ -33,19 +33,34 @@ const UserForm: React.FC = () => {
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<FormContainer onSubmit={onSubmit} validationSchema={validationSchema}>
-					<HStack spacing={3} pb={3}>
+					<Stack
+						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
+						direction={{ base: 'column-reverse', md: 'row' }}
+						spacing={3}
+						pb={3}
+					>
 						<TextFieldHookForm isRequired label="Tài khoản" name="account" variant="admin" />
 						<TextFieldHookForm isRequired label="Họ tên" name="fullName" variant="admin" />
-					</HStack>
-					<HStack pb={3}>
+					</Stack>
+					<Stack
+						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
+						direction={{ base: 'column-reverse', md: 'row' }}
+						spacing={3}
+						pb={3}
+					>
 						<TextFieldHookForm label="Ngày sinh" name="birthday" variant="admin" />
 						<TextFieldHookForm label="Giới tính" name="gender" variant="admin" />
-					</HStack>
+					</Stack>
 					<HStack pb={3}>
 						<TextFieldHookForm label="Email" name="email" variant="admin" />
 						<TextFieldHookForm isRequired label="Sô điện thoại" name="phone" variant="admin" />
 					</HStack>
-					<HStack pb={3}>
+					<Stack
+						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
+						direction={{ base: 'column-reverse', md: 'row' }}
+						spacing={3}
+						pb={3}
+					>
 						<PullDowndHookForm
 							label="Đơn vị"
 							name="room"
@@ -72,8 +87,13 @@ const UserForm: React.FC = () => {
 							isMulti
 							isSearchable={false}
 						/>
-					</HStack>
-					<HStack pb={3}>
+					</Stack>
+					<Stack
+						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
+						direction={{ base: 'column-reverse', md: 'row' }}
+						spacing={3}
+						pb={3}
+					>
 						<PullDowndHookForm
 							label="Phân khu quản lí"
 							isRequired
@@ -88,7 +108,7 @@ const UserForm: React.FC = () => {
 							isSearchable={false}
 						/>
 						<TextFieldHookForm label="Đại chỉ" name="addrress" variant="admin" />
-					</HStack>
+					</Stack>
 					<HStack pb={3}>
 						<PullDowndHookForm
 							label="Trạng thái hoạt động"

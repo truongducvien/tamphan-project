@@ -202,6 +202,27 @@ export const inputStyles = {
 				}),
 			},
 		},
+		Checkbox: {
+			variants: {
+				admin: (props: StyleFunctionProps | Dict<string>) => ({
+					control: {
+						_checked: {
+							bg: mode('white', 'navy.900')(props),
+							border: '1px solid',
+							color: mode('brand.300', 'whiteSmoke.100')(props),
+							borderColor: mode('secondaryGray.100', 'whiteSmoke.100')(props),
+							fontSize: 'sm',
+							_hover: {
+								bg: mode('secondaryGray.700', 'navy.700')(props),
+							},
+						},
+						_hover: {
+							bg: mode('brand.300', 'secondaryGray.900')(props),
+						},
+					},
+				}),
+			},
+		},
 		// PinInputField: {
 		//   variants: {
 		//     main: (props) => ({

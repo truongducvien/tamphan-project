@@ -24,6 +24,7 @@ export function FormContainer<F>({ children, validationSchema, onSubmit, ...inne
 	return (
 		<FormProvider {...methods}>
 			<form
+				noValidate
 				onSubmit={onSubmit ? methods.handleSubmit(data => onSubmit(data as unknown as F, methods.reset)) : undefined}
 			>
 				{children}
