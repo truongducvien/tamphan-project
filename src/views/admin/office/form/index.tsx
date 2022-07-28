@@ -1,4 +1,4 @@
-import { Box, Button, HStack } from '@chakra-ui/react';
+import { Box, Button, HStack, Stack } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { PullDowndHookForm } from 'components/form/PullDown';
@@ -18,7 +18,7 @@ interface DataForm {
 	description: string;
 }
 
-const Detail: React.FC = () => {
+const DetailOffice: React.FC = () => {
 	const onSubmit = (data: DataForm) => {
 		console.log(data);
 	};
@@ -27,7 +27,12 @@ const Detail: React.FC = () => {
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<FormContainer onSubmit={onSubmit} validationSchema={validationSchema}>
-					<HStack spacing={3} pb={3}>
+					<Stack
+						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
+						direction={{ base: 'column-reverse', md: 'row' }}
+						spacing={3}
+						pb={3}
+					>
 						<TextFieldHookForm isRequired label="Tên đơn vị" name="name" variant="admin" />
 						<PullDowndHookForm
 							label="Đơn vị trực thuộc"
@@ -42,8 +47,13 @@ const Detail: React.FC = () => {
 							isMulti
 							isSearchable={false}
 						/>
-					</HStack>
-					<HStack pb={3} align="start">
+					</Stack>
+					<Stack
+						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
+						direction={{ base: 'column-reverse', md: 'row' }}
+						spacing={3}
+						pb={3}
+					>
 						<TextAreaFieldHookForm label="Mô tả" name="description" variant="admin" />
 						<TextFieldHookForm
 							label="Ngày tạo"
@@ -52,7 +62,7 @@ const Detail: React.FC = () => {
 							isDisabled
 							variant="admin"
 						/>
-					</HStack>
+					</Stack>
 					<HStack pb={3}>
 						<Button w="20" type="submit" variant="brand">
 							Lưu
@@ -66,4 +76,4 @@ const Detail: React.FC = () => {
 		</Box>
 	);
 };
-export default Detail;
+export default DetailOffice;

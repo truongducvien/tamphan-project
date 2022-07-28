@@ -1,10 +1,12 @@
 import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
-import { FaBuilding, FaUserAlt } from 'react-icons/fa';
+import { FaBuffer, FaBuilding, FaUserAlt } from 'react-icons/fa';
 import { MdLock } from 'react-icons/md';
 import OfficeManagement from 'views/admin/office';
 import OfficeForm from 'views/admin/office/form';
+import PositionManagement from 'views/admin/position';
+import PositionForm from 'views/admin/position/form';
 import UserManagement from 'views/admin/userManangement';
 import UserManagementForm from 'views/admin/userManangement/form';
 import SignInCentered from 'views/auth/signIn';
@@ -53,6 +55,22 @@ const routes: Route[] = [
 				path: `/office/create`,
 				icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
 				component: OfficeForm,
+			},
+		],
+	},
+	{
+		name: 'Quản lí chức vụ',
+		layout: '/admin',
+		path: `/position`,
+		icon: <Icon as={FaBuffer} width="20px" height="20px" color="inherit" />,
+		component: PositionManagement,
+		items: [
+			{
+				name: 'Thêm mới chức vụ',
+				layout: '/admin',
+				path: `/position/create`,
+				icon: <Icon as={FaBuffer} width="20px" height="20px" color="inherit" />,
+				component: PositionForm,
 			},
 		],
 	},
