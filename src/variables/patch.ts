@@ -4,6 +4,7 @@ export const patchs = {
 	Office: 'office',
 	Position: 'position',
 	Subdivision: 'subdivision',
+	Apartment: 'apartment',
 	//
 	Create: 'create',
 	Edit: 'edit',
