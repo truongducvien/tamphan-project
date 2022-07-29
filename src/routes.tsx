@@ -3,6 +3,7 @@ import React from 'react';
 import { Icon } from '@chakra-ui/react';
 import { FaBuffer, FaBuilding, FaMicrosoft, FaUserAlt } from 'react-icons/fa';
 import { MdLock } from 'react-icons/md';
+import ApartMentManagement from 'views/admin/apartment';
 import OfficeManagement from 'views/admin/office';
 import OfficeForm from 'views/admin/office/form';
 import PositionManagement from 'views/admin/position';
@@ -87,6 +88,22 @@ const routes: Route[] = [
 				name: 'Thêm mới phân khu',
 				layout: '/admin',
 				path: `/subdivision/create`,
+				icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
+				component: DetailSubdivision,
+			},
+		],
+	},
+	{
+		name: 'Quản lí căn hộ',
+		layout: '/admin',
+		path: `/apartment`,
+		icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
+		component: ApartMentManagement,
+		items: [
+			{
+				name: 'Thêm mới căn hộ',
+				layout: '/admin',
+				path: `/apartment/create`,
 				icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
 				component: DetailSubdivision,
 			},
