@@ -48,7 +48,7 @@ const Permistion = forwardRef<PermissionRef, PermissionProps>(({ title, id, chec
 			<FormControl>
 				<FormLabel htmlFor={id}>{title}</FormLabel>
 				{permistion.map((i, idx) => (
-					<Box>
+					<Box key={i}>
 						<Checkbox
 							variant="admin"
 							ref={r => {
@@ -128,6 +128,7 @@ const DetailPosition: React.FC = () => {
 					<SimpleGrid p={5} columns={{ sm: 2, md: 3 }} spacing={3}>
 						{permissions.map((i, idx) => (
 							<Permistion
+								key={i.id}
 								ref={ref => {
 									checkBoxRef.current[idx] = ref;
 								}}
