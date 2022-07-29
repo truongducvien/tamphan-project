@@ -9,7 +9,6 @@ import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên nhóm'),
-	subdivision: Yup.string().required('Vui lòng chọn thương hiệu'),
 });
 
 interface DataForm {
@@ -19,9 +18,7 @@ interface DataForm {
 }
 
 const DetailOffice: React.FC = () => {
-	const onSubmit = (data: DataForm) => {
-		console.log(data);
-	};
+	const onSubmit = (data: DataForm) => {};
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
