@@ -4,6 +4,7 @@ import { Icon } from '@chakra-ui/react';
 import { FaBuffer, FaBuilding, FaMicrosoft, FaUserAlt } from 'react-icons/fa';
 import { MdLock } from 'react-icons/md';
 import ApartMentManagement from 'views/admin/apartment';
+import AparmentForm from 'views/admin/apartment/form';
 import OfficeManagement from 'views/admin/office';
 import OfficeForm from 'views/admin/office/form';
 import PositionManagement from 'views/admin/position';
@@ -105,7 +106,7 @@ const routes: Route[] = [
 				layout: '/admin',
 				path: `/apartment/create`,
 				icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
-				component: DetailSubdivision,
+				component: AparmentForm,
 			},
 		],
 	},

@@ -13,6 +13,7 @@ import {
 	Input,
 	Link,
 	Select,
+	Stack,
 	Text,
 } from '@chakra-ui/react';
 import Card from 'components/card/Card';
@@ -87,8 +88,13 @@ const ApartMentManagement: React.FC = () => {
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Box p={{ sm: 2, md: 5 }} mt={2}>
-					<HStack spacing={5} align="end">
-						<FormControl maxW={300}>
+					<Stack
+						spacing={5}
+						align="end"
+						justify={{ base: 'center', md: 'space-around', xl: 'space-around' }}
+						direction={{ base: 'column', md: 'row' }}
+					>
+						<FormControl flex={1}>
 							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
 								<Text>Mã căn hộ</Text>
 							</FormLabel>
@@ -101,7 +107,7 @@ const ApartMentManagement: React.FC = () => {
 								size="md"
 							/>
 						</FormControl>
-						<FormControl maxW={300}>
+						<FormControl flex={1}>
 							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
 								<Text>Phân khu</Text>
 							</FormLabel>
@@ -117,18 +123,20 @@ const ApartMentManagement: React.FC = () => {
 								isSearchable={false}
 							/>
 						</FormControl>
-						<Button variant="lightBrand" leftIcon={<SearchIcon />}>
-							Tìm kiếm
-						</Button>
-						<Button variant="light" leftIcon={<MdImportExport />}>
-							Import
-						</Button>
-						<Link to={`${patchs.Office}/${patchs.Create}`} as={RouterLink}>
-							<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-								Thêm mới
+						<Box>
+							<Button variant="lightBrand" leftIcon={<SearchIcon />}>
+								Tìm kiếm
 							</Button>
-						</Link>
-					</HStack>
+							<Button marginLeft={1} variant="light" leftIcon={<MdImportExport />}>
+								Import
+							</Button>
+							<Link to={`${patchs.Apartment}/${patchs.Create}`} as={RouterLink}>
+								<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+									Thêm mới
+								</Button>
+							</Link>
+						</Box>
+					</Stack>
 				</Box>
 				<Center m={5}>
 					<Heading as="h6" variant="admin" size="md">
