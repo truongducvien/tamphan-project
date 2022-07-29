@@ -1,21 +1,7 @@
 import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import {
-	Box,
-	Button,
-	Center,
-	Flex,
-	FormControl,
-	FormLabel,
-	Heading,
-	HStack,
-	Input,
-	Link,
-	Select,
-	Stack,
-	Text,
-} from '@chakra-ui/react';
+import { Box, Button, Center, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import { PullDown } from 'components/pulldown';
 import Table, { DataTable, IColumn } from 'components/table';
@@ -24,58 +10,58 @@ import { Link as RouterLink } from 'react-router-dom';
 import { patchs } from 'variables/patch';
 import { PermistionAction } from 'variables/permission';
 
-export interface Apartment extends DataTable {
-	code: string;
+export interface Resident extends DataTable {
 	name: string;
-	type: string;
-	tang: string;
-	khoi: string;
+	birthday: string;
+	gender: string;
+	cmnd: string;
+	createCm: string;
+	addCm: string;
+	partmentCode: string;
+	role: string;
+	email: string;
+	phone: string;
+	address: string;
+	currentAddress: string;
 	status: string;
-	area: string;
-	countBed: string;
-	countRoom: string;
-	countTang: string;
-	subdivision: string;
-	chu: string;
-	CMND: string;
 }
 
-const apartment: Array<Apartment> = [
+const apartment: Array<Resident> = [
 	{
-		code: 'string',
-		name: 'string',
-		type: 'string',
-		tang: 'string',
-		khoi: 'string',
+		name: 'string ',
+		birthday: 'string',
+		gender: 'string',
+		cmnd: 'string',
+		createCm: 'string',
+		addCm: 'string',
+		partmentCode: 'string',
+		role: 'string',
+		email: 'string',
+		phone: 'string',
+		address: 'string',
+		currentAddress: 'string',
 		status: 'string',
-		area: 'string',
-		countBed: 'string',
-		countRoom: 'string',
-		countTang: 'string',
-		subdivision: 'string',
-		chu: 'string',
-		CMND: 'string',
 	},
 ];
 
-const ApartMentManagement: React.FC = () => {
+const ResidentManagement: React.FC = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
 
-	const COLUMNS: Array<IColumn<Apartment>> = [
-		{ key: 'code', label: 'Mã căn hộ' },
-		{ key: 'name', label: 'Tên đơn vị' },
-		{ key: 'type', label: 'Loại căn hộ' },
-		{ key: 'tang', label: 'Tầng' },
-		{ key: 'khoi', label: 'Khối' },
+	const COLUMNS: Array<IColumn<Resident>> = [
+		{ key: 'name', label: 'Tên cư dân' },
+		{ key: 'birthday', label: 'Ngày sinh' },
+		{ key: 'gender', label: 'Giới tính' },
+		{ key: 'cmnd', label: 'CMND/ CCCD/ HC' },
+		{ key: 'createCm', label: 'Ngày cấp' },
+		{ key: 'addCm', label: 'Nới cấp' },
+		{ key: 'partmentCode', label: 'Căn hộ' },
+		{ key: 'role', label: 'Vai trò' },
+		{ key: 'email', label: 'Email' },
+		{ key: 'phone', label: 'Số điện thoại' },
+		{ key: 'address', label: 'Địa chỉ thường trú' },
+		{ key: 'currentAddress', label: 'Địa chỉ tạm trú' },
 		{ key: 'status', label: 'Trạng thái' },
-		{ key: 'area', label: 'Diện tích' },
-		{ key: 'countBed', label: 'Sô phòng ngủ' },
-		{ key: 'countRoom', label: 'Số phòng tắm' },
-		{ key: 'countTang', label: 'Số Tầng' },
-		{ key: 'subdivision', label: 'Phân khu' },
-		{ key: 'chu', label: 'Chủ sở hữu' },
-		{ key: 'CMND', label: 'CMND' },
 	];
 
 	const pageInfo = {
@@ -123,31 +109,37 @@ const ApartMentManagement: React.FC = () => {
 								isSearchable={false}
 							/>
 						</FormControl>
-						<Box>
-							<Button variant="lightBrand" leftIcon={<SearchIcon />}>
-								Tìm kiếm
-							</Button>
-							<Button marginLeft={1} variant="light" leftIcon={<MdImportExport />}>
-								Import
-							</Button>
-							<Link to={`${patchs.Apartment}/${patchs.Create}`} as={RouterLink}>
-								<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-									Thêm mới
-								</Button>
-							</Link>
-						</Box>
+						<FormControl flex={1}>
+							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
+								<Text>Tên cư dân</Text>
+							</FormLabel>
+							<Input variant="admin" />
+						</FormControl>
 					</Stack>
+					<Box mt="3">
+						<Button variant="lightBrand" leftIcon={<SearchIcon />}>
+							Tìm kiếm
+						</Button>
+						<Button marginLeft={1} variant="light" leftIcon={<MdImportExport />}>
+							Import
+						</Button>
+						<Link to={`${patchs.Resident}/${patchs.Create}`} as={RouterLink}>
+							<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+								Thêm mới
+							</Button>
+						</Link>
+					</Box>
 				</Box>
 				<Center m={5}>
 					<Heading as="h6" variant="admin" size="md">
-						Danh sách căn hộ
+						Danh sách cư dân
 					</Heading>
 				</Center>
 				<Table
+					minWith="2000px"
 					testId="consignments-dashboard"
 					// onSelectionChange={handleSelectionChange}
 					keyField="name"
-					minWith="2000px"
 					columns={COLUMNS}
 					data={[...apartment, ...apartment, ...apartment]}
 					pagination={{
@@ -166,4 +158,4 @@ const ApartMentManagement: React.FC = () => {
 	);
 };
 
-export default ApartMentManagement;
+export default ResidentManagement;
