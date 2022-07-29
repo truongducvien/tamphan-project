@@ -13,6 +13,7 @@ import {
 	Text,
 	Icon,
 	HStack,
+	Box,
 } from '@chakra-ui/react';
 import Pagination, { PaginationProps } from 'components/pagination';
 import { FaTrashAlt } from 'react-icons/fa';
@@ -30,6 +31,7 @@ export type IColumn<T> = {
 
 type TableProps<T> = {
 	data: Array<T>;
+	minWith?: string;
 	columns: Array<IColumn<T>>;
 	keyField: string;
 	toggleAllRowsSelected?: boolean;
@@ -51,6 +53,7 @@ const Table = <T extends DataTable>({
 	pagination,
 	loading,
 	action,
+	minWith,
 	onClickEdit,
 	onClickDelete,
 	onSelectionChange,
@@ -79,74 +82,76 @@ const Table = <T extends DataTable>({
 	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
 	const iconDelete = useColorModeValue('red.300', 'red.800');
 	return (
-		<Flex
-			data-testid={testId}
-			flexDirection="column"
-			flex={1}
-			maxWidth="100%"
-			width="100%"
-			overflowX="auto"
-			overflowY="auto"
-			boxSizing="border-box"
-		>
-			<ChakraTable variant="unstyled">
-				<Thead borderBottomColor={borderColor} borderBottomWidth={1}>
-					{columns && (
-						<Tr>
-							{columns.map((column, index) => (
-								<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" key={index}>
-									{column.label}
-								</Th>
-							))}
-							{action && <Th textAlign="center">Actions</Th>}
-						</Tr>
+		<>
+			<Box
+				data-testid={testId}
+				flexDirection="column"
+				width="100%"
+				height="100%"
+				flex={1}
+				overflowX="scroll"
+				overflowY="scroll"
+				boxSizing="border-box"
+			>
+				<ChakraTable variant="unstyled" minW={minWith || '100%'}>
+					<Thead borderBottomColor={borderColor} borderBottomWidth={1}>
+						{columns && (
+							<Tr>
+								{columns.map((column, index) => (
+									<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" key={index}>
+										{column.label}
+									</Th>
+								))}
+								{action && <Th textAlign="center">Actions</Th>}
+							</Tr>
+						)}
+					</Thead>
+					{loading ? (
+						<Flex minH={200} justify="center" align="center" transform="auto-gpu" translateX="50%">
+							<Spinner />
+						</Flex>
+					) : (
+						<Tbody flexDirection="column">
+							{data.map((row, index) => {
+								return (
+									<Tr
+										key={index}
+										bg={selectedKeys && selectedKeys.indexOf(row[keyField] as string) > -1 ? 'made.40' : undefined}
+										onClick={() => handleOnClick(row)}
+										data-testid={`row-${index}`}
+									>
+										{columns.map((column, colIndex) => (
+											<Td key={`${index}${colIndex}`}>
+												{column.cell && column.key ? (
+													column.cell(row)
+												) : (
+													<Text color={textColor} fontSize="sm" fontWeight="700">
+														{column.key ? (row[column.key] as string) : ''}
+													</Text>
+												)}
+											</Td>
+										))}
+										{action && (
+											<Td>
+												<HStack justify="center" align="center">
+													{action.includes(PermistionActionBase.EDIT) && (
+														<Icon onClick={() => onClickEdit?.(row)} as={MdBorderColor} />
+													)}
+													{action.includes(PermistionActionBase.DETETE) && (
+														<Icon as={FaTrashAlt} onClick={() => onClickDelete?.(row)} color={iconDelete} />
+													)}
+												</HStack>
+											</Td>
+										)}
+									</Tr>
+								);
+							})}
+						</Tbody>
 					)}
-				</Thead>
-				{loading ? (
-					<Flex minH={200} justify="center" align="center" transform="auto-gpu" translateX="50%">
-						<Spinner />
-					</Flex>
-				) : (
-					<Tbody flexDirection="column">
-						{data.map((row, index) => {
-							return (
-								<Tr
-									key={index}
-									bg={selectedKeys && selectedKeys.indexOf(row[keyField] as string) > -1 ? 'made.40' : undefined}
-									onClick={() => handleOnClick(row)}
-									data-testid={`row-${index}`}
-								>
-									{columns.map((column, colIndex) => (
-										<Td key={`${index}${colIndex}`}>
-											{column.cell && column.key ? (
-												column.cell(row)
-											) : (
-												<Text color={textColor} fontSize="sm" fontWeight="700">
-													{column.key ? (row[column.key] as string) : ''}
-												</Text>
-											)}
-										</Td>
-									))}
-									{action && (
-										<Td>
-											<HStack justify="center" align="center">
-												{action.includes(PermistionActionBase.EDIT) && (
-													<Icon onClick={() => onClickEdit?.(row)} as={MdBorderColor} />
-												)}
-												{action.includes(PermistionActionBase.DETETE) && (
-													<Icon as={FaTrashAlt} onClick={() => onClickDelete?.(row)} color={iconDelete} />
-												)}
-											</HStack>
-										</Td>
-									)}
-								</Tr>
-							);
-						})}
-					</Tbody>
-				)}
-			</ChakraTable>
+				</ChakraTable>
+			</Box>
 			{pagination && <Pagination {...pagination} />}
-		</Flex>
+		</>
 	);
 };
 export default Table;
