@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
-import { FaBuffer, FaBuilding, FaMicrosoft, FaUserAlt } from 'react-icons/fa';
+import { FaBuffer, FaBuilding, FaClipboardList, FaMicrosoft, FaUserAlt } from 'react-icons/fa';
 import { MdLock } from 'react-icons/md';
 import ApartMentManagement from 'views/admin/apartment';
 import AparmentForm from 'views/admin/apartment/form';
@@ -15,13 +15,15 @@ import SubdivisionManagement from 'views/admin/subdivision';
 import DetailSubdivision from 'views/admin/subdivision/form';
 import UserManagement from 'views/admin/userManangement';
 import UserManagementForm from 'views/admin/userManangement/form';
+import TypeUtilitiesForm from 'views/admin/utilities/typeUti/form';
+import TypeUtilitiesManagement from 'views/admin/utilities/typeUti/typeUtilities';
 import SignInCentered from 'views/auth/signIn';
 
 export interface Route {
 	name: string;
 	layout: string;
 	path: string;
-	icon: React.ReactNode;
+	icon?: React.ReactNode;
 	component: React.ComponentType;
 	secondary?: boolean;
 	items?: Route[];
@@ -29,6 +31,7 @@ export interface Route {
 	authIcon?: string;
 	category?: boolean;
 	messageNavbar?: boolean;
+	isShow?: boolean;
 }
 
 const routes: Route[] = [
@@ -43,7 +46,6 @@ const routes: Route[] = [
 				name: 'Thêm mới người dùng',
 				layout: '/admin',
 				path: `/users/create`,
-				icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
 				component: UserManagementForm,
 			},
 		],
@@ -59,7 +61,6 @@ const routes: Route[] = [
 				name: 'Thêm mới đơn vị',
 				layout: '/admin',
 				path: `/office/create`,
-				icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
 				component: OfficeForm,
 			},
 		],
@@ -75,7 +76,6 @@ const routes: Route[] = [
 				name: 'Thêm mới chức vụ',
 				layout: '/admin',
 				path: `/position/create`,
-				icon: <Icon as={FaBuffer} width="20px" height="20px" color="inherit" />,
 				component: PositionForm,
 			},
 		],
@@ -91,7 +91,6 @@ const routes: Route[] = [
 				name: 'Thêm mới phân khu',
 				layout: '/admin',
 				path: `/subdivision/create`,
-				icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
 				component: DetailSubdivision,
 			},
 		],
@@ -107,7 +106,6 @@ const routes: Route[] = [
 				name: 'Thêm mới căn hộ',
 				layout: '/admin',
 				path: `/apartment/create`,
-				icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
 				component: AparmentForm,
 			},
 		],
@@ -123,8 +121,29 @@ const routes: Route[] = [
 				name: 'Thêm mới cư dân',
 				layout: '/admin',
 				path: `/resident/create`,
-				icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
 				component: ResidentForm,
+			},
+		],
+	},
+	{
+		name: 'Tiện ích',
+		layout: '/admin',
+		path: `/utilities`,
+		category: true,
+		component: TypeUtilitiesManagement,
+	},
+	{
+		name: 'Quản lí loại tiện ích',
+		layout: '/admin',
+		path: `/typeUtilities`,
+		icon: <Icon as={FaClipboardList} width="20px" height="20px" color="inherit" />,
+		component: TypeUtilitiesManagement,
+		items: [
+			{
+				name: 'Thêm mới loại tiện ích',
+				layout: '/admin',
+				path: `/typeUtilities/create`,
+				component: TypeUtilitiesForm,
 			},
 		],
 	},

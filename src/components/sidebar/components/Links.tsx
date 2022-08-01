@@ -27,7 +27,7 @@ export const SidebarLinks: React.FC<Props> = props => {
 
 	// verifies if routeName is the one active (in browser input)
 	const activeRoute = (routeName: string) => {
-		return location.pathname.includes(routeName);
+		return location.pathname === '/admin' + routeName;
 	};
 
 	// this function creates the links from the secondary accordions (for example auth -> sign-in -> default)
@@ -54,49 +54,52 @@ export const SidebarLinks: React.FC<Props> = props => {
 						{route?.items && createLinks(route.items)}
 					</>
 				);
-			} else {
+			} else if (route.icon) {
 				return (
 					<NavLink key={index.toString()} to={route.layout + route.path}>
-						{route.icon ? (
-							<Box>
-								<HStack spacing={activeRoute(route.path.toLowerCase()) ? '22px' : '26px'} py="5px" ps="10px">
-									<Flex w="100%" alignItems="center" justifyContent="center">
-										<Box color={activeRoute(route.path.toLowerCase()) ? activeIcon : textColor} me="18px">
-											{route.icon}
-										</Box>
-										<Text
-											me="auto"
-											color={activeRoute(route.path.toLowerCase()) ? activeColor : textColor}
-											fontWeight={activeRoute(route.path.toLowerCase()) ? 'bold' : 'normal'}
-										>
-											{route.name}
-										</Text>
-									</Flex>
-									<Box
-										h="36px"
-										w="4px"
-										bg={activeRoute(route.path.toLowerCase()) ? brandColor : 'transparent'}
-										borderRadius="5px"
-									/>
-								</HStack>
-							</Box>
-						) : (
-							<Box>
-								<HStack spacing={activeRoute(route.path.toLowerCase()) ? '22px' : '26px'} py="5px" ps="10px">
+						<Box>
+							<HStack spacing={activeRoute(route.path.toLowerCase()) ? '22px' : '26px'} py="5px" ps="10px">
+								<Flex w="100%" alignItems="center" justifyContent="center">
+									<Box color={activeRoute(route.path.toLowerCase()) ? activeIcon : textColor} me="18px">
+										{route.icon}
+									</Box>
 									<Text
 										me="auto"
-										color={activeRoute(route.path.toLowerCase()) ? activeColor : inactiveColor}
+										color={activeRoute(route.path.toLowerCase()) ? activeColor : textColor}
 										fontWeight={activeRoute(route.path.toLowerCase()) ? 'bold' : 'normal'}
 									>
 										{route.name}
 									</Text>
-									<Box h="36px" w="4px" bg="brand.400" borderRadius="5px" />
-								</HStack>
-							</Box>
-						)}
+								</Flex>
+								<Box
+									h="36px"
+									w="4px"
+									bg={activeRoute(route.path.toLowerCase()) ? brandColor : 'transparent'}
+									borderRadius="5px"
+								/>
+							</HStack>
+							{route?.items && createLinks(route.items)}
+						</Box>
 					</NavLink>
 				);
-			}
+			} else if (route.isShow) {
+				return (
+					<NavLink key={index.toString()} to={route.layout + route.path}>
+						<Box ml={10}>
+							<HStack spacing={activeRoute(route.path.toLowerCase()) ? '22px' : '26px'} py="5px" ps="10px">
+								<Text
+									me="auto"
+									color={activeRoute(route.path.toLowerCase()) ? activeColor : inactiveColor}
+									fontWeight={activeRoute(route.path.toLowerCase()) ? 'bold' : 'normal'}
+								>
+									{route.name}
+								</Text>
+								{activeRoute(route.path.toLowerCase()) && <Box h="22px" w="4px" bg="brand.400" borderRadius="5px" />}
+							</HStack>
+						</Box>
+					</NavLink>
+				);
+			} else return <></>;
 		});
 		return element;
 	};
