@@ -1,4 +1,4 @@
-import React, { useState, createRef } from 'react';
+import { useState, createRef } from 'react';
 
 import { ArrowLeftIcon, ArrowRightIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import {
@@ -30,10 +30,10 @@ const todayTimestamp = Date.now() - (Date.now() % oneDay) + new Date().getTimezo
 export interface IDatePickerProps extends Omit<ChakraInputProps, 'onChange'> {
 	defaultDay?: Date;
 	dateFormat?: string;
-	onChange: (date: string) => void;
+	onChange?: (date: string) => void;
 }
 
-export const DatePicker = ({ onChange, defaultDay, dateFormat = 'DD/MM/YYYY', ...rest }: IDatePickerProps) => {
+export const DatePicker = ({ defaultDay, onChange, dateFormat = 'DD/MM/YYYY', ...rest }: IDatePickerProps) => {
 	const date = new Date();
 	const [year, setYear] = useState(date.getFullYear());
 	const [month, setMonth] = useState(date.getMonth());
@@ -61,7 +61,7 @@ export const DatePicker = ({ onChange, defaultDay, dateFormat = 'DD/MM/YYYY', ..
 		setSelectedDay(day.timestamp);
 		if (inputRef.current) {
 			inputRef.current.value = getDateStringFromTimestamp(day.timestamp);
-			onChange(inputRef.current.value);
+			onChange?.(inputRef.current.value);
 		}
 	};
 
