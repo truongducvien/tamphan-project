@@ -58,7 +58,6 @@ const Settings: React.FC = () => {
 				<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 					<Table
 						testId="consignments-dashboard"
-						onSelectionChange={handleSelectionChange}
 						keyField="name"
 						columns={COLUMNS}
 						data={pokemons}

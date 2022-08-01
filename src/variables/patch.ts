@@ -6,7 +6,8 @@ export const patchs = {
 	Subdivision: 'subdivision',
 	Apartment: 'apartment',
 	Resident: 'Resident',
-	TypeUtilities: 'typeUtilities',
+	Utilities: 'utilities',
+	TypeUtilities: 'type-utilities',
 	//
 	Create: 'create',
 	Edit: 'edit',
