@@ -49,7 +49,7 @@ const AparmentForm: React.FC = () => {
 				<FormContainer onSubmit={onSubmit} validationSchema={validationSchema}>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column-reverse', md: 'row' }}
+						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
@@ -58,7 +58,7 @@ const AparmentForm: React.FC = () => {
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column-reverse', md: 'row' }}
+						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
@@ -87,7 +87,7 @@ const AparmentForm: React.FC = () => {
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column-reverse', md: 'row' }}
+						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
@@ -96,7 +96,7 @@ const AparmentForm: React.FC = () => {
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column-reverse', md: 'row' }}
+						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
@@ -115,7 +115,7 @@ const AparmentForm: React.FC = () => {
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column-reverse', md: 'row' }}
+						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
@@ -124,7 +124,7 @@ const AparmentForm: React.FC = () => {
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column-reverse', md: 'row' }}
+						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
@@ -133,7 +133,7 @@ const AparmentForm: React.FC = () => {
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column-reverse', md: 'row' }}
+						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
@@ -142,7 +142,7 @@ const AparmentForm: React.FC = () => {
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column-reverse', md: 'row' }}
+						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
@@ -154,7 +154,7 @@ const AparmentForm: React.FC = () => {
 					</Heading>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column-reverse', md: 'row' }}
+						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
@@ -177,7 +177,7 @@ const AparmentForm: React.FC = () => {
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column-reverse', md: 'row' }}
+						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
@@ -186,7 +186,7 @@ const AparmentForm: React.FC = () => {
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column-reverse', md: 'row' }}
+						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
@@ -195,7 +195,7 @@ const AparmentForm: React.FC = () => {
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column-reverse', md: 'row' }}
+						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
@@ -204,7 +204,7 @@ const AparmentForm: React.FC = () => {
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column-reverse', md: 'row' }}
+						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>

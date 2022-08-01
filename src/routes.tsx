@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
-import { FaBuffer, FaBuilding, FaMicrosoft, FaUserAlt } from 'react-icons/fa';
+import { FaBuffer, FaBuilding, FaClipboardList, FaMicrosoft, FaUserAlt } from 'react-icons/fa';
 import { MdLock } from 'react-icons/md';
 import ApartMentManagement from 'views/admin/apartment';
 import AparmentForm from 'views/admin/apartment/form';
@@ -15,6 +15,8 @@ import SubdivisionManagement from 'views/admin/subdivision';
 import DetailSubdivision from 'views/admin/subdivision/form';
 import UserManagement from 'views/admin/userManangement';
 import UserManagementForm from 'views/admin/userManangement/form';
+import TypeUtilitiesForm from 'views/admin/utilities/typeUti/form';
+import TypeUtilitiesManagement from 'views/admin/utilities/typeUti/typeUtilities';
 import SignInCentered from 'views/auth/signIn';
 
 export interface Route {
@@ -120,6 +122,28 @@ const routes: Route[] = [
 				layout: '/admin',
 				path: `/resident/create`,
 				component: ResidentForm,
+			},
+		],
+	},
+	{
+		name: 'Tiện ích',
+		layout: '/admin',
+		path: `/utilities`,
+		category: true,
+		component: TypeUtilitiesManagement,
+	},
+	{
+		name: 'Quản lí loại tiện ích',
+		layout: '/admin',
+		path: `/typeUtilities`,
+		icon: <Icon as={FaClipboardList} width="20px" height="20px" color="inherit" />,
+		component: TypeUtilitiesManagement,
+		items: [
+			{
+				name: 'Thêm mới loại tiện ích',
+				layout: '/admin',
+				path: `/typeUtilities/create`,
+				component: TypeUtilitiesForm,
 			},
 		],
 	},

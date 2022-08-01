@@ -10,24 +10,17 @@ import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên nhóm'),
-	phone: Yup.string().required('Vui lòng nhaapj SDT'),
 });
 
 interface DataForm {
 	name: string;
-	phone: string;
-	type: string;
-	email: string;
-	area: string;
-	position: string;
-	createAt: string;
-	map: string;
+	status: string;
+	description: string;
+	image: string;
 }
 
-const DetailSubdivision: React.FC = () => {
-	const onSubmit = (data: DataForm) => {
-		console.log(data);
-	};
+const TypeUtilitiesForm: React.FC = () => {
+	const onSubmit = (data: DataForm) => {};
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -39,29 +32,18 @@ const DetailSubdivision: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isRequired label="Tên phân khu" name="name" variant="admin" />
-						<TextFieldHookForm label="Điện thoại liên hệ" name="phone" variant="admin" />
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
+						<TextFieldHookForm isRequired label="Tên loại" name="name" variant="admin" />
 						<PullDowndHookForm
-							label="Loại hình BDS"
-							name="type"
-							isRequired
+							label="Trạng thái"
+							name="status"
 							options={[
 								{
-									label: 'a',
+									label: 'Đang hoạt động',
 									value: '1',
 								},
 							]}
-							isMulti
 							isSearchable={false}
 						/>
-						<TextFieldHookForm isRequired label="Email" name="email" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -69,25 +51,12 @@ const DetailSubdivision: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isRequired label="Diện tích" name="area" variant="admin" />
-						<TextFieldHookForm label="Vị trí" name="posision" variant="admin" />
-					</Stack>
-					<Box pb={3}>
-						<TextFieldHookForm
-							isRequired
-							label="Ngày cập nhật"
-							name="createAt"
-							defaultValue={dayjs().format('DD/MM/YYYY')}
-							isDisabled
-							variant="admin"
-						/>
-					</Box>
-					<Box pb={3} maxW={{ sm: '100%', md: '50%' }}>
+						<TextAreaFieldHookForm rows={10} label="Mô tả" name="description" variant="admin" />
 						<FormControl>
-							<FormLabel>Bản đồ</FormLabel>
+							<FormLabel>Hình ảnh</FormLabel>
 							<UploadImage />
 						</FormControl>
-					</Box>
+					</Stack>
 					<HStack pb={3}>
 						<Button w="20" type="submit" variant="brand">
 							Lưu
@@ -101,4 +70,4 @@ const DetailSubdivision: React.FC = () => {
 		</Box>
 	);
 };
-export default DetailSubdivision;
+export default TypeUtilitiesForm;
