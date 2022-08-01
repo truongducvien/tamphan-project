@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
-import { FaBuffer, FaBuilding, FaClipboardList, FaMicrosoft, FaUserAlt } from 'react-icons/fa';
+import { FaBuffer, FaBuilding, FaClipboardList, FaMicrosoft, FaTh, FaUserAlt } from 'react-icons/fa';
 import { MdLock } from 'react-icons/md';
+import { Admin } from 'views/admin';
 import ApartMentManagement from 'views/admin/apartment';
 import AparmentForm from 'views/admin/apartment/form';
 import OfficeManagement from 'views/admin/office';
@@ -15,6 +16,8 @@ import SubdivisionManagement from 'views/admin/subdivision';
 import DetailSubdivision from 'views/admin/subdivision/form';
 import UserManagement from 'views/admin/userManangement';
 import UserManagementForm from 'views/admin/userManangement/form';
+import UtilitiesManagement from 'views/admin/utilities';
+import UtilitiesForm from 'views/admin/utilities/form';
 import TypeUtilitiesForm from 'views/admin/utilities/typeUti/form';
 import TypeUtilitiesManagement from 'views/admin/utilities/typeUti/typeUtilities';
 import SignInCentered from 'views/auth/signIn';
@@ -128,9 +131,9 @@ const routes: Route[] = [
 	{
 		name: 'Tiện ích',
 		layout: '/admin',
-		path: `/utilities`,
+		path: `/`,
 		category: true,
-		component: TypeUtilitiesManagement,
+		component: Admin,
 	},
 	{
 		name: 'Quản lí loại tiện ích',
@@ -142,8 +145,23 @@ const routes: Route[] = [
 			{
 				name: 'Thêm mới loại tiện ích',
 				layout: '/admin',
-				path: `/typeUtilities/create`,
+				path: `/type-utilities/create`,
 				component: TypeUtilitiesForm,
+			},
+		],
+	},
+	{
+		name: 'Quản lí tiện ích',
+		layout: '/admin',
+		path: `/utilities`,
+		icon: <Icon as={FaTh} width="20px" height="20px" color="inherit" />,
+		component: UtilitiesManagement,
+		items: [
+			{
+				name: 'Thêm mới tiện ích',
+				layout: '/admin',
+				path: `/utilities/create`,
+				component: UtilitiesForm,
 			},
 		],
 	},

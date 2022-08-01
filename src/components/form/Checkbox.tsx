@@ -13,7 +13,7 @@ export interface TextFieldHookFormProps extends CheckboxProps {
 export const CheckboxHookForm: React.FC<TextFieldHookFormProps> = ({ name, label, ...innerProps }) => (
 	<ConnectForm>
 		{({ register, formState: { errors } }: UseFormConnectProps) => (
-			<FormControl display="flex" justifyItems="center" isRequired={innerProps.isRequired} isInvalid={!!errors?.[name]}>
+			<FormControl isRequired={innerProps.isRequired} isInvalid={!!errors?.[name]}>
 				<Checkbox borderColor={errors?.[name] ? '#FC8181' : undefined} {...innerProps} {...register(name)}>
 					{label}
 				</Checkbox>

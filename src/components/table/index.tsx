@@ -34,20 +34,16 @@ type TableProps<T> = {
 	minWith?: string;
 	columns: Array<IColumn<T>>;
 	keyField: string;
-	toggleAllRowsSelected?: boolean;
 	testId?: string;
 	pagination?: PaginationProps;
 	loading?: boolean;
 	action?: PermissionAction | PermissionAction[];
 	onClickEdit?: (row: T) => void;
 	onClickDelete?: (row: T) => void;
-	onSelectionChange?: (selectedKeys: string[]) => void;
 };
 
-const Table = <T extends DataTable>({
+const Table = <T,>({
 	data = [],
-	keyField,
-	toggleAllRowsSelected,
 	columns,
 	testId,
 	pagination,
@@ -56,28 +52,7 @@ const Table = <T extends DataTable>({
 	minWith,
 	onClickEdit,
 	onClickDelete,
-	onSelectionChange,
 }: TableProps<T>): JSX.Element => {
-	const [selectedKeys, setSelectedKeys] = useState<string[]>(
-		toggleAllRowsSelected === true ? data.map(row => row[keyField] as string) : [],
-	);
-	const handleOnClick = (row: T) => {
-		if (!selectedKeys || (selectedKeys && selectedKeys.indexOf(row[keyField] as string)) === -1) {
-			setSelectedKeys([...(selectedKeys || []), row[keyField] as string]);
-		} else {
-			setSelectedKeys(selectedKeys?.filter(item => item !== row[keyField]));
-		}
-	};
-
-	useEffect(() => {
-		onSelectionChange?.(selectedKeys || []);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedKeys]);
-
-	useEffect(() => {
-		setSelectedKeys(toggleAllRowsSelected === true ? data.map(row => row[keyField] as string) : []);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [toggleAllRowsSelected]);
 	const textColor = useColorModeValue('secondaryGray.900', 'whiteSmoke.100');
 	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
 	const iconDelete = useColorModeValue('red.300', 'red.800');
@@ -114,19 +89,14 @@ const Table = <T extends DataTable>({
 						<Tbody flexDirection="column">
 							{data.map((row, index) => {
 								return (
-									<Tr
-										key={index}
-										bg={selectedKeys && selectedKeys.indexOf(row[keyField] as string) > -1 ? 'made.40' : undefined}
-										onClick={() => handleOnClick(row)}
-										data-testid={`row-${index}`}
-									>
+									<Tr key={index} bg="made.40" data-testid={`row-${index}`}>
 										{columns.map((column, colIndex) => (
 											<Td key={`${index}${colIndex}`}>
 												{column.cell && column.key ? (
 													column.cell(row)
 												) : (
 													<Text color={textColor} fontSize="sm" fontWeight="700">
-														{column.key ? (row[column.key] as string) : ''}
+														{column.key ? (row[column.key] as unknown as string) : ''}
 													</Text>
 												)}
 											</Td>
