@@ -21,7 +21,7 @@ export interface Route {
 	name: string;
 	layout: string;
 	path: string;
-	icon: React.ReactNode;
+	icon?: React.ReactNode;
 	component: React.ComponentType;
 	secondary?: boolean;
 	items?: Route[];
@@ -29,6 +29,7 @@ export interface Route {
 	authIcon?: string;
 	category?: boolean;
 	messageNavbar?: boolean;
+	isShow?: boolean;
 }
 
 const routes: Route[] = [
@@ -43,7 +44,6 @@ const routes: Route[] = [
 				name: 'Thêm mới người dùng',
 				layout: '/admin',
 				path: `/users/create`,
-				icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
 				component: UserManagementForm,
 			},
 		],
@@ -59,7 +59,6 @@ const routes: Route[] = [
 				name: 'Thêm mới đơn vị',
 				layout: '/admin',
 				path: `/office/create`,
-				icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
 				component: OfficeForm,
 			},
 		],
@@ -75,7 +74,6 @@ const routes: Route[] = [
 				name: 'Thêm mới chức vụ',
 				layout: '/admin',
 				path: `/position/create`,
-				icon: <Icon as={FaBuffer} width="20px" height="20px" color="inherit" />,
 				component: PositionForm,
 			},
 		],
@@ -91,7 +89,6 @@ const routes: Route[] = [
 				name: 'Thêm mới phân khu',
 				layout: '/admin',
 				path: `/subdivision/create`,
-				icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
 				component: DetailSubdivision,
 			},
 		],
@@ -107,7 +104,6 @@ const routes: Route[] = [
 				name: 'Thêm mới căn hộ',
 				layout: '/admin',
 				path: `/apartment/create`,
-				icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
 				component: AparmentForm,
 			},
 		],
@@ -123,7 +119,6 @@ const routes: Route[] = [
 				name: 'Thêm mới cư dân',
 				layout: '/admin',
 				path: `/resident/create`,
-				icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
 				component: ResidentForm,
 			},
 		],

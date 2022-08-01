@@ -45,6 +45,8 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, brandText, fixed, lo
 		};
 	});
 
+	const breadcrumb = brandText?.split('/');
+
 	return (
 		<Box
 			position={navbarPosition}
@@ -104,12 +106,12 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, brandText, fixed, lo
 								Pages
 							</BreadcrumbLink>
 						</BreadcrumbItem>
-
-						<BreadcrumbItem color={secondaryText} fontSize="sm">
-							<BreadcrumbLink href="#" color={secondaryText}>
-								{brandText}
-							</BreadcrumbLink>
-						</BreadcrumbItem>
+						{breadcrumb &&
+							breadcrumb.map((i, idx) => (
+								<BreadcrumbItem key={idx} color={secondaryText} fontSize="sm">
+									<BreadcrumbLink color={secondaryText}>{i}</BreadcrumbLink>
+								</BreadcrumbItem>
+							))}
 					</Breadcrumb>
 					{/* Here we create navbar brand, based on route name */}
 					<Flex mb={{ sm: '8px', md: '0px' }}>
@@ -132,7 +134,7 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, brandText, fixed, lo
 								boxShadow: 'none',
 							}}
 						>
-							{brandText}
+							{breadcrumb?.length ? breadcrumb?.[breadcrumb.length - 1] : brandText}
 						</Link>
 					</Flex>
 				</Box>

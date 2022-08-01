@@ -25,6 +25,7 @@ const Dashboard: React.FC = props => {
 	};
 	const getActiveRoute = (r: RootRoute[]): string => {
 		const activeRoute = '';
+		let parent = '';
 		for (const element of r) {
 			if (element.collapse) {
 				const collapseActiveRoute = getActiveRoute(element?.items || []);
@@ -40,7 +41,10 @@ const Dashboard: React.FC = props => {
 				return element.name;
 			} else if (element.items) {
 				const name = getActiveRoute(element?.items);
-				if (name) return name;
+				if (name) {
+					parent = element.name;
+					return `${parent}/${name}`;
+				}
 			}
 		}
 		return activeRoute;
