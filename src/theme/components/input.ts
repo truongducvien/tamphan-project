@@ -21,6 +21,9 @@ export const inputStyles = {
 						fontSize: 'sm',
 						p: '20px',
 						_placeholder: mode('secondaryGray.100', 'whiteAlpha.100')(props),
+						_focus: {
+							borderColor: mode('blue.300', 'blue.700')(props),
+						},
 					},
 				}),
 				auth: (props: StyleFunctionProps | Dict<string>) => ({
@@ -85,7 +88,6 @@ export const inputStyles = {
 					field: {
 						bg: 'transparent',
 						border: '1px solid',
-
 						borderColor: 'secondaryGray.100',
 						borderRadius: '16px',
 						_placeholder: { color: 'secondaryGray.600' },
@@ -117,6 +119,9 @@ export const inputStyles = {
 						borderColor: mode('secondaryGray.100', 'whiteAlpha.100')(props),
 						borderRadius: '16px',
 						_placeholder: { color: 'secondaryGray.600' },
+						_focus: {
+							borderColor: mode('blue.300', 'blue.700')(props),
+						},
 					},
 					icon: {
 						color: 'secondaryGray.600',
@@ -214,6 +219,9 @@ export const inputStyles = {
 							fontSize: 'sm',
 							_hover: {
 								bg: mode('secondaryGray.700', 'navy.700')(props),
+							},
+							_focus: {
+								borderColor: mode('blue.300', 'blue.700')(props),
 							},
 						},
 						_hover: {

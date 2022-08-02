@@ -86,101 +86,109 @@ export const DatePicker = ({ defaultDay, onChange, dateFormat = 'DD/MM/YYYY', ..
 	};
 	const color = useColorModeValue('gray', 'white');
 	const activeTextColor = useColorModeValue('white', 'white');
+	const borderColor = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
 	const curentDayColor = useColorModeValue('blue.200', 'blue.600');
-	const acticeBgColor = useColorModeValue('blue.500', 'blue.800');
+	const activeBgColor = useColorModeValue('blue.500', 'blue.800');
+	const forcusBorder = useColorModeValue('blue.300', 'blue.700');
 	return (
 		<Menu {...rest}>
-			<MenuButton w="100%" type="button">
-				<InputGroup>
-					<Input
-						defaultValue={defaultDay ? getDateStringFromTimestamp(defaultDay.setHours(0, 0, 0, 0)) : undefined}
-						color={color}
-						ref={inputRef}
-						{...rest}
-					/>
-					<InputRightElement>
-						<ChevronDownIcon w={5} h={5} />
-					</InputRightElement>
-				</InputGroup>
-			</MenuButton>
-			<MenuList>
-				<Center p={3}>
-					<HStack>
-						<IconButton
-							variant="ghost"
-							aria-label="datepicker left button"
-							onClick={() => setYearAction(-1)}
-							icon={<ArrowLeftIcon color={color} />}
-						/>
-						<IconButton
-							variant="ghost"
-							aria-label="datepicker left button"
-							onClick={() => setMonthAction(-1)}
-							icon={<ChevronLeftIcon color={color} />}
-						/>
-						<VStack align="center">
-							<Button variant="ghost" size="none">
-								<Heading color={color} m={0} fontWeight={200} as="h5">
-									{year}
-								</Heading>
-							</Button>
-							<Button variant="ghost" size="none" py="0px" color={color} margin="0px !important">
-								{getMonthStr(month).toUpperCase()}
-							</Button>
-						</VStack>
-						<IconButton
-							variant="ghost"
-							aria-label="datepicker right button"
-							color={color}
-							onClick={() => setMonthAction(1)}
-							icon={<ChevronRightIcon />}
-						/>
-						<IconButton
-							variant="ghost"
-							aria-label="datepicker right button"
-							color={color}
-							onClick={() => setYearAction(1)}
-							icon={<ArrowRightIcon />}
-						/>
-					</HStack>
-				</Center>
-				<Box p={3}>
-					<Grid alignItems="center" templateColumns="repeat(7, 1fr)" gap={3}>
-						{daysMap.map((d, i) => (
-							<Text color={color} key={i} w="100%">
-								{d.substring(0, 3).toLocaleUpperCase()}
-							</Text>
-						))}
-					</Grid>
-				</Box>
-				<Box p={3}>
-					<Grid templateColumns="repeat(7, 1fr)" gap={3}>
-						{monthDetails.map((day, index) => {
-							return (
-								<Button
-									disabled={day.month !== 0}
-									color={
-										isCurrentDay(day)
-											? activeTextColor
-											: isSelectedDay(day) && day.month === 0
-											? activeTextColor
-											: color
-									}
-									backgroundColor={
-										isSelectedDay(day) && day.month === 0 ? acticeBgColor : isCurrentDay(day) ? curentDayColor : ''
-									}
+			{({ isOpen }) => (
+				<>
+					<MenuButton w="100%" type="button">
+						<InputGroup>
+							<Input
+								defaultValue={defaultDay ? getDateStringFromTimestamp(defaultDay.setHours(0, 0, 0, 0)) : undefined}
+								color={color}
+								ref={inputRef}
+								{...rest}
+								borderWidth={1}
+								borderColor={isOpen ? forcusBorder : borderColor}
+							/>
+							<InputRightElement>
+								<ChevronDownIcon w={5} h={5} />
+							</InputRightElement>
+						</InputGroup>
+					</MenuButton>
+					<MenuList>
+						<Center p={3}>
+							<HStack>
+								<IconButton
 									variant="ghost"
-									size="sm"
-									key={index}
-									onClick={() => onDateClick(day)}
-								>
-									{day.date}
-								</Button>
-							);
-						})}
-					</Grid>
-				</Box>
-			</MenuList>
+									aria-label="datepicker left button"
+									onClick={() => setYearAction(-1)}
+									icon={<ArrowLeftIcon color={color} />}
+								/>
+								<IconButton
+									variant="ghost"
+									aria-label="datepicker left button"
+									onClick={() => setMonthAction(-1)}
+									icon={<ChevronLeftIcon color={color} />}
+								/>
+								<VStack align="center">
+									<Button variant="ghost" size="none">
+										<Heading color={color} m={0} fontWeight={200} as="h5">
+											{year}
+										</Heading>
+									</Button>
+									<Button variant="ghost" size="none" py="0px" color={color} margin="0px !important">
+										{getMonthStr(month).toUpperCase()}
+									</Button>
+								</VStack>
+								<IconButton
+									variant="ghost"
+									aria-label="datepicker right button"
+									color={color}
+									onClick={() => setMonthAction(1)}
+									icon={<ChevronRightIcon />}
+								/>
+								<IconButton
+									variant="ghost"
+									aria-label="datepicker right button"
+									color={color}
+									onClick={() => setYearAction(1)}
+									icon={<ArrowRightIcon />}
+								/>
+							</HStack>
+						</Center>
+						<Box p={3}>
+							<Grid alignItems="center" templateColumns="repeat(7, 1fr)" gap={3}>
+								{daysMap.map((d, i) => (
+									<Text color={color} key={i} w="100%">
+										{d.substring(0, 3).toLocaleUpperCase()}
+									</Text>
+								))}
+							</Grid>
+						</Box>
+						<Box p={3}>
+							<Grid templateColumns="repeat(7, 1fr)" gap={3}>
+								{monthDetails.map((day, index) => {
+									return (
+										<Button
+											disabled={day.month !== 0}
+											color={
+												isCurrentDay(day)
+													? activeTextColor
+													: isSelectedDay(day) && day.month === 0
+													? activeTextColor
+													: color
+											}
+											backgroundColor={
+												isSelectedDay(day) && day.month === 0 ? activeBgColor : isCurrentDay(day) ? curentDayColor : ''
+											}
+											variant="ghost"
+											size="sm"
+											key={index}
+											onClick={() => onDateClick(day)}
+										>
+											{day.date}
+										</Button>
+									);
+								})}
+							</Grid>
+						</Box>
+					</MenuList>
+				</>
+			)}
 		</Menu>
 	);
 };

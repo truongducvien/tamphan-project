@@ -34,7 +34,7 @@ export const buttonStyles = {
 					},
 				}),
 				delete: (props: StyleFunctionProps | Dict<string>) => ({
-					bg: mode('red.300', 'red.800')(props),
+					bg: mode('red.500', 'red.800')(props),
 					color: 'whiteSmoke',
 					_focus: {
 						bg: mode('brand.500', 'brand.400')(props),

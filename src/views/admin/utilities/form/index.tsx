@@ -153,7 +153,7 @@ const UtilitiesForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextAreaFieldHookForm label="Mô tả" name="description" />
+						<TextAreaFieldHookForm label="Mô tả" variant="admin" name="description" />
 						<CheckboxHookForm
 							pt={{ base: '0px', md: '25px' }}
 							label="Trạng thái hoạt động"
