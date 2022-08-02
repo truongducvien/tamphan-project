@@ -69,6 +69,8 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 	const fontSize = 'sm';
 	const bgMenu = useColorModeValue('white', 'navy.900');
 	const placeholderSt = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
+	const forcusBorder = useColorModeValue('blue.300', 'blue.700');
+
 	return (
 		<Controller
 			control={control}
@@ -93,7 +95,8 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 									fontSize,
 									_placeholder: placeholderSt,
 									'&:focus-within': {
-										borderWidth: 0,
+										borderWidth: 1,
+										borderColor: forcusBorder,
 										boxShadow: '0 0 0 0px',
 									},
 								}),

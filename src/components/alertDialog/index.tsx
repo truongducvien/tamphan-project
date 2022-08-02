@@ -11,16 +11,17 @@ import {
 	AlertDialogCloseButton,
 	AlertDialogProps,
 } from '@chakra-ui/react';
-import { FocusableElement } from '@chakra-ui/utils';
 
 export interface Props extends Omit<AlertDialogProps, 'leastDestructiveRef' | 'children'> {
 	title: string;
-	body?: string;
+	centerTitle?: boolean;
+	body?: React.ReactNode;
+	onConfirm?: () => void;
 }
 
-const AlertDialog: React.FC<Props> = ({ isOpen, onClose, title, body }) => {
-	const cancelRef = React.useRef<FocusableElement>(null);
-	return (
+const AlertDialog: React.FC<Props> = ({ isOpen, centerTitle = true, onClose, onConfirm, title, body }) => {
+	const cancelRef = React.useRef<HTMLButtonElement>(null);
+	return isOpen ? (
 		<RootAlertDialog
 			motionPreset="slideInBottom"
 			leastDestructiveRef={cancelRef}
@@ -30,20 +31,20 @@ const AlertDialog: React.FC<Props> = ({ isOpen, onClose, title, body }) => {
 		>
 			<AlertDialogOverlay />
 			<AlertDialogContent>
-				<AlertDialogHeader>{title}</AlertDialogHeader>
+				<AlertDialogHeader textAlign={centerTitle ? 'center' : 'start'}>{title}</AlertDialogHeader>
 				<AlertDialogCloseButton />
 				<AlertDialogBody>{body}</AlertDialogBody>
 				<AlertDialogFooter>
-					<Button ref={cancelRef as React.LegacyRef<HTMLButtonElement>} onClick={onClose}>
+					<Button ref={cancelRef} onClick={onClose}>
 						Huỷ
 					</Button>
-					<Button colorScheme="red" ml={3}>
+					<Button colorScheme="red" ml={3} onClick={onConfirm}>
 						Đồng ý
 					</Button>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</RootAlertDialog>
-	);
+	) : null;
 };
 
 export default AlertDialog;

@@ -21,6 +21,10 @@ export const textareaStyles = {
 					fontSize: 'sm',
 					p: '20px',
 					_placeholder: mode('secondaryGray.100', 'whiteAlpha.100')(props),
+					_focus: {
+						borderColor: mode('blue.300', 'blue.700')(props),
+						borderWith: 0,
+					},
 				}),
 				main: (props: StyleFunctionProps | Dict<string>) => ({
 					bg: mode('transparent', 'navy.800')(props),

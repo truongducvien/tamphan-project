@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
-import { FaBuffer, FaBuilding, FaClipboardList, FaMicrosoft, FaTh, FaUserAlt } from 'react-icons/fa';
+import { FaBuffer, FaBuilding, FaClipboardList, FaMicrosoft, FaRegistered, FaTh, FaUserAlt } from 'react-icons/fa';
 import { MdLock } from 'react-icons/md';
 import { Admin } from 'views/admin';
 import ApartMentManagement from 'views/admin/apartment';
@@ -20,6 +20,8 @@ import UtilitiesManagement from 'views/admin/utilities';
 import UtilitiesForm from 'views/admin/utilities/form';
 import TypeUtilitiesForm from 'views/admin/utilities/typeUti/form';
 import TypeUtilitiesManagement from 'views/admin/utilities/typeUti/typeUtilities';
+import UtilsReManagement from 'views/admin/utisRegisteration';
+import UtilsReForm from 'views/admin/utisRegisteration/form';
 import SignInCentered from 'views/auth/signIn';
 
 export interface Route {
@@ -138,7 +140,7 @@ const routes: Route[] = [
 	{
 		name: 'Quản lí loại tiện ích',
 		layout: '/admin',
-		path: `/typeUtilities`,
+		path: `/type-utilities`,
 		icon: <Icon as={FaClipboardList} width="20px" height="20px" color="inherit" />,
 		component: TypeUtilitiesManagement,
 		items: [
@@ -162,6 +164,21 @@ const routes: Route[] = [
 				layout: '/admin',
 				path: `/utilities/create`,
 				component: UtilitiesForm,
+			},
+		],
+	},
+	{
+		name: 'Quản lí đăng kí tiện ích',
+		layout: '/admin',
+		path: `/utilities-registeration`,
+		icon: <Icon as={FaRegistered} width="20px" height="20px" color="inherit" />,
+		component: UtilsReManagement,
+		items: [
+			{
+				name: 'Thông tin Đăng kí tiện ích',
+				layout: '/admin',
+				path: '/utilities-registeration/:id',
+				component: UtilsReForm,
 			},
 		],
 	},

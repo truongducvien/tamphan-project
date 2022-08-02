@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 
 export interface FormContainerProps<F> {
 	useFormFields?: UseFormProps;
-	validationSchema: Yup.AnyObjectSchema;
+	validationSchema?: Yup.AnyObjectSchema;
 	children: React.ReactNode;
 	defaultValues?: { [x: string]: undefined };
 	onSubmit?: (data: F, reset: UseFormReturn['reset']) => void;
@@ -18,7 +18,7 @@ export function FormContainer<F>({ children, validationSchema, onSubmit, ...inne
 		...innerProps,
 		criteriaMode: 'firstError',
 		shouldFocusError: true,
-		resolver: yupResolver(validationSchema),
+		...(validationSchema ? { resolver: yupResolver(validationSchema) } : {}),
 	});
 
 	return (

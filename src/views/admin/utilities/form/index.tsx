@@ -3,6 +3,7 @@ import Card from 'components/card/Card';
 import UploadImage from 'components/fileUpload';
 import { FormContainer } from 'components/form';
 import { CheckboxHookForm } from 'components/form/Checkbox';
+import { DatePickerdHookForm } from 'components/form/DatePicker';
 import { PullDowndHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
@@ -32,7 +33,9 @@ export interface DataForm {
 	image: string[];
 }
 const UtilitiesForm: React.FC = () => {
-	const onSubmit = (data: DataForm) => {};
+	const onSubmit = (data: DataForm) => {
+		console.log(data);
+	};
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -150,7 +153,7 @@ const UtilitiesForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextAreaFieldHookForm label="Mô tả" name="description" />
+						<TextAreaFieldHookForm label="Mô tả" variant="admin" name="description" />
 						<CheckboxHookForm
 							pt={{ base: '0px', md: '25px' }}
 							label="Trạng thái hoạt động"
