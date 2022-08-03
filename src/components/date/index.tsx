@@ -1,12 +1,9 @@
-import { useState, createRef } from 'react';
+import { useState, createRef, useRef } from 'react';
 
 import { ArrowLeftIcon, ArrowRightIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import {
 	InputProps as ChakraInputProps,
-	Menu,
-	MenuButton,
 	Button,
-	MenuList,
 	Input,
 	InputGroup,
 	InputRightElement,
@@ -19,6 +16,11 @@ import {
 	VStack,
 	Heading,
 	useColorModeValue,
+	Popover,
+	PopoverTrigger,
+	PopoverContent,
+	Portal,
+	useDisclosure,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 
@@ -35,6 +37,9 @@ export interface IDatePickerProps extends Omit<ChakraInputProps, 'onChange'> {
 
 export const DatePicker = ({ defaultDay, onChange, dateFormat = 'DD/MM/YYYY', ...rest }: IDatePickerProps) => {
 	const date = new Date();
+	const firstFieldRef = useRef(null);
+
+	const { onOpen, onClose, isOpen } = useDisclosure();
 	const [year, setYear] = useState(date.getFullYear());
 	const [month, setMonth] = useState(date.getMonth());
 	const [monthDetails, setMonthDetails] = useState(getMonthDetails(year, month));
@@ -91,104 +96,110 @@ export const DatePicker = ({ defaultDay, onChange, dateFormat = 'DD/MM/YYYY', ..
 	const activeBgColor = useColorModeValue('blue.500', 'blue.800');
 	const forcusBorder = useColorModeValue('blue.300', 'blue.700');
 	return (
-		<Menu {...rest}>
-			{({ isOpen }) => (
-				<>
-					<MenuButton w="100%" type="button">
-						<InputGroup>
-							<Input
-								defaultValue={defaultDay ? getDateStringFromTimestamp(defaultDay.setHours(0, 0, 0, 0)) : undefined}
-								color={color}
-								ref={inputRef}
-								{...rest}
-								borderWidth={1}
-								borderColor={isOpen ? forcusBorder : borderColor}
+		<Popover
+			isOpen={isOpen}
+			initialFocusRef={firstFieldRef}
+			onOpen={onOpen}
+			onClose={onClose}
+			placement="bottom-start"
+			closeOnBlur={false}
+			{...rest}
+		>
+			<PopoverTrigger>
+				<InputGroup>
+					<Input
+						defaultValue={defaultDay ? getDateStringFromTimestamp(defaultDay.setHours(0, 0, 0, 0)) : undefined}
+						color={color}
+						ref={inputRef}
+						{...rest}
+						borderWidth={1}
+						borderColor={isOpen ? forcusBorder : borderColor}
+					/>
+					<InputRightElement>
+						<ChevronDownIcon w={5} h={5} />
+					</InputRightElement>
+				</InputGroup>
+			</PopoverTrigger>
+			<Portal>
+				<PopoverContent>
+					<Center p={3}>
+						<HStack>
+							<IconButton
+								variant="ghost"
+								aria-label="datepicker left button"
+								onClick={() => setYearAction(-1)}
+								icon={<ArrowLeftIcon color={color} />}
 							/>
-							<InputRightElement>
-								<ChevronDownIcon w={5} h={5} />
-							</InputRightElement>
-						</InputGroup>
-					</MenuButton>
-					<MenuList>
-						<Center p={3}>
-							<HStack>
-								<IconButton
-									variant="ghost"
-									aria-label="datepicker left button"
-									onClick={() => setYearAction(-1)}
-									icon={<ArrowLeftIcon color={color} />}
-								/>
-								<IconButton
-									variant="ghost"
-									aria-label="datepicker left button"
-									onClick={() => setMonthAction(-1)}
-									icon={<ChevronLeftIcon color={color} />}
-								/>
-								<VStack align="center">
-									<Button variant="ghost" size="none">
-										<Heading color={color} m={0} fontWeight={200} as="h5">
-											{year}
-										</Heading>
+							<IconButton
+								variant="ghost"
+								aria-label="datepicker left button"
+								onClick={() => setMonthAction(-1)}
+								icon={<ChevronLeftIcon color={color} />}
+							/>
+							<VStack align="center">
+								<Button variant="ghost" size="none">
+									<Heading color={color} m={0} fontWeight={200} as="h5">
+										{year}
+									</Heading>
+								</Button>
+								<Button variant="ghost" size="none" py="0px" color={color} margin="0px !important">
+									{getMonthStr(month).toUpperCase()}
+								</Button>
+							</VStack>
+							<IconButton
+								variant="ghost"
+								aria-label="datepicker right button"
+								color={color}
+								onClick={() => setMonthAction(1)}
+								icon={<ChevronRightIcon />}
+							/>
+							<IconButton
+								variant="ghost"
+								aria-label="datepicker right button"
+								color={color}
+								onClick={() => setYearAction(1)}
+								icon={<ArrowRightIcon />}
+							/>
+						</HStack>
+					</Center>
+					<Box p={3}>
+						<Grid alignItems="center" templateColumns="repeat(7, 1fr)" gap={3}>
+							{daysMap.map((d, i) => (
+								<Text color={color} key={i} w="100%">
+									{d.substring(0, 3).toLocaleUpperCase()}
+								</Text>
+							))}
+						</Grid>
+					</Box>
+					<Box p={3}>
+						<Grid templateColumns="repeat(7, 1fr)" gap={3}>
+							{monthDetails.map((day, index) => {
+								return (
+									<Button
+										disabled={day.month !== 0}
+										color={
+											isCurrentDay(day)
+												? activeTextColor
+												: isSelectedDay(day) && day.month === 0
+												? activeTextColor
+												: color
+										}
+										backgroundColor={
+											isSelectedDay(day) && day.month === 0 ? activeBgColor : isCurrentDay(day) ? curentDayColor : ''
+										}
+										variant="ghost"
+										size="sm"
+										key={index}
+										onClick={() => onDateClick(day)}
+									>
+										{day.date}
 									</Button>
-									<Button variant="ghost" size="none" py="0px" color={color} margin="0px !important">
-										{getMonthStr(month).toUpperCase()}
-									</Button>
-								</VStack>
-								<IconButton
-									variant="ghost"
-									aria-label="datepicker right button"
-									color={color}
-									onClick={() => setMonthAction(1)}
-									icon={<ChevronRightIcon />}
-								/>
-								<IconButton
-									variant="ghost"
-									aria-label="datepicker right button"
-									color={color}
-									onClick={() => setYearAction(1)}
-									icon={<ArrowRightIcon />}
-								/>
-							</HStack>
-						</Center>
-						<Box p={3}>
-							<Grid alignItems="center" templateColumns="repeat(7, 1fr)" gap={3}>
-								{daysMap.map((d, i) => (
-									<Text color={color} key={i} w="100%">
-										{d.substring(0, 3).toLocaleUpperCase()}
-									</Text>
-								))}
-							</Grid>
-						</Box>
-						<Box p={3}>
-							<Grid templateColumns="repeat(7, 1fr)" gap={3}>
-								{monthDetails.map((day, index) => {
-									return (
-										<Button
-											disabled={day.month !== 0}
-											color={
-												isCurrentDay(day)
-													? activeTextColor
-													: isSelectedDay(day) && day.month === 0
-													? activeTextColor
-													: color
-											}
-											backgroundColor={
-												isSelectedDay(day) && day.month === 0 ? activeBgColor : isCurrentDay(day) ? curentDayColor : ''
-											}
-											variant="ghost"
-											size="sm"
-											key={index}
-											onClick={() => onDateClick(day)}
-										>
-											{day.date}
-										</Button>
-									);
-								})}
-							</Grid>
-						</Box>
-					</MenuList>
-				</>
-			)}
-		</Menu>
+								);
+							})}
+						</Grid>
+					</Box>
+				</PopoverContent>
+			</Portal>
+		</Popover>
 	);
 };
