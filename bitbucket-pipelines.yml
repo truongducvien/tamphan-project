@@ -1,0 +1,166 @@
+image: amazon/aws-cli
+
+.set_environment: &setenv |
+  export DOCKER_REPO=${DOCKER_REGISTRY}/${BITBUCKET_REPO_SLUG}
+  export IMAGE_TAG=${DOCKER_REPO}:${BITBUCKET_COMMIT::7}
+  export DOCKERFILE_PATH=Dockerfile
+  env
+  aws configure set aws_access_key_id "${AWS_KEY}"
+  aws configure set aws_secret_access_key "${AWS_SECRET}"
+  aws ecr get-login-password --region "${AWS_REGION}" | docker login --username AWS --password-stdin ${DOCKER_REGISTRY}
+
+.build_and_push_images: &build_and_push_images |
+  docker build . --file ${DOCKERFILE_PATH} --tag ${IMAGE_TAG}
+  docker push ${IMAGE_TAG}
+
+.pull_images: &pull_images |
+  docker pull ${IMAGE_TAG}
+
+.retag_and_push_images: &retag_and_push_images |
+  docker tag ${IMAGE_TAG} ${NEW_IMAGE_TAG}
+  docker push ${NEW_IMAGE_TAG}
+
+definitions:
+  services:
+    docker:
+      memory: 7128
+  steps:
+    - step: &deploy_service
+        name: Deploy Service
+        script:
+          - *setenv
+          - sed 's#__DEPLOY_IMAGE_TAG__#'${DOCKER_REPO}:${BITBUCKET_TAG}'#' deploy/deployment.yaml > deploy/deployment.yml
+          - cat deploy/deployment.yml
+          - pipe: atlassian/aws-eks-kubectl-run:1.2.0
+            variables:
+              AWS_ACCESS_KEY_ID: "${AWS_KEY}" # Optional if already defined in the context.
+              AWS_SECRET_ACCESS_KEY: "${AWS_SECRET}" # Optional if already defined in the context.
+              AWS_DEFAULT_REGION: "ap-southeast-1" # Optional if already defined in the context.
+              CLUSTER_NAME: "${CLUSTER_NAME}"
+              KUBECTL_ARGS:
+                - "-n"
+                - "data-api"
+              KUBECTL_COMMAND: "apply"
+              RESOURCE_PATH: "deploy/deployment.yml"
+        services:
+          - docker 
+
+    - step: &deploy_service
+        name: Deploy Service on Server
+        runs-on:
+          - self.hosted
+          - linux.shell
+          - aquacity
+        script:
+          - *setenv
+          - cd /home/ubuntu/aquacity/frontend
+          - unset DOCKER_HOST
+          - docker-compose down --rmi all | true
+          - export WEB_PORTAL_TAG="${DOCKER_REPO}:${BITBUCKET_TAG}"
+          - sed 's#__WEB_PORTAL_TAG__#'$WEB_PORTAL_TAG'#' docker-compose.yaml.template > docker-compose.yaml 
+          - docker-compose up -d
+
+pipelines:
+  pull-requests:
+    "**":
+        - step:
+            name: Build & Test
+            image: node:lts
+            caches:
+              - node
+            script:
+              - yarn install --frozen-lockfile --cache-folder .yarn
+              - yarn tsc
+              - yarn lint
+  tags:
+    ####################################
+    ############ CI For STG ############
+    ####################################
+    '*.*.*-stg':
+      - step:
+          name: STG - Build & Push Image
+          script:
+            - *setenv
+            - export NEW_IMAGE_TAG=${DOCKER_REPO}:${BITBUCKET_TAG}
+            - >-  
+              docker build . --file ${DOCKERFILE_PATH} --tag ${IMAGE_TAG}
+              --build-arg REACT_APP_API_BASE_URL=http://10.253.69.250:8080
+            - *retag_and_push_images
+          services:
+            - docker
+          caches:
+            - docker
+          size: 2x 
+      - step:
+          name: STG - Deploy Service
+          <<: *deploy_service
+      # - step:
+      #     name: STG - Deploy Service 
+      #     deployment: stg
+      #     <<: *deploy_service
+
+    ####################################
+    ############ CI For UAT ############
+    ####################################
+    '*.*.*-uat':
+      - step:
+          name: UAT - Update image tag
+          script:
+            - *setenv
+            - export NEW_IMAGE_TAG=${DOCKER_REPO}:${BITBUCKET_TAG}
+            - >-  
+              docker build . --file ${DOCKERFILE_PATH} --tag ${IMAGE_TAG}
+              --build-arg REACT_APP_API_BASE_URL=http://10.253.69.250:8080
+            - *retag_and_push_images
+          services:
+            - docker
+          caches:
+            - docker
+          size: 2x 
+      # - step:
+      #     name: UAT - Deploy Service 
+      #     deployment: uat
+      #     <<: *deploy_service
+
+      # - step:
+      #     name: READY FOR PRD - Update image tag
+      #     <<: *mark_image_ready_for_prd
+      #     trigger: manual
+ 
+    ###################################
+    ########## CI For PRE-PRD #########
+    ###################################
+    # '*.*.*-preprd':
+    #   - step:
+    #       name: PRD - Update image tag
+    #       script:
+    #         - *setenv
+    #         - export IMAGE_TAG=${DOCKER_REPO}:READY-FOR-PROD
+    #         - export NEW_IMAGE_TAG=${DOCKER_REPO}:${BITBUCKET_TAG}
+    #       services:
+    #         - docker
+    #       caches:
+    #         - docker
+
+    ####################################
+    ############ CI For PRD ############
+    ####################################
+    '*.*.*-prd':
+      - step:
+          name: PRD - Release Image On PRD
+          script:
+            - *setenv
+            - export NEW_IMAGE_TAG=${DOCKER_REPO}:${BITBUCKET_TAG}
+            - >-  
+              docker build . --file ${DOCKERFILE_PATH} --tag ${IMAGE_TAG}
+              --build-arg REACT_APP_API_BASE_URL=http://10.253.69.250:8080
+            - *retag_and_push_images
+          services:
+            - docker
+          caches:
+            - docker
+          size: 2x 
+      # - step:
+      #     name: PRD - Deploy Service 
+      #     deployment: prd
+      #     <<: *deploy_service
