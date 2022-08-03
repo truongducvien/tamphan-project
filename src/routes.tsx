@@ -170,14 +170,14 @@ const routes: Route[] = [
 	{
 		name: 'Quản lí đăng kí tiện ích',
 		layout: '/admin',
-		path: `/utilities-registeration`,
+		path: `/utils-registeration`,
 		icon: <Icon as={FaRegistered} width="20px" height="20px" color="inherit" />,
 		component: UtilsReManagement,
 		items: [
 			{
 				name: 'Thông tin Đăng kí tiện ích',
 				layout: '/admin',
-				path: '/utilities-registeration/:id',
+				path: '/utils-registeration/:id',
 				component: UtilsReForm,
 			},
 		],
