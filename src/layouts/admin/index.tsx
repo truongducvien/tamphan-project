@@ -158,7 +158,10 @@ const Dashboard: React.FC = props => {
 
 					{getRoute() ? (
 						<Box p={{ base: '20px', md: '30px' }} pe="20px" pt="50px">
-							<Switch>{getRoutes(routes)}</Switch>
+							<Switch>
+								{getRoutes(routes)}
+								<Redirect from="/*" to="/admin" />
+							</Switch>
 						</Box>
 					) : null}
 					<Box>
