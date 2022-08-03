@@ -27,7 +27,7 @@ export const SidebarLinks: React.FC<Props> = props => {
 
 	// verifies if routeName is the one active (in browser input)
 	const activeRoute = (routeName: string) => {
-		return location.pathname === '/admin' + routeName;
+		return location.pathname.includes('/admin' + routeName);
 	};
 
 	// this function creates the links from the secondary accordions (for example auth -> sign-in -> default)
