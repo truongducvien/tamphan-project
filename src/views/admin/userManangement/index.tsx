@@ -93,69 +93,67 @@ const UserManagement: React.FC = () => {
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
-				<Box p={{ sm: 2, md: 5 }} mt={2}>
-					<FormControl>
-						<SimpleGrid columns={{ sm: 1, md: 2 }} spacing={5}>
-							<Box>
-								<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-									<Text>Đơn vị</Text>
-								</FormLabel>
-								<Select
-									data-testid="page-size-dropdown"
-									size="md"
-									ml={1}
-									variant="admin"
-									_hover={{ bg: 'made.80' }}
-									placeholder="Chọn đơn vị"
-								/>
-							</Box>
-							<Box>
-								<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-									<Text>Họ tên</Text>
-								</FormLabel>
-								<Input
-									isRequired
-									variant="admin"
-									fontSize="sm"
-									ms={{ base: '0px', md: '0px' }}
-									type="email"
-									placeholder="Nhập họ tên"
-									size="md"
-								/>
-							</Box>
-							<Box>
-								<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-									<Text>Tài khoản</Text>
-								</FormLabel>
-								<Input
-									isRequired
-									variant="admin"
-									fontSize="sm"
-									ms={{ base: '0px', md: '0px' }}
-									type="email"
-									placeholder="Nhập tài khoản"
-									mb="24px"
-									fontWeight="500"
-									size="md"
-								/>
-							</Box>
-							<Box display="flex" justifySelf="flex-end">
-								<Flex align="center">
-									<Button variant="lightBrand" leftIcon={<SearchIcon />}>
-										Tìm kiếm
-									</Button>
-									<Link to={`${patchs.User}/${patchs.Create}`} as={RouterLink}>
-										<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-											Thêm mới
-										</Button>
-									</Link>
-								</Flex>
-							</Box>
-						</SimpleGrid>
-					</FormControl>
+			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
+				<Box px={{ sm: 2, md: 5 }}>
+					<SimpleGrid columns={{ sm: 1, md: 3 }} spacing={5}>
+						<FormControl>
+							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
+								<Text>Đơn vị</Text>
+							</FormLabel>
+							<Select
+								data-testid="page-size-dropdown"
+								size="md"
+								ml={1}
+								variant="admin"
+								_hover={{ bg: 'made.80' }}
+								placeholder="Chọn đơn vị"
+							/>
+						</FormControl>
+						<FormControl>
+							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
+								<Text>Họ tên</Text>
+							</FormLabel>
+							<Input
+								isRequired
+								variant="admin"
+								fontSize="sm"
+								ms={{ base: '0px', md: '0px' }}
+								type="email"
+								placeholder="Nhập họ tên"
+								size="md"
+							/>
+						</FormControl>
+						<FormControl>
+							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
+								<Text>Tài khoản</Text>
+							</FormLabel>
+							<Input
+								isRequired
+								variant="admin"
+								fontSize="sm"
+								ms={{ base: '0px', md: '0px' }}
+								type="email"
+								placeholder="Nhập tài khoản"
+								mb="24px"
+								fontWeight="500"
+								size="md"
+							/>
+						</FormControl>
+					</SimpleGrid>
+					<Flex flex={1} alignItems="flex-end" justifyContent="flex-end">
+						<Button variant="lightBrand" leftIcon={<SearchIcon />}>
+							Tìm kiếm
+						</Button>
+						<Link to={`${patchs.User}/${patchs.Create}`} as={RouterLink}>
+							<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+								Thêm mới
+							</Button>
+						</Link>
+					</Flex>
 				</Box>
-				<Center m={5}>
+			</Card>
+			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách người dùng
 					</Heading>

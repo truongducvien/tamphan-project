@@ -6,7 +6,7 @@ export const headingStyles = {
 		Heading: {
 			variants: {
 				admin: (props: StyleFunctionProps | Dict<string>) => ({
-					color: mode('gray.500', 'gray.300')(props),
+					color: mode('gray.800', 'gray.200')(props),
 				}),
 			},
 		},

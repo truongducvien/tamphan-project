@@ -51,10 +51,15 @@ const UserForm: React.FC = () => {
 						<TextFieldHookForm label="Ngày sinh" name="birthday" variant="admin" />
 						<TextFieldHookForm label="Giới tính" name="gender" variant="admin" />
 					</Stack>
-					<HStack pb={3}>
+					<Stack
+						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
+						direction={{ base: 'column', md: 'row' }}
+						spacing={3}
+						pb={3}
+					>
 						<TextFieldHookForm label="Email" name="email" variant="admin" />
 						<TextFieldHookForm isRequired label="Sô điện thoại" name="phone" variant="admin" />
-					</HStack>
+					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
 						direction={{ base: 'column', md: 'row' }}
@@ -107,9 +112,9 @@ const UserForm: React.FC = () => {
 							isMulti
 							isSearchable={false}
 						/>
-						<TextFieldHookForm label="Đại chỉ" name="addrress" variant="admin" />
+						<TextFieldHookForm label="Địa chỉ" name="addrress" variant="admin" />
 					</Stack>
-					<HStack pb={3}>
+					<HStack pb={3} pr={1.5} w={{ sm: '100%', md: '50%' }}>
 						<PullDowndHookForm
 							label="Trạng thái hoạt động"
 							name="subdivision"
@@ -123,7 +128,7 @@ const UserForm: React.FC = () => {
 							isSearchable={false}
 						/>
 					</HStack>
-					<HStack pb={3}>
+					<HStack pt={3} justifyContent="flex-end">
 						<Button w="20" type="submit" variant="brand">
 							Lưu
 						</Button>

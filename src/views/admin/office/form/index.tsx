@@ -60,7 +60,7 @@ const DetailOffice: React.FC = () => {
 							variant="admin"
 						/>
 					</Stack>
-					<HStack pb={3}>
+					<HStack pb={3} justifyContent="flex-end">
 						<Button w="20" type="submit" variant="brand">
 							Lưu
 						</Button>

@@ -88,7 +88,7 @@ const DetailSubdivision: React.FC = () => {
 							<UploadImage />
 						</FormControl>
 					</Box>
-					<HStack pb={3}>
+					<HStack pt={3} justifyContent="end">
 						<Button w="20" type="submit" variant="brand">
 							Lưu
 						</Button>

@@ -167,7 +167,7 @@ const UtilitiesForm: React.FC = () => {
 							<UploadImage isMulti />
 						</FormControl>
 					</Box>
-					<HStack pb={3}>
+					<HStack pt={3} justify="end">
 						<Button w="20" type="submit" variant="brand">
 							Lưu
 						</Button>

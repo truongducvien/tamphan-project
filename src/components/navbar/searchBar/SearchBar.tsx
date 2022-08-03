@@ -22,9 +22,8 @@ const SearchBar: React.FC<Props> = props => {
 		<InputGroup w={{ base: '100%', md: '200px' }} {...rest}>
 			<InputLeftElement>
 				<IconButton
+					bg={inputBg}
 					aria-label="Seacrch"
-					bg="inherit"
-					borderRadius="inherit"
 					_active={{
 						bg: 'inherit',
 						transform: 'none',

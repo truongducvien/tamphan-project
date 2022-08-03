@@ -1,16 +1,13 @@
 import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, Flex, Heading, Link, SimpleGrid, Stack } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { DatePickerdHookForm } from 'components/form/DatePicker';
 import { PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { DataTable, IColumn } from 'components/table';
-import { MdLibraryAdd } from 'react-icons/md';
-import { Link as RouterLink } from 'react-router-dom';
-import { patchs } from 'variables/patch';
 import { PermistionAction } from 'variables/permission';
 
 export interface UtilsRe extends DataTable {
@@ -78,8 +75,8 @@ const UtilsReManagement: React.FC = () => {
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
-				<Box p={{ sm: 2, md: 5 }} mt={2}>
+			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
+				<Box px={{ sm: 2, md: 5 }}>
 					<FormContainer onSubmit={() => {}}>
 						<SimpleGrid columns={{ sm: 1, md: 3 }} spacing={3}>
 							<DatePickerdHookForm label="Từ ngày" name="from" />
@@ -95,7 +92,9 @@ const UtilsReManagement: React.FC = () => {
 						</SimpleGrid>
 					</FormContainer>
 				</Box>
-				<Center m={5}>
+			</Card>
+			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách dăng kí tiện ích
 					</Heading>

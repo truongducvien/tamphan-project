@@ -231,6 +231,12 @@ export const inputStyles = {
 				}),
 			},
 		},
+		FormLabel: {
+			baseStyle: {
+				fontWeight: 500,
+				fontSize: 'sm',
+			},
+		},
 		// PinInputField: {
 		//   variants: {
 		//     main: (props) => ({

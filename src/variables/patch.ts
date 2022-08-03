@@ -5,7 +5,7 @@ export const patchs = {
 	Position: 'position',
 	Subdivision: 'subdivision',
 	Apartment: 'apartment',
-	Resident: 'Resident',
+	Resident: 'resident',
 	Utilities: 'utilities',
 	TypeUtilities: 'type-utilities',
 	//

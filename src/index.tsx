@@ -7,6 +7,7 @@ import AuthLayout from 'layouts/auth';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
+import './index.scss';
 import theme from './theme/theme';
 
 const container = document.getElementById('root');

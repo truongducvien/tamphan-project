@@ -64,36 +64,38 @@ const OfficeManagement: React.FC = () => {
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
-				<Box p={{ sm: 2, md: 5 }} mt={2}>
-					<FormControl>
-						<HStack spacing={5}>
+			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
+				<Box px={{ sm: 2, md: 5 }}>
+					<HStack spacing={5} align="flex-end">
+						<FormControl>
 							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
 								<Text>Tên đơn vị</Text>
 							</FormLabel>
 							<Input
 								variant="admin"
-								maxW={300}
+								maxW={500}
 								fontSize="sm"
 								ms={{ base: '0px', md: '0px' }}
 								type="email"
 								placeholder="Nhập đơn vị"
 								size="md"
 							/>
-							<Flex align="center">
-								<Button variant="lightBrand" leftIcon={<SearchIcon />}>
-									Tìm kiếm
+						</FormControl>
+						<Flex>
+							<Button variant="lightBrand" leftIcon={<SearchIcon />}>
+								Tìm kiếm
+							</Button>
+							<Link to={`${patchs.Office}/${patchs.Create}`} as={RouterLink}>
+								<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+									Thêm mới
 								</Button>
-								<Link to={`${patchs.Office}/${patchs.Create}`} as={RouterLink}>
-									<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-										Thêm mới
-									</Button>
-								</Link>
-							</Flex>
-						</HStack>
-					</FormControl>
+							</Link>
+						</Flex>
+					</HStack>
 				</Box>
-				<Center m={5}>
+			</Card>
+			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách Đơn vị
 					</Heading>

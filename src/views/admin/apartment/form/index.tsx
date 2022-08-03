@@ -211,7 +211,7 @@ const AparmentForm: React.FC = () => {
 						<TextFieldHookForm type="text" label="Địa chỉ tạm trú" name="currentAddress" variant="admin" />
 						<TextFieldHookForm type="text" label="Nơi cấp" name="addressCmnd" variant="admin" />
 					</Stack>
-					<HStack pb={3}>
+					<HStack pt={3} justifyContent="end">
 						<Button w="20" type="submit" variant="brand">
 							Lưu
 						</Button>

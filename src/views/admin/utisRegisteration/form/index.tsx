@@ -123,7 +123,7 @@ const UtilsReForm: React.FC = () => {
 						<TextFieldHookForm isDisabled label="Phương thức thanh toán" name="paymentMe" variant="admin" />
 						<TextAreaFieldHookForm isDisabled label="Ghi chú" name="note" variant="admin" />
 					</Stack>
-					<HStack pb={3}>
+					<HStack pt={3} justify="end">
 						<Button type="submit" variant="brand">
 							Xác nhận thanh toán
 						</Button>

@@ -52,13 +52,10 @@ const HeaderLinks: React.FC<Props> = props => {
 			w={{ sm: '100%', md: 'auto' }}
 			alignItems="center"
 			flexDirection="row"
-			bg={menuBg}
 			flexWrap={secondary ? { base: 'wrap', md: 'nowrap' } : 'unset'}
 			p="10px"
-			borderRadius="30px"
-			boxShadow={shadow}
 		>
-			<SearchBar mb={secondary ? { base: '10px', md: 'unset' } : 'unset'} me="10px" borderRadius="30px" />
+			<SearchBar mb={secondary ? { base: '10px', md: 'unset' } : 'unset'} me="10px" />
 			<Flex
 				bg={ethBg}
 				display={secondary ? 'flex' : 'none'}

@@ -136,7 +136,7 @@ const DetailPosition: React.FC = () => {
 							/>
 						))}
 					</SimpleGrid>
-					<HStack pb={3}>
+					<HStack pb={3} justifyContent="flex-end">
 						<Button w="20" type="submit" variant="brand">
 							Lưu
 						</Button>

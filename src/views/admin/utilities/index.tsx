@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import { PullDown } from 'components/pulldown';
 import Table, { DataTable, IColumn } from 'components/table';
@@ -63,8 +63,8 @@ const UtilitiesManagement: React.FC = () => {
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
-				<Box p={{ sm: 2, md: 5 }} mt={2}>
+			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
+				<Box px={{ sm: 2, md: 5 }}>
 					<Stack
 						spacing={5}
 						align="end"
@@ -72,7 +72,9 @@ const UtilitiesManagement: React.FC = () => {
 						direction={{ base: 'column', md: 'row' }}
 					>
 						<FormControl>
-							<FormLabel>Loại tiện ích</FormLabel>
+							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
+								Loại tiện ích
+							</FormLabel>
 							<PullDown
 								name="type"
 								options={[
@@ -115,7 +117,7 @@ const UtilitiesManagement: React.FC = () => {
 							/>
 						</FormControl>
 					</Stack>
-					<Box mt={3}>
+					<Flex mt={3} justify="end">
 						<Button variant="lightBrand" leftIcon={<SearchIcon />}>
 							Tìm kiếm
 						</Button>
@@ -127,9 +129,11 @@ const UtilitiesManagement: React.FC = () => {
 						<Button marginLeft={1} variant="delete" leftIcon={<MdDelete />}>
 							Xoá
 						</Button>
-					</Box>
+					</Flex>
 				</Box>
-				<Center m={5}>
+			</Card>
+			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách tiện ích
 					</Heading>

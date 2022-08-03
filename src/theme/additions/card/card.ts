@@ -11,7 +11,7 @@ const Card = {
 		borderRadius: '20px',
 		minWidth: '0px',
 		wordWrap: 'break-word',
-		bg: mode('rgba(255,255,255,0.3)', 'navy.800')(props),
+		bg: mode('white', 'navy.800')(props),
 		backgroundClip: 'border-box',
 	}),
 };

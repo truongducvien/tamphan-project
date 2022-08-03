@@ -64,48 +64,48 @@ const PositionManagement: React.FC = () => {
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
-				<Box p={{ sm: 2, md: 5 }} mt={2}>
+			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
+				<HStack spacing={5} px={{ sm: 2, md: 5 }} alignItems="flex-end">
 					<FormControl>
-						<HStack spacing={5}>
-							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-								<Text>Tên chức vụ</Text>
-							</FormLabel>
-							<Input
-								variant="admin"
-								maxW={300}
-								fontSize="sm"
-								ms={{ base: '0px', md: '0px' }}
-								type="text"
-								placeholder="Nhập chức vụ"
-								size="md"
-							/>
-							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-								<Text>Mã chức vụ</Text>
-							</FormLabel>
-							<Input
-								variant="admin"
-								maxW={300}
-								fontSize="sm"
-								ms={{ base: '0px', md: '0px' }}
-								type="text"
-								placeholder="Nhập mã chức vụ"
-								size="md"
-							/>
-							<Flex align="center">
-								<Button variant="lightBrand" leftIcon={<SearchIcon />}>
-									Tìm kiếm
-								</Button>
-								<Link to={`${patchs.Position}/${patchs.Create}`} as={RouterLink}>
-									<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-										Thêm mới
-									</Button>
-								</Link>
-							</Flex>
-						</HStack>
+						<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
+							<Text>Tên chức vụ</Text>
+						</FormLabel>
+						<Input
+							variant="admin"
+							fontSize="sm"
+							ms={{ base: '0px', md: '0px' }}
+							type="text"
+							placeholder="Nhập chức vụ"
+							size="md"
+						/>
 					</FormControl>
-				</Box>
-				<Center m={5}>
+					<FormControl>
+						<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
+							<Text>Mã chức vụ</Text>
+						</FormLabel>
+						<Input
+							variant="admin"
+							fontSize="sm"
+							ms={{ base: '0px', md: '0px' }}
+							type="text"
+							placeholder="Nhập mã chức vụ"
+							size="md"
+						/>
+					</FormControl>
+					<Flex align="center">
+						<Button variant="lightBrand" leftIcon={<SearchIcon />}>
+							Tìm kiếm
+						</Button>
+						<Link to={`${patchs.Position}/${patchs.Create}`} as={RouterLink}>
+							<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+								Thêm mới
+							</Button>
+						</Link>
+					</Flex>
+				</HStack>
+			</Card>
+			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách chức vụ
 					</Heading>

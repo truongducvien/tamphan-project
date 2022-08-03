@@ -24,12 +24,15 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, brandText, fixed, lo
 	const navbarPosition = 'fixed';
 	const navbarFilter = 'none';
 	const navbarBackdrop = 'blur(20px)';
-	const navbarShadow = 'none';
-	const navbarBg = useColorModeValue('rgba(244, 247, 254, 0.2)', 'rgba(11,20,55,0.5)');
+	const navbarBg = useColorModeValue('white', 'navy.800');
 	const navbarBorder = 'transparent';
 	const secondaryMargin = '0px';
 	const paddingX = '15px';
 	const gap = '0px';
+	const shadow = useColorModeValue(
+		'0px 17px 40px -17px rgba(112, 144, 176, 0.18)',
+		'14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
+	);
 	const changeNavbar = () => {
 		if (window.scrollY > 1) {
 			setScrolled(true);
@@ -50,14 +53,13 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, brandText, fixed, lo
 	return (
 		<Box
 			position={navbarPosition}
-			boxShadow={navbarShadow}
+			boxShadow={shadow}
 			bg={navbarBg}
 			borderColor={navbarBorder}
 			filter={navbarFilter}
 			backdropFilter={navbarBackdrop}
 			backgroundPosition="center"
 			backgroundSize="cover"
-			borderRadius="16px"
 			borderWidth="1.5px"
 			borderStyle="solid"
 			transitionDelay="0s, 0s, 0s, 0s"
@@ -72,50 +74,33 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, brandText, fixed, lo
 			mx="auto"
 			mt={secondaryMargin}
 			pb="8px"
-			right={{ base: '12px', md: '30px', lg: '30px', xl: '30px' }}
+			right={0}
 			px={{
 				sm: paddingX,
 				md: '10px',
 			}}
-			ps={{
-				xl: '12px',
-			}}
 			pt="8px"
-			top={{ base: '12px', md: '16px', xl: '18px' }}
+			top="0px"
 			w={{
-				base: 'calc(100vw - 6%)',
-				md: 'calc(100vw - 8%)',
-				lg: 'calc(100vw - 6%)',
-				xl: 'calc(100vw - 350px)',
-				'2xl': 'calc(100vw - 365px)',
+				base: '100vw',
+				xl: 'calc(100vw - 300px)',
+				'2xl': 'calc(100vw - 300px)',
 			}}
 		>
 			<Flex
+				pl="10px"
 				w="100%"
 				flexDirection={{
 					sm: 'column',
 					md: 'row',
 				}}
-				alignItems={{ xl: 'center' }}
+				alignItems="start"
 				mb={gap}
 			>
+				<SidebarResponsive routes={routes} display="none" />
 				<Box mb={{ sm: '8px', md: '0px' }}>
-					<Breadcrumb>
-						<BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
-							<BreadcrumbLink href="#" color={secondaryText}>
-								Pages
-							</BreadcrumbLink>
-						</BreadcrumbItem>
-						{breadcrumb &&
-							breadcrumb.map((i, idx) => (
-								<BreadcrumbItem key={idx} color={secondaryText} fontSize="sm">
-									<BreadcrumbLink color={secondaryText}>{i}</BreadcrumbLink>
-								</BreadcrumbItem>
-							))}
-					</Breadcrumb>
 					{/* Here we create navbar brand, based on route name */}
 					<Flex mb={{ sm: '8px', md: '0px' }}>
-						<SidebarResponsive routes={routes} display="none" />
 						{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
 						<Link
 							color={mainText}
@@ -123,7 +108,7 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, brandText, fixed, lo
 							bg="inherit"
 							borderRadius="inherit"
 							fontWeight="bold"
-							fontSize="34px"
+							fontSize="25px"
 							_hover={{ color: { mainText } }}
 							_active={{
 								bg: 'inherit',
@@ -137,7 +122,21 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, brandText, fixed, lo
 							{breadcrumb?.length ? breadcrumb?.[breadcrumb.length - 1] : brandText}
 						</Link>
 					</Flex>
+					<Breadcrumb ml="5px">
+						<BreadcrumbItem color={secondaryText} fontSize="sm">
+							<BreadcrumbLink href="#" color={secondaryText}>
+								Pages
+							</BreadcrumbLink>
+						</BreadcrumbItem>
+						{breadcrumb &&
+							breadcrumb.map((i, idx) => (
+								<BreadcrumbItem key={idx} color={secondaryText} fontSize="sm">
+									<BreadcrumbLink color={secondaryText}>{i}</BreadcrumbLink>
+								</BreadcrumbItem>
+							))}
+					</Breadcrumb>
 				</Box>
+
 				<Box ms="auto" w={{ sm: '100%', md: 'unset' }}>
 					<AdminNavbarLinks
 						onOpen={onOpen}

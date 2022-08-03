@@ -53,7 +53,7 @@ const Table = <T,>({
 	onClickEdit,
 	onClickDelete,
 }: TableProps<T>): JSX.Element => {
-	const textColor = useColorModeValue('secondaryGray.900', 'whiteSmoke.100');
+	const textColor = useColorModeValue('gray.600', 'whiteSmoke.100');
 	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
 	const iconDelete = useColorModeValue('red.300', 'red.800');
 	return (
@@ -77,7 +77,11 @@ const Table = <T,>({
 										{column.label}
 									</Th>
 								))}
-								{action && <Th textAlign="center">Actions</Th>}
+								{action && (
+									<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" textAlign="center">
+										Actions
+									</Th>
+								)}
 							</Tr>
 						)}
 					</Thead>

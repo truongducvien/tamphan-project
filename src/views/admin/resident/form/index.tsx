@@ -194,10 +194,10 @@ const ResidentForm: React.FC = () => {
 						<TextFieldHookForm isRequired label="Thông tin uỷ quyền" name="uyquyen" variant="admin" />
 						<TextFieldHookForm isRequired label="Ngày cập nhật" isDisabled name="createAt" variant="admin" />
 					</Stack>
-					<Box p={3}>
+					<Box>
 						<CheckboxHookForm label="Cho phép sử dụng NOVAID" name="novaid" variant="admin" />
 					</Box>
-					<HStack pb={3}>
+					<HStack pt={3} justifyContent="end">
 						<Button w="20" type="submit" variant="brand">
 							Lưu
 						</Button>

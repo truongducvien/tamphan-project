@@ -75,37 +75,37 @@ const SubdivisionManagement: React.FC = () => {
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
-				<Box p={{ sm: 2, md: 5 }} mt={2}>
+			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
+				<HStack px={{ sm: 2, md: 5 }} spacing={5} align="end">
 					<FormControl>
-						<HStack spacing={5}>
-							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-								<Text>Tên phân khu</Text>
-							</FormLabel>
-							<Input
-								isRequired
-								variant="admin"
-								fontSize="sm"
-								maxW={300}
-								ms={{ base: '0px', md: '0px' }}
-								type="email"
-								placeholder="Nhập ..."
-								size="md"
-							/>
-							<Flex align="center">
-								<Button variant="lightBrand" leftIcon={<SearchIcon />}>
-									Tìm kiếm
-								</Button>
-								<Link to={`${patchs.Subdivision}/${patchs.Create}`} as={RouterLink}>
-									<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-										Thêm mới
-									</Button>
-								</Link>
-							</Flex>
-						</HStack>
+						<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
+							<Text>Tên phân khu</Text>
+						</FormLabel>
+						<Input
+							isRequired
+							variant="admin"
+							fontSize="sm"
+							maxW={300}
+							ms={{ base: '0px', md: '0px' }}
+							type="email"
+							placeholder="Nhập ..."
+							size="md"
+						/>
 					</FormControl>
-				</Box>
-				<Center m={5}>
+					<Flex align="center">
+						<Button variant="lightBrand" leftIcon={<SearchIcon />}>
+							Tìm kiếm
+						</Button>
+						<Link to={`${patchs.Subdivision}/${patchs.Create}`} as={RouterLink}>
+							<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+								Thêm mới
+							</Button>
+						</Link>
+					</Flex>
+				</HStack>
+			</Card>
+			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách phân khu
 					</Heading>
