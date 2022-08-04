@@ -61,7 +61,6 @@ export const DatePicker = ({ defaultDay, onChange, dateFormat = 'DD/MM/YYYY', ..
 		const d = dateObject.getDate();
 		return dayjs(`${dateObject.getFullYear()}-${m < 10 ? `0${m}` : m}-${d < 10 ? `0${d}` : d}`).format(dateFormat);
 	};
-
 	const onDateClick = (day: { timestamp: number }) => {
 		setSelectedDay(day.timestamp);
 		if (inputRef.current) {
@@ -102,7 +101,8 @@ export const DatePicker = ({ defaultDay, onChange, dateFormat = 'DD/MM/YYYY', ..
 			onOpen={onOpen}
 			onClose={onClose}
 			placement="bottom-start"
-			closeOnBlur={false}
+			closeOnBlur
+			closeOnEsc
 			{...rest}
 		>
 			<PopoverTrigger>

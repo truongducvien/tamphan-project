@@ -1,9 +1,7 @@
-import React, { useRef } from 'react';
+import React from 'react';
 
-import { FormControl, FormErrorMessage, FormLabel, useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@chakra-ui/react';
 import { Select, GroupBase } from 'chakra-react-select';
-import useDerivedProps from 'hooks/useDerivedProps';
-import { Controller, FieldError, useFormContext } from 'react-hook-form';
 
 export interface PullDownReference {
 	reset: () => void;
@@ -82,6 +80,7 @@ export const PullDown: React.FC<PullDownHookFormProps> = ({
 			}}
 			placeholder={placeholder}
 			defaultValue={defaultValue}
+			menuPortalTarget={document.body}
 		/>
 	);
 };

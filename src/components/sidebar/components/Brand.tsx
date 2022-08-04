@@ -12,7 +12,7 @@ export const SidebarBrand: React.FC = () => {
 		<Flex pl="35px" direction="column">
 			{/* <HorizonLogo h='26px' w='175px' my='32px' color={logoColor} /> */}
 			<Text color={logoColor} fontWeight={700} h="70px" fontSize={45}>
-				NovaID
+				Aqua City
 			</Text>
 			<HSeparator mb="20px" />
 		</Flex>

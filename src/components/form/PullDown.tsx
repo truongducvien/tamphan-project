@@ -108,6 +108,7 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 							}}
 							placeholder={placeholder}
 							defaultValue={defaultValue}
+							menuPortalTarget={document.body}
 						/>
 						<FormErrorMessage>
 							{(errors?.[name] as unknown as FieldError)?.message as unknown as string}
