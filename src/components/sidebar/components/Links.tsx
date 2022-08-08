@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react';
+import React, { Fragment } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 // chakra imports
 import { Box, Flex, HStack, Text, useColorModeValue } from '@chakra-ui/react';
@@ -37,7 +37,7 @@ export const SidebarLinks: React.FC<Props> = props => {
 		const element: React.ReactElement[] = r.map((route, index) => {
 			if (route.category) {
 				return (
-					<>
+					<Fragment key={route.name + index.toString()}>
 						<Text
 							fontSize={'md'}
 							color={activeColor}
@@ -54,11 +54,11 @@ export const SidebarLinks: React.FC<Props> = props => {
 							{route.name}
 						</Text>
 						{route?.items && createLinks(route.items)}
-					</>
+					</Fragment>
 				);
 			} else if (route.icon) {
 				return (
-					<NavLink key={index.toString()} to={route.layout + route.path}>
+					<NavLink key={route.name + index.toString()} to={route.layout + route.path}>
 						<Box>
 							<HStack spacing={activeRoute(route.path.toLowerCase()) ? '22px' : '26px'} py="5px" ps="10px">
 								<Flex w="100%" alignItems="center" justifyContent="center">
@@ -86,7 +86,7 @@ export const SidebarLinks: React.FC<Props> = props => {
 				);
 			} else if (route.isShow) {
 				return (
-					<NavLink key={index.toString()} to={route.layout + route.path}>
+					<NavLink key={route.name + index.toString()} to={route.layout + route.path}>
 						<Box ml={10}>
 							<HStack spacing={activeRoute(route.path.toLowerCase()) ? '22px' : '26px'} py="5px" ps="10px">
 								<Text
@@ -101,7 +101,7 @@ export const SidebarLinks: React.FC<Props> = props => {
 						</Box>
 					</NavLink>
 				);
-			} else return <></>;
+			} else return <Fragment key={route.name + index.toString()}></Fragment>;
 		});
 		return element;
 	};

@@ -50,7 +50,7 @@ const routes: Route[] = [
 			{
 				name: 'Thêm mới người dùng',
 				layout: '/admin',
-				path: `/users/create`,
+				path: `/users/form`,
 				component: UserManagementForm,
 			},
 		],
@@ -65,7 +65,7 @@ const routes: Route[] = [
 			{
 				name: 'Thêm mới đơn vị',
 				layout: '/admin',
-				path: `/office/create`,
+				path: `/office/form`,
 				component: OfficeForm,
 			},
 		],
@@ -80,7 +80,7 @@ const routes: Route[] = [
 			{
 				name: 'Thêm mới chức vụ',
 				layout: '/admin',
-				path: `/position/create`,
+				path: `/position/form`,
 				component: PositionForm,
 			},
 		],
@@ -95,7 +95,7 @@ const routes: Route[] = [
 			{
 				name: 'Thêm mới phân khu',
 				layout: '/admin',
-				path: `/subdivision/create`,
+				path: `/subdivision/form`,
 				component: DetailSubdivision,
 			},
 		],
@@ -110,7 +110,7 @@ const routes: Route[] = [
 			{
 				name: 'Thêm mới căn hộ',
 				layout: '/admin',
-				path: `/apartment/create`,
+				path: `/apartment/form`,
 				component: AparmentForm,
 			},
 		],
@@ -125,7 +125,7 @@ const routes: Route[] = [
 			{
 				name: 'Thêm mới cư dân',
 				layout: '/admin',
-				path: `/resident/create`,
+				path: `/resident/form`,
 				component: ResidentForm,
 			},
 		],
@@ -147,7 +147,7 @@ const routes: Route[] = [
 			{
 				name: 'Thêm mới loại tiện ích',
 				layout: '/admin',
-				path: `/type-utilities/create`,
+				path: `/type-utilities/form`,
 				component: TypeUtilitiesForm,
 			},
 		],
@@ -162,7 +162,7 @@ const routes: Route[] = [
 			{
 				name: 'Thêm mới tiện ích',
 				layout: '/admin',
-				path: `/utilities/create`,
+				path: `/utilities/form`,
 				component: UtilitiesForm,
 			},
 		],

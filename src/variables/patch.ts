@@ -11,4 +11,5 @@ export const patchs = {
 	//
 	Create: 'create',
 	Edit: 'edit',
+	Detail: ':id',
 } as const;

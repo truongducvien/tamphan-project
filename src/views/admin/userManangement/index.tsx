@@ -18,6 +18,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import Table, { DataTable, IColumn } from 'components/table';
+import useActionPage from 'hooks/useActionPage';
 import { MdLibraryAdd } from 'react-icons/md';
 import { Link as RouterLink } from 'react-router-dom';
 import { getUser } from 'services/user';
@@ -72,8 +73,6 @@ const UserManagement: React.FC = () => {
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
 	const { data } = useQuery(['users'], getUser);
 
-	console.log(data);
-
 	const COLUMNS: Array<IColumn<User>> = [
 		{ key: 'acount', label: 'Tài khoản' },
 		{ key: 'fullName', label: 'Họ tên' },
@@ -95,7 +94,7 @@ const UserManagement: React.FC = () => {
 		hasNextPage: true,
 		hasPreviousPage: true,
 	};
-
+	const { changeAction } = useActionPage();
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
@@ -149,11 +148,9 @@ const UserManagement: React.FC = () => {
 						<Button variant="lightBrand" leftIcon={<SearchIcon />}>
 							Tìm kiếm
 						</Button>
-						<Link to={`${patchs.User}/${patchs.Create}`} as={RouterLink}>
-							<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-								Thêm mới
-							</Button>
-						</Link>
+						<Button onClick={() => changeAction('create')} marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+							Thêm mới
+						</Button>
 					</Flex>
 				</Box>
 			</Card>
