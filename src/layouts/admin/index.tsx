@@ -7,6 +7,7 @@ import Footer from 'components/footer/FooterAdmin';
 import Navbar from 'components/navbar/NavbarAdmin';
 import Sidebar from 'components/sidebar/Sidebar';
 import { SidebarContext } from 'contexts/SidebarContext';
+import useActionPage from 'hooks/useActionPage';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import routes, { Route as RootRoute } from 'routes';
 
@@ -15,6 +16,7 @@ const Dashboard: React.FC = props => {
 	const {
 		location: { pathname },
 	} = useHistory();
+	const { action } = useActionPage();
 	const { ...rest } = props;
 	// states and functions
 	const [fixed] = useState(false);
@@ -38,7 +40,16 @@ const Dashboard: React.FC = props => {
 					return categoryActiveRoute;
 				}
 			} else if (pathname === element.layout + element.path) {
-				return element.name;
+				switch (action) {
+					case 'create':
+						return `Thêm mới ${element.name}`;
+					case 'detail':
+						return `Chi tiết ${element.name}`;
+					case 'edit':
+						return `Chỉnh sửa ${element.name}`;
+					default:
+						return element.name;
+				}
 			} else if (element.items) {
 				const name = getActiveRoute(element?.items);
 				if (name) {

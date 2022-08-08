@@ -145,7 +145,7 @@ const routes: Route[] = [
 		component: TypeUtilitiesManagement,
 		items: [
 			{
-				name: 'Thêm mới loại tiện ích',
+				name: 'loại tiện ích',
 				layout: '/admin',
 				path: `/type-utilities/form`,
 				component: TypeUtilitiesForm,
