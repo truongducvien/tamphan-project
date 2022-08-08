@@ -1,49 +1,29 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
-import Table, { DataTable, IColumn } from 'components/table';
+import Table, { IColumn } from 'components/table';
 import { MdDelete, MdLibraryAdd } from 'react-icons/md';
 import { Link as RouterLink } from 'react-router-dom';
+import { getUtilsGroup } from 'services/utils/group';
+import { IUtilsGroup } from 'services/utils/group/type';
 import { patchs } from 'variables/patch';
 import { PermistionAction } from 'variables/permission';
 
-export interface Resident extends DataTable {
-	name: string;
-	description: string;
-	image: string;
-	status: string;
-	createAt: string;
-}
-
-const apartment: Array<Resident> = [
-	{
-		name: 'string ',
-		description: 'string',
-		image: 'string',
-		status: 'string',
-		createAt: 'string',
-	},
-];
-
 const TypeUtilitiesManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
+	const keywordRef = useRef<HTMLInputElement>(null);
+	const [keyword, setKeyword] = useState('');
+	const { data, isLoading } = useQuery(['list', keyword], () => getUtilsGroup(keyword));
 
-	const COLUMNS: Array<IColumn<Resident>> = [
+	const COLUMNS: Array<IColumn<IUtilsGroup>> = [
 		{ key: 'name', label: 'Tên loại tiện ích' },
 		{ key: 'description', label: 'Mô tả' },
-		{ key: 'image', label: 'hình ảnh' },
-		{ key: 'status', label: 'Trạng thái hoạt động' },
-		{ key: 'createAt', label: 'Ngày cập nhật' },
+		{ key: 'imageLink', label: 'hình ảnh' },
+		{ key: 'state', label: 'Trạng thái hoạt động' },
+		{ key: 'updatedDate', label: 'Ngày cập nhật' },
 	];
-
-	const pageInfo = {
-		total: 10,
-		hasNextPage: true,
-		hasPreviousPage: true,
-	};
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -60,6 +40,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 								<Text>Tên loại tiện ích</Text>
 							</FormLabel>
 							<Input
+								ref={keywordRef}
 								variant="admin"
 								fontSize="sm"
 								ms={{ base: '0px', md: '0px' }}
@@ -69,7 +50,11 @@ const TypeUtilitiesManagement: React.FC = () => {
 							/>
 						</FormControl>
 						<Flex flex={1} justifyContent="end">
-							<Button variant="lightBrand" leftIcon={<SearchIcon />}>
+							<Button
+								variant="lightBrand"
+								onClick={() => setKeyword(keywordRef.current?.value || '')}
+								leftIcon={<SearchIcon />}
+							>
 								Tìm kiếm
 							</Button>
 							<Link to={`${patchs.TypeUtilities}/${patchs.Create}`} as={RouterLink}>
@@ -92,19 +77,10 @@ const TypeUtilitiesManagement: React.FC = () => {
 				</Center>
 				<Table
 					testId="consignments-dashboard"
-					// onSelectionChange={handleSelectionChange}
+					loading={isLoading}
 					keyField="name"
 					columns={COLUMNS}
-					data={[...apartment, ...apartment, ...apartment]}
-					pagination={{
-						total: Number(pageInfo?.total || 0),
-						pageSize: currentPageSize,
-						value: currentPage,
-						hasNextPage: pageInfo?.hasNextPage,
-						hasPreviousPage: pageInfo?.hasPreviousPage,
-						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
-					}}
+					data={data?.items || []}
 					action={[PermistionAction.EDIT, PermistionAction.DETETE]}
 				/>
 			</Card>

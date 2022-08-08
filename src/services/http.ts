@@ -19,19 +19,16 @@ const createHTTP = (httpConfig: AxiosRequestConfig) => {
 			config.headers.Authorization = `Bearer ${accessToken || ''}`;
 			return config;
 		},
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		(error: AxiosError<any>) => {
+		(error: AxiosError) => {
 			return Promise.reject(error);
 		},
 	);
 
 	httpInstance.interceptors.response.use(
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		(response: AxiosResponse<any>) => {
+		(response: AxiosResponse) => {
 			return response;
 		},
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		(error: AxiosError<any>) => {
+		(error: AxiosError) => {
 			return Promise.reject(error);
 		},
 	);

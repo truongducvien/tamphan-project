@@ -86,9 +86,11 @@ const Table = <T,>({
 						)}
 					</Thead>
 					{loading ? (
-						<Flex minH={200} justify="center" align="center" transform="auto-gpu" translateX="50%">
-							<Spinner />
-						</Flex>
+						<Tbody flexDirection="column">
+							<Tr width="100vw" height={200} position="relative">
+								<Spinner position="absolute" left="50%" top="50%" />
+							</Tr>
+						</Tbody>
 					) : (
 						<Tbody flexDirection="column">
 							{data.map((row, index) => {
