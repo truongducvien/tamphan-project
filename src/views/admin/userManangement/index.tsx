@@ -15,10 +15,12 @@ import {
 	SimpleGrid,
 	Text,
 } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import Table, { DataTable, IColumn } from 'components/table';
 import { MdLibraryAdd } from 'react-icons/md';
 import { Link as RouterLink } from 'react-router-dom';
+import { getUser } from 'services/user';
 import { patchs } from 'variables/patch';
 import { PermistionAction } from 'variables/permission';
 
@@ -68,6 +70,9 @@ const users: Array<User> = [
 const UserManagement: React.FC = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
+	const { data } = useQuery(['users'], getUser);
+
+	console.log(data);
 
 	const COLUMNS: Array<IColumn<User>> = [
 		{ key: 'acount', label: 'Tài khoản' },
