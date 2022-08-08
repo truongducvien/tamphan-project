@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import {
 	Table as ChakraTable,
@@ -7,7 +7,6 @@ import {
 	Tr,
 	Th,
 	Td,
-	Flex,
 	Spinner,
 	useColorModeValue,
 	Text,
@@ -17,11 +16,11 @@ import {
 } from '@chakra-ui/react';
 import Pagination, { PaginationProps } from 'components/pagination';
 import { FaTrashAlt } from 'react-icons/fa';
-import { MdBorderColor } from 'react-icons/md';
+import { MdBorderColor, MdPreview } from 'react-icons/md';
 import { PermistionAction as PermistionActionBase } from 'variables/permission';
 
 export type DataTable = { [k: string]: boolean | number | string | undefined | DataTable };
-export type PermissionAction = PermistionActionBase.EDIT | PermistionActionBase.DETETE;
+export type PermissionAction = PermistionActionBase.EDIT | PermistionActionBase.DETETE | PermistionActionBase.VIEW;
 
 export type IColumn<T> = {
 	key?: keyof T;
@@ -40,6 +39,7 @@ type TableProps<T> = {
 	action?: PermissionAction | PermissionAction[];
 	onClickEdit?: (row: T) => void;
 	onClickDelete?: (row: T) => void;
+	onClickDetail?: (row: T) => void;
 };
 
 const Table = <T,>({
@@ -52,6 +52,7 @@ const Table = <T,>({
 	minWith,
 	onClickEdit,
 	onClickDelete,
+	onClickDetail,
 }: TableProps<T>): JSX.Element => {
 	const textColor = useColorModeValue('gray.600', 'whiteSmoke.100');
 	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
@@ -88,7 +89,9 @@ const Table = <T,>({
 					{loading ? (
 						<Tbody flexDirection="column">
 							<Tr width="100vw" height={200} position="relative">
-								<Spinner position="absolute" left="50%" top="50%" />
+								<Td>
+									<Spinner position="absolute" left="50%" top="50%" />
+								</Td>
 							</Tr>
 						</Tbody>
 					) : (
@@ -111,10 +114,18 @@ const Table = <T,>({
 											<Td>
 												<HStack justify="center" align="center">
 													{action.includes(PermistionActionBase.EDIT) && (
-														<Icon onClick={() => onClickEdit?.(row)} as={MdBorderColor} />
+														<Icon onClick={() => onClickDetail?.(row)} as={MdPreview} cursor="pointer" />
+													)}
+													{action.includes(PermistionActionBase.EDIT) && (
+														<Icon onClick={() => onClickEdit?.(row)} as={MdBorderColor} cursor="pointer" />
 													)}
 													{action.includes(PermistionActionBase.DETETE) && (
-														<Icon as={FaTrashAlt} onClick={() => onClickDelete?.(row)} color={iconDelete} />
+														<Icon
+															as={FaTrashAlt}
+															onClick={() => onClickDelete?.(row)}
+															color={iconDelete}
+															cursor="pointer"
+														/>
 													)}
 												</HStack>
 											</Td>

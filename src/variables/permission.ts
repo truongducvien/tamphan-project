@@ -3,4 +3,5 @@ export enum PermistionAction {
 	EDIT = 'edit',
 	DETETE = 'delete',
 	UPLOAD = 'upload',
+	VIEW = 'VIEW',
 }

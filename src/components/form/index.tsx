@@ -8,7 +8,7 @@ export interface FormContainerProps<F> {
 	useFormFields?: UseFormProps;
 	validationSchema?: Yup.AnyObjectSchema;
 	children: React.ReactNode;
-	defaultValues?: { [x: string]: undefined };
+	defaultValues?: { [x: string]: string };
 	onSubmit?: (data: F, reset: UseFormReturn['reset']) => void;
 }
 

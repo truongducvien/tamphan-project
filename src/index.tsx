@@ -2,6 +2,8 @@ import React from 'react';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { UseAlert } from 'components/alertDialog/hook';
+import DialogServiceProvider from 'components/alertDialog/provider';
 import { Toastify } from 'components/toast';
 import AdminLayout from 'layouts/admin';
 import AuthLayout from 'layouts/auth';
@@ -19,17 +21,20 @@ const root = createRoot(container!);
 root.render(
 	<QueryClientProvider client={queryClient}>
 		<ChakraProvider theme={theme}>
-			<React.StrictMode>
-				<BrowserRouter>
-					<Switch>
-						<Route path="/auth" component={AuthLayout} />
-						<Route path="/admin" component={AdminLayout} />
-						<Route exact path="/" render={() => <Redirect to="/admin" />} />
-						<Route path="*" component={NotFound} />
-					</Switch>
-					<Toastify />
-				</BrowserRouter>
-			</React.StrictMode>
+			<DialogServiceProvider>
+				<React.StrictMode>
+					<BrowserRouter>
+						<Switch>
+							<Route path="/auth" component={AuthLayout} />
+							<Route path="/admin" component={AdminLayout} />
+							<Route exact path="/" render={() => <Redirect to="/admin" />} />
+							<Route path="*" component={NotFound} />
+						</Switch>
+						<Toastify />
+						<UseAlert />
+					</BrowserRouter>
+				</React.StrictMode>
+			</DialogServiceProvider>
 		</ChakraProvider>
 	</QueryClientProvider>,
 );

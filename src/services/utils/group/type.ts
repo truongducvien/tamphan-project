@@ -10,3 +10,11 @@ export interface IUtilsGroup {
 }
 
 export type IUtilsGroupResponse = BaseResponeList<IUtilsGroup>;
+
+export interface IUtilsGroupPayload {
+	description: string;
+	imageLink: string;
+	name: string;
+	state: string | number;
+	id?: string;
+}

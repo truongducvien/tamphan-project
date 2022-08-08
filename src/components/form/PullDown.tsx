@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { FormControl, FormErrorMessage, FormLabel, useColorModeValue } from '@chakra-ui/react';
 import { Select, GroupBase } from 'chakra-react-select';
@@ -19,7 +19,7 @@ type OptionBase = {
 	onChange?: (value: Option) => void;
 };
 
-interface Option {
+export interface Option {
 	label: string;
 	value: string | number;
 }
@@ -27,7 +27,7 @@ type TagVariant = 'subtle' | 'solid' | 'outline';
 export interface PullDownHookFormProps extends OptionBase {
 	name: string;
 	options: Array<Option>;
-	defaultValue?: Array<Option>;
+	defaultValue?: Array<Option> | Option;
 	isSearchable?: boolean;
 	tagVariant?: TagVariant;
 	label: string;
@@ -49,7 +49,13 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 		formState: { errors },
 		getValues,
 		clearErrors,
+		setValue,
 	} = useFormContext();
+
+	useEffect(() => {
+		setValue(name, defaultValue);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [defaultValue]);
 
 	useDerivedProps((prevValue, currentValue) => {
 		if (typeof currentValue === 'undefined' && prevValue !== null && currentValue !== prevValue) {
@@ -61,6 +67,7 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 			}, 0);
 		}
 	}, getValues(name));
+
 	const bg = useColorModeValue('white', 'navy.900');
 	const border = '1px';
 	const color = useColorModeValue('secondaryGray.900', 'white');
@@ -107,7 +114,6 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 								}),
 							}}
 							placeholder={placeholder}
-							defaultValue={defaultValue}
 							menuPortalTarget={document.body}
 						/>
 						<FormErrorMessage>

@@ -1,21 +1,47 @@
 import { useRef, useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
+import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from '@chakra-ui/react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { alert } from 'components/alertDialog/hook';
 import Card from 'components/card/Card';
 import Table, { IColumn } from 'components/table';
+import { useToastInstance } from 'components/toast';
+import useActionPage from 'hooks/useActionPage';
 import { MdDelete, MdLibraryAdd } from 'react-icons/md';
-import { Link as RouterLink } from 'react-router-dom';
-import { getUtilsGroup } from 'services/utils/group';
+import { deleteUtilsGroup, getUtilsGroup } from 'services/utils/group';
 import { IUtilsGroup } from 'services/utils/group/type';
-import { patchs } from 'variables/patch';
 import { PermistionAction } from 'variables/permission';
 
 const TypeUtilitiesManagement: React.FC = () => {
 	const keywordRef = useRef<HTMLInputElement>(null);
+	const { toast } = useToastInstance();
 	const [keyword, setKeyword] = useState('');
-	const { data, isLoading } = useQuery(['list', keyword], () => getUtilsGroup(keyword));
+	const { data, isLoading, refetch } = useQuery(['list', keyword], () => getUtilsGroup(keyword));
+	const { changeAction } = useActionPage();
+
+	const mutationDelete = useMutation(deleteUtilsGroup);
+	const onDelete = async (row: IUtilsGroup) => {
+		try {
+			await alert({
+				type: 'error',
+				title: 'Bạn có muốn xoá ?',
+				description: row.name,
+			});
+			await mutationDelete.mutateAsync(row.id);
+			toast({ title: 'Xoá thành công' });
+			refetch();
+		} catch {
+			toast({ title: 'Xoá thất bại', status: 'error' });
+		}
+	};
+	const onEdit = (id: string) => {
+		changeAction('edit', id);
+	};
+
+	const onDetail = (id: string) => {
+		changeAction('detail', id);
+	};
 
 	const COLUMNS: Array<IColumn<IUtilsGroup>> = [
 		{ key: 'name', label: 'Tên loại tiện ích' },
@@ -57,11 +83,9 @@ const TypeUtilitiesManagement: React.FC = () => {
 							>
 								Tìm kiếm
 							</Button>
-							<Link to={`${patchs.TypeUtilities}/${patchs.Create}`} as={RouterLink}>
-								<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-									Thêm mới
-								</Button>
-							</Link>
+							<Button marginLeft={1} onClick={() => changeAction('create')} variant="brand" leftIcon={<MdLibraryAdd />}>
+								Thêm mới
+							</Button>
 							<Button marginLeft={1} variant="delete" leftIcon={<MdDelete />}>
 								Xoá
 							</Button>
@@ -81,7 +105,11 @@ const TypeUtilitiesManagement: React.FC = () => {
 					keyField="name"
 					columns={COLUMNS}
 					data={data?.items || []}
-					action={[PermistionAction.EDIT, PermistionAction.DETETE]}
+					action={[PermistionAction.EDIT, PermistionAction.DETETE, PermistionAction.VIEW]}
+					// eslint-disable-next-line @typescript-eslint/no-misused-promises
+					onClickDelete={row => onDelete(row)}
+					onClickEdit={row => onEdit(row.id)}
+					onClickDetail={row => onDetail(row.id)}
 				/>
 			</Card>
 		</Box>

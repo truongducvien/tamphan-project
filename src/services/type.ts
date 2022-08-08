@@ -1,4 +1,4 @@
-export interface BaseResponeList<IData> {
+export interface BaseResponeList<IData> extends BaseResponeAction {
 	data?: {
 		items: Array<IData>;
 		pageNum: number;
@@ -6,4 +6,17 @@ export interface BaseResponeList<IData> {
 		totalItems: number;
 		totalPages: number;
 	};
+}
+
+export interface BaseResponeAction {
+	code: string;
+	errors: Array<{ code: string; message: string }>;
+	message: string;
+}
+
+export interface BaseResponeDetail<IData> {
+	data?: IData;
+	code: string;
+	errors: Array<{ code: string; message: string }>;
+	message: string;
 }

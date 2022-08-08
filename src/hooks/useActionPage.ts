@@ -6,18 +6,21 @@ const useActionPage = () => {
 	const location = useLocation();
 	const history = useHistory();
 	const query = new URLSearchParams(location.search);
-	const action = query.get('action');
+	const action = query.get('action') as ActionPages;
+	const id = query.get('id');
 	const actionPage = {
 		create: false,
 		edit: false,
 		detail: false,
 	};
-	const changeAction = (act: ActionPages) => {
+
+	const changeAction = (act: ActionPages, i?: string, navigate = true) => {
 		if (act === action) return;
 		query.set('action', act);
+
 		history.push({
-			pathname: !action ? `${location.pathname}/form` : location.pathname,
-			search: `action=${query.get('action') || ''}`,
+			pathname: navigate ? `${location.pathname}/form` : location.pathname,
+			search: i ? `id=${i}&action=${query.get('action') || ''}` : `action=${query.get('action') || ''}`,
 		});
 	};
 
@@ -26,6 +29,8 @@ const useActionPage = () => {
 			return { ...accumulator, [key]: key === action };
 		}, actionPage),
 		changeAction,
+		id,
+		action,
 	};
 };
 
