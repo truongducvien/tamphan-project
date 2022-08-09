@@ -12,7 +12,7 @@ export const getUtils = async (payload: IUtilsSearchPayload) => {
 	return data?.data || null;
 };
 
-export const createUtils = async (payload: IUtilsSearchPayload) => {
+export const createUtils = async (payload: IUtilsCreatePayload) => {
 	const { data } = await http.post<BaseResponeAction>('/v1/amenities', {
 		...payload,
 	});
@@ -30,6 +30,8 @@ export const getUtilsById = async (id: string) => {
 };
 
 export const updateUtils = async (payload: IUtilsCreatePayload) => {
-	const { data } = await http.put<BaseResponeAction>(`/v1/amenities/${payload.id || ''}`, payload);
+	// eslint-disable-next-line @typescript-eslint/naming-convention
+	const { id, ..._payload } = payload;
+	const { data } = await http.put<BaseResponeAction>(`/v1/amenities/${id || ''}`, _payload);
 	return data || null;
 };

@@ -48,7 +48,7 @@ const routes: Route[] = [
 		component: UserManagement,
 		items: [
 			{
-				name: 'Thêm mới người dùng',
+				name: 'người dùng',
 				layout: '/admin',
 				path: `/users/form`,
 				component: UserManagementForm,
@@ -63,7 +63,7 @@ const routes: Route[] = [
 		component: OfficeManagement,
 		items: [
 			{
-				name: 'Thêm mới đơn vị',
+				name: 'đơn vị',
 				layout: '/admin',
 				path: `/office/form`,
 				component: OfficeForm,
@@ -78,7 +78,7 @@ const routes: Route[] = [
 		component: PositionManagement,
 		items: [
 			{
-				name: 'Thêm mới chức vụ',
+				name: 'chức vụ',
 				layout: '/admin',
 				path: `/position/form`,
 				component: PositionForm,
@@ -93,7 +93,7 @@ const routes: Route[] = [
 		component: SubdivisionManagement,
 		items: [
 			{
-				name: 'Thêm mới phân khu',
+				name: 'phân khu',
 				layout: '/admin',
 				path: `/subdivision/form`,
 				component: DetailSubdivision,
@@ -108,7 +108,7 @@ const routes: Route[] = [
 		component: ApartMentManagement,
 		items: [
 			{
-				name: 'Thêm mới căn hộ',
+				name: 'căn hộ',
 				layout: '/admin',
 				path: `/apartment/form`,
 				component: AparmentForm,
@@ -160,7 +160,7 @@ const routes: Route[] = [
 		component: UtilitiesManagement,
 		items: [
 			{
-				name: 'Thêm mới tiện ích',
+				name: 'tiện ích',
 				layout: '/admin',
 				path: `/utilities/form`,
 				component: UtilitiesForm,
@@ -175,7 +175,7 @@ const routes: Route[] = [
 		component: UtilsReManagement,
 		items: [
 			{
-				name: 'Thông tin Đăng kí tiện ích',
+				name: 'đăng kí tiện ích',
 				layout: '/admin',
 				path: '/utils-registeration/:id',
 				component: UtilsReForm,

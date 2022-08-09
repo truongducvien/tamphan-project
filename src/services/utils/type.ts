@@ -43,9 +43,31 @@ export interface IUtilsSearchPayload {
 }
 
 export interface IUtilsCreatePayload {
+	id?: string;
+	address: string;
+	amenitiesGroupId: string;
+	areaId: string;
+	capacity: number;
+	dateOffs: Array<string>;
+	depositAmount: number;
 	description: string;
 	imageLink: string;
+	isAllowBookViaApp: boolean;
+	maxOrderNumber: number;
 	name: string;
-	state: string | number;
-	id?: string;
+	operatingTime:
+		| {
+				end: string;
+				start: string;
+		  }
+		| string;
+	phoneNumber: string;
+	state: string;
+	timeSlotType: string;
+	timeSlots:
+		| {
+				end: string;
+				start: string;
+		  }[]
+		| string;
 }

@@ -123,7 +123,6 @@ const TypeUtilitiesForm: React.FC = () => {
 						<Button w="20" disabled={action === 'detail'} type="submit" variant="brand">
 							Lưu
 						</Button>
-						,
 						<Button w="20" type="button" variant="gray" onClick={() => history.goBack()}>
 							Huỷ
 						</Button>
