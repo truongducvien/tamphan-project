@@ -29,6 +29,7 @@ export interface PullDownHookFormProps extends OptionBase {
 	tagVariant?: TagVariant;
 	placeholder?: string;
 	onChange?: (value: Option) => void;
+	onInputChange?: (e: string) => void;
 }
 
 export const PullDown: React.FC<PullDownHookFormProps> = ({

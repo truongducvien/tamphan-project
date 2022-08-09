@@ -39,7 +39,6 @@ const TypeUtilitiesForm: React.FC = () => {
 
 	const handelCreate = async (data: IUtilsGroupForm, reset: () => void) => {
 		const prepareData = { ...data, state: data.state.value };
-
 		try {
 			await mutationCreate.mutateAsync(prepareData);
 			toast({ title: 'Tạo mới thành công' });
@@ -51,10 +50,9 @@ const TypeUtilitiesForm: React.FC = () => {
 
 	const handelUpdate = async (data: IUtilsGroupForm) => {
 		const prepareData = { ...data, state: data.state.value, id: id || '' };
-
 		try {
 			await mutationUpdate.mutateAsync(prepareData);
-			toast({ title: 'Cập nhật Tthành công' });
+			toast({ title: 'Cập nhật thành công' });
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
 		}

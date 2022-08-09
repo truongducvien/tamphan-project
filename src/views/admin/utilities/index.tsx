@@ -1,65 +1,96 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from '@chakra-ui/react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { alert } from 'components/alertDialog/hook';
 import Card from 'components/card/Card';
+import { Option } from 'components/form/PullDown';
 import { PullDown } from 'components/pulldown';
-import Table, { DataTable, IColumn } from 'components/table';
+import Table, { IColumn } from 'components/table';
+import { useToastInstance } from 'components/toast';
+import useActionPage from 'hooks/useActionPage';
+import { useDebounce } from 'hooks/useDebounce';
 import { MdDelete, MdLibraryAdd } from 'react-icons/md';
-import { Link as RouterLink } from 'react-router-dom';
-import { patchs } from 'variables/patch';
+import { getArea } from 'services/area';
+import { deleteUtils, getUtils } from 'services/utils';
+import { getUtilsGroup } from 'services/utils/group';
+import { IUtils } from 'services/utils/type';
 import { PermistionAction } from 'variables/permission';
 
-export interface Untilities extends DataTable {
-	name: string;
-	type: string;
-	subdivistion: string;
-	address: string;
-	max: string;
-	resquest: boolean;
-	price: string;
-	time: string;
-	apping: string;
-	status: string;
-}
-
-const utils: Array<Untilities> = [
+const COLUMNS: Array<IColumn<IUtils>> = [
+	{ key: 'name', label: 'Tên tiện ích' },
+	{ key: 'amenitiesGroupId', label: 'Loại tiện ích' },
+	{ key: 'areaId', label: 'Phân khu' },
+	{ key: 'address', label: 'Địa chỉ' },
+	{ key: 'maxOrderNumber', label: 'Sức chứa' },
+	{ key: 'depositAmount', label: 'Yêu cầu đặt cọc', cell: ({ depositAmount }) => (depositAmount ? 'Có' : 'Không') },
+	{ key: 'depositAmount', label: 'Số tiền đặc cọc' },
+	{ key: 'timeSlots', label: 'Giờ hoạt động', cell: row => row.timeSlots.map(i => `${i.start} - ${i.end}`).join(', ') },
 	{
-		name: 'string',
-		type: 'string',
-		subdivistion: 'string',
-		address: 'string',
-		max: 'string',
-		resquest: true,
-		price: 'string',
-		time: 'string',
-		apping: 'string',
-		status: 'string',
+		key: 'isAllowBookViaApp',
+		label: 'Cho phép đặt chỗ qua App',
+		cell: ({ isAllowBookViaApp }) => (isAllowBookViaApp ? 'Có' : 'Không'),
 	},
+	{ key: 'state', label: 'Trạng thái' },
 ];
 
 const UtilitiesManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(1);
+	const { toast } = useToastInstance();
+	const [currentPage, setCurrentPage] = useState(0);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
+	const keywordRef = useRef<HTMLInputElement>(null);
+	const [param, setParams] = useState<{
+		name?: string;
+		amenitiesGroupId?: string;
+		areaId?: string;
+	}>({});
+	const [keywordGroup, setKeywordGroup] = useState('');
+	const [keywordArea, setKeywordArea] = useState('');
+	const [selectedGroup, setGroup] = useState<Option>();
 
-	const COLUMNS: Array<IColumn<Untilities>> = [
-		{ key: 'name', label: 'Tên tiện ích' },
-		{ key: 'type', label: 'Loại tiện ích' },
-		{ key: 'subdivistion', label: 'Phân khu' },
-		{ key: 'address', label: 'Địa chỉ' },
-		{ key: 'max', label: 'Sức chứa' },
-		{ key: 'resquest', label: 'Yêu cầu đặt cọc' },
-		{ key: 'price', label: 'Số tiền đặc cọc' },
-		{ key: 'time', label: 'Giờ hoạt động' },
-		{ key: 'apping', label: 'Cho phép đặt chỗ qua App' },
-		{ key: 'status', label: 'Trạng thái' },
-	];
+	const keywordGroupDebound = useDebounce(keywordGroup, 500);
+	const keywordAreaDebound = useDebounce(keywordArea, 500);
+	const [selectedArea, setArea] = useState<Option>();
+
+	const { data: dataGroup } = useQuery(['list', keywordGroupDebound], () => getUtilsGroup(keywordGroupDebound));
+	const { data, isLoading, refetch } = useQuery(['list', param, currentPage, currentPageSize], () =>
+		getUtils({ ...param, page: currentPage, size: currentPageSize }),
+	);
+	const { data: dataArea } = useQuery(['list', keywordAreaDebound], () => getArea(keywordAreaDebound));
+	const mutationDelete = useMutation(deleteUtils);
+
+	const handleApllyFilter = () => {
+		setParams(prev => ({
+			...prev,
+			name: keywordRef.current?.value || '',
+			...(selectedGroup ? { amenitiesGroupId: selectedGroup.value as string } : {}),
+			...(selectedArea ? { areaId: selectedArea.value as string } : {}),
+		}));
+	};
+
+	const handleDelete = async (row: { id: string; name: string }) => {
+		try {
+			await alert({
+				type: 'error',
+				title: 'Bạn có muốn xoá ?',
+				description: row.name,
+			});
+			await mutationDelete.mutateAsync(row.id);
+			toast({ title: 'Xoá thành công' });
+			refetch();
+		} catch {
+			toast({ title: 'Xoá thất bại', status: 'error' });
+		}
+	};
 
 	const pageInfo = {
-		total: 10,
-		hasNextPage: true,
-		hasPreviousPage: true,
+		total: data?.totalPages,
+		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
+		hasPreviousPage: data ? data?.pageNum < 0 : false,
 	};
+
+	const { changeAction } = useActionPage();
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -77,14 +108,9 @@ const UtilitiesManagement: React.FC = () => {
 							</FormLabel>
 							<PullDown
 								name="type"
-								options={[
-									{
-										label: 'a',
-										value: '1',
-									},
-								]}
-								isMulti
-								isSearchable={false}
+								options={dataGroup?.items.map(i => ({ label: i.name, value: i.id })) || []}
+								onChange={value => setGroup(value)}
+								onInputChange={setKeywordGroup}
 							/>
 						</FormControl>
 						<FormControl>
@@ -92,6 +118,7 @@ const UtilitiesManagement: React.FC = () => {
 								<Text>Tên tiện ích</Text>
 							</FormLabel>
 							<Input
+								ref={keywordRef}
 								variant="admin"
 								fontSize="sm"
 								ms={{ base: '0px', md: '0px' }}
@@ -106,26 +133,20 @@ const UtilitiesManagement: React.FC = () => {
 							</FormLabel>
 							<PullDown
 								name="subdivision"
-								options={[
-									{
-										label: 'a',
-										value: '1',
-									},
-								]}
-								isMulti
+								options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
+								onChange={setArea}
 								isSearchable={false}
+								onInputChange={setKeywordArea}
 							/>
 						</FormControl>
 					</Stack>
 					<Flex mt={3} justify="end">
-						<Button variant="lightBrand" leftIcon={<SearchIcon />}>
+						<Button variant="lightBrand" onClick={handleApllyFilter} leftIcon={<SearchIcon />}>
 							Tìm kiếm
 						</Button>
-						<Link to={`${patchs.Utilities}/${patchs.Create}`} as={RouterLink}>
-							<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-								Thêm mới
-							</Button>
-						</Link>
+						<Button marginLeft={1} variant="brand" onClick={() => changeAction('create')} leftIcon={<MdLibraryAdd />}>
+							Thêm mới
+						</Button>
 						<Button marginLeft={1} variant="delete" leftIcon={<MdDelete />}>
 							Xoá
 						</Button>
@@ -140,10 +161,11 @@ const UtilitiesManagement: React.FC = () => {
 				</Center>
 				<Table
 					testId="consignments-dashboard"
-					// onSelectionChange={handleSelectionChange}
+					minWith="1500px"
 					keyField="name"
 					columns={COLUMNS}
-					data={[...utils, ...utils, ...utils]}
+					data={data?.items || []}
+					loading={isLoading}
 					pagination={{
 						total: Number(pageInfo?.total || 0),
 						pageSize: currentPageSize,
@@ -153,7 +175,11 @@ const UtilitiesManagement: React.FC = () => {
 						onPageChange: page => setCurrentPage(page),
 						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
 					}}
-					action={[PermistionAction.EDIT, PermistionAction.DETETE]}
+					action={[PermistionAction.EDIT, PermistionAction.DETETE, PermistionAction.VIEW]}
+					onClickDetail={row => changeAction('detail', row.id)}
+					onClickEdit={row => changeAction('edit', row.id)}
+					// eslint-disable-next-line @typescript-eslint/no-misused-promises
+					onClickDelete={handleDelete}
 				/>
 			</Card>
 		</Box>
