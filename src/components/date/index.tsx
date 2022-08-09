@@ -35,7 +35,7 @@ export interface IDatePickerProps extends Omit<ChakraInputProps, 'onChange'> {
 	onChange?: (date: string) => void;
 }
 
-export const DatePicker = ({ defaultDay, onChange, dateFormat = 'DD/MM/YYYY', ...rest }: IDatePickerProps) => {
+export const DatePicker = ({ defaultDay, onChange, dateFormat = 'YYYY-MM-DD', ...rest }: IDatePickerProps) => {
 	const date = new Date();
 	const firstFieldRef = useRef(null);
 

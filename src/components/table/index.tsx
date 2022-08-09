@@ -113,7 +113,7 @@ const Table = <T,>({
 										{action && (
 											<Td>
 												<HStack justify="center" align="center">
-													{action.includes(PermistionActionBase.EDIT) && (
+													{action.includes(PermistionActionBase.VIEW) && (
 														<Icon onClick={() => onClickDetail?.(row)} as={MdPreview} cursor="pointer" />
 													)}
 													{action.includes(PermistionActionBase.EDIT) && (

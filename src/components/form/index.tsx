@@ -21,10 +21,15 @@ export function FormContainer<F>({ children, validationSchema, onSubmit, ...inne
 		...(validationSchema ? { resolver: yupResolver(validationSchema) } : {}),
 	});
 
+	const onReset = () => {
+		methods.reset();
+	};
+
 	return (
 		<FormProvider {...methods}>
 			<form
 				noValidate
+				onReset={onReset}
 				onSubmit={onSubmit ? methods.handleSubmit(data => onSubmit(data as unknown as F, methods.reset)) : undefined}
 			>
 				{children}

@@ -34,6 +34,7 @@ export interface PullDownHookFormProps extends OptionBase {
 	isRequired?: boolean;
 	placeholder?: string;
 	onInputChange?: (e: string) => void;
+	isClearable?: boolean;
 }
 
 export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
