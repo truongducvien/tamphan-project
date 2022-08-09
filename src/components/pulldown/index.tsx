@@ -73,6 +73,7 @@ export const PullDown: React.FC<PullDownHookFormProps> = ({
 					...provided,
 					padding: '4px 0',
 					bg: bgMenu,
+					zIndex: 9999,
 				}),
 			}}
 			onChange={value => {
@@ -81,7 +82,6 @@ export const PullDown: React.FC<PullDownHookFormProps> = ({
 			}}
 			placeholder={placeholder}
 			defaultValue={defaultValue}
-			menuPortalTarget={document.body}
 		/>
 	);
 };

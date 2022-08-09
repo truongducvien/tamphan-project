@@ -134,6 +134,7 @@ const UtilsReManagement: React.FC = () => {
 						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
 					}}
 					action={PermistionAction.VIEW}
+					onClickDetail={({ id }) => changeAction('detail', id)}
 				/>
 			</Card>
 		</Box>

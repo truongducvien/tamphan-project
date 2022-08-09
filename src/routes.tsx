@@ -177,7 +177,7 @@ const routes: Route[] = [
 			{
 				name: 'đăng kí tiện ích',
 				layout: '/admin',
-				path: '/utils-registeration/:id',
+				path: '/utils-registeration/form',
 				component: UtilsReForm,
 			},
 		],

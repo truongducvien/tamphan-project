@@ -16,3 +16,10 @@ export const getUtilsReById = async (id: string) => {
 	const { data } = await http.get<BaseResponeDetail<IUtilsRe>>(`/v1/amenities-booking/${id}`);
 	return data || null;
 };
+
+export const confirmUtilsReById = async (payload: { id: string; paymentMethod: string }) => {
+	const { data } = await http.put<BaseResponeDetail<IUtilsRe>>(`/v1/amenities-booking/${payload.id}/confirm`, {
+		paymentMethod: payload.paymentMethod,
+	});
+	return data || null;
+};
