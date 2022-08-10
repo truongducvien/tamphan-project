@@ -12,6 +12,11 @@ export const getOffice = async (name?: string) => {
 	return data?.data || null;
 };
 
+export const getAllOffice = async () => {
+	const { data } = await http.get<IOfficeResponse>('/v1/units/all');
+	return data?.data || null;
+};
+
 export const createOffice = async (payload: IOfficePayload) => {
 	const { data } = await http.post<BaseResponeAction>('/v1/units', {
 		...payload,
