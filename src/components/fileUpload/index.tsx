@@ -114,9 +114,10 @@ const PreviewImage = forwardRef<PreviewImageProp, typeof Box>(({ src, ...props }
 
 interface Props {
 	isMulti?: boolean;
+	isDisabled?: boolean;
 }
 
-const UploadImage: React.FC<Props> = ({ isMulti }) => {
+const UploadImage: React.FC<Props> = ({ isMulti, isDisabled }) => {
 	const controls = useAnimation();
 	const startAnimation = () => controls.start('hover');
 	const stopAnimation = () => controls.stop();
@@ -193,6 +194,8 @@ const UploadImage: React.FC<Props> = ({ isMulti }) => {
 							aria-hidden="true"
 							accept="image/*"
 							multiple={isMulti}
+							_disabled={{ opacity: '0' }}
+							isDisabled={isDisabled}
 							onChange={onChangeFile}
 							// eslint-disable-next-line @typescript-eslint/no-misused-promises
 							onDragEnter={startAnimation}

@@ -1,46 +1,89 @@
 import { Box, Button, FormControl, FormLabel, HStack, Stack } from '@chakra-ui/react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import UploadImage from 'components/fileUpload';
 import { FormContainer } from 'components/form';
-import { PullDowndHookForm } from 'components/form/PullDown';
-import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
+import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
-import dayjs from 'helpers/dayjs';
+import { useToastInstance } from 'components/toast';
+import useActionPage from 'hooks/useActionPage';
+import { useHistory } from 'react-router-dom';
+import { createArea, getAreaById, updateArea } from 'services/area';
+import { IAreaPayload, TypeArea, typeAreas } from 'services/area/type';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên nhóm'),
-	phone: Yup.string().required('Vui lòng nhaapj SDT'),
+	contactPhone: Yup.number().required('Vui lòng nhập SDT'),
+	contactEmail: Yup.string().email('Định dạng email...'),
+	type: Yup.object({ label: Yup.string(), value: Yup.string() }).required('Vui lòng chọn loại BDS'),
 });
 
-interface DataForm {
-	name: string;
-	phone: string;
-	type: string;
-	email: string;
-	area: string;
-	position: string;
-	createAt: string;
-	map: string;
+interface DataForm extends Omit<IAreaPayload, 'type'> {
+	type: Option;
 }
 
 const DetailSubdivision: React.FC = () => {
-	const onSubmit = (data: DataForm) => {
-		console.log(data);
+	const { changeAction, id, action } = useActionPage();
+	const {
+		data: detailData,
+		isFetching,
+		isError,
+	} = useQuery(['detail', id], () => getAreaById(id || ''), {
+		enabled: !!id,
+	});
+
+	const history = useHistory();
+	const mutationCreate = useMutation(createArea);
+	const mutationUpdate = useMutation(updateArea);
+	const { toast } = useToastInstance();
+
+	const handelCreate = async (data: DataForm, reset: () => void) => {
+		const prepareData = { ...data, type: data.type.value as TypeArea };
+		try {
+			await mutationCreate.mutateAsync(prepareData);
+			toast({ title: 'Tạo mới thành công' });
+			reset();
+		} catch {
+			toast({ title: 'Tạo mới thất bại', status: 'error' });
+		}
 	};
 
+	const handelUpdate = async (data: DataForm) => {
+		const prepareData = { ...data, type: (data.type.value as TypeArea) || detailData?.data?.type, id: id || '' };
+		try {
+			await mutationUpdate.mutateAsync(prepareData);
+			toast({ title: 'Cập nhật thành công' });
+		} catch {
+			toast({ title: 'Cập nhật thất bại', status: 'error' });
+		}
+	};
+
+	const onSubmit = (data: DataForm, reset: () => void) => {
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+		action === 'create' ? handelCreate(data, reset) : handelUpdate(data);
+	};
+
+	if (isFetching || isError) return null;
+
+	const defaultData = { ...detailData?.data, type: typeAreas.find(i => i.value === detailData?.data?.type) };
+	const isDisabled = action === 'detail';
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
-				<FormContainer onSubmit={onSubmit} validationSchema={validationSchema}>
+				<FormContainer
+					defaultValues={defaultData as unknown as { [x: string]: string }}
+					onSubmit={onSubmit}
+					validationSchema={validationSchema}
+				>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
 						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isRequired label="Tên phân khu" name="name" variant="admin" />
-						<TextFieldHookForm label="Điện thoại liên hệ" name="phone" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} isRequired label="Tên phân khu" name="name" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} label="Điện thoại liên hệ" name="contactPhone" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -49,19 +92,13 @@ const DetailSubdivision: React.FC = () => {
 						pb={3}
 					>
 						<PullDowndHookForm
+							isDisabled={isDisabled}
 							label="Loại hình BDS"
 							name="type"
-							isRequired
-							options={[
-								{
-									label: 'a',
-									value: '1',
-								},
-							]}
-							isMulti
+							options={typeAreas}
 							isSearchable={false}
 						/>
-						<TextFieldHookForm isRequired label="Email" name="email" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} label="Email" name="contactEmail" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -69,30 +106,34 @@ const DetailSubdivision: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isRequired label="Diện tích" name="area" variant="admin" />
-						<TextFieldHookForm label="Vị trí" name="posision" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} label="Diện tích" type="number" name="acreage" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} label="Vị trí" name="location" variant="admin" />
 					</Stack>
-					<Box pb={3}>
-						<TextFieldHookForm
-							isRequired
-							label="Ngày cập nhật"
-							name="createAt"
-							defaultValue={dayjs().format('DD/MM/YYYY')}
-							isDisabled
-							variant="admin"
-						/>
-					</Box>
-					<Box pb={3} maxW={{ sm: '100%', md: '50%' }}>
+					<Stack
+						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
+						direction={{ base: 'column', md: 'row' }}
+						spacing={3}
+						pb={3}
+					>
 						<FormControl>
 							<FormLabel>Bản đồ</FormLabel>
-							<UploadImage />
+							<UploadImage isDisabled={isDisabled} />
 						</FormControl>
-					</Box>
-					<HStack pt={3} justifyContent="end">
-						<Button w="20" type="submit" variant="brand">
+						<FormControl>
+							<FormLabel>Avatar</FormLabel>
+							<UploadImage isDisabled={isDisabled} />
+						</FormControl>
+					</Stack>
+					<HStack pt={3} justify="end">
+						{action === 'detail' && (
+							<Button type="button" onClick={() => changeAction('edit', id || '', false)} variant="brand">
+								Chỉnh sửa
+							</Button>
+						)}
+						<Button w="20" disabled={action === 'detail'} type="submit" variant="brand">
 							Lưu
 						</Button>
-						<Button w="20" type="button" variant="gray">
+						<Button w="20" type="button" variant="gray" onClick={() => history.goBack()}>
 							Huỷ
 						</Button>
 					</HStack>

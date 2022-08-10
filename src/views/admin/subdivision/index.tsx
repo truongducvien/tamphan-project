@@ -8,7 +8,7 @@ import Table, { IColumn } from 'components/table';
 import useActionPage from 'hooks/useActionPage';
 import { MdLibraryAdd } from 'react-icons/md';
 import { getArea } from 'services/area';
-import { IArea } from 'services/area/type';
+import { IArea, typeAreas } from 'services/area/type';
 import { PermistionAction } from 'variables/permission';
 
 const SubdivisionManagement: React.FC = () => {
@@ -29,7 +29,7 @@ const SubdivisionManagement: React.FC = () => {
 
 	const COLUMNS: Array<IColumn<IArea>> = [
 		{ key: 'name', label: 'Tên phân khu' },
-		{ key: 'type', label: 'Loại hình BDS' },
+		{ key: 'type', label: 'Loại hình BDS', cell: ({ type }) => typeAreas.find(i => i.value === type)?.label },
 		{ key: 'acreage', label: 'Diện tích' },
 		{ key: 'location', label: 'Vị trí' },
 		{ key: 'contactPhone', label: 'Số điện thoại' },
