@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, Flex, Heading, Link, Stack } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
@@ -11,11 +11,9 @@ import Table, { IColumn } from 'components/table';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { MdImportExport, MdLibraryAdd } from 'react-icons/md';
-import { Link as RouterLink } from 'react-router-dom';
 import { getApartment } from 'services/apartment';
 import { IApartment, IApartmentParams } from 'services/apartment/type';
 import { getArea } from 'services/area';
-import { patchs } from 'variables/patch';
 import { PermistionAction } from 'variables/permission';
 import * as Yup from 'yup';
 
