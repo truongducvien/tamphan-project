@@ -57,7 +57,7 @@ const UtilitiesForm: React.FC = () => {
 		getUtilsGroup(keywordGroupDebound),
 	);
 	const { data: dataArea, isFetchedAfterMount: fetchedArea } = useQuery(['listDataArea', keywordAreaDebound], () =>
-		getArea(keywordAreaDebound),
+		getArea({ name: keywordAreaDebound }),
 	);
 
 	const mutationCreate = useMutation(createUtils);

@@ -38,7 +38,7 @@ const UtilsReManagement: React.FC = () => {
 		},
 	);
 
-	const { data: dataArea } = useQuery(['list', keywordAreaDebound], () => getArea(keywordAreaDebound));
+	const { data: dataArea } = useQuery(['list', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
 
 	const { data: dataGroup } = useQuery(['listGroup', keywordDebound], () => getUtilsGroup(keywordDebound));
 

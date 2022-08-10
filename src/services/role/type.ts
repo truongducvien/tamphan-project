@@ -33,6 +33,14 @@ export interface IRole {
 
 export type IRoleResponse = BaseResponeList<IRole>;
 
+export interface IRoleParams {
+	description: string;
+	imageLink: string;
+	name: string;
+	state: string | number;
+	id?: string;
+}
+
 export interface IRolePayload {
 	description: string;
 	imageLink: string;

@@ -1,76 +1,45 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import {
-	Box,
-	Button,
-	Center,
-	Flex,
-	FormControl,
-	FormLabel,
-	Heading,
-	HStack,
-	Input,
-	Link,
-	Text,
-} from '@chakra-ui/react';
+import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, HStack, Input, Text } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
-import Table, { DataTable, IColumn } from 'components/table';
+import Table, { IColumn } from 'components/table';
+import useActionPage from 'hooks/useActionPage';
 import { MdLibraryAdd } from 'react-icons/md';
-import { Link as RouterLink } from 'react-router-dom';
-import { patchs } from 'variables/patch';
+import { getArea } from 'services/area';
+import { IArea } from 'services/area/type';
 import { PermistionAction } from 'variables/permission';
 
-export interface Subdivision extends DataTable {
-	id: number;
-	name: string;
-	type: string;
-	area?: string;
-	phone?: string;
-	position?: string;
-	enail?: string;
-}
-
-const subdivision: Array<Subdivision> = [
-	{
-		id: 1,
-		enail: 'admin@novaid.vn',
-		name: 'demo',
-		email: 'admin@novaid.vn',
-		phone: '1234561234',
-		area: '12ha',
-		position: 'Phía Tây',
-		type: 'BDS',
-	},
-	{
-		id: 2,
-		enail: 'admin@novaid.vn',
-		name: 'demo',
-		email: 'admin@novaid.vn',
-		phone: '1234561234',
-		area: '12ha',
-		position: 'Phía Tây',
-		type: 'BDS',
-	},
-];
-
 const SubdivisionManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPage, setCurrentPage] = useState(0);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
 
-	const COLUMNS: Array<IColumn<Subdivision>> = [
+	const keywordRef = useRef<HTMLInputElement>(null);
+
+	const [keyword, setKeyword] = useState('');
+	const { data, isLoading } = useQuery(['list', keyword, currentPage, currentPageSize], () =>
+		getArea({
+			page: currentPage,
+			size: currentPageSize,
+			name: keyword,
+		}),
+	);
+	const { changeAction } = useActionPage();
+
+	const COLUMNS: Array<IColumn<IArea>> = [
 		{ key: 'name', label: 'Tên phân khu' },
 		{ key: 'type', label: 'Loại hình BDS' },
-		{ key: 'area', label: 'Diện tích' },
-		{ key: 'position', label: 'Vị trí' },
-		{ key: 'phone', label: 'Số điện thoại' },
-		{ key: 'email', label: 'email' },
+		{ key: 'acreage', label: 'Diện tích' },
+		{ key: 'location', label: 'Vị trí' },
+		{ key: 'contactPhone', label: 'Số điện thoại' },
+		{ key: 'contactEmail', label: 'email' },
 	];
 
 	const pageInfo = {
-		total: 10,
-		hasNextPage: true,
-		hasPreviousPage: true,
+		total: data?.totalPages,
+		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
+		hasPreviousPage: data ? data?.pageNum < 0 : false,
 	};
 
 	return (
@@ -82,6 +51,7 @@ const SubdivisionManagement: React.FC = () => {
 							<Text>Tên phân khu</Text>
 						</FormLabel>
 						<Input
+							ref={keywordRef}
 							isRequired
 							variant="admin"
 							fontSize="sm"
@@ -93,14 +63,16 @@ const SubdivisionManagement: React.FC = () => {
 						/>
 					</FormControl>
 					<Flex align="center">
-						<Button variant="lightBrand" leftIcon={<SearchIcon />}>
+						<Button
+							variant="lightBrand"
+							onClick={() => setKeyword(keywordRef.current?.value || '')}
+							leftIcon={<SearchIcon />}
+						>
 							Tìm kiếm
 						</Button>
-						<Link to={`${patchs.Subdivision}/${patchs.Create}`} as={RouterLink}>
-							<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-								Thêm mới
-							</Button>
-						</Link>
+						<Button marginLeft={1} onClick={() => changeAction('create')} variant="brand" leftIcon={<MdLibraryAdd />}>
+							Thêm mới
+						</Button>
 					</Flex>
 				</HStack>
 			</Card>
@@ -112,10 +84,10 @@ const SubdivisionManagement: React.FC = () => {
 				</Center>
 				<Table
 					testId="consignments-dashboard"
-					// onSelectionChange={handleSelectionChange}
 					keyField="name"
 					columns={COLUMNS}
-					data={[...subdivision, ...subdivision, ...subdivision]}
+					data={data?.items || []}
+					loading={isLoading}
 					pagination={{
 						total: Number(pageInfo?.total || 0),
 						pageSize: currentPageSize,
@@ -125,7 +97,9 @@ const SubdivisionManagement: React.FC = () => {
 						onPageChange: page => setCurrentPage(page),
 						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
 					}}
-					action={[PermistionAction.EDIT, PermistionAction.DETETE]}
+					action={[PermistionAction.EDIT, PermistionAction.VIEW]}
+					onClickDetail={({ id }) => changeAction('detail', id)}
+					onClickEdit={({ id }) => changeAction('edit', id)}
 				/>
 			</Card>
 		</Box>

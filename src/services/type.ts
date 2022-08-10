@@ -20,3 +20,8 @@ export interface BaseResponeDetail<IData> {
 	errors: Array<{ code: string; message: string }>;
 	message: string;
 }
+
+export interface BaseParams {
+	page?: number;
+	size?: number;
+}

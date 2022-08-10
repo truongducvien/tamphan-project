@@ -1,4 +1,4 @@
-import { BaseResponeList } from 'services/type';
+import { BaseParams, BaseResponeList } from 'services/type';
 
 export interface IArea {
 	name: string;
@@ -12,3 +12,14 @@ export interface IArea {
 }
 
 export type IAreaResponse = BaseResponeList<IArea>;
+export interface IAreaPayload {
+	description: string;
+	imageLink: string;
+	name: string;
+	state: string | number;
+	id?: string;
+}
+
+export interface IAreaParams extends BaseParams {
+	name?: string;
+}

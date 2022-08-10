@@ -57,7 +57,7 @@ const UtilitiesManagement: React.FC = () => {
 	const { data, isLoading, refetch } = useQuery(['list', param, currentPage, currentPageSize], () =>
 		getUtils({ ...param, page: currentPage, size: currentPageSize }),
 	);
-	const { data: dataArea } = useQuery(['list', keywordAreaDebound], () => getArea(keywordAreaDebound));
+	const { data: dataArea } = useQuery(['list', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
 	const mutationDelete = useMutation(deleteUtils);
 
 	const handleApllyFilter = () => {
