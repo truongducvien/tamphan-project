@@ -1,66 +1,30 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import {
-	Box,
-	Button,
-	Center,
-	Flex,
-	FormControl,
-	FormLabel,
-	Heading,
-	HStack,
-	Input,
-	Link,
-	Text,
-} from '@chakra-ui/react';
+import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, HStack, Input, Text } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
-import Table, { DataTable, IColumn } from 'components/table';
+import Table, { IColumn } from 'components/table';
+import useActionPage from 'hooks/useActionPage';
 import { MdLibraryAdd } from 'react-icons/md';
-import { Link as RouterLink } from 'react-router-dom';
-import { patchs } from 'variables/patch';
+import { getOffice } from 'services/office';
+import { IOffice } from 'services/office/type';
 import { PermistionAction } from 'variables/permission';
 
-export interface Subdivision extends DataTable {
-	name: string;
-	parrent: string;
-	description: string;
-	createAt?: string;
-}
-
-const subdivision: Array<Subdivision> = [
-	{
-		id: 1,
-		name: 'addmin',
-		parrent: '2',
-		description: '1234561234',
-		createAt: 'ban quản lí',
-	},
-	{
-		id: 2,
-		name: 'addmin',
-		parrent: '2',
-		description: '1234561234',
-		createAt: 'ban quản lí',
-	},
-];
-
 const OfficeManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
+	const keywordRef = useRef<HTMLInputElement>(null);
+	const [keyword, setKeyword] = useState('');
 
-	const COLUMNS: Array<IColumn<Subdivision>> = [
+	const { data, isLoading } = useQuery(['list', keyword], () => getOffice(keyword));
+
+	const COLUMNS: Array<IColumn<IOffice>> = [
 		{ key: 'name', label: 'Tên đơn vị' },
-		{ key: 'parrent', label: 'Đơn vị trực thuộc' },
+		{ key: 'parentId', label: 'Đơn vị trực thuộc' },
 		{ key: 'description', label: 'Mô tả' },
-		{ key: 'createAt', label: 'Ngày tạo' },
+		{ key: 'createdDate', label: 'Ngày tạo' },
 	];
 
-	const pageInfo = {
-		total: 10,
-		hasNextPage: true,
-		hasPreviousPage: true,
-	};
+	const { changeAction } = useActionPage();
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -72,6 +36,7 @@ const OfficeManagement: React.FC = () => {
 								<Text>Tên đơn vị</Text>
 							</FormLabel>
 							<Input
+								ref={keywordRef}
 								variant="admin"
 								maxW={500}
 								fontSize="sm"
@@ -82,14 +47,16 @@ const OfficeManagement: React.FC = () => {
 							/>
 						</FormControl>
 						<Flex>
-							<Button variant="lightBrand" leftIcon={<SearchIcon />}>
+							<Button
+								variant="lightBrand"
+								onClick={() => setKeyword(keywordRef.current?.value || '')}
+								leftIcon={<SearchIcon />}
+							>
 								Tìm kiếm
 							</Button>
-							<Link to={`${patchs.Office}/${patchs.Create}`} as={RouterLink}>
-								<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-									Thêm mới
-								</Button>
-							</Link>
+							<Button onClick={() => changeAction('create')} marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+								Thêm mới
+							</Button>
 						</Flex>
 					</HStack>
 				</Box>
@@ -101,21 +68,14 @@ const OfficeManagement: React.FC = () => {
 					</Heading>
 				</Center>
 				<Table
+					loading={isLoading}
 					testId="consignments-dashboard"
-					// onSelectionChange={handleSelectionChange}
 					keyField="name"
 					columns={COLUMNS}
-					data={[...subdivision, ...subdivision, ...subdivision]}
-					pagination={{
-						total: Number(pageInfo?.total || 0),
-						pageSize: currentPageSize,
-						value: currentPage,
-						hasNextPage: pageInfo?.hasNextPage,
-						hasPreviousPage: pageInfo?.hasPreviousPage,
-						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
-					}}
-					action={[PermistionAction.EDIT, PermistionAction.DETETE]}
+					data={data?.items || []}
+					action={[PermistionAction.EDIT, PermistionAction.VIEW]}
+					onClickDetail={({ id }) => changeAction('detail', id)}
+					onClickEdit={({ id }) => changeAction('edit', id)}
 				/>
 			</Card>
 		</Box>
