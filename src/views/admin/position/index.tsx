@@ -1,59 +1,32 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import {
-	Box,
-	Button,
-	Center,
-	Flex,
-	FormControl,
-	FormLabel,
-	Heading,
-	HStack,
-	Input,
-	Link,
-	Text,
-} from '@chakra-ui/react';
+import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, HStack, Input, Text } from '@chakra-ui/react';
 import Card from 'components/card/Card';
-import Table, { DataTable, IColumn } from 'components/table';
+import Table, { IColumn } from 'components/table';
+import useActionPage from 'hooks/useActionPage';
 import { MdLibraryAdd } from 'react-icons/md';
-import { Link as RouterLink } from 'react-router-dom';
-import { patchs } from 'variables/patch';
+import { IRole } from 'services/role/type';
 import { PermistionAction } from 'variables/permission';
-
-export interface Position extends DataTable {
-	name: string;
-	code: string;
-	updateAt: string;
-	createAt?: string;
-}
-
-const position: Array<Position> = [
-	{
-		id: 1,
-		name: 'addmin',
-		code: '2',
-		updateAt: '11/11/2022',
-		createAt: '11/11/2022',
-	},
-	{
-		id: 2,
-		name: 'addmin',
-		code: '2',
-		updateAt: '11/11/2022',
-		createAt: '11/11/2022',
-	},
-];
 
 const PositionManagement: React.FC = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
 
-	const COLUMNS: Array<IColumn<Position>> = [
+	const nameRef = useRef<HTMLInputElement>(null);
+	const codeRef = useRef<HTMLInputElement>(null);
+
+	const [param, setParams] = useState<{
+		name?: string;
+		amenitiesGroupId?: string;
+		areaId?: string;
+	}>({});
+
+	const COLUMNS: Array<IColumn<IRole>> = [
 		{ key: 'name', label: 'Tên chức vụ' },
 		{ key: 'code', label: 'Mã chức vụ' },
-		{ key: 'createAt', label: 'Ngày tạo' },
-		{ key: 'updateAt', label: 'Ngày cập nhật' },
+		{ key: 'createdDate', label: 'Ngày tạo' },
+		{ key: 'updatedDate', label: 'Ngày cập nhật' },
 	];
 
 	const pageInfo = {
@@ -61,6 +34,8 @@ const PositionManagement: React.FC = () => {
 		hasNextPage: true,
 		hasPreviousPage: true,
 	};
+
+	const { changeAction } = useActionPage();
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -96,11 +71,9 @@ const PositionManagement: React.FC = () => {
 						<Button variant="lightBrand" leftIcon={<SearchIcon />}>
 							Tìm kiếm
 						</Button>
-						<Link to={`${patchs.Position}/${patchs.Create}`} as={RouterLink}>
-							<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-								Thêm mới
-							</Button>
-						</Link>
+						<Button onClick={() => changeAction('create')} marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+							Thêm mới
+						</Button>
 					</Flex>
 				</HStack>
 			</Card>
@@ -115,7 +88,7 @@ const PositionManagement: React.FC = () => {
 					// onSelectionChange={handleSelectionChange}
 					keyField="name"
 					columns={COLUMNS}
-					data={[...position, ...position, ...position]}
+					data={[]}
 					pagination={{
 						total: Number(pageInfo?.total || 0),
 						pageSize: currentPageSize,

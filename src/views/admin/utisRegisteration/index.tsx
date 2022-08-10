@@ -15,8 +15,8 @@ import { useDebounce } from 'hooks/useDebounce';
 import { MdResetTv } from 'react-icons/md';
 import { getArea } from 'services/area';
 import { getUtilsGroup } from 'services/utils/group';
-import { getUtilsRe } from 'services/utilsRehisteration';
-import { IUtilsRe, IUtilsReSearchForm, IUtilsReSearchPayload } from 'services/utilsRehisteration/type';
+import { getUtilsRe } from 'services/utilsRegisteration';
+import { IUtilsRe, IUtilsReSearchForm, IUtilsReSearchPayload } from 'services/utilsRegisteration/type';
 import { PermistionAction } from 'variables/permission';
 
 const UtilsReManagement: React.FC = () => {

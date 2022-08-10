@@ -1,7 +1,6 @@
 export enum PermistionAction {
-	CREATE = 'create',
-	EDIT = 'edit',
-	DETETE = 'delete',
-	UPLOAD = 'upload',
+	CREATE = 'ADD',
+	EDIT = 'UPDATE',
+	DETETE = 'DETETE',
 	VIEW = 'VIEW',
 }

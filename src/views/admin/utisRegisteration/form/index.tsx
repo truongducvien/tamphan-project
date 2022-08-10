@@ -10,7 +10,7 @@ import { TextFieldHookForm } from 'components/form/TextField';
 import { PullDown } from 'components/pulldown';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
-import { confirmUtilsReById, getUtilsReById } from 'services/utilsRehisteration';
+import { confirmUtilsReById, getUtilsReById } from 'services/utilsRegisteration';
 
 enum PaymentMethod {
 	CASH = 'CASH',
