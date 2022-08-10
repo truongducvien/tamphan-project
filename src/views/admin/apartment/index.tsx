@@ -28,13 +28,13 @@ const validationSchema = Yup.object({
 });
 
 const ApartMentManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPage, setCurrentPage] = useState(0);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
 	const [keywordArea, setKeywordArea] = useState('');
 	const keywordAreaDebound = useDebounce(keywordArea, 500);
 	const [param, setParams] = useState<IApartmentParams | null>(null);
 
-	const { data: dataArea } = useQuery(['list', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
+	const { data: dataArea } = useQuery(['listArea', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
 	const { data, isLoading } = useQuery(['list', param, currentPage, currentPageSize], () =>
 		getApartment({ ...param, page: currentPage, size: currentPageSize }),
 	);

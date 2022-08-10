@@ -79,7 +79,6 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 	const bgMenu = useColorModeValue('white', 'navy.900');
 	const placeholderSt = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
 	const forcusBorder = useColorModeValue('blue.300', 'blue.700');
-
 	return (
 		<Controller
 			control={control}
@@ -119,7 +118,7 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 							menuPortalTarget={document.body}
 						/>
 						<FormErrorMessage>
-							{(errors?.[name] as unknown as FieldError)?.message as unknown as string}
+							{(errors?.[name] as unknown as { value: FieldError })?.value?.message as unknown as string}
 						</FormErrorMessage>
 					</FormControl>
 				);
