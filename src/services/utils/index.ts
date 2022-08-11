@@ -4,7 +4,7 @@ import { BaseResponeAction, BaseResponeDetail } from 'services/type';
 import { IUtils, IUtilsSearchPayload, IUtilsCreatePayload, IUtilsGroupResponse } from './type';
 
 export const getUtils = async (payload: IUtilsSearchPayload) => {
-	const { data } = await http.get<IUtilsGroupResponse>('/v1/amenities/search', {
+	const { data } = await http.get<IUtilsGroupResponse>('/v1/facilities/search', {
 		params: {
 			...payload,
 		},
@@ -13,25 +13,25 @@ export const getUtils = async (payload: IUtilsSearchPayload) => {
 };
 
 export const createUtils = async (payload: IUtilsCreatePayload) => {
-	const { data } = await http.post<BaseResponeAction>('/v1/amenities', {
+	const { data } = await http.post<BaseResponeAction>('/v1/facilities', {
 		...payload,
 	});
 	return data || null;
 };
 
 export const deleteUtils = async (id: string) => {
-	const { data } = await http.delete<BaseResponeAction>(`/v1/amenities/${id}`);
+	const { data } = await http.delete<BaseResponeAction>(`/v1/facilities/${id}`);
 	return data || null;
 };
 
 export const getUtilsById = async (id: string) => {
-	const { data } = await http.get<BaseResponeDetail<IUtils>>(`/v1/amenities/${id}`);
+	const { data } = await http.get<BaseResponeDetail<IUtils>>(`/v1/facilities/${id}`);
 	return data || null;
 };
 
 export const updateUtils = async (payload: IUtilsCreatePayload) => {
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	const { id, ..._payload } = payload;
-	const { data } = await http.put<BaseResponeAction>(`/v1/amenities/${id || ''}`, _payload);
+	const { data } = await http.put<BaseResponeAction>(`/v1/facilities/${id || ''}`, _payload);
 	return data || null;
 };

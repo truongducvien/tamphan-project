@@ -4,7 +4,7 @@ import { BaseResponeDetail } from 'services/type';
 import { IUtilsRe, IUtilsReSearchPayload, IUtilsGroupResponse } from './type';
 
 export const getUtilsRe = async (payload: IUtilsReSearchPayload) => {
-	const { data } = await http.get<IUtilsGroupResponse>('/v1/amenities-booking/search', {
+	const { data } = await http.get<IUtilsGroupResponse>('/v1/facility-bookings/search', {
 		params: {
 			...payload,
 		},
@@ -13,12 +13,12 @@ export const getUtilsRe = async (payload: IUtilsReSearchPayload) => {
 };
 
 export const getUtilsReById = async (id: string) => {
-	const { data } = await http.get<BaseResponeDetail<IUtilsRe>>(`/v1/amenities-booking/${id}`);
+	const { data } = await http.get<BaseResponeDetail<IUtilsRe>>(`/v1/facility-bookings/${id}`);
 	return data || null;
 };
 
 export const confirmUtilsReById = async (payload: { id: string; paymentMethod: string }) => {
-	const { data } = await http.put<BaseResponeDetail<IUtilsRe>>(`/v1/amenities-booking/${payload.id}/confirm`, {
+	const { data } = await http.put<BaseResponeDetail<IUtilsRe>>(`/v1/facility-bookings/${payload.id}/confirm`, {
 		paymentMethod: payload.paymentMethod,
 	});
 	return data || null;

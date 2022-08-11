@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Box, Button, HStack, Stack, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+import { Box, Button, HStack, Stack, Tabs, TabList, TabPanels, Tab, TabPanel, Flex } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
@@ -10,10 +10,21 @@ import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
-import { useHistory } from 'react-router-dom';
+import useDidMount from 'hooks/useDidMount';
+import { Link, useHistory } from 'react-router-dom';
 import { createApartment, getApartmentById, updateApartment } from 'services/apartment';
 import { IApartmentPayload, StatusApartment, statusApartment } from 'services/apartment/type';
 import { getArea } from 'services/area';
+import { createResident, getResidentOwner, updateResident } from 'services/resident';
+import {
+	Gender,
+	gender,
+	IdentityCardType,
+	identityCardType,
+	IResidentPayload,
+	ResidentType,
+} from 'services/resident/type';
+import { patchs } from 'variables/patch';
 import * as Yup from 'yup';
 
 const validationApartment = Yup.object({
@@ -24,35 +35,63 @@ const validationApartment = Yup.object({
 });
 
 const validationSchema = Yup.object({
-	name: Yup.string().required('Vui lòng nhập tên nhóm'),
+	fullName: Yup.string().required('Vui lòng nhập họ tên'),
+	gender: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn giới tính') }),
+	dateOfBirth: Yup.string().required('Vui lòng nhập ngày sinh'),
+	phoneNumber: Yup.string().required('Vui lòng nhập số điện thoại'),
+	identityCardType: Yup.object({
+		label: Yup.string(),
+		value: Yup.string().required('Vui lòng chọn loại giấy tờ tuỳ thân'),
+	}),
+	identityCardNumber: Yup.string().required('Vui lòng nhập giấy tờ tuỳ thân'),
 });
 
 interface DataForm1 {
-	acreage: number;
+	acreage: string;
 	address: string;
 	areaId: Option;
 	block: string;
 	code: string;
 	description: string;
 	direction: string;
-	floorNumber: number;
-	inUserAcreage: number;
-	maxResident: number;
+	floorNumber: string;
+	inUserAcreage: string;
+	maxResident: string;
 	name: string;
-	numberOfBathRoom: number;
-	numberOfBedRoom: number;
-	numberOfFloor: number;
+	numberOfBathRoom: string;
+	numberOfBedRoom: string;
+	numberOfFloor: string;
 	status: Option;
 	type: string;
 }
 
+interface DataForm2 {
+	dateOfBirth: string;
+	email: string;
+	flatId: string;
+	fullName: string;
+	gender: Option;
+	identityCardNumber: string;
+	identityCardType: Option;
+	identityCreateDate: string;
+	identityLocationIssued: string;
+	permanentAddress: string;
+	phoneNumber: string;
+	temporaryAddress: string;
+	type: Option;
+	id: string;
+}
+
 const AparmentForm: React.FC = () => {
+	const [idApartment, setIdApartment] = useState<string>();
 	const [keyword, setKeyword] = useState('');
 	const keywordDebounce = useDebounce(keyword);
 
 	const history = useHistory();
 	const mutationCreate = useMutation(createApartment);
 	const mutationUpdate = useMutation(updateApartment);
+	const mutationCreateOwner = useMutation(createResident);
+	const mutationUpdateOwner = useMutation(updateResident);
 
 	const { changeAction, id, action } = useActionPage();
 	const { toast } = useToastInstance();
@@ -65,23 +104,31 @@ const AparmentForm: React.FC = () => {
 		enabled: !!id,
 	});
 
+	const {
+		data: dataOwnner,
+		isFetching: isFetchingOwner,
+		isError: isErrorOwner,
+	} = useQuery(['detail', id], () => getResidentOwner(id || ''), {
+		enabled: !!id,
+	});
+
 	const { data: dataArea, isFetched } = useQuery(['listArea', keywordDebounce], () =>
 		getArea({
 			name: keywordDebounce,
 		}),
 	);
 
-	const handelCreate = async (data: IApartmentPayload, reset: () => void) => {
+	const handelCreateApartment = async (data: IApartmentPayload) => {
 		try {
-			await mutationCreate.mutateAsync(data);
+			const response = await mutationCreate.mutateAsync(data);
+			setIdApartment(response?.data?.id);
 			toast({ title: 'Tạo mới thành công' });
-			reset();
 		} catch {
 			toast({ title: 'Tạo mới thất bại', status: 'error' });
 		}
 	};
 
-	const handelUpdate = async (data: IApartmentPayload) => {
+	const handelUpdateApartment = async (data: IApartmentPayload) => {
 		try {
 			await mutationUpdate.mutateAsync(data);
 			toast({ title: 'Cập nhật thành công' });
@@ -90,7 +137,25 @@ const AparmentForm: React.FC = () => {
 		}
 	};
 
-	const onSubmitApartment = (data: DataForm1, reset: () => void) => {
+	const handelCreateOwner = async (data: IResidentPayload) => {
+		try {
+			await mutationCreateOwner.mutateAsync(data);
+			toast({ title: 'Tạo mới thành công' });
+		} catch {
+			toast({ title: 'Tạo mới thất bại', status: 'error' });
+		}
+	};
+
+	const handelUpdateOwner = async (data: IResidentPayload) => {
+		try {
+			await mutationUpdateOwner.mutateAsync(data);
+			toast({ title: 'Cập nhật thành công' });
+		} catch {
+			toast({ title: 'Cập nhật thất bại', status: 'error' });
+		}
+	};
+
+	const onSubmitApartment = (data: DataForm1) => {
 		const prepareData = {
 			...data,
 			status: data.status.value as StatusApartment,
@@ -105,16 +170,36 @@ const AparmentForm: React.FC = () => {
 			id: id || '',
 		};
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
+		action === 'create' ? handelCreateApartment(prepareData) : handelUpdateApartment(prepareData);
 	};
 
-	const onSubmit = (data: DataForm1) => {};
+	const onSubmit = (data: DataForm2) => {
+		if (!idApartment) return;
+		const prepareData: IResidentPayload = {
+			...data,
+			propertyId: idApartment,
+			gender: data.gender.value as Gender,
+			identityCardType: data.identityCardType.value as IdentityCardType,
+			type: ResidentType.OWNER,
+		};
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+		action === 'create' ? handelCreateOwner(prepareData) : handelUpdateOwner(prepareData);
+	};
 
-	if (isFetching || isError || !isFetched) return null;
+	useDidMount(() => {
+		if (id) setIdApartment(id);
+	});
+
+	if (isFetching || isError || !isFetched || isFetchingOwner || isErrorOwner) return null;
 
 	const defaultApartment = {
 		...detailData?.data,
 		status: statusApartment.find(i => i.value === detailData?.data?.status),
+		areaId: dataArea?.items.map(i => ({ label: i.name, value: i.id })).find(i => i.value === detailData?.data?.areaId),
+	};
+
+	const defaultOwner = {
+		...dataOwnner?.data,
 		areaId: dataArea?.items.map(i => ({ label: i.name, value: i.id })).find(i => i.value === detailData?.data?.areaId),
 	};
 
@@ -125,7 +210,7 @@ const AparmentForm: React.FC = () => {
 					<TabList>
 						<Tab>Thông tin căn hộ</Tab>
 						<Tab>Thông tin Chủ sở hữu</Tab>
-						<Tab>Dang sách cư dân</Tab>
+						<Tab hidden={!idApartment}>Dang sách cư dân</Tab>
 					</TabList>
 					<TabPanels>
 						<TabPanel>
@@ -239,21 +324,22 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm type="text" label="Họ và tên" name="fullName" variant="admin" />
-									<PullDowndHookForm
-										label="Giới tính"
-										name="gender"
-										options={[
-											{
-												label: 'Nam',
-												value: 'nam',
-											},
-											{
-												label: 'Nữ',
-												value: 'nữ',
-											},
-										]}
-										isSearchable={false}
+									<TextFieldHookForm type="text" isRequired label="Họ và tên" name="fullName" variant="admin" />
+									<PullDowndHookForm label="Giới tính" isRequired name="gender" options={gender} isSearchable={false} />
+								</Stack>
+								<Stack
+									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
+									direction={{ base: 'column', md: 'row' }}
+									spacing={3}
+									pb={3}
+								>
+									<TextFieldHookForm type="text" label="Ngày sinh" isRequired name="dateOfBirth" variant="admin" />
+									<TextFieldHookForm
+										type="number"
+										isRequired
+										label="Số điện thoại"
+										name="phoneNumber"
+										variant="admin"
 									/>
 								</Stack>
 								<Stack
@@ -262,8 +348,20 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm type="text" label="Ngày sinh" name="birthday" variant="admin" />
-									<TextFieldHookForm type="number" label="Số điện thoại" name="phone" variant="admin" />
+									<PullDowndHookForm
+										label="Loại giấy tờ tuỳ thân"
+										name="identityCardType"
+										variant="admin"
+										options={identityCardType}
+										isRequired
+									/>
+									<TextFieldHookForm
+										type="number"
+										label="CMND/CCCD/Hộ chiếu"
+										name="identityCardNumber"
+										variant="admin"
+										isRequired
+									/>
 								</Stack>
 								<Stack
 									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -271,31 +369,42 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
+									<TextFieldHookForm type="text" label="Địa chỉ thường trú" name="permanentAddress" variant="admin" />
+									<TextFieldHookForm type="text" label="Ngày cấp" name="identityCreateDate" variant="admin" />
+								</Stack>
+								<Stack
+									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
+									direction={{ base: 'column', md: 'row' }}
+									spacing={3}
+									pb={3}
+								>
+									<TextFieldHookForm type="text" label="Địa chỉ tạm trú" name="temporaryAddress" variant="admin" />
+									<TextFieldHookForm type="text" label="Nơi cấp" name="identityLocationIssued" variant="admin" />
+								</Stack>
+								<Box pb={3} maxW={{ base: '100%', md: '50%' }}>
 									<TextFieldHookForm type="email" label="Email" name="email" variant="admin" />
-									<TextFieldHookForm type="number" label="CMND/CCCD/Hộ chiếu" name="cmnd" variant="admin" />
-								</Stack>
-								<Stack
-									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-									direction={{ base: 'column', md: 'row' }}
-									spacing={3}
-									pb={3}
-								>
-									<TextFieldHookForm type="text" label="Địa chỉ thường trú" name="address" variant="admin" />
-									<TextFieldHookForm type="text" label="Ngày cấp" name="datecmd" variant="admin" />
-								</Stack>
-								<Stack
-									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-									direction={{ base: 'column', md: 'row' }}
-									spacing={3}
-									pb={3}
-								>
-									<TextFieldHookForm type="text" label="Địa chỉ tạm trú" name="currentAddress" variant="admin" />
-									<TextFieldHookForm type="text" label="Nơi cấp" name="addressCmnd" variant="admin" />
-								</Stack>
+								</Box>
+								<HStack pt={3} justify="end">
+									{action === 'detail' && (
+										<Button type="button" onClick={() => changeAction('edit', id || '', false)} variant="brand">
+											Chỉnh sửa
+										</Button>
+									)}
+									<Button w="20" isDisabled={!idApartment} type="submit" variant="brand">
+										Lưu
+									</Button>
+									<Button w="20" type="button" variant="gray" onClick={() => history.goBack()}>
+										Huỷ
+									</Button>
+								</HStack>
 							</FormContainer>
 						</TabPanel>
 						<TabPanel>
-							<p>three!</p>
+							<Flex alignItems="center" minH={200} justifyContent="center">
+								<Link to={`/admin/${patchs.Resident}/:propertyId=${idApartment || ''}`}>
+									<Button variant="link">Quản lí cư dân</Button>
+								</Link>
+							</Flex>
 						</TabPanel>
 					</TabPanels>
 				</Tabs>
