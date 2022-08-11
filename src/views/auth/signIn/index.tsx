@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 // Chakra imports
 import {
@@ -7,6 +7,7 @@ import {
 	Checkbox,
 	Flex,
 	FormControl,
+	FormErrorMessage,
 	FormLabel,
 	Heading,
 	Icon,
@@ -21,25 +22,31 @@ import illustration from 'assets/img/auth/auth.png';
 import { HSeparator } from 'components/separator/Separator';
 import DefaultAuth from 'layouts/auth/Default';
 // Assets
-import { FcGoogle } from 'react-icons/fc';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { NavLink } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from 'store';
+import { userLogin } from 'store/actionCreators';
 
 const SignIn: React.FC = () => {
-	// Chakra color mode
-
 	const textColor = useColorModeValue('navy.700', 'white');
 	const textColorSecondary = 'gray.400';
-	// const textColorDetails = useColorModeValue('navy.700', 'secondaryGray.600');
 	const textColorBrand = useColorModeValue('brand.500', 'white');
 	const brandStars = useColorModeValue('brand.500', 'brand.400');
-	const googleBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.200');
-	const googleText = useColorModeValue('navy.700', 'white');
-	const googleHover = useColorModeValue({ bg: 'gray.200' }, { bg: 'whiteAlpha.300' });
-	const googleActive = useColorModeValue({ bg: 'secondaryGray.300' }, { bg: 'whiteAlpha.200' });
+
+	const usernameRef = useRef<HTMLInputElement>(null);
+	const passRef = useRef<HTMLInputElement>(null);
+
+	const dispatch = useAppDispatch();
+	const error = useAppSelector(state => state.error);
+
+	const handleLogin = () => {
+		dispatch(userLogin(usernameRef.current?.value || '', passRef.current?.value || ''));
+	};
+
 	const [show, setShow] = React.useState(false);
 	const handleClick = () => setShow(!show);
+
 	return (
 		<DefaultAuth illustrationBackground={illustration}>
 			<Flex
@@ -74,7 +81,7 @@ const SignIn: React.FC = () => {
 					me="auto"
 					mb={{ base: '20px', md: 'auto' }}
 				>
-					<Button
+					{/* <Button
 						fontSize="sm"
 						me="0px"
 						mb="26px"
@@ -90,7 +97,7 @@ const SignIn: React.FC = () => {
 					>
 						<Icon as={FcGoogle} w="20px" h="20px" me="10px" />
 						Sign in with Google
-					</Button>
+					</Button> */}
 					<Flex align="center" mb="25px">
 						<HSeparator />
 						<Text color="gray.400" mx="14px">
@@ -100,14 +107,15 @@ const SignIn: React.FC = () => {
 					</Flex>
 					<FormControl>
 						<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" color={textColor} mb="8px">
-							Email<Text color={brandStars}>*</Text>
+							Username<Text color={brandStars}>*</Text>
 						</FormLabel>
 						<Input
+							ref={usernameRef}
 							isRequired
 							variant="auth"
 							fontSize="sm"
 							ms={{ base: '0px', md: '0px' }}
-							type="email"
+							type="text"
 							placeholder="mail@simmmple.com"
 							mb="24px"
 							fontWeight="500"
@@ -118,6 +126,7 @@ const SignIn: React.FC = () => {
 						</FormLabel>
 						<InputGroup size="md">
 							<Input
+								ref={passRef}
 								isRequired
 								fontSize="sm"
 								placeholder="Min. 8 characters"
@@ -135,6 +144,9 @@ const SignIn: React.FC = () => {
 								/>
 							</InputRightElement>
 						</InputGroup>
+						<Text pb={3} textAlign="center" fontWeight="bold" fontSize="sm" color="red.600">
+							{error['users/LOGIN'] as string}
+						</Text>
 						<Flex justifyContent="space-between" align="center" mb="24px">
 							<FormControl display="flex" alignItems="center">
 								<Checkbox id="remember-login" colorScheme="brandScheme" me="10px" />
@@ -148,7 +160,8 @@ const SignIn: React.FC = () => {
 								</Text>
 							</NavLink>
 						</Flex>
-						<Button fontSize="sm" variant="brand" fontWeight="500" w="100%" h="50" mb="24px">
+
+						<Button onClick={handleLogin} fontSize="sm" variant="brand" fontWeight="500" w="100%" h="50" mb="24px">
 							Sign In
 						</Button>
 					</FormControl>

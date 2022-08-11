@@ -9,7 +9,8 @@ export interface ErrorState {
 
 const getErrorMatches = (actionType: string) => /(.*)_(REQUEST|FAILURE|CLEAR_ERRORS)/.exec(actionType);
 
-const errorReducer = (action: ErrorAction, state: ErrorState = {}) => {
+// eslint-disable-next-line @typescript-eslint/default-param-last
+const errorReducer = (state: ErrorState = {}, action: ErrorAction) => {
 	const matches = getErrorMatches(action.type);
 
 	if (!matches) {

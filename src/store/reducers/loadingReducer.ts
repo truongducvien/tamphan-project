@@ -6,7 +6,8 @@ export interface IsLoadingState {
 
 const getLoadingMatches = (actionType: string) => /(.*)_(REQUEST|SUCCESS|FAILURE)/.exec(actionType);
 
-const isLoadingReducer = (action: Action, state: IsLoadingState = {}) => {
+// eslint-disable-next-line @typescript-eslint/default-param-last
+const isLoadingReducer = (state: IsLoadingState = {}, action: Action) => {
 	const matches = getLoadingMatches(action.type as string);
 
 	if (!matches) {

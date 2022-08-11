@@ -5,11 +5,19 @@ import { IUserResponse } from './type';
 
 export interface LoginResponse {
 	user: IUser;
-	token: string;
+	accessToken: string;
 }
 
-export async function login(username: string, pass: string) {
-	return http.post<LoginResponse>('login', { username, pass });
+export async function login(payload: { username: string; password: string }) {
+	return http.post<LoginResponse>(
+		'/v1/operators/login',
+		{ ...payload },
+		{
+			headers: {
+				authorization: false,
+			},
+		},
+	);
 }
 
 export const getUser = async () => {
