@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 // Chakra imports
 import {
@@ -38,9 +38,23 @@ const SignIn: React.FC = () => {
 	const passRef = useRef<HTMLInputElement>(null);
 
 	const dispatch = useAppDispatch();
+
+	const [errorMessase, setError] = useState({ username: '', password: '' });
+
 	const error = useAppSelector(state => state.error);
+	const loading = useAppSelector(state => state.isLoading);
 
 	const handleLogin = () => {
+		if (!usernameRef.current?.value.length || usernameRef.current?.value.length < 4) {
+			setError(prev => ({ ...prev, username: 'Username is incorrect' }));
+			return;
+		}
+
+		if (!passRef.current?.value.length || passRef.current?.value.length < 6) {
+			setError(prev => ({ ...prev, password: 'Password is incorrect' }));
+			return;
+		}
+		setError({ username: '', password: '' });
 		dispatch(userLogin(usernameRef.current?.value || '', passRef.current?.value || ''));
 	};
 
@@ -100,10 +114,6 @@ const SignIn: React.FC = () => {
 					</Button> */}
 					<Flex align="center" mb="25px">
 						<HSeparator />
-						<Text color="gray.400" mx="14px">
-							or
-						</Text>
-						<HSeparator />
 					</Flex>
 					<FormControl>
 						<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" color={textColor} mb="8px">
@@ -113,6 +123,7 @@ const SignIn: React.FC = () => {
 							ref={usernameRef}
 							isRequired
 							variant="auth"
+							borderColor={errorMessase.username ? '#FC8181' : undefined}
 							fontSize="sm"
 							ms={{ base: '0px', md: '0px' }}
 							type="text"
@@ -127,6 +138,7 @@ const SignIn: React.FC = () => {
 						<InputGroup size="md">
 							<Input
 								ref={passRef}
+								borderColor={errorMessase.password ? '#FC8181' : undefined}
 								isRequired
 								fontSize="sm"
 								placeholder="Min. 8 characters"
@@ -145,7 +157,7 @@ const SignIn: React.FC = () => {
 							</InputRightElement>
 						</InputGroup>
 						<Text pb={3} textAlign="center" fontWeight="bold" fontSize="sm" color="red.600">
-							{error['users/LOGIN'] as string}
+							{errorMessase.password || errorMessase.username || (error['users/LOGIN'] as string)}
 						</Text>
 						<Flex justifyContent="space-between" align="center" mb="24px">
 							<FormControl display="flex" alignItems="center">
@@ -161,7 +173,17 @@ const SignIn: React.FC = () => {
 							</NavLink>
 						</Flex>
 
-						<Button onClick={handleLogin} fontSize="sm" variant="brand" fontWeight="500" w="100%" h="50" mb="24px">
+						<Button
+							onClick={handleLogin}
+							isLoading={loading['users/LOGIN']}
+							loadingText="Loading"
+							fontSize="sm"
+							variant="brand"
+							fontWeight="500"
+							w="100%"
+							h="50"
+							mb="24px"
+						>
 							Sign In
 						</Button>
 					</FormControl>

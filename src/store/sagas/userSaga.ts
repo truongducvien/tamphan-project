@@ -15,8 +15,8 @@ export function* requestLogin({
 		yield put(actionCreators.userLoginSuccess(response.data.user));
 		yield call(saveAccessToken, response.data.accessToken);
 	} catch (error) {
-		const err = error as AxiosError;
-		yield put(actionCreators.userLoginFail(err.message));
+		const err = error as AxiosError<{ message: string }>;
+		yield put(actionCreators.userLoginFail(err.response?.data?.message || err.message));
 	}
 }
 
