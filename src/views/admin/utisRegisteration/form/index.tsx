@@ -95,7 +95,7 @@ const UtilsReForm: React.FC = () => {
 						pb={3}
 					>
 						<TextFieldHookForm isDisabled label="Trạng thái" name="status" variant="admin" />
-						<TextFieldHookForm isDisabled label="Ngày đăng kí" name="reservationDate" variant="admin" />
+						<TextFieldHookForm isDisabled label="Ngày đăng ký" name="reservationDate" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}

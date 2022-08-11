@@ -7,7 +7,7 @@ export enum ResidentType {
 	RESIDENT = 'RESIDENT',
 }
 
-export const residnetType: Array<Option> = [
+export const residentType: Array<Option> = [
 	{
 		label: 'Chủ sở hữu',
 		value: ResidentType.OWNER,
@@ -77,7 +77,7 @@ export interface IResident {
 	type: ResidentType;
 	useNovaId?: boolean;
 	state?: Status;
-	id: string;
+	id?: string;
 }
 
 export interface IResidentParams extends BaseParams {

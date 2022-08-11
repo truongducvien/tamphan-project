@@ -100,7 +100,7 @@ const UserForm: React.FC = () => {
 						pb={3}
 					>
 						<PullDowndHookForm
-							label="Phân khu quản lí"
+							label="Phân khu quản lý"
 							isRequired
 							name="subdivision"
 							options={[

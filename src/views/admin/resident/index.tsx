@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, Flex, Heading, Link, Stack } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
@@ -11,11 +11,9 @@ import Table, { IColumn } from 'components/table';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { MdImportExport, MdLibraryAdd } from 'react-icons/md';
-import { Link as RouterLink } from 'react-router-dom';
 import { getArea } from 'services/area';
 import { getResident } from 'services/resident';
-import { IResident, IResidentParams, residnetType } from 'services/resident/type';
-import { patchs } from 'variables/patch';
+import { IResident, IResidentParams, residentType } from 'services/resident/type';
 import { PermistionAction } from 'variables/permission';
 import { statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
@@ -36,7 +34,7 @@ const ResidentManagement: React.FC = () => {
 		{ key: 'identityCreateDate', label: 'Ngày cấp' },
 		{ key: 'identityLocationIssued', label: 'Nới cấp' },
 		{ key: 'propertyName', label: 'Căn hộ' },
-		{ key: 'type', label: 'Vai trò', cell: ({ type }) => residnetType.find(i => i.value === type)?.label },
+		{ key: 'type', label: 'Vai trò', cell: ({ type }) => residentType.find(i => i.value === type)?.label },
 		{ key: 'email', label: 'Email' },
 		{ key: 'phoneNumber', label: 'Số điện thoại' },
 		{ key: 'permanentAddress', label: 'Địa chỉ thường trú' },

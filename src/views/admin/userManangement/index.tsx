@@ -44,7 +44,7 @@ const users: Array<User> = [
 		fullName: 'addmin',
 		email: 'admin@novaid.vn',
 		phone: '1234561234',
-		role: 'ban quản lí',
+		role: 'ban quản lý',
 		room: '',
 		status: 'Đang hoạt động',
 		subdivision: {
@@ -58,7 +58,7 @@ const users: Array<User> = [
 		fullName: 'addmin',
 		email: 'admin@novaid.vn',
 		phone: '1234561234',
-		role: 'ban quản lí',
+		role: 'ban quản lý',
 		room: '',
 		status: 'Đang hoạt động',
 		subdivision: {

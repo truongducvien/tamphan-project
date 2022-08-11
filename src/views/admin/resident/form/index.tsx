@@ -1,53 +1,156 @@
-import { Box, Button, HStack, Stack } from '@chakra-ui/react';
+import { useState } from 'react';
+
+import { Box, Button, Flex, HStack, Stack } from '@chakra-ui/react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { CheckboxHookForm } from 'components/form/Checkbox';
-import { PullDowndHookForm } from 'components/form/PullDown';
+import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
+import { useToastInstance } from 'components/toast';
+import useActionPage from 'hooks/useActionPage';
+import { useDebounce } from 'hooks/useDebounce';
+import { useHistory } from 'react-router-dom';
+import { getApartment } from 'services/apartment';
+import { createResident, getResidentById, updateResident } from 'services/resident';
+import {
+	Gender,
+	gender,
+	IdentityCardType,
+	identityCardType,
+	IResidentPayload,
+	ResidentType,
+	residentType,
+} from 'services/resident/type';
+import { Status, statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
-	name: Yup.string().required('Vui lòng nhập tên nhóm'),
-	cmnd: Yup.string().required('Vui lòng nhập cmnd'),
+	fullName: Yup.string().required('Vui lòng nhập họ tên'),
+	gender: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn giới tính') }),
+	dateOfBirth: Yup.string().required('Vui lòng nhập ngày sinh'),
+	phoneNumber: Yup.string().required('Vui lòng nhập số điện thoại'),
+	identityCardType: Yup.object({
+		label: Yup.string(),
+		value: Yup.string().required('Vui lòng chọn loại giấy tờ tuỳ thân'),
+	}),
+	identityCardNumber: Yup.string().required('Vui lòng nhập giấy tờ tuỳ thân'),
+	propertyId: Yup.object({
+		label: Yup.string(),
+		value: Yup.string().required('Vui lòng chọn căn hộ'),
+	}),
 });
 
 interface DataForm {
-	name: string;
-	cmnd: string;
-	birthday: string;
-	createCm: string;
-	gender: string;
-	addCm: string;
-	partmentCode: string;
-	phone: string;
-	role: string;
+	dateOfBirth: string;
 	email: string;
-	relaition: string;
-	novaid: boolean;
-	address: string;
-	status: boolean;
-	currentAddress: string;
-	uyquyen: string;
-	createAt: string;
+	propertyId: string;
+	propertyName?: string;
+	fullName: string;
+	gender: Option;
+	identityCardNumber: string;
+	identityCardType: Option;
+	identityCreateDate: string;
+	identityLocationIssued: string;
+	permanentAddress: string;
+	phoneNumber: string;
+	temporaryAddress: string;
+	type: Option;
+	useNovaId?: boolean;
+	state?: Option;
 }
 
 const ResidentForm: React.FC = () => {
-	const onSubmit = (data: DataForm) => {
-		console.log(data);
+	const { changeAction, id, action } = useActionPage();
+	const { toast } = useToastInstance();
+	const [keyword, setKeyword] = useState('');
+	const keywordDebounce = useDebounce(keyword);
+
+	const { data: dataApartment, isFetched } = useQuery(['listApartment', keywordDebounce], () =>
+		getApartment({ code: keywordDebounce }),
+	);
+	const {
+		data: detailData,
+		isFetching,
+		isError,
+	} = useQuery(['detail', id], () => getResidentById(id || ''), {
+		enabled: !!id,
+	});
+
+	const history = useHistory();
+	const mutationCreate = useMutation(createResident);
+	const mutationUpdate = useMutation(updateResident);
+
+	const handelCreate = async (data: IResidentPayload, reset: () => void) => {
+		try {
+			await mutationCreate.mutateAsync(data);
+			toast({ title: 'Tạo mới thành công' });
+			reset();
+		} catch {
+			toast({ title: 'Tạo mới thất bại', status: 'error' });
+		}
+	};
+
+	const handelUpdate = async (data: IResidentPayload) => {
+		const prepareData = { ...data, id: id || '' };
+		try {
+			await mutationUpdate.mutateAsync(prepareData);
+			toast({ title: 'Cập nhật thành công' });
+		} catch {
+			toast({ title: 'Cập nhật thất bại', status: 'error' });
+		}
+	};
+
+	const onSubmit = (data: DataForm, reset: () => void) => {
+		const prepareData: IResidentPayload = {
+			...data,
+			state: data.state?.value as Status,
+			type: data.type.value as ResidentType,
+			identityCardType: data.identityCardType.value as IdentityCardType,
+			gender: data.gender.value as Gender,
+		};
+
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
+	};
+
+	if (isFetching || isError || !isFetched) return null;
+
+	const defaultValue = {
+		...detailData?.data,
+		state: statusOption2.find(i => i.value === detailData?.data?.state),
+		type: residentType.find(i => i.value === detailData?.data?.type),
+		identityCardType: identityCardType.find(i => i.value === detailData?.data?.identityCardType),
+		gender: gender.find(i => i.value === detailData?.data?.gender),
 	};
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
-				<FormContainer onSubmit={onSubmit} validationSchema={validationSchema}>
+				<FormContainer
+					onSubmit={onSubmit}
+					validationSchema={validationSchema}
+					defaultValues={defaultValue as unknown as { [x: string]: string }}
+				>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
 						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isRequired label="Họ và tên" name="name" variant="admin" />
-						<TextFieldHookForm isRequired label="CMND.CCCD/Hộ chiếu" name="cmnd" variant="admin" />
+						<TextFieldHookForm isRequired label="Họ và tên" name="fullName" variant="admin" />
+						<Flex minW={{ base: '100%', md: '50%' }}>
+							<Box width={300} mr={2}>
+								<PullDowndHookForm
+									label="Loại giấy tờ tuỳ thân"
+									name="identityCardType"
+									variant="admin"
+									options={identityCardType}
+									isRequired
+								/>
+							</Box>
+							<TextFieldHookForm isRequired label="CMND.CCCD/Hộ chiếu" name="identityCardNumber" variant="admin" />
+						</Flex>
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -55,8 +158,8 @@ const ResidentForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm label="Ngày sinh" name="birthday" variant="admin" />
-						<TextFieldHookForm label="Ngày cấp" name="createCm" variant="admin" />
+						<TextFieldHookForm label="Ngày sinh" isRequired name="dateOfBirth" variant="admin" />
+						<TextFieldHookForm label="Ngày cấp" name="identityCreateDate" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -64,20 +167,8 @@ const ResidentForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<PullDowndHookForm
-							label="Giới tính"
-							name="gender"
-							isRequired
-							options={[
-								{
-									label: 'Nam',
-									value: 'nam',
-								},
-							]}
-							isMulti
-							isSearchable={false}
-						/>
-						<TextFieldHookForm label="Nơi cấp" name="addCm" variant="admin" />
+						<PullDowndHookForm label="Giới tính" name="gender" isRequired options={gender} isSearchable={false} />
+						<TextFieldHookForm label="Nơi cấp" name="identityLocationIssued" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -87,18 +178,12 @@ const ResidentForm: React.FC = () => {
 					>
 						<PullDowndHookForm
 							label="Căn hộ"
-							name="partmentCode"
+							name="propertyId"
 							isRequired
-							options={[
-								{
-									label: '1',
-									value: '1',
-								},
-							]}
-							isMulti
-							isSearchable={false}
+							options={dataApartment?.items.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id })) || []}
+							onInputChange={setKeyword}
 						/>
-						<TextFieldHookForm label="Số điện thoại" name="phone" variant="admin" />
+						<TextFieldHookForm label="Số điện thoại" name="phoneNumber" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -108,14 +193,9 @@ const ResidentForm: React.FC = () => {
 					>
 						<PullDowndHookForm
 							label="Vai trò"
-							name="role"
+							name="type"
 							isRequired
-							options={[
-								{
-									label: 'Cư dân',
-									value: '1',
-								},
-							]}
+							options={residentType}
 							isMulti
 							isSearchable={false}
 						/>
@@ -140,7 +220,7 @@ const ResidentForm: React.FC = () => {
 							isMulti
 							isSearchable={false}
 						/>
-						<TextFieldHookForm isRequired label="Địa chỉ thường trú" name="address" variant="admin" />
+						<TextFieldHookForm isRequired label="Địa chỉ thường trú" name="permanentAddress" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -150,40 +230,12 @@ const ResidentForm: React.FC = () => {
 					>
 						<PullDowndHookForm
 							label="Trạng thái hoạt động"
-							name="role"
+							name="state"
 							isRequired
-							options={[
-								{
-									label: 'Đang hoạt động',
-									value: '1',
-								},
-							]}
-							isMulti
+							options={statusOption2}
 							isSearchable={false}
 						/>
-						<TextFieldHookForm isRequired label="Địa chỉ tạm trú" name="currentAddress" variant="admin" />
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
-						<PullDowndHookForm
-							label="Trạng thái hoạt động"
-							name="role"
-							isRequired
-							options={[
-								{
-									label: 'Đang hoạt động',
-									value: '1',
-								},
-							]}
-							isMulti
-							isSearchable={false}
-						/>
-						<TextFieldHookForm isRequired label="Địa chỉ tạm trú" name="currentAddress" variant="admin" />
-						{/* <CheckboxHookForm label="Cho phép sử dụng NOVAID" name="novaid" variant="admin" /> */}
+						<TextFieldHookForm isRequired label="Địa chỉ tạm trú" name="temporaryAddress" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -195,13 +247,18 @@ const ResidentForm: React.FC = () => {
 						<TextFieldHookForm isRequired label="Ngày cập nhật" isDisabled name="createAt" variant="admin" />
 					</Stack>
 					<Box>
-						<CheckboxHookForm label="Cho phép sử dụng NOVAID" name="novaid" variant="admin" />
+						<CheckboxHookForm label="Cho phép sử dụng NOVAID" name="useNovaId" variant="admin" />
 					</Box>
-					<HStack pt={3} justifyContent="end">
-						<Button w="20" type="submit" variant="brand">
+					<HStack pb={3} justifyContent="flex-end">
+						{action === 'detail' && (
+							<Button type="button" onClick={() => changeAction('edit', id || '', false)} variant="brand">
+								Chỉnh sửa
+							</Button>
+						)}
+						<Button w="20" disabled={action === 'detail'} type="submit" variant="brand">
 							Lưu
 						</Button>
-						<Button w="20" type="button" variant="gray">
+						<Button w="20" onClick={() => history.goBack()} type="button" variant="gray">
 							Huỷ
 						</Button>
 					</HStack>

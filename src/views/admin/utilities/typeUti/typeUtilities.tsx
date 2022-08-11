@@ -96,7 +96,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
-						Danh sách cư dân
+						Danh sách loại tiện ích
 					</Heading>
 				</Center>
 				<Table

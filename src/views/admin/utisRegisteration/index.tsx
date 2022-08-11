@@ -34,7 +34,7 @@ const UtilsReManagement: React.FC = () => {
 		['list', param, currentPage, currentPageSize],
 		() => getUtilsRe({ ...param, page: currentPage, size: currentPage }),
 		{
-			onError: () => toast({ status: 'error', title: 'Qerry thất bại' }),
+			onError: () => toast({ status: 'error', title: 'Query thất bại' }),
 		},
 	);
 
@@ -114,7 +114,7 @@ const UtilsReManagement: React.FC = () => {
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
-						Danh sách dăng kí tiện ích
+						Danh sách đăng ký tiện ích
 					</Heading>
 				</Center>
 				<Table

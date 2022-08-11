@@ -55,7 +55,8 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 	} = useFormContext();
 
 	useEffect(() => {
-		setValue(name, defaultValue);
+		if (defaultValue) setValue(name, defaultValue);
+		else setValue(name, getValues(name));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [defaultValue]);
 
@@ -114,6 +115,7 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 									bg: bgMenu,
 								}),
 							}}
+							defaultValue={defaultValue}
 							placeholder={placeholder}
 							menuPortalTarget={document.body}
 						/>

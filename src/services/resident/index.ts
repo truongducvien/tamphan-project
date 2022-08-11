@@ -16,7 +16,7 @@ export const getAllResident = async () => {
 };
 
 export const getResidentOwner = async (flatId: string) => {
-	const { data } = await http.get<BaseResponeDetail<{ data: IResident }>>(`/v1/residents/owner/${flatId}`);
+	const { data } = await http.get<BaseResponeDetail<IResident>>(`/v1/residents/owner/${flatId}`);
 	return data?.data || null;
 };
 
@@ -28,12 +28,12 @@ export const createResident = async (payload: IResidentPayload) => {
 };
 
 export const deleteResident = async (id: string) => {
-	const { data } = await http.delete<BaseResponeAction>(`/v1/units/${id}`);
+	const { data } = await http.delete<BaseResponeAction>(`/v1/residents/${id}`);
 	return data || null;
 };
 
 export const getResidentById = async (id: string) => {
-	const { data } = await http.get<BaseResponeDetail<IResident>>(`/v1/units/${id}`);
+	const { data } = await http.get<BaseResponeDetail<IResident>>(`/v1/residents/${id}`);
 	return data || null;
 };
 export const getResidentByProperty = async (id: string) => {
@@ -42,6 +42,6 @@ export const getResidentByProperty = async (id: string) => {
 };
 
 export const updateResident = async (payload: IResidentPayload) => {
-	const { data } = await http.put<BaseResponeAction>(`/v1/units/${payload.id || ''}`, payload);
+	const { data } = await http.put<BaseResponeAction>(`/v1/residents/${payload.id || ''}`, payload);
 	return data || null;
 };

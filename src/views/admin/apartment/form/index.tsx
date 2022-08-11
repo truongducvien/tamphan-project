@@ -30,8 +30,8 @@ import * as Yup from 'yup';
 const validationApartment = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên căn hộ'),
 	code: Yup.string().required('Vui lòng nhập tên căn hộ'),
-	areaId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn phân khu') }),
-	status: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn trạng thái') }),
+	areaId: Yup.object().shape({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn phân khu') }),
+	status: Yup.object().shape({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn trạng thái') }),
 });
 
 const validationSchema = Yup.object({
@@ -106,9 +106,9 @@ const AparmentForm: React.FC = () => {
 
 	const {
 		data: dataOwnner,
-		isFetching: isFetchingOwner,
+		isFetched: isFetchedingOwner,
 		isError: isErrorOwner,
-	} = useQuery(['detail', id], () => getResidentOwner(id || ''), {
+	} = useQuery(['detailOwner', id], () => getResidentOwner(id || ''), {
 		enabled: !!id,
 	});
 
@@ -178,7 +178,7 @@ const AparmentForm: React.FC = () => {
 		const prepareData: IResidentPayload = {
 			...data,
 			propertyId: idApartment,
-			gender: data.gender.value as Gender,
+			gender: (data.gender.value as Gender) || dataOwnner?.gender,
 			identityCardType: data.identityCardType.value as IdentityCardType,
 			type: ResidentType.OWNER,
 		};
@@ -190,7 +190,7 @@ const AparmentForm: React.FC = () => {
 		if (id) setIdApartment(id);
 	});
 
-	if (isFetching || isError || !isFetched || isFetchingOwner || isErrorOwner) return null;
+	if (isFetching || isError || !isFetched || !isFetchedingOwner || isErrorOwner) return null;
 
 	const defaultApartment = {
 		...detailData?.data,
@@ -199,8 +199,11 @@ const AparmentForm: React.FC = () => {
 	};
 
 	const defaultOwner = {
-		...dataOwnner?.data,
+		...dataOwnner,
 		areaId: dataArea?.items.map(i => ({ label: i.name, value: i.id })).find(i => i.value === detailData?.data?.areaId),
+		identityCardType:
+			identityCardType.find(i => i.value === dataOwnner?.identityCardType) || dataOwnner?.identityCardType,
+		gender: gender.find(i => i.value === dataOwnner?.gender),
 	};
 
 	return (
@@ -317,7 +320,11 @@ const AparmentForm: React.FC = () => {
 							</FormContainer>
 						</TabPanel>
 						<TabPanel>
-							<FormContainer onSubmit={onSubmit} validationSchema={validationSchema}>
+							<FormContainer
+								onSubmit={onSubmit}
+								validationSchema={validationSchema}
+								defaultValues={defaultOwner as unknown as { [x: string]: string }}
+							>
 								<Stack
 									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
 									direction={{ base: 'column', md: 'row' }}
@@ -402,7 +409,7 @@ const AparmentForm: React.FC = () => {
 						<TabPanel>
 							<Flex alignItems="center" minH={200} justifyContent="center">
 								<Link to={`/admin/${patchs.Resident}/:propertyId=${idApartment || ''}`}>
-									<Button variant="link">Quản lí cư dân</Button>
+									<Button variant="link">Quản lý cư dân</Button>
 								</Link>
 							</Flex>
 						</TabPanel>

@@ -41,7 +41,7 @@ export interface Route {
 
 const routes: Route[] = [
 	{
-		name: 'Quản lí người dùng',
+		name: 'Quản lý người dùng',
 		layout: '/admin',
 		path: `/users`,
 		icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
@@ -56,7 +56,7 @@ const routes: Route[] = [
 		],
 	},
 	{
-		name: 'Quản lí Đơn vị',
+		name: 'Quản lý Đơn vị',
 		layout: '/admin',
 		path: `/office`,
 		icon: <Icon as={FaBuilding} width="20px" height="20px" color="inherit" />,
@@ -71,7 +71,7 @@ const routes: Route[] = [
 		],
 	},
 	{
-		name: 'Quản lí chức vụ',
+		name: 'Quản lý chức vụ',
 		layout: '/admin',
 		path: `/position`,
 		icon: <Icon as={FaBuffer} width="20px" height="20px" color="inherit" />,
@@ -86,7 +86,7 @@ const routes: Route[] = [
 		],
 	},
 	{
-		name: 'Quản lí phân khu',
+		name: 'Quản lý phân khu',
 		layout: '/admin',
 		path: `/subdivision`,
 		icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
@@ -101,7 +101,7 @@ const routes: Route[] = [
 		],
 	},
 	{
-		name: 'Quản lí căn hộ',
+		name: 'Quản lý căn hộ',
 		layout: '/admin',
 		path: `/apartment`,
 		icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
@@ -116,7 +116,7 @@ const routes: Route[] = [
 		],
 	},
 	{
-		name: 'Quản lí cư dân',
+		name: 'Quản lý cư dân',
 		layout: '/admin',
 		path: `/resident`,
 		icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
@@ -138,7 +138,7 @@ const routes: Route[] = [
 		component: Admin,
 	},
 	{
-		name: 'Quản lí loại tiện ích',
+		name: 'Quản lý loại tiện ích',
 		layout: '/admin',
 		path: `/type-utilities`,
 		icon: <Icon as={FaClipboardList} width="20px" height="20px" color="inherit" />,
@@ -153,7 +153,7 @@ const routes: Route[] = [
 		],
 	},
 	{
-		name: 'Quản lí tiện ích',
+		name: 'Quản lý tiện ích',
 		layout: '/admin',
 		path: `/utilities`,
 		icon: <Icon as={FaTh} width="20px" height="20px" color="inherit" />,
@@ -168,14 +168,14 @@ const routes: Route[] = [
 		],
 	},
 	{
-		name: 'Quản lí đăng kí tiện ích',
+		name: 'Quản lý đăng ký tiện ích',
 		layout: '/admin',
 		path: `/utils-registeration`,
 		icon: <Icon as={FaRegistered} width="20px" height="20px" color="inherit" />,
 		component: UtilsReManagement,
 		items: [
 			{
-				name: 'đăng kí tiện ích',
+				name: 'đăng ký tiện ích',
 				layout: '/admin',
 				path: '/utils-registeration/form',
 				component: UtilsReForm,

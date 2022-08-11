@@ -73,17 +73,17 @@ const DetailPosition: React.FC = () => {
 	const permissions: Array<PermissionProps> = [
 		{
 			id: '1',
-			title: 'Quản lí người dùng',
+			title: 'Quản lý người dùng',
 			permistion: [PermistionAction.CREATE, PermistionAction.EDIT, PermistionAction.DETETE],
 		},
 		{
 			id: '2',
-			title: 'Quản lí sơ đồ tổ chức',
+			title: 'Quản lý sơ đồ tổ chức',
 			permistion: [PermistionAction.CREATE, PermistionAction.EDIT, PermistionAction.DETETE],
 		},
 		{
 			id: '3',
-			title: 'Quản lí chức vụ',
+			title: 'Quản lý chức vụ',
 			checked: [PermistionAction.CREATE],
 			permistion: [PermistionAction.CREATE, PermistionAction.EDIT, PermistionAction.DETETE],
 		},
