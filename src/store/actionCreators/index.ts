@@ -1,10 +1,11 @@
 import * as actions from '../actions';
 
-export function userLogin(username: string, password: string): actions.LoginAction {
+export function userLogin(username: string, password: string, remember?: boolean): actions.LoginAction {
 	return {
 		type: actions.LOGIN_REQUEST,
 		username,
 		password,
+		remember,
 	};
 }
 

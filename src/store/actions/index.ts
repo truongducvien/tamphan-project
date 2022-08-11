@@ -7,6 +7,7 @@ export interface LoginAction {
 	type: typeof LOGIN_REQUEST;
 	username: string;
 	password: string;
+	remember?: boolean;
 }
 
 export const LOGIN_SUCCESS = 'users/LOGIN_SUCCESS';

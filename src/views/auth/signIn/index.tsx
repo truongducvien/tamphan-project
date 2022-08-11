@@ -36,6 +36,7 @@ const SignIn: React.FC = () => {
 
 	const usernameRef = useRef<HTMLInputElement>(null);
 	const passRef = useRef<HTMLInputElement>(null);
+	const checkboxRef = useRef<HTMLInputElement>(null);
 
 	const dispatch = useAppDispatch();
 
@@ -55,7 +56,7 @@ const SignIn: React.FC = () => {
 			return;
 		}
 		setError({ username: '', password: '' });
-		dispatch(userLogin(usernameRef.current?.value || '', passRef.current?.value || ''));
+		dispatch(userLogin(usernameRef.current?.value || '', passRef.current?.value || '', checkboxRef.current?.checked));
 	};
 
 	const [show, setShow] = React.useState(false);
@@ -161,7 +162,7 @@ const SignIn: React.FC = () => {
 						</Text>
 						<Flex justifyContent="space-between" align="center" mb="24px">
 							<FormControl display="flex" alignItems="center">
-								<Checkbox id="remember-login" colorScheme="brandScheme" me="10px" />
+								<Checkbox ref={checkboxRef} id="remember-login" colorScheme="brandScheme" me="10px" />
 								<FormLabel htmlFor="remember-login" mb="0" fontWeight="normal" color={textColor} fontSize="sm">
 									Keep me logged in
 								</FormLabel>

@@ -9,11 +9,14 @@ import * as actionTypes from '../actions';
 export function* requestLogin({
 	username,
 	password,
+	remember,
 }: actionTypes.LoginAction): Generator<StrictEffect, void, AxiosResponse<LoginResponse>> {
 	try {
 		const response = yield call(login, { username, password });
 		yield put(actionCreators.userLoginSuccess(response.data.user));
-		yield call(saveAccessToken, response.data.accessToken);
+		if (remember) {
+			yield call(saveAccessToken, response.data.accessToken);
+		}
 	} catch (error) {
 		const err = error as AxiosError<{ message: string }>;
 		yield put(actionCreators.userLoginFail(err.response?.data?.message || err.message));
