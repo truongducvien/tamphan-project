@@ -14,10 +14,8 @@ const createHTTP = (httpConfig: AxiosRequestConfig) => {
 			if (!config?.headers) {
 				throw new Error(`Expected 'config' and 'config.headers' not to be undefined`);
 			}
-			if (!config.headers.authorization) {
-				const accessToken = loadAccessToken();
-				config.headers.authorization = `Bearer ${accessToken || ''}`;
-			}
+			const accessToken = loadAccessToken();
+			config.headers.authorization = `Bearer ${accessToken || ''}`;
 			return config;
 		},
 		(error: AxiosError) => {

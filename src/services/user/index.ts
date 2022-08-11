@@ -9,15 +9,7 @@ export interface LoginResponse {
 }
 
 export async function login(payload: { username: string; password: string }) {
-	return http.post<LoginResponse>(
-		'/v1/operators/login',
-		{ ...payload },
-		{
-			headers: {
-				authorization: false,
-			},
-		},
-	);
+	return http.post<LoginResponse>('/v1/operators/login', { ...payload });
 }
 
 export const getUser = async () => {
