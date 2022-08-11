@@ -1,5 +1,6 @@
 import { Option } from 'components/form/PullDown';
-import { BaseResponeList } from 'services/type';
+import { BaseParams, BaseResponeList } from 'services/type';
+import { Status } from 'variables/status';
 
 export enum ResidentType {
 	OWNER = 'OWNER',
@@ -63,6 +64,7 @@ export interface IResident {
 	dateOfBirth: string;
 	email: string;
 	propertyId: string;
+	propertyName?: string;
 	fullName: string;
 	gender: Gender;
 	identityCardNumber: string;
@@ -74,7 +76,14 @@ export interface IResident {
 	temporaryAddress: string;
 	type: ResidentType;
 	useNovaId?: boolean;
+	state?: Status;
 	id: string;
+}
+
+export interface IResidentParams extends BaseParams {
+	propertyId?: string;
+	areaId?: string;
+	fullName?: string;
 }
 
 export type IResidentResponse = BaseResponeList<IResident>;

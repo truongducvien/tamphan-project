@@ -1,68 +1,66 @@
 import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, Input, Link, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, Link, Stack } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
-import { PullDown } from 'components/pulldown';
-import Table, { DataTable, IColumn } from 'components/table';
+import { FormContainer } from 'components/form';
+import { PullDowndHookForm } from 'components/form/PullDown';
+import { TextFieldHookForm } from 'components/form/TextField';
+import Table, { IColumn } from 'components/table';
+import useActionPage from 'hooks/useActionPage';
+import { useDebounce } from 'hooks/useDebounce';
 import { MdImportExport, MdLibraryAdd } from 'react-icons/md';
 import { Link as RouterLink } from 'react-router-dom';
+import { getArea } from 'services/area';
+import { getResident } from 'services/resident';
+import { IResident, IResidentParams, residnetType } from 'services/resident/type';
 import { patchs } from 'variables/patch';
 import { PermistionAction } from 'variables/permission';
+import { statusOption2 } from 'variables/status';
+import * as Yup from 'yup';
 
-export interface Resident extends DataTable {
-	name: string;
-	birthday: string;
-	gender: string;
-	cmnd: string;
-	createCm: string;
-	addCm: string;
-	partmentCode: string;
-	role: string;
-	email: string;
-	phone: string;
-	address: string;
-	currentAddress: string;
-	status: string;
-}
-
-const apartment: Array<Resident> = [
-	{
-		name: 'string ',
-		birthday: 'string',
-		gender: 'string',
-		cmnd: 'string',
-		createCm: 'string',
-		addCm: 'string',
-		partmentCode: 'string',
-		role: 'string',
-		email: 'string',
-		phone: 'string',
-		address: 'string',
-		currentAddress: 'string',
-		status: 'string',
-	},
-];
+const validation = Yup.object({
+	areaId: Yup.object({ label: Yup.string(), value: Yup.string() }).nullable(),
+});
 
 const ResidentManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPage, setCurrentPage] = useState(0);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
 
-	const COLUMNS: Array<IColumn<Resident>> = [
-		{ key: 'name', label: 'Tên cư dân' },
-		{ key: 'birthday', label: 'Ngày sinh' },
+	const COLUMNS: Array<IColumn<IResident>> = [
+		{ key: 'fullName', label: 'Tên cư dân' },
+		{ key: 'dateOfBirth', label: 'Ngày sinh' },
 		{ key: 'gender', label: 'Giới tính' },
-		{ key: 'cmnd', label: 'CMND/ CCCD/ HC' },
-		{ key: 'createCm', label: 'Ngày cấp' },
-		{ key: 'addCm', label: 'Nới cấp' },
-		{ key: 'partmentCode', label: 'Căn hộ' },
-		{ key: 'role', label: 'Vai trò' },
+		{ key: 'identityCardNumber', label: 'CMND/ CCCD/ HC' },
+		{ key: 'identityCreateDate', label: 'Ngày cấp' },
+		{ key: 'identityLocationIssued', label: 'Nới cấp' },
+		{ key: 'propertyName', label: 'Căn hộ' },
+		{ key: 'type', label: 'Vai trò', cell: ({ type }) => residnetType.find(i => i.value === type)?.label },
 		{ key: 'email', label: 'Email' },
-		{ key: 'phone', label: 'Số điện thoại' },
-		{ key: 'address', label: 'Địa chỉ thường trú' },
-		{ key: 'currentAddress', label: 'Địa chỉ tạm trú' },
-		{ key: 'status', label: 'Trạng thái' },
+		{ key: 'phoneNumber', label: 'Số điện thoại' },
+		{ key: 'permanentAddress', label: 'Địa chỉ thường trú' },
+		{ key: 'temporaryAddress', label: 'Địa chỉ tạm trú' },
+		{ key: 'state', label: 'Trạng thái', cell: ({ state }) => statusOption2.find(i => i.value === state)?.label },
 	];
+
+	const [params, setParams] = useState<IResidentParams>();
+	const [keyword, setKeyword] = useState('');
+	const keywordDebounce = useDebounce(keyword);
+
+	const { data: dataArea } = useQuery(['listArea', keyword], () => getArea({ name: keywordDebounce }));
+
+	const { data } = useQuery(['list', params, currentPage, currentPageSize], () =>
+		getResident({
+			page: currentPage,
+			size: currentPageSize,
+			...params,
+		}),
+	);
+
+	const onSearch = (payload: IResidentParams) => {
+		setParams(payload);
+	};
 
 	const pageInfo = {
 		total: 10,
@@ -70,65 +68,46 @@ const ResidentManagement: React.FC = () => {
 		hasPreviousPage: true,
 	};
 
+	const { changeAction } = useActionPage();
+
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
 				<Box px={{ sm: 2, md: 5 }}>
-					<Stack
-						spacing={5}
-						align="end"
-						justify={{ base: 'center', md: 'space-around', xl: 'space-around' }}
-						direction={{ base: 'column', md: 'row' }}
-					>
-						<FormControl flex={1}>
-							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-								<Text>Mã căn hộ</Text>
-							</FormLabel>
-							<Input
-								variant="admin"
-								fontSize="sm"
-								ms={{ base: '0px', md: '0px' }}
-								type="text"
-								placeholder="Nhập ..."
-								size="md"
+					<FormContainer onSubmit={onSearch} validationSchema={validation}>
+						<Stack
+							spacing={5}
+							align="end"
+							justify={{ base: 'center', md: 'space-around', xl: 'space-around' }}
+							direction={{ base: 'column', md: 'row' }}
+						>
+							<TextFieldHookForm label="Mã căn hộ" name="propertyId" />
+							<PullDowndHookForm
+								name="areaId"
+								label="Phân khu"
+								options={
+									dataArea?.items.map(i => ({
+										label: i.name,
+										value: i.id,
+									})) || []
+								}
+								onInputChange={setKeyword}
+								isClearable
 							/>
-						</FormControl>
-						<FormControl flex={1}>
-							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-								<Text>Phân khu</Text>
-							</FormLabel>
-							<PullDown
-								name="subdivision"
-								options={[
-									{
-										label: 'a',
-										value: '1',
-									},
-								]}
-								isMulti
-								isSearchable={false}
-							/>
-						</FormControl>
-						<FormControl flex={1}>
-							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-								<Text>Tên cư dân</Text>
-							</FormLabel>
-							<Input variant="admin" placeholder="Nhập ..." />
-						</FormControl>
-					</Stack>
-					<Flex mt="3" justifyContent="end">
-						<Button variant="lightBrand" leftIcon={<SearchIcon />}>
-							Tìm kiếm
-						</Button>
-						<Button marginLeft={1} variant="light" leftIcon={<MdImportExport />}>
-							Import
-						</Button>
-						<Link to={`${patchs.Resident}/${patchs.Create}`} as={RouterLink}>
-							<Button marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+							<TextFieldHookForm label="Tên cư dân" name="fullName" />
+						</Stack>
+						<Flex mt="3" justifyContent="end">
+							<Button type="submit" variant="lightBrand" leftIcon={<SearchIcon />}>
+								Tìm kiếm
+							</Button>
+							<Button marginLeft={1} variant="light" leftIcon={<MdImportExport />}>
+								Import
+							</Button>
+							<Button marginLeft={1} onClick={() => changeAction('create')} variant="brand" leftIcon={<MdLibraryAdd />}>
 								Thêm mới
 							</Button>
-						</Link>
-					</Flex>
+						</Flex>
+					</FormContainer>
 				</Box>
 			</Card>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
@@ -140,10 +119,9 @@ const ResidentManagement: React.FC = () => {
 				<Table
 					minWith="2000px"
 					testId="consignments-dashboard"
-					// onSelectionChange={handleSelectionChange}
 					keyField="name"
 					columns={COLUMNS}
-					data={[...apartment, ...apartment, ...apartment]}
+					data={data?.items || []}
 					pagination={{
 						total: Number(pageInfo?.total || 0),
 						pageSize: currentPageSize,
@@ -153,7 +131,9 @@ const ResidentManagement: React.FC = () => {
 						onPageChange: page => setCurrentPage(page),
 						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
 					}}
-					action={[PermistionAction.EDIT, PermistionAction.DETETE]}
+					action={[PermistionAction.EDIT, PermistionAction.DETETE, PermistionAction.VIEW]}
+					onClickDetail={({ id }) => changeAction('detail', id)}
+					onClickEdit={({ id }) => changeAction('edit', id)}
 				/>
 			</Card>
 		</Box>

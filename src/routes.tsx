@@ -123,7 +123,7 @@ const routes: Route[] = [
 		component: ResidentManagement,
 		items: [
 			{
-				name: 'Thêm mới cư dân',
+				name: 'cư dân',
 				layout: '/admin',
 				path: `/resident/form`,
 				component: ResidentForm,

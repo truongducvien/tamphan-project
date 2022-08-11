@@ -1,19 +1,17 @@
 import http from 'services/http';
 import { BaseResponeAction, BaseResponeDetail } from 'services/type';
 
-import { IResident, IResidentPayload, IResidentResponse } from './type';
+import { IResident, IResidentParams, IResidentPayload, IResidentResponse } from './type';
 
-export const getResident = async (name?: string) => {
-	const { data } = await http.get<IResidentResponse>('/v1/units/search', {
-		params: {
-			name,
-		},
+export const getResident = async (params: IResidentParams) => {
+	const { data } = await http.get<IResidentResponse>('/v1/residents/search', {
+		params,
 	});
 	return data?.data || null;
 };
 
 export const getAllResident = async () => {
-	const { data } = await http.get<IResidentResponse>('/v1/units/all');
+	const { data } = await http.get<IResidentResponse>('/v1/residents/all');
 	return data?.data || null;
 };
 
