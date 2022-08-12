@@ -1,157 +1,94 @@
 import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import {
-	Box,
-	Button,
-	Center,
-	Flex,
-	FormControl,
-	FormLabel,
-	Heading,
-	Input,
-	Link,
-	Select,
-	SimpleGrid,
-	Text,
-} from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
+import { FormContainer } from 'components/form';
+import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { DataTable, IColumn } from 'components/table';
 import useActionPage from 'hooks/useActionPage';
+import { useDebounce } from 'hooks/useDebounce';
 import { MdLibraryAdd } from 'react-icons/md';
-import { Link as RouterLink } from 'react-router-dom';
+import { getOffice } from 'services/office';
 import { getUser } from 'services/user';
-import { patchs } from 'variables/patch';
+import { IUser, IUserParams } from 'services/user/type';
 import { PermistionAction } from 'variables/permission';
+import * as Yup from 'yup';
 
-export interface User extends DataTable {
-	id: number;
-	acount: string;
-	fullName: string;
-	email?: string;
-	phone?: string;
-	role?: string;
-	room?: string;
-	status?: string;
-	subdivision?: { id: string; name: string };
-}
-
-const users: Array<User> = [
-	{
-		id: 1,
-		acount: 'admin@novaid.vn',
-		fullName: 'addmin',
-		email: 'admin@novaid.vn',
-		phone: '1234561234',
-		role: 'ban quản lý',
-		room: '',
-		status: 'Đang hoạt động',
-		subdivision: {
-			id: '1',
-			name: 'Rever park 1',
-		},
-	},
-	{
-		id: 2,
-		acount: 'admin@novaid.vn',
-		fullName: 'addmin',
-		email: 'admin@novaid.vn',
-		phone: '1234561234',
-		role: 'ban quản lý',
-		room: '',
-		status: 'Đang hoạt động',
-		subdivision: {
-			id: '1',
-			name: 'Rever park 2',
-		},
-	},
-];
+const validationSchema = Yup.object({
+	fullName: Yup.string(),
+	username: Yup.string(),
+	organizationId: Yup.object({ label: Yup.string(), value: Yup.string() }).nullable(),
+});
 
 const UserManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPage, setCurrentPage] = useState(0);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
-	const { data } = useQuery(['users'], getUser);
+	const [keyword, setKeyword] = useState('');
+	const deboundKeyword = useDebounce(keyword);
+	const [params, setParams] = useState<Omit<IUserParams, 'page' | 'size'>>();
 
-	const COLUMNS: Array<IColumn<User>> = [
-		{ key: 'acount', label: 'Tài khoản' },
+	const { data: dataOffice } = useQuery(['list', deboundKeyword], () => getOffice(deboundKeyword));
+
+	const { data, isLoading, isError } = useQuery(['users', currentPage, currentPageSize, params], () =>
+		getUser({ page: currentPage, size: currentPageSize, ...params }),
+	);
+
+	const COLUMNS: Array<IColumn<IUser>> = [
+		{ key: 'username', label: 'Tài khoản' },
 		{ key: 'fullName', label: 'Họ tên' },
 		{ key: 'email', label: 'Email' },
-		{ key: 'phone', label: 'Sô điện thoại' },
-		{ key: 'role', label: 'Vai trò người dùng' },
-		{ key: 'room', label: 'đơn vị' },
+		{ key: 'phoneNumber', label: 'Sô điện thoại' },
+		{ key: 'roleId', label: 'Vai trò người dùng' },
+		{ key: 'organizationName', label: 'Đơn vị' },
 		{
-			key: 'subdivision',
+			key: 'areaName',
 			label: 'Phân khu',
-			// eslint-disable-next-line react/no-unstable-nested-components
-			cell: ({ subdivision }) => <Text>{subdivision?.name}</Text>,
 		},
-		{ key: 'status', label: 'Trạng thái' },
+		// { key: 'status', label: 'Trạng thái' },
 	];
 
 	const pageInfo = {
-		total: 10,
-		hasNextPage: true,
-		hasPreviousPage: true,
+		total: data?.totalPages,
+		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
+		hasPreviousPage: data ? data?.pageNum < 0 : false,
 	};
+	const handleFillter = (payload: { fullName: string; organizationId: Option; username: string }) => {
+		setParams({ ...payload, organizationId: payload.organizationId.value as string });
+	};
+
 	const { changeAction } = useActionPage();
+
+	if (isError) return null;
+
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
 				<Box px={{ sm: 2, md: 5 }}>
-					<SimpleGrid columns={{ sm: 1, md: 3 }} spacing={5}>
-						<FormControl>
-							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-								<Text>Đơn vị</Text>
-							</FormLabel>
-							<Select
-								data-testid="page-size-dropdown"
-								size="md"
-								ml={1}
-								variant="admin"
-								_hover={{ bg: 'made.80' }}
-								placeholder="Chọn đơn vị"
+					<FormContainer onSubmit={handleFillter} validationSchema={validationSchema}>
+						<SimpleGrid columns={{ sm: 1, md: 3 }} spacing={5}>
+							<PullDowndHookForm
+								label="Đơn vị"
+								isClearable
+								isSearchable
+								name="organizationId"
+								options={dataOffice?.items.map(i => ({ label: i.name, value: i.id })) || []}
+								onInputChange={setKeyword}
 							/>
-						</FormControl>
-						<FormControl>
-							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-								<Text>Họ tên</Text>
-							</FormLabel>
-							<Input
-								isRequired
-								variant="admin"
-								fontSize="sm"
-								ms={{ base: '0px', md: '0px' }}
-								type="email"
-								placeholder="Nhập họ tên"
-								size="md"
-							/>
-						</FormControl>
-						<FormControl>
-							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-								<Text>Tài khoản</Text>
-							</FormLabel>
-							<Input
-								isRequired
-								variant="admin"
-								fontSize="sm"
-								ms={{ base: '0px', md: '0px' }}
-								type="email"
-								placeholder="Nhập tài khoản"
-								mb="24px"
-								fontWeight="500"
-								size="md"
-							/>
-						</FormControl>
-					</SimpleGrid>
-					<Flex flex={1} alignItems="flex-end" justifyContent="flex-end">
-						<Button variant="lightBrand" leftIcon={<SearchIcon />}>
-							Tìm kiếm
-						</Button>
-						<Button onClick={() => changeAction('create')} marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-							Thêm mới
-						</Button>
-					</Flex>
+							<TextFieldHookForm label="Họ tên" name="fullName" />
+							<TextFieldHookForm label="Tài khoản" name="username" />
+						</SimpleGrid>
+						<Flex mt={3} flex={1} alignItems="flex-end" justifyContent="flex-end">
+							<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
+								Tìm kiếm
+							</Button>
+							<Button onClick={() => changeAction('create')} marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+								Thêm mới
+							</Button>
+						</Flex>
+					</FormContainer>
 				</Box>
 			</Card>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
@@ -165,7 +102,7 @@ const UserManagement: React.FC = () => {
 					// onSelectionChange={handleSelectionChange}
 					keyField="name"
 					columns={COLUMNS}
-					data={[...users, ...users, ...users]}
+					data={data?.items || []}
 					pagination={{
 						total: Number(pageInfo?.total || 0),
 						pageSize: currentPageSize,
@@ -175,7 +112,10 @@ const UserManagement: React.FC = () => {
 						onPageChange: page => setCurrentPage(page),
 						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
 					}}
-					action={[PermistionAction.EDIT, PermistionAction.DETETE]}
+					loading={isLoading}
+					action={[PermistionAction.EDIT, PermistionAction.VIEW]}
+					onClickDetail={({ id }) => changeAction('detail', id)}
+					onClickEdit={({ id }) => changeAction('edit', id)}
 				/>
 			</Card>
 		</Box>

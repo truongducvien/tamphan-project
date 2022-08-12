@@ -13,6 +13,7 @@ import {
 	Icon,
 	HStack,
 	Box,
+	Center,
 } from '@chakra-ui/react';
 import Pagination, { PaginationProps } from 'components/pagination';
 import { FaTrashAlt } from 'react-icons/fa';
@@ -86,11 +87,13 @@ const Table = <T,>({
 							</Tr>
 						)}
 					</Thead>
-					{loading ? (
+					{loading || !data?.[0] ? (
 						<Tbody flexDirection="column">
 							<Tr width="100vw" height={200} position="relative">
 								<Td>
-									<Spinner position="absolute" left="50%" top="50%" />
+									<Center position="absolute" left="50%" top="50%" transform="translate(-50%, 0px)">
+										{loading ? <Spinner /> : 'Không có dữ liệu'}
+									</Center>
 								</Td>
 							</Tr>
 						</Tbody>

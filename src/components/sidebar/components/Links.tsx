@@ -35,6 +35,9 @@ export const SidebarLinks: React.FC<Props> = props => {
 	// this function creates the links from the secondary accordions (for example auth -> sign-in -> default)
 	const createLinks = (r: Route[]) => {
 		const element: React.ReactElement[] = r.map((route, index) => {
+			if (route.isShow === false) {
+				return <Fragment key={route.name + index.toString()}></Fragment>;
+			}
 			if (route.category) {
 				return (
 					<Fragment key={route.name + index.toString()}>
