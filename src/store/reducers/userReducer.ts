@@ -27,6 +27,12 @@ export default function userReducer(state: UserState = initialState, action: act
 				logined: true,
 				loading: false,
 			};
+		case actions.INITIAL_FAILURE:
+			return {
+				...state,
+				logined: false,
+				loading: false,
+			};
 		case actions.LOGOUT_SUCCESS:
 			return { ...initialState, loading: false };
 		default:
