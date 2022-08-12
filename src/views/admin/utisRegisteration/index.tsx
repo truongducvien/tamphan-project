@@ -9,7 +9,6 @@ import { DatePickerdHookForm } from 'components/form/DatePicker';
 import { PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
-import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { MdResetTv } from 'react-icons/md';
@@ -20,7 +19,6 @@ import { IUtilsRe, IUtilsReSearchForm, IUtilsReSearchPayload } from 'services/ut
 import { PermistionAction } from 'variables/permission';
 
 const UtilsReManagement: React.FC = () => {
-	const { toast } = useToastInstance();
 	const [currentPage, setCurrentPage] = useState(0);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
 	const [param, setParams] = useState<Omit<IUtilsReSearchPayload, 'page' | 'size'>>({});
@@ -30,26 +28,22 @@ const UtilsReManagement: React.FC = () => {
 	const [keywordArea, setKeywordArea] = useState('');
 	const keywordAreaDebound = useDebounce(keywordArea);
 
-	const { data } = useQuery(
-		['list', param, currentPage, currentPageSize],
-		() => getUtilsRe({ ...param, page: currentPage, size: currentPage }),
-		{
-			onError: () => toast({ status: 'error', title: 'Query thất bại' }),
-		},
+	const { data, isLoading } = useQuery(['listUtilsRe', param, currentPage, currentPageSize], () =>
+		getUtilsRe({ ...param, page: currentPage, size: currentPageSize }),
 	);
 
-	const { data: dataArea } = useQuery(['list', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
+	const { data: dataArea } = useQuery(['listArea', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
 
 	const { data: dataGroup } = useQuery(['listGroup', keywordDebound], () => getUtilsGroup(keywordDebound));
 
 	const COLUMNS: Array<IColumn<IUtilsRe>> = [
-		{ key: 'amenitiesName', label: 'Tên tiện ích' },
+		{ key: 'facilityName', label: 'Tên tiện ích' },
 		{ key: 'userName', label: 'Tên người đặt' },
 		{ key: 'phoneNumber', label: 'Số điện thoại' },
 		{
 			key: 'bookingTimeSlot',
 			label: 'Giờ đặt chỗ',
-			cell: ({ bookingTimeSlot }) => `${bookingTimeSlot.start} - ${bookingTimeSlot.end}`,
+			cell: ({ bookingTimeSlot }) => `${bookingTimeSlot?.start} - ${bookingTimeSlot?.end}`,
 		},
 		{ key: 'reservationDate', label: 'Ngày đặt chỗ' },
 		{ key: 'quantityOfPerson', label: 'Số lượng' },
@@ -84,7 +78,7 @@ const UtilsReManagement: React.FC = () => {
 						<SimpleGrid columns={{ sm: 1, md: 3 }} spacing={3}>
 							<DatePickerdHookForm label="Từ ngày" name="bookingFromTime" />
 							<DatePickerdHookForm label="Đến ngày" name="bookingToTime" />
-							<TextFieldHookForm label="Tên tiện ích" name="amenitiesName" />
+							<TextFieldHookForm label="Tên tiện ích" name="facilityName" />
 							<PullDowndHookForm
 								label="Loại tiện ích"
 								name="amenitiesGroupId"
@@ -124,6 +118,7 @@ const UtilsReManagement: React.FC = () => {
 					keyField="name"
 					columns={COLUMNS}
 					data={data?.items || []}
+					loading={isLoading}
 					pagination={{
 						total: Number(pageInfo?.total || 0),
 						pageSize: currentPageSize,

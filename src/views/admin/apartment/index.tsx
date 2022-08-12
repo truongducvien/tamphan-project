@@ -35,7 +35,7 @@ const ApartMentManagement: React.FC = () => {
 	const [param, setParams] = useState<IApartmentParams | null>(null);
 
 	const { data: dataArea } = useQuery(['listArea', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
-	const { data, isLoading } = useQuery(['list', param, currentPage, currentPageSize], () =>
+	const { data, isLoading } = useQuery(['listApartment', param, currentPage, currentPageSize], () =>
 		getApartment({ ...param, page: currentPage, size: currentPageSize }),
 	);
 

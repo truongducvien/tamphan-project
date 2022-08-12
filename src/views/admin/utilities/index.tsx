@@ -26,7 +26,11 @@ const COLUMNS: Array<IColumn<IUtils>> = [
 	{ key: 'maxOrderNumber', label: 'Sức chứa' },
 	{ key: 'depositAmount', label: 'Yêu cầu đặt cọc', cell: ({ depositAmount }) => (depositAmount ? 'Có' : 'Không') },
 	{ key: 'depositAmount', label: 'Số tiền đặc cọc' },
-	{ key: 'timeSlots', label: 'Giờ hoạt động', cell: row => row.timeSlots.map(i => `${i.start} - ${i.end}`).join(', ') },
+	{
+		key: 'timeSlots',
+		label: 'Giờ hoạt động',
+		cell: ({ timeSlots }) => timeSlots?.map(i => `${i?.start} - ${i?.end}`).join(', '),
+	},
 	{
 		key: 'isAllowBookViaApp',
 		label: 'Cho phép đặt chỗ qua App',
@@ -53,11 +57,11 @@ const UtilitiesManagement: React.FC = () => {
 	const keywordAreaDebound = useDebounce(keywordArea, 500);
 	const [selectedArea, setArea] = useState<Option>();
 
-	const { data: dataGroup } = useQuery(['list', keywordGroupDebound], () => getUtilsGroup(keywordGroupDebound));
-	const { data, isLoading, refetch } = useQuery(['list', param, currentPage, currentPageSize], () =>
+	const { data: dataGroup } = useQuery(['listGroup', keywordGroupDebound], () => getUtilsGroup(keywordGroupDebound));
+	const { data, isLoading, refetch } = useQuery(['listUtils', param, currentPage, currentPageSize], () =>
 		getUtils({ ...param, page: currentPage, size: currentPageSize }),
 	);
-	const { data: dataArea } = useQuery(['list', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
+	const { data: dataArea } = useQuery(['listArea', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
 	const mutationDelete = useMutation(deleteUtils);
 
 	const handleApllyFilter = () => {

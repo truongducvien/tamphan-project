@@ -48,7 +48,7 @@ const ResidentManagement: React.FC = () => {
 
 	const { data: dataArea } = useQuery(['listArea', keyword], () => getArea({ name: keywordDebounce }));
 
-	const { data } = useQuery(['list', params, currentPage, currentPageSize], () =>
+	const { data, isLoading } = useQuery(['listResident', params, currentPage, currentPageSize], () =>
 		getResident({
 			page: currentPage,
 			size: currentPageSize,
@@ -120,6 +120,7 @@ const ResidentManagement: React.FC = () => {
 					keyField="name"
 					columns={COLUMNS}
 					data={data?.items || []}
+					loading={isLoading}
 					pagination={{
 						total: Number(pageInfo?.total || 0),
 						pageSize: currentPageSize,

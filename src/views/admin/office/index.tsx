@@ -15,7 +15,7 @@ const OfficeManagement: React.FC = () => {
 	const keywordRef = useRef<HTMLInputElement>(null);
 	const [keyword, setKeyword] = useState('');
 
-	const { data, isLoading } = useQuery(['list', keyword], () => getOffice(keyword));
+	const { data, isLoading } = useQuery(['listOffice', keyword], () => getOffice(keyword));
 
 	const COLUMNS: Array<IColumn<IOffice>> = [
 		{ key: 'name', label: 'Tên đơn vị' },

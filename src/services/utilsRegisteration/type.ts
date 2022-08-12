@@ -10,7 +10,7 @@ export interface IUtilsRe {
 	note: string;
 	phoneNumber: string;
 	userName: string;
-	amenitiesName: string;
+	facilityName: string;
 	reservationDate: string;
 	cancelDate: string;
 	status: string;
@@ -23,7 +23,7 @@ export type IUtilsGroupResponse = BaseResponeList<IUtilsRe>;
 
 export interface IUtilsReSearchPayload {
 	amenitiesGroupId?: string;
-	amenitiesName?: string;
+	facilityName?: string;
 	areaId?: string;
 	bookingFromTime?: string;
 	bookingToTime?: string;

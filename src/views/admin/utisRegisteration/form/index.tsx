@@ -58,7 +58,7 @@ const UtilsReForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isDisabled label="Tên tiện ích" name="amenitiesName" variant="admin" />
+						<TextFieldHookForm isDisabled label="Tên tiện ích" name="facilityName" variant="admin" />
 						<TextFieldHookForm isDisabled label="Ngày dặt chỗ" name="reservationDate" variant="admin" />
 					</Stack>
 					<Stack

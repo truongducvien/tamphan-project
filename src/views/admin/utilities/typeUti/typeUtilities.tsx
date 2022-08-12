@@ -17,7 +17,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 	const keywordRef = useRef<HTMLInputElement>(null);
 	const { toast } = useToastInstance();
 	const [keyword, setKeyword] = useState('');
-	const { data, isLoading, refetch } = useQuery(['list', keyword], () => getUtilsGroup(keyword));
+	const { data, isLoading, refetch } = useQuery(['listUtilsGroup', keyword], () => getUtilsGroup(keyword));
 	const { changeAction } = useActionPage();
 
 	const mutationDelete = useMutation(deleteUtilsGroup);
