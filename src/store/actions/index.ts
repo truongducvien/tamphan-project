@@ -3,6 +3,7 @@ export interface IUser {
 }
 
 export const LOGIN_REQUEST = 'users/LOGIN_REQUEST';
+
 export interface LoginAction {
 	type: typeof LOGIN_REQUEST;
 	username: string;
@@ -22,4 +23,43 @@ export interface LoginFailureAction {
 	error: Error | string;
 }
 
-export type LyricsAction = LoginAction | LoginSuccessAction | LoginFailureAction;
+export const LOGOUT_REQUEST = 'users/LOGOUT_REQUEST';
+
+export interface LogoutAction {
+	type: typeof LOGOUT_REQUEST;
+}
+
+export const LOGOUT_SUCCESS = 'users/LOGOUT_SUCCESS';
+
+export interface LogoutSuccessAction {
+	type: typeof LOGOUT_SUCCESS;
+}
+
+export const INITIAL = 'users/INITIAL';
+
+export interface InitialAction {
+	type: typeof INITIAL;
+}
+
+export const INITIAL_SUCESS = 'users/INITIAL_SUCESS';
+
+export interface InitialSuscessAction {
+	type: typeof INITIAL_SUCESS;
+}
+
+export const INITIAL_FAILURE = 'users/INITIAL_FAILURE';
+
+export interface InitiaFailurelAction {
+	type: typeof INITIAL_FAILURE;
+	error: Error | string;
+}
+
+export type UserAction =
+	| LoginAction
+	| LoginSuccessAction
+	| LoginFailureAction
+	| InitialAction
+	| InitialSuscessAction
+	| InitiaFailurelAction
+	| LogoutAction
+	| LogoutSuccessAction;

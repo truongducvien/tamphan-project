@@ -24,7 +24,7 @@ import DefaultAuth from 'layouts/auth/Default';
 // Assets
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store';
 import { userLogin } from 'store/actionCreators';
 
@@ -39,6 +39,7 @@ const SignIn: React.FC = () => {
 	const checkboxRef = useRef<HTMLInputElement>(null);
 
 	const dispatch = useAppDispatch();
+	const { logined } = useAppSelector(state => state.user);
 
 	const [errorMessase, setError] = useState({ username: '', password: '' });
 
@@ -46,12 +47,12 @@ const SignIn: React.FC = () => {
 	const loading = useAppSelector(state => state.isLoading);
 
 	const handleLogin = () => {
-		if (!usernameRef.current?.value.length || usernameRef.current?.value.length < 4) {
+		if (!usernameRef.current?.value.length || usernameRef.current?.value.length < 0) {
 			setError(prev => ({ ...prev, username: 'Username is incorrect' }));
 			return;
 		}
 
-		if (!passRef.current?.value.length || passRef.current?.value.length < 6) {
+		if (!passRef.current?.value.length || passRef.current?.value.length < 0) {
 			setError(prev => ({ ...prev, password: 'Password is incorrect' }));
 			return;
 		}
@@ -62,6 +63,7 @@ const SignIn: React.FC = () => {
 	const [show, setShow] = React.useState(false);
 	const handleClick = () => setShow(!show);
 
+	if (logined) return <Redirect to="/admin" />;
 	return (
 		<DefaultAuth illustrationBackground={illustration}>
 			<Flex

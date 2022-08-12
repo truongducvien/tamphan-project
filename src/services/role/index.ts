@@ -1,7 +1,7 @@
 import http from 'services/http';
-import { BaseResponeAction, BaseResponeDetail } from 'services/type';
+import { BaseResponeAction } from 'services/type';
 
-import { IRole, IRolePayload, IRoleResponse } from './type';
+import { IRoleDetail, IRolePayload, IRoleResponse } from './type';
 
 export const getRole = async (name?: string) => {
 	const { data } = await http.get<IRoleResponse>('/v1/roles/search', {
@@ -25,7 +25,7 @@ export const deleteRole = async (id: string) => {
 };
 
 export const getRoleById = async (id: string) => {
-	const { data } = await http.get<BaseResponeDetail<IRole>>(`/v1/roles/${id}`);
+	const { data } = await http.get<IRoleDetail>(`/v1/roles/${id}`);
 	return data || null;
 };
 

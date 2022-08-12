@@ -21,6 +21,8 @@ import SearchBar from 'components/navbar/searchBar/SearchBar';
 import { FaEthereum } from 'react-icons/fa';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { MdNotificationsNone } from 'react-icons/md';
+import { useAppDispatch } from 'store';
+import { logout } from 'store/actionCreators';
 
 export interface Props {
 	variant?: string;
@@ -32,6 +34,7 @@ export interface Props {
 }
 
 const HeaderLinks: React.FC<Props> = props => {
+	const dispatch = useAppDispatch();
 	const { secondary } = props;
 	const { colorMode, toggleColorMode } = useColorMode();
 	// Chakra Color Mode
@@ -156,7 +159,14 @@ const HeaderLinks: React.FC<Props> = props => {
 						<MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} borderRadius="8px" px="14px">
 							<Text fontSize="sm">Newsletter Settings</Text>
 						</MenuItem>
-						<MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} color="red.400" borderRadius="8px" px="14px">
+						<MenuItem
+							_hover={{ bg: 'none' }}
+							_focus={{ bg: 'none' }}
+							color="red.400"
+							onClick={() => dispatch(logout())}
+							borderRadius="8px"
+							px="14px"
+						>
 							<Text fontSize="sm">Log out</Text>
 						</MenuItem>
 					</Flex>

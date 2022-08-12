@@ -1,4 +1,4 @@
-import { BaseResponeList } from 'services/type';
+import { BaseResponeDetail, BaseResponeList } from 'services/type';
 import { PermistionAction } from 'variables/permission';
 
 export enum FeatureModule {
@@ -29,6 +29,9 @@ export interface IRole {
 	state: string;
 	updatedDate: string;
 	resources: ResourceRole;
+	privileges: {
+		[x in FeatureModule]: Array<PermistionAction>;
+	};
 }
 
 export type IRoleResponse = BaseResponeList<IRole>;
@@ -48,3 +51,5 @@ export interface IRolePayload {
 	state: string | number;
 	id?: string;
 }
+
+export type IRoleDetail = BaseResponeDetail<IRole>;

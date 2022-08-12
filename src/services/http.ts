@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { loadAccessToken } from 'helpers/storage';
+import { loadAccessToken, loadSessionAccessToken } from 'helpers/storage';
 
 const createHTTP = (httpConfig: AxiosRequestConfig) => {
 	const httpInstance = axios.create({
@@ -14,8 +14,9 @@ const createHTTP = (httpConfig: AxiosRequestConfig) => {
 			if (!config?.headers) {
 				throw new Error(`Expected 'config' and 'config.headers' not to be undefined`);
 			}
-			const accessToken = loadAccessToken();
+			const accessToken = loadAccessToken() || loadSessionAccessToken();
 			config.headers.authorization = `Bearer ${accessToken || ''}`;
+
 			return config;
 		},
 		(error: AxiosError) => {

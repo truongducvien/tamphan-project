@@ -6,6 +6,7 @@ import { UseAlert } from 'components/alertDialog/hook';
 import DialogServiceProvider from 'components/alertDialog/provider';
 import { Toastify } from 'components/toast';
 import { withAuth } from 'hocs/withAuth';
+import { InitialApp } from 'layouts';
 import AdminLayout from 'layouts/admin';
 import AuthLayout from 'layouts/auth';
 import { createRoot } from 'react-dom/client';
@@ -27,6 +28,7 @@ root.render(
 			<ChakraProvider theme={theme}>
 				<DialogServiceProvider>
 					<React.StrictMode>
+						<InitialApp />
 						<BrowserRouter>
 							<Switch>
 								<Route path="/auth" component={AuthLayout} />
