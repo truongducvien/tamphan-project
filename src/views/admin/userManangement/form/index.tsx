@@ -1,45 +1,135 @@
+import { useState } from 'react';
+
 import { Box, Button, HStack, Stack } from '@chakra-ui/react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
-import { PullDowndHookForm } from 'components/form/PullDown';
+import { DatePickerdHookForm } from 'components/form/DatePicker';
+import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
+import { useToastInstance } from 'components/toast';
+import useActionPage from 'hooks/useActionPage';
+import { useDebounce } from 'hooks/useDebounce';
+import { useHistory } from 'react-router-dom';
+import { getArea } from 'services/area';
+import { getOffice } from 'services/office';
+import { Gender, gender } from 'services/resident/type';
+import { getRole } from 'services/role';
+import { createUser, getUserById, updateUser } from 'services/user';
+import { IUserPayload } from 'services/user/type';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
-	account: Yup.string().required('Vui lòng nhập tên nhóm'),
-	subdivision: Yup.array().required('Vui lòng chọn thương hiệu').min(1),
+	username: Yup.string().required('Vui lòng nhập tên tài khoản'),
+	fullName: Yup.string().required('Vui lòng nhập tên họ tên'),
+	organizationId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn đơn vị') }),
+	roleId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn vai trò') }),
+	areaId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn phân khu') }),
 });
 
-interface DataForm {
-	account: string;
-	birthday: string;
-	email: string;
-	room: string;
-	subdivision: string;
-	status: string;
-	fullName: string;
-	gender: string;
-	phone: string;
-	role: string;
-	address: string;
+interface DataForm extends Omit<IUserPayload, 'gender' | 'areaId' | 'organizationId' | 'roleId'> {
+	gender: Option;
+	areaId: Option;
+	organizationId: Option;
+	roleId: Option;
 }
 
 const UserForm: React.FC = () => {
-	const onSubmit = (data: DataForm) => {
-		console.log(data);
+	const { changeAction, id, action } = useActionPage();
+	const { toast } = useToastInstance();
+
+	const [keywordArea, setKeywordArea] = useState('');
+	const keywordAreaDebound = useDebounce(keywordArea);
+
+	const [keywordOffice, setKeywordOffice] = useState('');
+	const keywordOfficeDebound = useDebounce(keywordOffice);
+
+	const [keywordRole, setKeywordRole] = useState('');
+	const keywordRoleDebound = useDebounce(keywordRole);
+
+	const { data: dataArea, isFetched: isFecthedArea } = useQuery(['listArea', keywordAreaDebound], () =>
+		getArea({ name: keywordAreaDebound }),
+	);
+
+	const { data: dataOffice, isFetched: isFecthedOffice } = useQuery(['listOffice', keywordAreaDebound], () =>
+		getOffice(keywordOfficeDebound),
+	);
+
+	const { data: dataRole, isFetched: isFecthedRole } = useQuery(['listRole', keywordAreaDebound], () =>
+		getRole(keywordRoleDebound),
+	);
+
+	const {
+		data: detailData,
+		isFetching,
+		isError,
+	} = useQuery(['detail', id], () => getUserById(id || ''), {
+		enabled: !!id,
+	});
+
+	const history = useHistory();
+	const mutationCreate = useMutation(createUser);
+	const mutationUpdate = useMutation(updateUser);
+
+	const handelCreate = async (data: IUserPayload, reset: () => void) => {
+		try {
+			await mutationCreate.mutateAsync(data);
+			toast({ title: 'Tạo mới thành công' });
+			reset();
+		} catch {
+			toast({ title: 'Tạo mới thất bại', status: 'error' });
+		}
+	};
+
+	const handelUpdate = async (data: IUserPayload) => {
+		const prepareData = { ...data, id: id || '' };
+		try {
+			await mutationUpdate.mutateAsync(prepareData);
+			toast({ title: 'Cập nhật thành công' });
+		} catch {
+			toast({ title: 'Cập nhật thất bại', status: 'error' });
+		}
+	};
+
+	const onSubmit = (data: DataForm, reset: () => void) => {
+		const prepareData = {
+			...data,
+			areaId: data.areaId.value as string,
+			organizationId: data.organizationId.value as string,
+			roleId: data.roleId.value as string,
+			gender: data.gender.value as Gender,
+		};
+
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
+	};
+	if (!isFecthedArea || !isFecthedOffice || !isFecthedRole || isFetching || isError) return null;
+
+	const defaultData = {
+		...detailData?.data,
+		areaId: dataArea?.items.map(i => ({ label: i.name, value: i.id })).find(i => i.value === detailData?.data?.areaId),
+		organizationId: dataOffice?.items
+			.map(i => ({ label: i.name, value: i.id }))
+			.find(i => i.value === detailData?.data?.organizationId),
+		roleId: dataRole?.items.map(i => ({ label: i.name, value: i.id })).find(i => i.value === detailData?.data?.roleId),
+		gender: gender.find(i => i.value === detailData?.data?.gender),
 	};
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
-				<FormContainer onSubmit={onSubmit} validationSchema={validationSchema}>
+				<FormContainer
+					onSubmit={onSubmit}
+					validationSchema={validationSchema}
+					defaultValues={defaultData as unknown as { [x: string]: string }}
+				>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
 						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isRequired label="Tài khoản" name="account" variant="admin" />
+						<TextFieldHookForm isRequired label="Tài khoản" name="username" variant="admin" />
 						<TextFieldHookForm isRequired label="Họ tên" name="fullName" variant="admin" />
 					</Stack>
 					<Stack
@@ -48,8 +138,8 @@ const UserForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm label="Ngày sinh" name="birthday" variant="admin" />
-						<TextFieldHookForm label="Giới tính" name="gender" variant="admin" />
+						<DatePickerdHookForm label="Ngày sinh" name="dateOfBirth" variant="admin" />
+						<PullDowndHookForm label="Giới tính" options={gender} name="gender" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -58,7 +148,7 @@ const UserForm: React.FC = () => {
 						pb={3}
 					>
 						<TextFieldHookForm label="Email" name="email" variant="admin" />
-						<TextFieldHookForm isRequired label="Sô điện thoại" name="phone" variant="admin" />
+						<TextFieldHookForm isRequired label="Sô điện thoại" name="phoneNumber" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -68,29 +158,24 @@ const UserForm: React.FC = () => {
 					>
 						<PullDowndHookForm
 							label="Đơn vị"
-							name="room"
+							name="organizationId"
 							isRequired
-							options={[
-								{
-									label: 'a',
-									value: '1',
-								},
-							]}
-							isMulti
-							isSearchable={false}
+							options={dataOffice?.items.map(i => ({ label: i.name, value: i.id })) || []}
+							onInputChange={setKeywordOffice}
 						/>
 						<PullDowndHookForm
 							isRequired
 							label="Vai trò người đung"
-							name="role"
-							options={[
-								{
-									label: 'a',
-									value: '1',
-								},
-							]}
-							isMulti
-							isSearchable={false}
+							name="roleId"
+							options={
+								dataRole?.items.map(i => ({ label: i.name, value: i.id })) || [
+									{
+										label: 'SYSTEM',
+										value: '123e4567-e89b-12d3-a456-426614174000',
+									},
+								]
+							}
+							onInputChange={setKeywordRole}
 						/>
 					</Stack>
 					<Stack
@@ -102,22 +187,16 @@ const UserForm: React.FC = () => {
 						<PullDowndHookForm
 							label="Phân khu quản lý"
 							isRequired
-							name="subdivision"
-							options={[
-								{
-									label: 'a',
-									value: '1',
-								},
-							]}
-							isMulti
-							isSearchable={false}
+							name="areaId"
+							options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
+							onInputChange={setKeywordArea}
 						/>
 						<TextFieldHookForm label="Địa chỉ" name="addrress" variant="admin" />
 					</Stack>
-					<HStack pb={3} pr={1.5} w={{ sm: '100%', md: '50%' }}>
+					{/* <HStack pb={3} pr={1.5} w={{ sm: '100%', md: '50%' }}>
 						<PullDowndHookForm
 							label="Trạng thái hoạt động"
-							name="subdivision"
+							name="state"
 							options={[
 								{
 									label: 'a',
@@ -127,12 +206,17 @@ const UserForm: React.FC = () => {
 							isMulti
 							isSearchable={false}
 						/>
-					</HStack>
-					<HStack pt={3} justifyContent="flex-end">
-						<Button w="20" type="submit" variant="brand">
+					</HStack> */}
+					<HStack pb={3} justifyContent="flex-end">
+						{action === 'detail' && (
+							<Button type="button" onClick={() => changeAction('edit', id || '', false)} variant="brand">
+								Chỉnh sửa
+							</Button>
+						)}
+						<Button w="20" disabled={action === 'detail'} type="submit" variant="brand">
 							Lưu
 						</Button>
-						<Button w="20" type="button" variant="gray">
+						<Button w="20" onClick={() => history.goBack()} type="button" variant="gray">
 							Huỷ
 						</Button>
 					</HStack>

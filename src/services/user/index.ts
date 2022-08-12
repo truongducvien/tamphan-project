@@ -24,7 +24,11 @@ export interface LoginResponse {
 }
 
 export const login = async (payload: { username: string; password: string }) => {
-	const { data } = await http.post<BaseResponeDetail<LoginResponse>>('/v1/operators/login', { ...payload });
+	const { data } = await http.post<BaseResponeDetail<LoginResponse>>(
+		'/v1/operators/login',
+		{ ...payload },
+		{ headers: { authorization: false } },
+	);
 	return data;
 };
 

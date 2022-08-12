@@ -5,11 +5,13 @@ export interface IUser {
 	areaName: string;
 	createdAt: Date;
 	dateOfBirth: string;
+	areaId: string;
 	email: string;
 	fullName: string;
 	gender: Gender;
 	id: string;
 	organizationName: string;
+	organizationId: string;
 	phoneNumber: string;
 	roleId: string;
 	roleName: string;

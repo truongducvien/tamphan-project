@@ -15,9 +15,17 @@ const createHTTP = (httpConfig: AxiosRequestConfig) => {
 				throw new Error(`Expected 'config' and 'config.headers' not to be undefined`);
 			}
 			const accessToken = loadAccessToken() || loadSessionAccessToken();
-			config.headers.authorization = `Bearer ${accessToken || ''}`;
-
-			return config;
+			const authConfig = {
+				authorization: `Bearer ${accessToken || ''}`,
+			};
+			return {
+				...config,
+				...(config.headers.authorization !== false
+					? {
+							headers: authConfig,
+					  }
+					: {}),
+			};
 		},
 		(error: AxiosError) => {
 			return Promise.reject(error);

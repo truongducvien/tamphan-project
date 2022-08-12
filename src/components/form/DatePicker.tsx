@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { FormControl, FormErrorMessage, FormLabel, Input, InputProps } from '@chakra-ui/react';
 import { DatePicker, IDatePickerProps } from 'components/date';
@@ -19,17 +19,24 @@ export const DatePickerdHookForm: React.FC<DatePickerdHookFormProps> = ({
 	const {
 		control,
 		formState: { errors },
+		getValues,
+		setValue,
 	} = useFormContext();
+	useEffect(() => {
+		setValue(name, getValues(name));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 	return (
 		<Controller
 			control={control}
-			render={({ field: { onChange } }) => (
+			render={({ field: { onChange, value } }) => (
 				<FormControl isRequired={innerProps.isRequired} isInvalid={!!errors?.[name]}>
 					<FormLabel htmlFor={name}>{label}</FormLabel>
 					<DatePicker
 						borderColor={errors?.[name] ? '#FC8181' : undefined}
 						{...innerProps}
 						onChange={onChange}
+						defaultValue={value as string}
 						variant={variant}
 						placeholder={placeholder}
 					/>

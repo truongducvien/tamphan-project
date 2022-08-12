@@ -7,7 +7,7 @@ import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
-import Table, { DataTable, IColumn } from 'components/table';
+import Table, { IColumn } from 'components/table';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { MdLibraryAdd } from 'react-icons/md';
