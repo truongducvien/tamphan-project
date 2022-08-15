@@ -22,7 +22,7 @@ export interface IUtilsRe {
 export type IUtilsGroupResponse = BaseResponeList<IUtilsRe>;
 
 export interface IUtilsReSearchPayload {
-	amenitiesGroupId?: string;
+	facilityGroupId?: string;
 	facilityName?: string;
 	areaId?: string;
 	bookingFromTime?: string;
@@ -32,7 +32,7 @@ export interface IUtilsReSearchPayload {
 }
 
 export interface IUtilsReSearchForm
-	extends Omit<IUtilsReSearchPayload, 'page' | 'size' | 'areaId' | 'amenitiesGroupId'> {
+	extends Omit<IUtilsReSearchPayload, 'page' | 'size' | 'areaId' | 'facilityGroupId'> {
 	areaId: Option;
-	amenitiesGroupId: Option;
+	facilityGroupId: Option;
 }

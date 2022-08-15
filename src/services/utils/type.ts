@@ -3,13 +3,13 @@ import { BaseResponeList } from 'services/type';
 export interface IUtils {
 	id: string;
 	address: string;
-	amenitiesGroupId: string;
+	facilityGroupId: string;
 	areaId: string;
 	capacity: number;
 	dateOffs: Array<string>;
 	depositAmount: number;
 	description: string;
-	imageLink: string;
+	imageLink: string[];
 	isAllowBookViaApp: true;
 	maxOrderNumber: number;
 	name: string;
@@ -35,7 +35,7 @@ export interface IUtils {
 export type IUtilsGroupResponse = BaseResponeList<IUtils>;
 
 export interface IUtilsSearchPayload {
-	amenitiesGroupId?: string;
+	facilityGroupId?: string;
 	areaId?: string;
 	name?: string;
 	page: number;
@@ -45,13 +45,13 @@ export interface IUtilsSearchPayload {
 export interface IUtilsCreatePayload {
 	id?: string;
 	address: string;
-	amenitiesGroupId: string;
+	facilityGroupId: string;
 	areaId: string;
 	capacity: number;
 	dateOffs: Array<string>;
 	depositAmount: number;
 	description: string;
-	imageLink: string;
+	imageLink: string[];
 	isAllowBookViaApp: boolean;
 	maxOrderNumber: number;
 	name: string;

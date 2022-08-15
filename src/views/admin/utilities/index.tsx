@@ -20,7 +20,7 @@ import { PermistionAction } from 'variables/permission';
 
 const COLUMNS: Array<IColumn<IUtils>> = [
 	{ key: 'name', label: 'Tên tiện ích' },
-	{ key: 'amenitiesGroupId', label: 'Loại tiện ích' },
+	{ key: 'facilityGroupId', label: 'Loại tiện ích' },
 	{ key: 'areaId', label: 'Phân khu' },
 	{ key: 'address', label: 'Địa chỉ' },
 	{ key: 'maxOrderNumber', label: 'Sức chứa' },
@@ -46,7 +46,7 @@ const UtilitiesManagement: React.FC = () => {
 	const keywordRef = useRef<HTMLInputElement>(null);
 	const [param, setParams] = useState<{
 		name?: string;
-		amenitiesGroupId?: string;
+		facilityGroupId?: string;
 		areaId?: string;
 	}>({});
 	const [keywordGroup, setKeywordGroup] = useState('');
@@ -68,7 +68,7 @@ const UtilitiesManagement: React.FC = () => {
 		setParams(prev => ({
 			...prev,
 			name: keywordRef.current?.value || '',
-			...(selectedGroup ? { amenitiesGroupId: selectedGroup.value as string } : {}),
+			...(selectedGroup ? { facilityGroupId: selectedGroup.value as string } : {}),
 			...(selectedArea ? { areaId: selectedArea.value as string } : {}),
 		}));
 	};

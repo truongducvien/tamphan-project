@@ -1,7 +1,9 @@
+import { useRef } from 'react';
+
 import { Box, Button, FormControl, FormLabel, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
-import UploadImage from 'components/fileUpload';
+import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
@@ -23,6 +25,7 @@ interface IUtilsGroupForm extends Omit<IUtilsGroupPayload, 'state' | 'id'> {
 }
 
 const TypeUtilitiesForm: React.FC = () => {
+	const imageRef = useRef<UploadImageRef>(null);
 	const { changeAction, id, action } = useActionPage();
 	const {
 		data: detailData,
@@ -38,7 +41,8 @@ const TypeUtilitiesForm: React.FC = () => {
 	const { toast } = useToastInstance();
 
 	const handelCreate = async (data: IUtilsGroupForm, reset: () => void) => {
-		const prepareData = { ...data, state: data.state.value };
+		const imageLink = imageRef.current?.onSubmit();
+		const prepareData = { ...data, state: data.state.value, imageLink: imageLink?.files[0] || '' };
 		try {
 			await mutationCreate.mutateAsync(prepareData);
 			toast({ title: 'Tạo mới thành công' });
@@ -49,7 +53,9 @@ const TypeUtilitiesForm: React.FC = () => {
 	};
 
 	const handelUpdate = async (data: IUtilsGroupForm) => {
-		const prepareData = { ...data, state: data.state.value, id: id || '' };
+		const imageLink = imageRef.current?.onSubmit();
+
+		const prepareData = { ...data, state: data.state.value, imageLink: imageLink?.files[0] || '', id: id || '' };
 		try {
 			await mutationUpdate.mutateAsync(prepareData);
 			toast({ title: 'Cập nhật thành công' });
@@ -65,13 +71,15 @@ const TypeUtilitiesForm: React.FC = () => {
 
 	if (isFetching || isError) return null;
 
+	const defaultValue = { ...detailData?.data, state: statusOption2.find(i => i.value === detailData?.data?.state) };
+
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<FormContainer
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises
 					onSubmit={onSubmit}
-					defaultValues={detailData?.data as unknown as { [x: string]: string }}
+					defaultValues={defaultValue as unknown as { [x: string]: string }}
 					validationSchema={validationSchema}
 				>
 					<Stack
@@ -91,7 +99,6 @@ const TypeUtilitiesForm: React.FC = () => {
 							label="Trạng thái"
 							name="state"
 							options={statusOption2}
-							defaultValue={statusOption2[0]}
 							isSearchable={false}
 							isDisabled={action === 'detail'}
 						/>
@@ -111,7 +118,12 @@ const TypeUtilitiesForm: React.FC = () => {
 						/>
 						<FormControl>
 							<FormLabel>Hình ảnh</FormLabel>
-							<UploadImage />
+							<UploadImage
+								isDisabled={action === 'detail'}
+								service="PROPERTIES"
+								ref={imageRef}
+								defaultValue={detailData?.data?.imageLink ? [detailData?.data?.imageLink] : []}
+							/>
 						</FormControl>
 					</Stack>
 					<HStack pt={3} justify="end">

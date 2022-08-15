@@ -18,7 +18,7 @@ const PositionManagement: React.FC = () => {
 
 	const [param, setParams] = useState<{
 		name?: string;
-		amenitiesGroupId?: string;
+		facilityGroupId?: string;
 		areaId?: string;
 	}>({});
 

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { UseAlert } from 'components/alertDialog/hook';
@@ -27,20 +25,18 @@ root.render(
 		<QueryClientProvider client={queryClient}>
 			<ChakraProvider theme={theme}>
 				<DialogServiceProvider>
-					<React.StrictMode>
-						<InitialApp />
-						<BrowserRouter>
-							<Switch>
-								<Route path="/auth" component={AuthLayout} />
-								{/* <Route path="/admin" component={AdminLayout} /> */}
-								<Route path="/admin" component={withAuth(AdminLayout)} />
-								<Route exact path="/" render={() => <Redirect to="/admin" />} />
-								<Route path="*" component={NotFound} />
-							</Switch>
-							<Toastify />
-							<UseAlert />
-						</BrowserRouter>
-					</React.StrictMode>
+					<InitialApp />
+					<BrowserRouter>
+						<Switch>
+							<Route path="/auth" component={AuthLayout} />
+							{/* <Route path="/admin" component={AdminLayout} /> */}
+							<Route path="/admin" component={withAuth(AdminLayout)} />
+							<Route exact path="/" render={() => <Redirect to="/admin" />} />
+							<Route path="*" component={NotFound} />
+						</Switch>
+						<Toastify />
+						<UseAlert />
+					</BrowserRouter>
 				</DialogServiceProvider>
 			</ChakraProvider>
 		</QueryClientProvider>

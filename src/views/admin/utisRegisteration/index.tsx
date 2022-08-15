@@ -63,7 +63,7 @@ const UtilsReManagement: React.FC = () => {
 		const prepareData = {
 			...dt,
 			areaId: dt.areaId.value as string,
-			amenitiesGroupId: dt.amenitiesGroupId.value as string,
+			facilityGroupId: dt.facilityGroupId.value as string,
 		};
 		setParams(prev => ({ ...prev, ...prepareData }));
 	};
@@ -81,7 +81,7 @@ const UtilsReManagement: React.FC = () => {
 							<TextFieldHookForm label="Tên tiện ích" name="facilityName" />
 							<PullDowndHookForm
 								label="Loại tiện ích"
-								name="amenitiesGroupId"
+								name="facilityGroupId"
 								options={dataGroup?.items.map(i => ({ label: i.name, value: i.id })) || []}
 								onInputChange={setKeywordGroup}
 								isClearable
