@@ -74,16 +74,16 @@ const Table = <T,>({
 					<Thead borderBottomColor={borderColor} borderBottomWidth={1}>
 						{columns && (
 							<Tr>
-								{columns.map((column, index) => (
-									<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" key={index}>
-										{column.label}
-									</Th>
-								))}
 								{action && (
 									<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" textAlign="center">
 										Actions
 									</Th>
 								)}
+								{columns.map((column, index) => (
+									<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" key={index}>
+										{column.label}
+									</Th>
+								))}
 							</Tr>
 						)}
 					</Thead>
@@ -102,17 +102,6 @@ const Table = <T,>({
 							{data.map((row, index) => {
 								return (
 									<Tr key={index} bg="made.40" data-testid={`row-${index}`}>
-										{columns.map((column, colIndex) => (
-											<Td key={`${index}${colIndex}`}>
-												{column.cell && column.key ? (
-													column.cell(row)
-												) : (
-													<Text color={textColor} fontSize="sm" fontWeight="700">
-														{column.key ? (row[column.key] as unknown as string) : ''}
-													</Text>
-												)}
-											</Td>
-										))}
 										{action && (
 											<Td>
 												<HStack justify="center" align="center">
@@ -133,6 +122,17 @@ const Table = <T,>({
 												</HStack>
 											</Td>
 										)}
+										{columns.map((column, colIndex) => (
+											<Td key={`${index}${colIndex}`}>
+												{column.cell && column.key ? (
+													column.cell(row)
+												) : (
+													<Text color={textColor} fontSize="sm" fontWeight="700">
+														{column.key ? (row[column.key] as unknown as string) : ''}
+													</Text>
+												)}
+											</Td>
+										))}
 									</Tr>
 								);
 							})}
