@@ -1,3 +1,5 @@
+import { IRole } from 'services/role/type';
+
 export interface IUser {
 	username: string;
 }
@@ -45,6 +47,7 @@ export const INITIAL_SUCESS = 'users/INITIAL_SUCESS';
 
 export interface InitialSuscessAction {
 	type: typeof INITIAL_SUCESS;
+	privileges: IRole['privileges'];
 }
 
 export const INITIAL_FAILURE = 'users/INITIAL_FAILURE';

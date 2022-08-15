@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useImperativeHandle, useRef, useState } from 'react';
 
 import {
 	AspectRatio,
@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { motion, useAnimation } from 'framer-motion';
 import { FaCloudUploadAlt } from 'react-icons/fa';
+import { uploadFile } from 'services/file';
 
 const first = {
 	rest: {
@@ -117,22 +118,39 @@ interface Props {
 	isDisabled?: boolean;
 }
 
-const UploadImage: React.FC<Props> = ({ isMulti, isDisabled }) => {
+export interface UploadImageRef {
+	onSubmit: () => { file: string }[];
+}
+
+const UploadImage: React.FC<Props> = forwardRef(({ isMulti, isDisabled }, ref) => {
 	const controls = useAnimation();
 	const startAnimation = () => controls.start('hover');
 	const stopAnimation = () => controls.stop();
 	const [files, setFiles] = useState<string[]>([]);
-	const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const fileRef = useRef<string[]>([]);
+
+	useImperativeHandle(
+		ref,
+		() => ({
+			submit: () => {
+				return fileRef.current;
+			},
+		}),
+		[],
+	);
+
+	const onChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const prefiles = e.target.files;
 		if (!prefiles?.[0]) return;
-		for (let index = 0; index < prefiles.length; index += 1) {
+		const { data } = await uploadFile(prefiles, 'PROPERTIES');
+		for (const prefile of prefiles) {
 			const reader = new FileReader();
-			reader.readAsDataURL(prefiles[index]);
-			setFiles(prev =>
-				isMulti ? [...prev, URL.createObjectURL(prefiles[index])] : [URL.createObjectURL(prefiles[index])],
-			);
+			reader.readAsDataURL(prefile);
+			setFiles(prev => (isMulti ? [...prev, URL.createObjectURL(prefile)] : [URL.createObjectURL(prefile)]));
 		}
+		fileRef.current = data.items.map(i => i.fileId);
 	};
+
 	return (
 		<Box>
 			<AspectRatio width="56" ratio={1}>
@@ -196,6 +214,7 @@ const UploadImage: React.FC<Props> = ({ isMulti, isDisabled }) => {
 							multiple={isMulti}
 							_disabled={{ opacity: '0' }}
 							isDisabled={isDisabled}
+							// eslint-disable-next-line @typescript-eslint/no-misused-promises
 							onChange={onChangeFile}
 							// eslint-disable-next-line @typescript-eslint/no-misused-promises
 							onDragEnter={startAnimation}
@@ -206,6 +225,6 @@ const UploadImage: React.FC<Props> = ({ isMulti, isDisabled }) => {
 			</AspectRatio>
 		</Box>
 	);
-};
+});
 
 export default UploadImage;

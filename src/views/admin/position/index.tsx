@@ -34,7 +34,6 @@ const PositionManagement: React.FC = () => {
 		hasNextPage: true,
 		hasPreviousPage: true,
 	};
-
 	const { changeAction } = useActionPage();
 
 	return (

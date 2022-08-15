@@ -28,7 +28,6 @@ export interface IRole {
 	name: string;
 	state: string;
 	updatedDate: string;
-	resources: ResourceRole;
 	privileges: {
 		[x in FeatureModule]: Array<PermistionAction>;
 	};

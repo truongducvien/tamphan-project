@@ -2,7 +2,8 @@ import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
 import { FaBuffer, FaBuilding, FaClipboardList, FaMicrosoft, FaRegistered, FaTh, FaUserAlt } from 'react-icons/fa';
-import { MdLock } from 'react-icons/md';
+import { MdAccountBox, MdHouse, MdLock } from 'react-icons/md';
+import { FeatureModule } from 'services/role/type';
 import { Admin } from 'views/admin';
 import ApartMentManagement from 'views/admin/apartment';
 import AparmentForm from 'views/admin/apartment/form';
@@ -37,6 +38,7 @@ export interface Route {
 	category?: boolean;
 	messageNavbar?: boolean;
 	isShow?: boolean;
+	requirePermission?: FeatureModule;
 }
 
 const routes: Route[] = [
@@ -46,6 +48,7 @@ const routes: Route[] = [
 		path: `/users`,
 		icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
 		component: UserManagement,
+		requirePermission: FeatureModule.ADMIN_USER_MANAGEMENT,
 		items: [
 			{
 				name: 'người dùng',
@@ -104,7 +107,7 @@ const routes: Route[] = [
 		name: 'Quản lý căn hộ',
 		layout: '/admin',
 		path: `/apartment`,
-		icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
+		icon: <Icon as={MdHouse} width="20px" height="20px" color="inherit" />,
 		component: ApartMentManagement,
 		items: [
 			{
@@ -119,7 +122,7 @@ const routes: Route[] = [
 		name: 'Quản lý cư dân',
 		layout: '/admin',
 		path: `/resident`,
-		icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
+		icon: <Icon as={MdAccountBox} width="20px" height="20px" color="inherit" />,
 		component: ResidentManagement,
 		items: [
 			{

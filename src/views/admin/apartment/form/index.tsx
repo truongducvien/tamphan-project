@@ -190,7 +190,7 @@ const AparmentForm: React.FC = () => {
 		if (id) setIdApartment(id);
 	});
 
-	if (isFetching || isError || !isFetched || !isFetchedingOwner || isErrorOwner) return null;
+	if (isFetching || isError || !isFetched || isFetchedingOwner || isErrorOwner) return null;
 
 	const defaultApartment = {
 		...detailData?.data,

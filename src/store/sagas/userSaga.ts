@@ -1,5 +1,6 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import {
+	clearAccessToken,
 	loadRole,
 	loadSessionRole,
 	saveAccessToken,
@@ -9,6 +10,7 @@ import {
 } from 'helpers/storage';
 import { put, call, takeEvery, all, fork, StrictEffect, cancel } from 'redux-saga/effects';
 import { getRoleById } from 'services/role';
+import { IRoleDetail } from 'services/role/type';
 import { login, LoginResponse } from 'services/user';
 
 import * as actionCreators from '../actionCreators';
@@ -39,14 +41,17 @@ function* watchOnRequesstLogin() {
 	yield takeEvery(actionTypes.LOGIN_REQUEST, requestLogin);
 }
 
-export function* requestGetUserInfo(): Generator<StrictEffect, void, AxiosResponse<LoginResponse>> {
+export function* requestGetUserInfo(): Generator<StrictEffect, void, IRoleDetail> {
 	try {
 		const roleId = loadRole() || loadSessionRole();
 		if (!roleId) {
 			throw new Error("don't have roleId");
 		}
 		const response = yield call(getRoleById, roleId);
-		yield put(actionCreators.initialUserSuccess(response.data.operatorResponse));
+		if (!response.data?.privileges) {
+			throw new Error('Get role failure');
+		}
+		yield put(actionCreators.initialUserSuccess(response.data?.privileges));
 	} catch (error) {
 		const err = error as AxiosError<{ message: string }>;
 		yield put(actionCreators.initialUserFalure(err.response?.data?.message || err.message));
@@ -60,8 +65,8 @@ function* watchOnRequesstInital() {
 export function* requestLogout() {
 	try {
 		const clearStore = () => {
-			localStorage.clear();
 			sessionStorage.clear();
+			clearAccessToken();
 		};
 		yield call(clearStore);
 		yield put(actionCreators.logoutSuccess());
