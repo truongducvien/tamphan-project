@@ -55,16 +55,16 @@ const UserForm: React.FC = () => {
 		getOffice(keywordOfficeDebound),
 	);
 
-	const { data: dataRole, isFetched: isFecthedRole } = useQuery(['listRole', keywordAreaDebound], () =>
-		getRole(keywordRoleDebound),
+	const { data: dataRole, isFetched: isFecthedRole } = useQuery(['listRole', keywordRoleDebound], () =>
+		getRole({ name: keywordRoleDebound }),
 	);
 
 	const {
 		data: detailData,
-		isFetching,
+		isFetched,
 		isError,
 	} = useQuery(['detail', id], () => getUserById(id || ''), {
-		enabled: !!id,
+		enabled: !!id && (isFecthedArea || isFecthedOffice || isFecthedRole),
 	});
 
 	const history = useHistory();
@@ -103,7 +103,8 @@ const UserForm: React.FC = () => {
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
 	};
-	if (!isFecthedArea || !isFecthedOffice || !isFecthedRole || isFetching || isError) return null;
+
+	if (!!id && (!isFetched || isError)) return null;
 
 	const defaultData = {
 		...detailData?.data,
@@ -147,8 +148,14 @@ const UserForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm label="Email" name="email" variant="admin" />
 						<TextFieldHookForm isRequired label="Sô điện thoại" name="phoneNumber" variant="admin" />
+						<PullDowndHookForm
+							label="Phân khu quản lý"
+							isRequired
+							name="areaId"
+							options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
+							onInputChange={setKeywordArea}
+						/>
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -165,7 +172,7 @@ const UserForm: React.FC = () => {
 						/>
 						<PullDowndHookForm
 							isRequired
-							label="Vai trò người đung"
+							label="Vai trò người dùng"
 							name="roleId"
 							options={
 								dataRole?.items.map(i => ({ label: i.name, value: i.id })) || [
@@ -179,18 +186,12 @@ const UserForm: React.FC = () => {
 						/>
 					</Stack>
 					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
+						justify="start"
 						direction={{ base: 'column', md: 'row' }}
 						spacing={3}
 						pb={3}
+						maxW={{ base: '100%', md: '50%' }}
 					>
-						<PullDowndHookForm
-							label="Phân khu quản lý"
-							isRequired
-							name="areaId"
-							options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
-							onInputChange={setKeywordArea}
-						/>
 						<TextFieldHookForm label="Địa chỉ" name="addrress" variant="admin" />
 					</Stack>
 					{/* <HStack pb={3} pr={1.5} w={{ sm: '100%', md: '50%' }}>

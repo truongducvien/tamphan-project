@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-import { FormControl, FormErrorMessage, FormLabel, useColorModeValue } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormLabel, Text, useColorModeValue } from '@chakra-ui/react';
 import { Select, GroupBase } from 'chakra-react-select';
 import useDerivedProps from 'hooks/useDerivedProps';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
@@ -118,6 +118,8 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 							defaultValue={defaultValue}
 							placeholder={placeholder}
 							menuPortalTarget={document.body}
+							// eslint-disable-next-line react/no-unstable-nested-components
+							noOptionsMessage={() => <Text fontSize="xs">Không có dữ liệu</Text>}
 						/>
 						<FormErrorMessage>
 							{(errors?.[name] as unknown as { value: FieldError })?.value?.message as unknown as string}

@@ -66,15 +66,15 @@ const ResidentForm: React.FC = () => {
 	const [keyword, setKeyword] = useState('');
 	const keywordDebounce = useDebounce(keyword);
 
-	const { data: dataApartment, isFetched } = useQuery(['listApartment', keywordDebounce], () =>
+	const { data: dataApartment, isFetched: isFetchedApartment } = useQuery(['listApartment', keywordDebounce], () =>
 		getApartment({ code: keywordDebounce }),
 	);
 	const {
 		data: detailData,
-		isFetching,
+		isFetched,
 		isError,
 	} = useQuery(['detail', id], () => getResidentById(id || ''), {
-		enabled: !!id,
+		enabled: !!id && isFetchedApartment,
 	});
 
 	const history = useHistory();
@@ -114,7 +114,7 @@ const ResidentForm: React.FC = () => {
 		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
 	};
 
-	if (isFetching || isError || !isFetched) return null;
+	if (!!id && (isError || !isFetched)) return null;
 
 	const defaultValue = {
 		...detailData?.data,

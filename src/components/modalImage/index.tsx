@@ -34,38 +34,43 @@ export const ModalImage: React.FC<Props> = ({ src, onPrev, onNext, ...modalProps
 	}, [src]);
 
 	return (
-		<Modal aria-hidden {...modalProps} isCentered>
-			<ModalOverlay />
-			<ModalContent>
-				<ModalBody>
-					<TransformWrapper initialScale={1} centerOnInit ref={ref}>
-						{({ zoomIn, zoomOut, resetTransform }) => (
-							<div className="d-flex align-items-center justify-content-center o-modalimage_container">
-								<TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
-									<Image src={src} alt="" />
-								</TransformComponent>
-								<ModalFooter p={2} justifyContent="center">
-									<Button m={1} ref={prevRef} type="button" onClick={onPrev}>
-										{'<<'}
-									</Button>
-									<Button m={1} type="button" onClick={() => zoomIn()}>
-										+
-									</Button>
-									<Button m={1} type="button" onClick={() => zoomOut()}>
-										-
-									</Button>
-									<Button m={1} type="button" onClick={() => resetTransform()}>
-										0
-									</Button>
-									<Button m={1} type="button" ref={nextRef} onClick={onNext}>
-										{'>>'}
-									</Button>
-								</ModalFooter>
-							</div>
-						)}
-					</TransformWrapper>
-				</ModalBody>
-			</ModalContent>
+		<Modal aria-hidden {...modalProps} size="6xl" isCentered>
+			<ModalOverlay>
+				<ModalContent>
+					<ModalBody>
+						<TransformWrapper initialScale={1} centerOnInit ref={ref}>
+							{({ zoomIn, zoomOut, resetTransform }) => (
+								<div className="d-flex align-items-center justify-content-center o-modalimage_container">
+									<TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
+										<Image src={src} alt="" />
+									</TransformComponent>
+									<ModalFooter p={2} justifyContent="center">
+										{onPrev && (
+											<Button m={1} ref={prevRef} type="button" onClick={onPrev}>
+												{'<<'}
+											</Button>
+										)}
+										<Button m={1} type="button" onClick={() => zoomIn()}>
+											+
+										</Button>
+										<Button m={1} type="button" onClick={() => zoomOut()}>
+											-
+										</Button>
+										<Button m={1} type="button" onClick={() => resetTransform()}>
+											R
+										</Button>
+										{onNext && (
+											<Button m={1} type="button" ref={nextRef} onClick={onNext}>
+												{'>>'}
+											</Button>
+										)}
+									</ModalFooter>
+								</div>
+							)}
+						</TransformWrapper>
+					</ModalBody>
+				</ModalContent>
+			</ModalOverlay>
 		</Modal>
 	);
 };

@@ -26,13 +26,14 @@ const DetailOffice: React.FC = () => {
 	const { changeAction, id, action } = useActionPage();
 	const { toast } = useToastInstance();
 
-	const { data: dataParent } = useQuery(['list'], getAllOffice);
+	const { data: dataParent, isFetched: isFetchedParent } = useQuery(['list'], getAllOffice);
+
 	const {
 		data: detailData,
-		isFetching,
+		isFetched,
 		isError,
 	} = useQuery(['detail', id], () => getOfficeById(id || ''), {
-		enabled: !!id,
+		enabled: !!id && isFetchedParent,
 	});
 
 	const history = useHistory();
@@ -65,7 +66,7 @@ const DetailOffice: React.FC = () => {
 		action === 'create' ? handelCreate(data, reset) : handelUpdate(data);
 	};
 
-	if (isFetching || isError) return null;
+	if (!!id && (!isFetched || isError)) return null;
 
 	const defaultValue = {
 		...detailData?.data,

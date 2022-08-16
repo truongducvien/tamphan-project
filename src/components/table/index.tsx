@@ -70,17 +70,17 @@ const Table = <T,>({
 				overflowY="scroll"
 				boxSizing="border-box"
 			>
-				<ChakraTable variant="unstyled" minW={minWith || '100%'}>
+				<ChakraTable minW={minWith || '100%'}>
 					<Thead borderBottomColor={borderColor} borderBottomWidth={1}>
 						{columns && (
 							<Tr>
 								{action && (
 									<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" textAlign="center">
-										Actions
+										Thao tác
 									</Th>
 								)}
 								{columns.map((column, index) => (
-									<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" key={index}>
+									<Th fontSize={{ sm: '10px', lg: '12px' }} minW={200} textAlign="center" color="gray.400" key={index}>
 										{column.label}
 									</Th>
 								))}
@@ -127,7 +127,7 @@ const Table = <T,>({
 												{column.cell && column.key ? (
 													column.cell(row)
 												) : (
-													<Text color={textColor} fontSize="sm" fontWeight="700">
+													<Text color={textColor} fontSize="sm" fontWeight="700" maxH={200} overflow="scroll">
 														{column.key ? (row[column.key] as unknown as string) : ''}
 													</Text>
 												)}

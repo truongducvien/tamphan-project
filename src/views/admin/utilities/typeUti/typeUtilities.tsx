@@ -5,6 +5,7 @@ import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, Input, Stac
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { alert } from 'components/alertDialog/hook';
 import Card from 'components/card/Card';
+import { LazyImage } from 'components/image';
 import Table, { IColumn } from 'components/table';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
@@ -46,7 +47,15 @@ const TypeUtilitiesManagement: React.FC = () => {
 	const COLUMNS: Array<IColumn<IUtilsGroup>> = [
 		{ key: 'name', label: 'Tên loại tiện ích' },
 		{ key: 'description', label: 'Mô tả' },
-		{ key: 'imageLink', label: 'hình ảnh' },
+		{
+			key: 'imageLink',
+			label: 'Hình ảnh',
+			// eslint-disable-next-line react/no-unstable-nested-components
+			cell: ({ imageLink }) => {
+				if (!imageLink) return null;
+				return <LazyImage src={imageLink} />;
+			},
+		},
 		{ key: 'state', label: 'Trạng thái hoạt động' },
 		{ key: 'updatedDate', label: 'Ngày cập nhật' },
 	];

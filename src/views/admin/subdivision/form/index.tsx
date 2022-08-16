@@ -1,7 +1,9 @@
+import { useRef } from 'react';
+
 import { Box, Button, FormControl, FormLabel, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
-import UploadImage from 'components/fileUpload';
+import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
@@ -24,6 +26,9 @@ interface DataForm extends Omit<IAreaPayload, 'type'> {
 }
 
 const DetailSubdivision: React.FC = () => {
+	const mapImageRef = useRef<UploadImageRef>(null);
+	const avatarImageRef = useRef<UploadImageRef>(null);
+
 	const { changeAction, id, action } = useActionPage();
 	const {
 		data: detailData,
@@ -38,10 +43,9 @@ const DetailSubdivision: React.FC = () => {
 	const mutationUpdate = useMutation(updateArea);
 	const { toast } = useToastInstance();
 
-	const handelCreate = async (data: DataForm, reset: () => void) => {
-		const prepareData = { ...data, type: data.type.value as TypeArea };
+	const handelCreate = async (data: IAreaPayload, reset: () => void) => {
 		try {
-			await mutationCreate.mutateAsync(prepareData);
+			await mutationCreate.mutateAsync(data);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
 		} catch {
@@ -49,8 +53,8 @@ const DetailSubdivision: React.FC = () => {
 		}
 	};
 
-	const handelUpdate = async (data: DataForm) => {
-		const prepareData = { ...data, type: (data.type.value as TypeArea) || detailData?.data?.type, id: id || '' };
+	const handelUpdate = async (data: IAreaPayload) => {
+		const prepareData = { ...data, id: id || '' };
 		try {
 			await mutationUpdate.mutateAsync(prepareData);
 			toast({ title: 'Cập nhật thành công' });
@@ -60,14 +64,21 @@ const DetailSubdivision: React.FC = () => {
 	};
 
 	const onSubmit = (data: DataForm, reset: () => void) => {
+		const dataImage = {
+			avatarLink: avatarImageRef.current?.onSubmit().files[0],
+			mapLink: mapImageRef.current?.onSubmit().files[0],
+		};
+		const prepareData = { ...data, type: data.type.value as TypeArea, ...dataImage };
+
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		action === 'create' ? handelCreate(data, reset) : handelUpdate(data);
+		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
 	};
 
 	if (isFetching || isError) return null;
 
 	const defaultData = { ...detailData?.data, type: typeAreas.find(i => i.value === detailData?.data?.type) };
 	const isDisabled = action === 'detail';
+
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
@@ -117,11 +128,21 @@ const DetailSubdivision: React.FC = () => {
 					>
 						<FormControl>
 							<FormLabel>Bản đồ</FormLabel>
-							<UploadImage isDisabled={isDisabled} />
+							<UploadImage
+								ref={mapImageRef}
+								service="AREAS"
+								isDisabled={isDisabled}
+								defaultValue={defaultData?.mapLink ? [defaultData?.mapLink] : []}
+							/>
 						</FormControl>
 						<FormControl>
 							<FormLabel>Avatar</FormLabel>
-							<UploadImage isDisabled={isDisabled} />
+							<UploadImage
+								ref={avatarImageRef}
+								service="AREAS"
+								isDisabled={isDisabled}
+								defaultValue={defaultData?.avatarLink ? [defaultData?.avatarLink] : []}
+							/>
 						</FormControl>
 					</Stack>
 					<HStack pt={3} justify="end">

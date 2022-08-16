@@ -96,12 +96,18 @@ const AparmentForm: React.FC = () => {
 	const { changeAction, id, action } = useActionPage();
 	const { toast } = useToastInstance();
 
+	const { data: dataArea, isFetched: isFetchedArea } = useQuery(['listArea', keywordDebounce], () =>
+		getArea({
+			name: keywordDebounce,
+		}),
+	);
+
 	const {
 		data: detailData,
 		isFetching,
 		isError,
 	} = useQuery(['detail', id], () => getApartmentById(id || ''), {
-		enabled: !!id,
+		enabled: !!id && isFetchedArea,
 	});
 
 	const {
@@ -111,12 +117,6 @@ const AparmentForm: React.FC = () => {
 	} = useQuery(['detailOwner', id], () => getResidentOwner(id || ''), {
 		enabled: !!id,
 	});
-
-	const { data: dataArea, isFetched } = useQuery(['listArea', keywordDebounce], () =>
-		getArea({
-			name: keywordDebounce,
-		}),
-	);
 
 	const handelCreateApartment = async (data: IApartmentPayload) => {
 		try {
@@ -190,7 +190,7 @@ const AparmentForm: React.FC = () => {
 		if (id) setIdApartment(id);
 	});
 
-	if (isFetching || isError || !isFetched || isFetchedingOwner || isErrorOwner) return null;
+	if (!!id && (isFetching || isError || isErrorOwner || !isFetchedingOwner)) return null;
 
 	const defaultApartment = {
 		...detailData?.data,

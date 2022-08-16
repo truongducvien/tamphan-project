@@ -1,12 +1,12 @@
 import http from 'services/http';
 import { BaseResponeAction } from 'services/type';
 
-import { IRoleDetail, IRolePayload, IRoleResponse } from './type';
+import { IRoleDetail, IRoleParams, IRolePayload, IRoleResponse } from './type';
 
-export const getRole = async (name?: string) => {
+export const getRole = async (params: IRoleParams) => {
 	const { data } = await http.get<IRoleResponse>('/v1/roles/search', {
 		params: {
-			name,
+			...params,
 		},
 	});
 	return data?.data || null;

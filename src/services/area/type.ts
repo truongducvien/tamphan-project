@@ -10,6 +10,8 @@ export interface IArea {
 	type: string;
 	updateDate: string;
 	id: string;
+	mapLink: string;
+	avatarLink: string;
 }
 
 export type IAreaResponse = BaseResponeList<IArea>;
@@ -42,11 +44,11 @@ export const typeAreas: Array<Option> = [
 
 export interface IAreaPayload {
 	acreage: string;
-	avatarLink: string;
+	avatarLink?: string;
 	contactEmail: string;
 	contactPhone: string;
 	location: string;
-	mapLink: string;
+	mapLink?: string;
 	name: string;
 	id?: string;
 	type: TypeArea;

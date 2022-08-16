@@ -84,10 +84,10 @@ const UtilitiesForm: React.FC = () => {
 	};
 	const {
 		data: detailData,
-		isFetching,
+		isFetched,
 		isError,
 	} = useQuery(['detail', id], () => getUtilsById(id || ''), {
-		enabled: !!id,
+		enabled: !!id && fetchedGroup && fetchedArea,
 	});
 
 	const onSubmit = (data: IUtilsForm, reset: () => void) => {
@@ -116,24 +116,19 @@ const UtilitiesForm: React.FC = () => {
 		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
 	};
 
-	const dataDefault = useMemo(() => {
-		if (!detailData?.data || !fetchedGroup || !fetchedArea) return {};
-		return {
-			...detailData.data,
-			areaId: dataArea?.items
-				.map(i => ({ label: i.name, value: i.id }))
-				.find(i => i.value === detailData?.data?.areaId),
-			facilityGroupId: dataGroup?.items
-				.map(i => ({ label: i.name, value: i.id }))
-				.find(i => i.value === detailData?.data?.facilityGroupId),
-			operatingTime: `${detailData?.data?.operatingTime.start || ''} - ${detailData?.data?.operatingTime.end || ''}`,
-			timeSlots: detailData?.data?.timeSlots.map(i => `${i.start} - ${i.end}`).join(', '),
-			dateOffs: detailData?.data?.dateOffs.join(','),
-			state: statusOption2.find(i => i.value === detailData.data?.state),
-		};
-	}, [detailData?.data, fetchedGroup, fetchedArea, dataArea?.items, dataGroup?.items]);
+	if (!!id && (!isFetched || isError)) return null;
 
-	if (isFetching || isError || !fetchedGroup || !fetchedArea) return null;
+	const dataDefault = {
+		...detailData?.data,
+		areaId: dataArea?.items.map(i => ({ label: i.name, value: i.id })).find(i => i.value === detailData?.data?.areaId),
+		facilityGroupId: dataGroup?.items
+			.map(i => ({ label: i.name, value: i.id }))
+			.find(i => i.value === detailData?.data?.facilityGroupId),
+		operatingTime: `${detailData?.data?.operatingTime.start || ''} - ${detailData?.data?.operatingTime.end || ''}`,
+		timeSlots: detailData?.data?.timeSlots.map(i => `${i.start} - ${i.end}`).join(', '),
+		dateOffs: detailData?.data?.dateOffs.join(','),
+		state: statusOption2.find(i => i.value === detailData?.data?.state),
+	};
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -162,7 +157,6 @@ const UtilitiesForm: React.FC = () => {
 							isDisabled={action === 'detail'}
 							isRequired
 							options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
-							isSearchable={false}
 							onInputChange={setKeywordArea}
 						/>
 					</Stack>
@@ -179,7 +173,6 @@ const UtilitiesForm: React.FC = () => {
 							name="facilityGroupId"
 							options={dataGroup?.items.map(i => ({ label: i.name, value: i.id })) || []}
 							onInputChange={setKeywordGroup}
-							isSearchable={false}
 						/>
 						<TextFieldHookForm isDisabled={action === 'detail'} label="Địa chỉ" name="address" variant="admin" />
 					</Stack>

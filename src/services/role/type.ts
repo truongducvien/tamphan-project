@@ -1,4 +1,4 @@
-import { BaseResponeDetail, BaseResponeList } from 'services/type';
+import { BaseParams, BaseResponeDetail, BaseResponeList } from 'services/type';
 import { PermistionAction } from 'variables/permission';
 
 export enum FeatureModule {
@@ -35,12 +35,9 @@ export interface IRole {
 
 export type IRoleResponse = BaseResponeList<IRole>;
 
-export interface IRoleParams {
-	description: string;
-	imageLink: string;
-	name: string;
-	state: string | number;
-	id?: string;
+export interface IRoleParams extends BaseParams {
+	name?: string;
+	code?: string;
 }
 
 export interface IRolePayload {
