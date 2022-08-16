@@ -112,7 +112,7 @@ const UserManagement: React.FC = () => {
 						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
 					}}
 					loading={isLoading}
-					action={[PermistionAction.EDIT, PermistionAction.VIEW]}
+					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}
 				/>

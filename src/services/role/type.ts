@@ -1,19 +1,23 @@
 import { BaseParams, BaseResponeDetail, BaseResponeList } from 'services/type';
 import { PermistionAction } from 'variables/permission';
+import { Status } from 'variables/status';
 
 export enum FeatureModule {
-	ADMIN_USER_MANAGEMENT,
-	UNIT_MANAGEMENT,
-	ROLE_MANAGEMENT,
-	AREA_MANAGEMENT,
-	FLAT_MANAGEMENT,
-	RESIDENT_MANAGEMENT,
-	RESIDENT_CARD_MANAGEMENT,
-	AMENITIES_GROUP_MANAGEMENT,
-	AMENITIES_MANAGEMENT,
-	AMENITIES_BOOKING_MANAGEMENT,
-	ARTICLE_MANAGEMENT,
+	OPERATION_MANAGEMENT = 'OPERATION_MANAGEMENT',
+	ORGANIZATIONS_MANAGEMENT = 'ORGANIZATIONS_MANAGEMENT',
+	ROLE_MANAGEMENT = 'ROLE_MANAGEMENT',
+	AREA_MANAGEMENT = 'AREA_MANAGEMENT',
+	PROPERTIES_MANAGEMENT = 'PROPERTIES_MANAGEMENT',
+	RESIDENT_MANAGEMENT = 'RESIDENT_MANAGEMENT',
+	RESIDENT_CARD_MANAGEMENT = 'RESIDENT_CARD_MANAGEMENT',
+	FACILITY_GROUP_MANAGEMENT = 'FACILITY_GROUP_MANAGEMENT',
+	FACILITY_MANAGEMENT = 'FACILITY_MANAGEMENT',
+	FACILITY_BOOKING_MANAGEMENT = 'FACILITY_BOOKING_MANAGEMENT',
+	ARTICLE_MANAGEMENT = 'ARTICLE_MANAGEMENT',
 }
+
+export type FeatureModuleKey = keyof typeof FeatureModule;
+export type PermistionActionkey = keyof typeof PermistionAction;
 
 export interface ResourceRole {
 	action: PermistionAction;
@@ -41,11 +45,14 @@ export interface IRoleParams extends BaseParams {
 }
 
 export interface IRolePayload {
-	description: string;
-	imageLink: string;
+	code: string;
 	name: string;
-	state: string | number;
 	id?: string;
+	privilegeRequests?: Array<{
+		actions: Array<PermistionActionkey>;
+		feature: FeatureModuleKey;
+	}>;
+	state?: Status;
 }
 
 export type IRoleDetail = BaseResponeDetail<IRole>;

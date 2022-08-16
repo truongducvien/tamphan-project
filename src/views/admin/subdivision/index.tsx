@@ -97,7 +97,7 @@ const SubdivisionManagement: React.FC = () => {
 						onPageChange: page => setCurrentPage(page),
 						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
 					}}
-					action={[PermistionAction.EDIT, PermistionAction.VIEW]}
+					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}
 				/>

@@ -1,80 +1,73 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, HStack, Input, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
+import { FormContainer } from 'components/form';
+import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import useActionPage from 'hooks/useActionPage';
 import { MdLibraryAdd } from 'react-icons/md';
-import { IRole } from 'services/role/type';
+import { getRole } from 'services/role';
+import { IRole, IRoleParams } from 'services/role/type';
 import { PermistionAction } from 'variables/permission';
+import { statusOption2 } from 'variables/status';
+
+type DaraForm = Omit<IRoleParams, 'page' | 'size'>;
 
 const PositionManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPage, setCurrentPage] = useState(0);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
 
-	const nameRef = useRef<HTMLInputElement>(null);
-	const codeRef = useRef<HTMLInputElement>(null);
+	const [params, setParams] = useState<DaraForm>({});
 
-	const [param, setParams] = useState<{
-		name?: string;
-		facilityGroupId?: string;
-		areaId?: string;
-	}>({});
+	const { data, isLoading } = useQuery(['listRole', params, currentPage, currentPageSize], () =>
+		getRole({ page: currentPage, size: currentPageSize, ...params }),
+	);
 
 	const COLUMNS: Array<IColumn<IRole>> = [
 		{ key: 'name', label: 'Tên chức vụ' },
 		{ key: 'code', label: 'Mã chức vụ' },
 		{ key: 'createdDate', label: 'Ngày tạo' },
 		{ key: 'updatedDate', label: 'Ngày cập nhật' },
+		{ key: 'state', label: 'Trạng thái', cell: ({ state }) => statusOption2.find(i => i.value === state)?.label },
 	];
 
-	const pageInfo = {
-		total: 10,
-		hasNextPage: true,
-		hasPreviousPage: true,
+	const onSearch = (payload: DaraForm) => {
+		setParams(payload);
 	};
+
+	const pageInfo = {
+		total: data?.totalPages,
+		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
+		hasPreviousPage: data ? data?.pageNum < 0 : false,
+	};
+
 	const { changeAction } = useActionPage();
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
-				<HStack spacing={5} px={{ sm: 2, md: 5 }} alignItems="flex-end">
-					<FormControl>
-						<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-							<Text>Tên chức vụ</Text>
-						</FormLabel>
-						<Input
-							variant="admin"
-							fontSize="sm"
-							ms={{ base: '0px', md: '0px' }}
-							type="text"
-							placeholder="Nhập chức vụ"
-							size="md"
-						/>
-					</FormControl>
-					<FormControl>
-						<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-							<Text>Mã chức vụ</Text>
-						</FormLabel>
-						<Input
-							variant="admin"
-							fontSize="sm"
-							ms={{ base: '0px', md: '0px' }}
-							type="text"
-							placeholder="Nhập mã chức vụ"
-							size="md"
-						/>
-					</FormControl>
-					<Flex align="center">
-						<Button variant="lightBrand" leftIcon={<SearchIcon />}>
-							Tìm kiếm
-						</Button>
-						<Button onClick={() => changeAction('create')} marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-							Thêm mới
-						</Button>
-					</Flex>
-				</HStack>
+				<FormContainer onSubmit={onSearch}>
+					<Stack
+						spacing={5}
+						align="end"
+						justify={{ base: 'center', md: 'left', xl: 'left' }}
+						direction={{ base: 'column', md: 'row' }}
+					>
+						<TextFieldHookForm name="name" label="Tên chức vụ" />
+						<TextFieldHookForm label="Mã chức vụ" name="code" />
+						<Flex align="center">
+							<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
+								Tìm kiếm
+							</Button>
+							<Button onClick={() => changeAction('create')} marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+								Thêm mới
+							</Button>
+						</Flex>
+					</Stack>
+				</FormContainer>
 			</Card>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
@@ -87,7 +80,8 @@ const PositionManagement: React.FC = () => {
 					// onSelectionChange={handleSelectionChange}
 					keyField="name"
 					columns={COLUMNS}
-					data={[]}
+					data={data?.items || []}
+					loading={isLoading}
 					pagination={{
 						total: Number(pageInfo?.total || 0),
 						pageSize: currentPageSize,
@@ -97,7 +91,9 @@ const PositionManagement: React.FC = () => {
 						onPageChange: page => setCurrentPage(page),
 						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
 					}}
-					action={[PermistionAction.EDIT, PermistionAction.DETETE]}
+					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
+					onClickDetail={({ id }) => changeAction('detail', id)}
+					onClickEdit={({ id }) => changeAction('edit', id)}
 				/>
 			</Card>
 		</Box>

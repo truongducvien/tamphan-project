@@ -61,7 +61,10 @@ interface DataForm {
 }
 
 const ResidentForm: React.FC = () => {
-	const { changeAction, id, action } = useActionPage();
+	const { changeAction, id: ids, action } = useActionPage();
+	const arrayIds = ids?.split(',');
+	const id = arrayIds?.[0];
+	const propertyId = arrayIds?.[1];
 	const { toast } = useToastInstance();
 	const [keyword, setKeyword] = useState('');
 	const keywordDebounce = useDebounce(keyword);
@@ -81,7 +84,7 @@ const ResidentForm: React.FC = () => {
 	const mutationCreate = useMutation(createResident);
 	const mutationUpdate = useMutation(updateResident);
 
-	const handelCreate = async (data: IResidentPayload, reset: () => void) => {
+	const handelCreate = async (data: Omit<IResidentPayload, 'id'>, reset: () => void) => {
 		try {
 			await mutationCreate.mutateAsync(data);
 			toast({ title: 'Tạo mới thành công' });
@@ -91,7 +94,7 @@ const ResidentForm: React.FC = () => {
 		}
 	};
 
-	const handelUpdate = async (data: IResidentPayload) => {
+	const handelUpdate = async (data: Omit<IResidentPayload, 'id'>) => {
 		const prepareData = { ...data, id: id || '' };
 		try {
 			await mutationUpdate.mutateAsync(prepareData);
@@ -102,7 +105,7 @@ const ResidentForm: React.FC = () => {
 	};
 
 	const onSubmit = (data: DataForm, reset: () => void) => {
-		const prepareData: IResidentPayload = {
+		const prepareData = {
 			...data,
 			state: data.state?.value as Status,
 			type: data.type.value as ResidentType,

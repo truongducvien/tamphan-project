@@ -20,7 +20,7 @@ export const getResidentOwner = async (flatId: string) => {
 	return data?.data || null;
 };
 
-export const createResident = async (payload: IResidentPayload) => {
+export const createResident = async (payload: Omit<IResidentPayload, 'id'>) => {
 	const { data } = await http.post<BaseResponeAction>('/v1/residents', {
 		...payload,
 	});

@@ -21,15 +21,15 @@ const TypeUtilitiesManagement: React.FC = () => {
 	const { data, isLoading, refetch } = useQuery(['listUtilsGroup', keyword], () => getUtilsGroup(keyword));
 	const { changeAction } = useActionPage();
 
-	const mutationDelete = useMutation(deleteUtilsGroup);
-	const onDelete = async (row: IUtilsGroup) => {
+	const mutationDELETE = useMutation(deleteUtilsGroup);
+	const onDELETE = async (row: IUtilsGroup) => {
 		try {
 			await alert({
 				type: 'error',
 				title: 'Bạn có muốn xoá ?',
 				description: row.name,
 			});
-			await mutationDelete.mutateAsync(row.id);
+			await mutationDELETE.mutateAsync(row.id);
 			toast({ title: 'Xoá thành công' });
 			refetch();
 		} catch {
@@ -95,7 +95,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 							<Button marginLeft={1} onClick={() => changeAction('create')} variant="brand" leftIcon={<MdLibraryAdd />}>
 								Thêm mới
 							</Button>
-							<Button marginLeft={1} variant="delete" leftIcon={<MdDelete />}>
+							<Button marginLeft={1} variant="DELETE" leftIcon={<MdDelete />}>
 								Xoá
 							</Button>
 						</Flex>
@@ -114,9 +114,9 @@ const TypeUtilitiesManagement: React.FC = () => {
 					keyField="name"
 					columns={COLUMNS}
 					data={data?.items || []}
-					action={[PermistionAction.EDIT, PermistionAction.DETETE, PermistionAction.VIEW]}
+					action={[PermistionAction.UPDATE, PermistionAction.DELETE, PermistionAction.VIEW]}
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises
-					onClickDelete={row => onDelete(row)}
+					onClickDELETE={row => onDELETE(row)}
 					onClickEdit={row => onEdit(row.id)}
 					onClickDetail={row => onDetail(row.id)}
 				/>

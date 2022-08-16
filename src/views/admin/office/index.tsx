@@ -73,7 +73,7 @@ const OfficeManagement: React.FC = () => {
 					keyField="name"
 					columns={COLUMNS}
 					data={data?.items || []}
-					action={[PermistionAction.EDIT, PermistionAction.VIEW]}
+					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}
 				/>

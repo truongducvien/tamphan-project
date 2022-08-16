@@ -10,6 +10,7 @@ import { TextFieldHookForm } from 'components/form/TextField';
 import { PullDown } from 'components/pulldown';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
+import { useHistory } from 'react-router-dom';
 import { confirmUtilsReById, getUtilsReById } from 'services/utilsRegisteration';
 
 enum PaymentMethod {
@@ -18,13 +19,14 @@ enum PaymentMethod {
 }
 
 const UtilsReForm: React.FC = () => {
+	const history = useHistory();
 	const { toast } = useToastInstance();
 	const { id } = useActionPage();
 	const [paymentMethod, setPay] = useState<PaymentMethod>();
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { data, isFetched, refetch } = useQuery(['detail', id], () => getUtilsReById(id || ''));
-	const mutationDelete = useMutation(confirmUtilsReById);
+	const mutationDELETE = useMutation(confirmUtilsReById);
 
 	const onSubmit = () => {
 		onOpen();
@@ -33,11 +35,12 @@ const UtilsReForm: React.FC = () => {
 	const onConfirm = async () => {
 		try {
 			if (!id && !paymentMethod) return;
-			await mutationDelete.mutateAsync({ id: id || '', paymentMethod: paymentMethod || '' });
-			toast({ title: 'Xoá thành công' });
+			await mutationDELETE.mutateAsync({ id: id || '', paymentMethod: paymentMethod || '' });
+			toast({ title: 'Cập nhật phương thức thanh toán thành công' });
+			onClose();
 			refetch();
 		} catch {
-			toast({ title: 'Xoá thất bại', status: 'error' });
+			toast({ title: 'Cập nhật phương thức thanh toán thất bại', status: 'error' });
 		}
 	};
 
@@ -119,7 +122,7 @@ const UtilsReForm: React.FC = () => {
 						<Button type="submit" variant="brand">
 							Xác nhận thanh toán
 						</Button>
-						<Button w="20" type="button" variant="gray">
+						<Button w="20" type="button" variant="gray" onClick={() => history.goBack()}>
 							Huỷ
 						</Button>
 					</HStack>

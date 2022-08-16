@@ -21,7 +21,7 @@ import { MdBorderColor, MdPreview } from 'react-icons/md';
 import { PermistionAction as PermistionActionBase } from 'variables/permission';
 
 export type DataTable = { [k: string]: boolean | number | string | undefined | DataTable };
-export type PermissionAction = PermistionActionBase.EDIT | PermistionActionBase.DETETE | PermistionActionBase.VIEW;
+export type PermissionAction = PermistionActionBase.UPDATE | PermistionActionBase.DELETE | PermistionActionBase.VIEW;
 
 export type IColumn<T> = {
 	key?: keyof T;
@@ -39,7 +39,7 @@ type TableProps<T> = {
 	loading?: boolean;
 	action?: PermissionAction | PermissionAction[];
 	onClickEdit?: (row: T) => void;
-	onClickDelete?: (row: T) => void;
+	onClickDELETE?: (row: T) => void;
 	onClickDetail?: (row: T) => void;
 };
 
@@ -52,12 +52,12 @@ const Table = <T,>({
 	action,
 	minWith,
 	onClickEdit,
-	onClickDelete,
+	onClickDELETE,
 	onClickDetail,
 }: TableProps<T>): JSX.Element => {
 	const textColor = useColorModeValue('gray.600', 'whiteSmoke.100');
 	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
-	const iconDelete = useColorModeValue('red.300', 'red.800');
+	const iconDELETE = useColorModeValue('red.300', 'red.800');
 	return (
 		<>
 			<Box
@@ -80,7 +80,7 @@ const Table = <T,>({
 									</Th>
 								)}
 								{columns.map((column, index) => (
-									<Th fontSize={{ sm: '10px', lg: '12px' }} minW={200} textAlign="center" color="gray.400" key={index}>
+									<Th fontSize={{ sm: '10px', lg: '12px' }} minW={200} color="gray.400" key={index}>
 										{column.label}
 									</Th>
 								))}
@@ -108,14 +108,14 @@ const Table = <T,>({
 													{action.includes(PermistionActionBase.VIEW) && (
 														<Icon onClick={() => onClickDetail?.(row)} as={MdPreview} cursor="pointer" />
 													)}
-													{action.includes(PermistionActionBase.EDIT) && (
+													{action.includes(PermistionActionBase.UPDATE) && (
 														<Icon onClick={() => onClickEdit?.(row)} as={MdBorderColor} cursor="pointer" />
 													)}
-													{action.includes(PermistionActionBase.DETETE) && (
+													{action.includes(PermistionActionBase.DELETE) && (
 														<Icon
 															as={FaTrashAlt}
-															onClick={() => onClickDelete?.(row)}
-															color={iconDelete}
+															onClick={() => onClickDELETE?.(row)}
+															color={iconDELETE}
 															cursor="pointer"
 														/>
 													)}

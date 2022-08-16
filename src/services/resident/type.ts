@@ -77,7 +77,7 @@ export interface IResident {
 	type: ResidentType;
 	useNovaId?: boolean;
 	state?: Status;
-	id?: string;
+	id: string;
 }
 
 export interface IResidentParams extends BaseParams {

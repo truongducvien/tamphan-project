@@ -12,7 +12,7 @@ export const getRole = async (params: IRoleParams) => {
 	return data?.data || null;
 };
 
-export const createRole = async (payload: IRolePayload) => {
+export const createRole = async (payload: Omit<IRolePayload, 'id'>) => {
 	const { data } = await http.post<BaseResponeAction>('/v1/roles', {
 		...payload,
 	});

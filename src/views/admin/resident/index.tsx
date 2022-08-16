@@ -13,7 +13,7 @@ import { useDebounce } from 'hooks/useDebounce';
 import { MdImportExport, MdLibraryAdd } from 'react-icons/md';
 import { getArea } from 'services/area';
 import { getResident } from 'services/resident';
-import { IResident, IResidentParams, residentType } from 'services/resident/type';
+import { gender as genderOptions, IResident, IResidentParams, residentType } from 'services/resident/type';
 import { PermistionAction } from 'variables/permission';
 import { statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
@@ -29,7 +29,7 @@ const ResidentManagement: React.FC = () => {
 	const COLUMNS: Array<IColumn<IResident>> = [
 		{ key: 'fullName', label: 'Tên cư dân' },
 		{ key: 'dateOfBirth', label: 'Ngày sinh' },
-		{ key: 'gender', label: 'Giới tính' },
+		{ key: 'gender', label: 'Giới tính', cell: ({ gender }) => genderOptions.find(i => i.value === gender)?.label },
 		{ key: 'identityCardNumber', label: 'CMND/ CCCD/ HC' },
 		{ key: 'identityCreateDate', label: 'Ngày cấp' },
 		{ key: 'identityLocationIssued', label: 'Nới cấp' },
@@ -61,9 +61,9 @@ const ResidentManagement: React.FC = () => {
 	};
 
 	const pageInfo = {
-		total: 10,
-		hasNextPage: true,
-		hasPreviousPage: true,
+		total: data?.totalPages,
+		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
+		hasPreviousPage: data ? data?.pageNum < 0 : false,
 	};
 
 	const { changeAction } = useActionPage();
@@ -130,9 +130,9 @@ const ResidentManagement: React.FC = () => {
 						onPageChange: page => setCurrentPage(page),
 						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
 					}}
-					action={[PermistionAction.EDIT, PermistionAction.DETETE, PermistionAction.VIEW]}
-					onClickDetail={({ id }) => changeAction('detail', id)}
-					onClickEdit={({ id }) => changeAction('edit', id)}
+					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
+					onClickDetail={({ id, propertyId }) => changeAction('detail', `${id},${propertyId}`)}
+					onClickEdit={({ id, propertyId }) => changeAction('edit', `${id},${propertyId}`)}
 				/>
 			</Card>
 		</Box>

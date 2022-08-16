@@ -62,7 +62,7 @@ const UtilitiesManagement: React.FC = () => {
 		getUtils({ ...param, page: currentPage, size: currentPageSize }),
 	);
 	const { data: dataArea } = useQuery(['listArea', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
-	const mutationDelete = useMutation(deleteUtils);
+	const mutationDELETE = useMutation(deleteUtils);
 
 	const handleApllyFilter = () => {
 		setParams(prev => ({
@@ -73,14 +73,14 @@ const UtilitiesManagement: React.FC = () => {
 		}));
 	};
 
-	const handleDelete = async (row: { id: string; name: string }) => {
+	const handleDELETE = async (row: { id: string; name: string }) => {
 		try {
 			await alert({
 				type: 'error',
 				title: 'Bạn có muốn xoá ?',
 				description: row.name,
 			});
-			await mutationDelete.mutateAsync(row.id);
+			await mutationDELETE.mutateAsync(row.id);
 			toast({ title: 'Xoá thành công' });
 			refetch();
 		} catch {
@@ -151,7 +151,7 @@ const UtilitiesManagement: React.FC = () => {
 						<Button marginLeft={1} variant="brand" onClick={() => changeAction('create')} leftIcon={<MdLibraryAdd />}>
 							Thêm mới
 						</Button>
-						<Button marginLeft={1} variant="delete" leftIcon={<MdDelete />}>
+						<Button marginLeft={1} variant="DELETE" leftIcon={<MdDelete />}>
 							Xoá
 						</Button>
 					</Flex>
@@ -179,11 +179,11 @@ const UtilitiesManagement: React.FC = () => {
 						onPageChange: page => setCurrentPage(page),
 						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
 					}}
-					action={[PermistionAction.EDIT, PermistionAction.DETETE, PermistionAction.VIEW]}
+					action={[PermistionAction.UPDATE, PermistionAction.DELETE, PermistionAction.VIEW]}
 					onClickDetail={row => changeAction('detail', row.id)}
 					onClickEdit={row => changeAction('edit', row.id)}
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises
-					onClickDelete={handleDelete}
+					onClickDELETE={handleDELETE}
 				/>
 			</Card>
 		</Box>

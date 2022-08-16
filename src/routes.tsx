@@ -48,7 +48,7 @@ const routes: Route[] = [
 		path: `/users`,
 		icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
 		component: UserManagement,
-		requirePermission: FeatureModule.ADMIN_USER_MANAGEMENT,
+		requirePermission: FeatureModule.OPERATION_MANAGEMENT,
 		items: [
 			{
 				name: 'người dùng',
