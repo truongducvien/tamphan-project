@@ -31,64 +31,66 @@ interface PermissionProps {
 	value: FeatureModuleKey;
 	checked?: Array<PermistionActionkey>;
 	permistion: Array<PermistionActionkey>;
+	isDisabled?: boolean;
 }
 interface PermissionRef {
 	submit: () => { actions: Array<PermistionActionkey>; feature: FeatureModuleKey };
 	reset: () => void;
 }
 
-const Permistion = forwardRef<PermissionRef, PermissionProps>(({ title, id, value, checked, permistion }, ref) => {
-	const [isChecked, setIsChecked] = useState<Array<PermistionActionkey>>(checked || []);
-	useImperativeHandle(
-		ref,
-		() => ({
-			submit: () => {
-				console.log(isChecked, '----');
+const Permistion = forwardRef<PermissionRef, PermissionProps>(
+	({ title, id, value, checked, permistion, isDisabled = false }, ref) => {
+		const [isChecked, setIsChecked] = useState<Array<PermistionActionkey>>(checked || []);
+		useImperativeHandle(
+			ref,
+			() => ({
+				submit: () => {
+					return {
+						actions: isChecked,
+						feature: value,
+					};
+				},
+				reset: () => {
+					setIsChecked([]);
+				},
+			}),
+			[isChecked, value],
+		);
 
-				return {
-					actions: isChecked,
-					feature: value,
-				};
-			},
-			reset: () => {
-				setIsChecked([]);
-			},
-		}),
-		[isChecked, value],
-	);
+		useEffect(() => {
+			if (checked) setIsChecked(checked);
+		}, [checked]);
 
-	useEffect(() => {
-		if (checked) setIsChecked(checked);
-	}, [checked]);
+		const handleChange = (i: PermistionActionkey) => {
+			if (isChecked.includes(i)) setIsChecked(prev => prev.filter(item => item !== i));
+			else setIsChecked(prev => [...prev, i]);
+		};
 
-	const handleChange = (i: PermistionActionkey) => {
-		if (isChecked.includes(i)) setIsChecked(prev => prev.filter(item => item !== i));
-		else setIsChecked(prev => [...prev, i]);
-	};
-
-	return (
-		<Box display="inline-grid">
-			<FormControl>
-				<FormLabel htmlFor={id}>{title}</FormLabel>
-				{permistion.map(i => {
-					return (
-						<Box key={i}>
-							<Checkbox
-								variant="admin"
-								id={id}
-								onChange={_ => handleChange(i)}
-								isChecked={isChecked.includes(i)}
-								ml={5}
-							>
-								{i.toLowerCase()}
-							</Checkbox>
-						</Box>
-					);
-				})}
-			</FormControl>
-		</Box>
-	);
-});
+		return (
+			<Box display="inline-grid">
+				<FormControl>
+					<FormLabel htmlFor={id}>{title}</FormLabel>
+					{permistion.map(i => {
+						return (
+							<Box key={i}>
+								<Checkbox
+									isDisabled={isDisabled}
+									variant="admin"
+									id={id}
+									onChange={_ => handleChange(i)}
+									isChecked={isChecked.includes(i)}
+									ml={5}
+								>
+									{i.toLowerCase()}
+								</Checkbox>
+							</Box>
+						);
+					})}
+				</FormControl>
+			</Box>
+		);
+	},
+);
 
 const permissions: Array<PermissionProps> = [
 	{
@@ -227,6 +229,7 @@ const DetailPosition: React.FC = () => {
 	if (loading && !!id && (isError || !isFetched)) return null;
 
 	const defaultValues = { ...detailData?.data, state: statusOption2.find(i => i.value === detailData?.data?.state) };
+	const isDisable = action === 'detail';
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -242,12 +245,18 @@ const DetailPosition: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isRequired label="Tên chức vụ" name="name" variant="admin" />
-						<TextFieldHookForm label="Mã chức vụ" name="code" variant="admin" />
+						<TextFieldHookForm isRequired isDisabled={isDisable} label="Tên chức vụ" name="name" variant="admin" />
+						<TextFieldHookForm label="Mã chức vụ" isDisabled={isDisable} name="code" variant="admin" />
 					</Stack>
 					{action !== 'create' && (
 						<Stack pb={3} align="start" w={{ sm: '100%', md: '50%' }}>
-							<PullDowndHookForm label="Trạng thái" name="state" isRequired options={statusOption2} />
+							<PullDowndHookForm
+								isDisabled={isDisable}
+								label="Trạng thái"
+								name="state"
+								isRequired
+								options={statusOption2}
+							/>
 						</Stack>
 					)}
 
@@ -259,6 +268,7 @@ const DetailPosition: React.FC = () => {
 							<Permistion
 								key={i.id}
 								{...i}
+								isDisabled={isDisable}
 								ref={ref => {
 									checkBoxRef.current[idx] = ref;
 								}}

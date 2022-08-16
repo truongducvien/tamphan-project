@@ -7,7 +7,6 @@ import {
 	Checkbox,
 	Flex,
 	FormControl,
-	FormErrorMessage,
 	FormLabel,
 	Heading,
 	Icon,
@@ -24,14 +23,14 @@ import DefaultAuth from 'layouts/auth/Default';
 // Assets
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
-import { NavLink, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store';
 import { userLogin } from 'store/actionCreators';
 
 const SignIn: React.FC = () => {
 	const textColor = useColorModeValue('navy.700', 'white');
 	const textColorSecondary = 'gray.400';
-	const textColorBrand = useColorModeValue('brand.500', 'white');
+	// const textColorBrand = useColorModeValue('brand.500', 'white');
 	const brandStars = useColorModeValue('brand.500', 'brand.400');
 
 	const usernameRef = useRef<HTMLInputElement>(null);
@@ -169,11 +168,11 @@ const SignIn: React.FC = () => {
 									Keep me logged in
 								</FormLabel>
 							</FormControl>
-							<NavLink to="/auth/forgot-password">
+							{/* <NavLink to="/auth/forgot-password">
 								<Text color={textColorBrand} fontSize="sm" w="124px" fontWeight="500">
 									Forgot password?
 								</Text>
-							</NavLink>
+							</NavLink> */}
 						</Flex>
 
 						<Button

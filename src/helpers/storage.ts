@@ -2,7 +2,6 @@ const config = {
 	prefix: 'AQACITY_PORTAL',
 	accessToken: 'ACCESS_TOKEN',
 	refreshToken: 'REFRESH_TOKEN',
-	roleId: 'ROLE',
 } as const;
 
 /**
@@ -30,10 +29,6 @@ const removeFromLocalStorage = (name: string) => {
 	if (typeof window === 'undefined' || !window.localStorage) return;
 	localStorage.removeItem(`${config.prefix}:${name}`);
 };
-
-export const saveRole = (role: string) => saveToLocalStorage(config.roleId, role);
-export const loadRole = () => loadFromLocalStorage(config.roleId);
-export const clearRole = () => removeFromLocalStorage(config.roleId);
 
 export const saveAccessToken = (accessToken: string) => saveToLocalStorage(config.accessToken, accessToken);
 export const loadAccessToken = () => loadFromLocalStorage(config.accessToken);
@@ -73,10 +68,6 @@ const removeFromSessionStorage = (name: string) => {
 export const saveSessionAccessToken = (accessToken: string) => saveToSessionStorage(config.accessToken, accessToken);
 export const loadSessionAccessToken = () => loadFromSessionStorage(config.accessToken);
 export const clearSessionAccessToken = () => removeFromSessionStorage(config.accessToken);
-
-export const saveSessionRole = (role: string) => saveToSessionStorage(config.roleId, role);
-export const loadSessionRole = () => loadFromSessionStorage(config.roleId);
-export const clearSessionRole = () => removeFromSessionStorage(config.roleId);
 
 export const saveSessionRefreshToken = (refeshToken: string) => saveToSessionStorage(config.refreshToken, refeshToken);
 export const loadSessionRefreshToken = () => loadFromSessionStorage(config.refreshToken);

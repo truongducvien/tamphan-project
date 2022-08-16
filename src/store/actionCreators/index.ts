@@ -1,4 +1,4 @@
-import { IRole } from 'services/role/type';
+import { IUser } from 'services/user/type';
 
 import * as actions from '../actions';
 
@@ -11,7 +11,7 @@ export function userLogin(username: string, password: string, remember?: boolean
 	};
 }
 
-export function userLoginSuccess(user: actions.IUser): actions.LoginSuccessAction {
+export function userLoginSuccess(user: IUser): actions.LoginSuccessAction {
 	return {
 		type: actions.LOGIN_SUCCESS,
 		user,
@@ -31,10 +31,10 @@ export function initialUser(): actions.InitialAction {
 	};
 }
 
-export function initialUserSuccess(privileges: IRole['privileges']): actions.InitialSuscessAction {
+export function initialUserSuccess(user: IUser): actions.InitialSuscessAction {
 	return {
 		type: actions.INITIAL_SUCESS,
-		privileges,
+		user,
 	};
 }
 

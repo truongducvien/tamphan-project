@@ -1,5 +1,7 @@
 import { Gender } from 'services/resident/type';
+import { FeatureModule } from 'services/role/type';
 import { BaseParams, BaseResponeList } from 'services/type';
+import { PermistionAction } from 'variables/permission';
 
 export interface IUser {
 	areaName: string;
@@ -16,6 +18,7 @@ export interface IUser {
 	roleId: string;
 	roleName: string;
 	username: string;
+	role?: { privileges: { [x in FeatureModule]: Array<PermistionAction> } };
 }
 
 export type IUserResponse = BaseResponeList<IUser>;

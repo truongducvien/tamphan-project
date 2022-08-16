@@ -1,25 +1,10 @@
 import http from 'services/http';
-import { Gender } from 'services/resident/type';
 import { BaseResponeAction, BaseResponeDetail } from 'services/type';
 
 import { IUser, IUserParams, IUserPayload, IUserResponse } from './type';
 
 export interface LoginResponse {
-	operatorResponse: {
-		address: string;
-		areaName: string;
-		createdAt: Date;
-		dateOfBirth: string;
-		email: string;
-		fullName: string;
-		gender: Gender;
-		id: string;
-		organizationName: string;
-		phoneNumber: string;
-		roleId: string;
-		roleName: string;
-		username: string;
-	};
+	operatorResponse: IUser;
 	accessToken: string;
 }
 
@@ -65,5 +50,10 @@ export const getUserById = async (id: string) => {
 
 export const updateUser = async (payload: IUserPayload) => {
 	const { data } = await http.put<BaseResponeAction>(`/v1/operators/${payload.id || ''}`, payload);
+	return data || null;
+};
+
+export const getByAccessToken = async () => {
+	const { data } = await http.get<BaseResponeDetail<IUser>>('	/v1/operators/access-token');
 	return data || null;
 };

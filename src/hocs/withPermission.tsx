@@ -11,7 +11,8 @@ export const withPermission1 =
 		}
 	> =>
 	props => {
-		const permission = useAppSelector(state => state.user.privileges);
+		const { info } = useAppSelector(state => state.user);
+		const permission = info?.role?.privileges;
 		// eslint-disable-next-line react/jsx-no-useless-fragment
 		if (permission) {
 			const arrayPermission = Object.keys(permission) as Array<PermistionAction>;

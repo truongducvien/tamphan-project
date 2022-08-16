@@ -1,19 +1,17 @@
-import { IRole } from 'services/role/type';
+import { IUser } from 'services/user/type';
 
 import * as actions from '../actions';
 
 export interface UserState {
 	logined: boolean;
-	user: actions.IUser | null;
+	info: IUser | null;
 	loading: boolean;
-	privileges: IRole['privileges'] | null;
 }
 
 const initialState: UserState = {
-	user: null,
+	info: null,
 	logined: false,
 	loading: true,
-	privileges: null,
 };
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
@@ -22,7 +20,7 @@ export default function userReducer(state: UserState = initialState, action: act
 		case actions.LOGIN_SUCCESS:
 			return {
 				...state,
-				user: action.user,
+				info: action.user,
 				logined: true,
 				loading: false,
 			};
@@ -31,7 +29,7 @@ export default function userReducer(state: UserState = initialState, action: act
 				...state,
 				logined: true,
 				loading: false,
-				privileges: action.privileges,
+				info: action.user,
 			};
 		case actions.INITIAL_FAILURE:
 			return {
