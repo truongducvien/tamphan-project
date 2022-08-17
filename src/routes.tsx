@@ -2,11 +2,12 @@ import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
 import { FaBuffer, FaBuilding, FaClipboardList, FaMicrosoft, FaRegistered, FaTh, FaUserAlt } from 'react-icons/fa';
-import { MdAccountBox, MdHouse, MdLock } from 'react-icons/md';
+import { MdAccountBox, MdHouse, MdLock, MdOutlineArticle } from 'react-icons/md';
 import { FeatureModule } from 'services/role/type';
 import { PermistionAction } from 'variables/permission';
 import ApartMentManagement from 'views/admin/apartment';
 import AparmentForm from 'views/admin/apartment/form';
+import ArticleManagement from 'views/admin/article';
 import OfficeManagement from 'views/admin/office';
 import OfficeForm from 'views/admin/office/form';
 import PositionManagement from 'views/admin/position';
@@ -334,7 +335,7 @@ const routes: Route[] = [
 		requirePermission: FeatureModule.FACILITY_BOOKING_MANAGEMENT,
 		items: [
 			{
-				name: ' đăng ký tiện ích',
+				name: 'Chi tiết đăng ký tiện ích',
 				layout: '/admin',
 				path: '/utils-registeration/detail',
 				component: UtilsReForm,
@@ -343,13 +344,25 @@ const routes: Route[] = [
 			},
 		],
 	},
-	// {
-	// 	name: 'Data Tables',
-	// 	layout: '/admin',
-	// 	icon: <Icon as={MdBarChart} width="20px" height="20px" color="inherit" />,
-	// 	path: '/data-tables',
-	// 	component: DataTables,
-	// },
+	{
+		name: 'Quản lý bài viết',
+		layout: '/admin',
+		path: `/article`,
+		icon: <Icon as={MdOutlineArticle} width="20px" height="20px" color="inherit" />,
+		component: ArticleManagement,
+		action: PermistionAction.VIEW,
+		requirePermission: FeatureModule.ARTICLE_MANAGEMENT,
+		items: [
+			{
+				name: 'Chi tiết bài viết',
+				layout: '/admin',
+				path: '/article/detail',
+				component: UtilsReForm,
+				action: PermistionAction.VIEW,
+				requirePermission: FeatureModule.ARTICLE_MANAGEMENT,
+			},
+		],
+	},
 	{
 		name: 'Sign In',
 		layout: '/auth',
