@@ -17,7 +17,7 @@ export enum FeatureModule {
 }
 
 export type FeatureModuleKey = keyof typeof FeatureModule;
-export type PermistionActionkey = keyof typeof PermistionAction;
+export type PermistionActionKey = keyof typeof PermistionAction;
 
 export interface ResourceRole {
 	action: PermistionAction;
@@ -49,7 +49,7 @@ export interface IRolePayload {
 	name: string;
 	id?: string;
 	privilegeRequests?: Array<{
-		actions: Array<PermistionActionkey>;
+		actions: Array<PermistionActionKey>;
 		feature: FeatureModuleKey;
 	}>;
 	state?: Status;

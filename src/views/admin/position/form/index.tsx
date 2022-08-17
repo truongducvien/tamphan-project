@@ -10,7 +10,7 @@ import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useHistory } from 'react-router-dom';
 import { createRole, getRoleById, updateRole } from 'services/role';
-import { FeatureModuleKey, IRolePayload, PermistionActionkey } from 'services/role/type';
+import { FeatureModuleKey, IRolePayload, PermistionActionKey } from 'services/role/type';
 import { Status, statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
 
@@ -29,18 +29,18 @@ interface PermissionProps {
 	id: string;
 	title: string;
 	value: FeatureModuleKey;
-	checked?: Array<PermistionActionkey>;
-	permistion: Array<PermistionActionkey>;
+	checked?: Array<PermistionActionKey>;
+	permistion: Array<PermistionActionKey>;
 	isDisabled?: boolean;
 }
 interface PermissionRef {
-	submit: () => { actions: Array<PermistionActionkey>; feature: FeatureModuleKey };
+	submit: () => { actions: Array<PermistionActionKey>; feature: FeatureModuleKey };
 	reset: () => void;
 }
 
 const Permistion = forwardRef<PermissionRef, PermissionProps>(
 	({ title, id, value, checked, permistion, isDisabled = false }, ref) => {
-		const [isChecked, setIsChecked] = useState<Array<PermistionActionkey>>(checked || []);
+		const [isChecked, setIsChecked] = useState<Array<PermistionActionKey>>(checked || []);
 		useImperativeHandle(
 			ref,
 			() => ({
@@ -61,7 +61,7 @@ const Permistion = forwardRef<PermissionRef, PermissionProps>(
 			if (checked) setIsChecked(checked);
 		}, [checked]);
 
-		const handleChange = (i: PermistionActionkey) => {
+		const handleChange = (i: PermistionActionKey) => {
 			if (isChecked.includes(i)) setIsChecked(prev => prev.filter(item => item !== i));
 			else setIsChecked(prev => [...prev, i]);
 		};
@@ -213,7 +213,7 @@ const DetailPosition: React.FC = () => {
 		const prepareData = {
 			...data,
 			privilegeRequests: d.filter(i => i !== undefined) as {
-				actions: Array<PermistionActionkey>;
+				actions: Array<PermistionActionKey>;
 				feature: FeatureModuleKey;
 			}[],
 		};

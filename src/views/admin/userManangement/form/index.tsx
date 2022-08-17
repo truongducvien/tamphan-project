@@ -116,6 +116,8 @@ const UserForm: React.FC = () => {
 		gender: gender.find(i => i.value === detailData?.data?.gender),
 	};
 
+	const isDisabled = action === 'detail';
+
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
@@ -130,8 +132,8 @@ const UserForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isRequired label="Tài khoản" name="username" variant="admin" />
-						<TextFieldHookForm isRequired label="Họ tên" name="fullName" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} isRequired label="Tài khoản" name="username" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} isRequired label="Họ tên" name="fullName" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -139,8 +141,8 @@ const UserForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<DatePickerdHookForm label="Ngày sinh" name="dateOfBirth" variant="admin" />
-						<PullDowndHookForm label="Giới tính" options={gender} name="gender" />
+						<DatePickerdHookForm isDisabled={isDisabled} label="Ngày sinh" name="dateOfBirth" variant="admin" />
+						<PullDowndHookForm isDisabled={isDisabled} label="Giới tính" options={gender} name="gender" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -148,10 +150,17 @@ const UserForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isRequired label="Sô điện thoại" name="phoneNumber" variant="admin" />
+						<TextFieldHookForm
+							isDisabled={isDisabled}
+							isRequired
+							label="Sô điện thoại"
+							name="phoneNumber"
+							variant="admin"
+						/>
 						<PullDowndHookForm
 							label="Phân khu quản lý"
 							isRequired
+							isDisabled={isDisabled}
 							name="areaId"
 							options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
 							onInputChange={setKeywordArea}
@@ -167,6 +176,7 @@ const UserForm: React.FC = () => {
 							label="Đơn vị"
 							name="organizationId"
 							isRequired
+							isDisabled={isDisabled}
 							options={dataOffice?.items.map(i => ({ label: i.name, value: i.id })) || []}
 							onInputChange={setKeywordOffice}
 						/>
@@ -174,6 +184,7 @@ const UserForm: React.FC = () => {
 							isRequired
 							label="Vai trò người dùng"
 							name="roleId"
+							isDisabled={isDisabled}
 							options={
 								dataRole?.items.map(i => ({ label: i.name, value: i.id })) || [
 									{
@@ -192,7 +203,7 @@ const UserForm: React.FC = () => {
 						pb={3}
 						maxW={{ base: '100%', md: '50%' }}
 					>
-						<TextFieldHookForm label="Địa chỉ" name="addrress" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} label="Địa chỉ" name="addrress" variant="admin" />
 					</Stack>
 					{/* <HStack pb={3} pr={1.5} w={{ sm: '100%', md: '50%' }}>
 						<PullDowndHookForm

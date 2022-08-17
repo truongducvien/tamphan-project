@@ -7,7 +7,7 @@ import Footer from 'components/footer/FooterAdmin';
 import Navbar from 'components/navbar/NavbarAdmin';
 import Sidebar from 'components/sidebar/Sidebar';
 import { SidebarContext } from 'contexts/SidebarContext';
-import useActionPage from 'hooks/useActionPage';
+import { withPermission } from 'hocs/withPermission';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import routes, { Route as RootRoute } from 'routes';
 
@@ -16,7 +16,6 @@ const Dashboard: React.FC = props => {
 	const {
 		location: { pathname },
 	} = useHistory();
-	const { action } = useActionPage();
 	const { ...rest } = props;
 	// states and functions
 	const [fixed] = useState(false);
@@ -40,16 +39,7 @@ const Dashboard: React.FC = props => {
 					return categoryActiveRoute;
 				}
 			} else if (pathname === element.layout + element.path) {
-				switch (action) {
-					case 'create':
-						return `Thêm mới ${element.name}`;
-					case 'detail':
-						return `Chi tiết ${element.name}`;
-					case 'edit':
-						return `Chỉnh sửa ${element.name}`;
-					default:
-						return element.name;
-				}
+				return element.name;
 			} else if (element.items) {
 				const name = getActiveRoute(element?.items);
 				if (name) {
@@ -108,7 +98,13 @@ const Dashboard: React.FC = props => {
 							path={prop.layout + prop.path}
 							render={({ match: { path } }) => (
 								<Switch>
-									<Route exact path={`${path}/`} component={prop.component} />
+									<Route
+										exact
+										path={`${path}/`}
+										component={() =>
+											withPermission(prop.component)({ request: prop.requirePermission, action: prop.action })
+										}
+									/>
 									{routers}
 									<Redirect from={`${path}/*`} to={path} />
 								</Switch>
@@ -117,7 +113,14 @@ const Dashboard: React.FC = props => {
 						/>
 					);
 				}
-				return <Route exact path={prop.layout + prop.path} component={prop.component} key={key} />;
+				return (
+					<Route
+						exact
+						path={prop.layout + prop.path}
+						component={() => withPermission(prop.component)({ request: prop.requirePermission, action: prop.action })}
+						key={key}
+					/>
+				);
 			}
 			if (prop.collapse) {
 				return getRoutes(prop?.items || []);

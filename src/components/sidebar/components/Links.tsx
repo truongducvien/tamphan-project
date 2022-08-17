@@ -4,6 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 // chakra imports
 import { Box, Flex, HStack, Text, useColorModeValue } from '@chakra-ui/react';
 import { Route as RootRoute } from 'routes';
+import { useAppSelector } from 'store';
 
 export interface Route extends RootRoute {
 	category?: boolean;
@@ -15,6 +16,9 @@ export interface Props {
 }
 
 export const SidebarLinks: React.FC<Props> = props => {
+	const { info } = useAppSelector(state => state.user);
+	const permission = info?.role?.privileges;
+
 	//   Chakra color mode
 	let location = useLocation();
 	let activeColor = useColorModeValue('gray.700', 'white');
@@ -35,6 +39,12 @@ export const SidebarLinks: React.FC<Props> = props => {
 	// this function creates the links from the secondary accordions (for example auth -> sign-in -> default)
 	const createLinks = (r: Route[]) => {
 		const element: React.ReactElement[] = r.map((route, index) => {
+			const { requirePermission, action } = route;
+			if (permission && requirePermission && action) {
+				const hasPermission = permission?.[requirePermission].includes(action);
+				if (!hasPermission) return <Fragment key={route.name + index.toString()}></Fragment>;
+			}
+
 			if (route.isShow === false) {
 				return <Fragment key={route.name + index.toString()}></Fragment>;
 			}
