@@ -39,7 +39,7 @@ type TableProps<T> = {
 	loading?: boolean;
 	action?: PermissionAction | PermissionAction[];
 	onClickEdit?: (row: T) => void;
-	onClickDELETE?: (row: T) => void;
+	onClickDelete?: (row: T) => void;
 	onClickDetail?: (row: T) => void;
 };
 
@@ -52,7 +52,7 @@ const Table = <T,>({
 	action,
 	minWith,
 	onClickEdit,
-	onClickDELETE,
+	onClickDelete,
 	onClickDetail,
 }: TableProps<T>): JSX.Element => {
 	const textColor = useColorModeValue('gray.600', 'whiteSmoke.100');
@@ -114,7 +114,7 @@ const Table = <T,>({
 													{action.includes(PermistionActionBase.DELETE) && (
 														<Icon
 															as={FaTrashAlt}
-															onClick={() => onClickDELETE?.(row)}
+															onClick={() => onClickDelete?.(row)}
 															color={iconDELETE}
 															cursor="pointer"
 														/>

@@ -2,28 +2,32 @@ import { useRef, useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, HStack, Input, Text } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { alert } from 'components/alertDialog/hook';
 import Card from 'components/card/Card';
 import Table, { IColumn } from 'components/table';
+import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { MdLibraryAdd } from 'react-icons/md';
-import { getArticle } from 'services/article';
+import { deleteArticle, getArticle } from 'services/article';
 import { IArticle, statusArticle, typeArticles } from 'services/article/type';
 import { PermistionAction } from 'variables/permission';
 
 const ArticleManagement: React.FC = () => {
+	const { toast } = useToastInstance();
 	const [currentPage, setCurrentPage] = useState(0);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
 	const keywordRef = useRef<HTMLInputElement>(null);
 	const [keyword, setKeyword] = useState('');
 
-	const { data, isLoading } = useQuery(['listArticle', keyword, currentPage, currentPageSize], () =>
+	const { data, isLoading, refetch } = useQuery(['listArticle', keyword, currentPage, currentPageSize], () =>
 		getArticle({
 			keyword,
 			page: currentPage,
 			size: currentPageSize,
 		}),
 	);
+	const mutationDelete = useMutation(deleteArticle);
 
 	const COLUMNS: Array<IColumn<IArticle>> = [
 		{
@@ -43,6 +47,21 @@ const ArticleManagement: React.FC = () => {
 		{ key: 'status', label: 'Trạng thái', cell: ({ status }) => statusArticle.find(i => i.value === status)?.label },
 		{ key: 'createdAt', label: 'Ngày tạo' },
 	];
+
+	const handleDelete = async (row: { id: string; title: string }) => {
+		try {
+			await alert({
+				type: 'error',
+				title: 'Bạn có muốn xoá ?',
+				description: row.title,
+			});
+			await mutationDelete.mutateAsync(row.id);
+			toast({ title: 'Xoá thành công' });
+			refetch();
+		} catch {
+			toast({ title: 'Xoá thất bại', status: 'error' });
+		}
+	};
 
 	const pageInfo = {
 		total: data?.totalPages,
@@ -108,9 +127,11 @@ const ArticleManagement: React.FC = () => {
 						onPageChange: page => setCurrentPage(page),
 						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
 					}}
-					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
+					action={[PermistionAction.UPDATE, PermistionAction.VIEW, PermistionAction.DELETE]}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}
+					// eslint-disable-next-line @typescript-eslint/no-misused-promises
+					onClickDelete={handleDelete}
 				/>
 			</Card>
 		</Box>

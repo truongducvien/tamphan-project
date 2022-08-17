@@ -33,7 +33,7 @@ export const buttonStyles = {
 						bg: mode('brand.600', 'brand.400')(props),
 					},
 				}),
-				DELETE: (props: StyleFunctionProps | Dict<string>) => ({
+				delete: (props: StyleFunctionProps | Dict<string>) => ({
 					bg: mode('red.500', 'red.800')(props),
 					color: 'whiteSmoke',
 					_focus: {

@@ -33,7 +33,7 @@ export interface IArticle {
 			updateDate: string;
 		},
 	];
-	avatarLink: string;
+	avatarLink?: string;
 	content: string;
 	contentLink: string;
 	createdAt: Date;
@@ -41,7 +41,7 @@ export interface IArticle {
 	notificationWays: Array<NotificationWays>;
 	shortContent: string;
 	status: StatusArticle;
-	thumbnailLink: string;
+	thumbnailLink?: string;
 	title: string;
 	type: TypeArticle;
 }
@@ -111,15 +111,17 @@ export const typeArticles: Array<Option> = [
 ];
 
 export interface IArticlePayload {
-	acreage: string;
+	areaIds: Array<string>;
 	avatarLink?: string;
-	contactEmail: string;
-	contactPhone: string;
-	location: string;
-	mapLink?: string;
-	name: string;
-	id?: string;
+	content: string;
+	contentLink: string;
+	notificationWays: Array<NotificationWays>;
+	shortContent: string;
+	status: StatusArticle;
+	thumbnailLink?: string;
+	title: string;
 	type: TypeArticle;
+	id?: string;
 }
 
 export interface IArticleParams extends BaseParams {

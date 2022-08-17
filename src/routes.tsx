@@ -8,6 +8,7 @@ import { PermistionAction } from 'variables/permission';
 import ApartMentManagement from 'views/admin/apartment';
 import AparmentForm from 'views/admin/apartment/form';
 import ArticleManagement from 'views/admin/article';
+import DetailArticle from 'views/admin/article/form';
 import OfficeManagement from 'views/admin/office';
 import OfficeForm from 'views/admin/office/form';
 import PositionManagement from 'views/admin/position';
@@ -354,11 +355,27 @@ const routes: Route[] = [
 		requirePermission: FeatureModule.ARTICLE_MANAGEMENT,
 		items: [
 			{
+				name: 'Thêm mới bài viết',
+				layout: '/admin',
+				path: '/article/form',
+				component: DetailArticle,
+				action: PermistionAction.ADD,
+				requirePermission: FeatureModule.ARTICLE_MANAGEMENT,
+			},
+			{
 				name: 'Chi tiết bài viết',
 				layout: '/admin',
 				path: '/article/detail',
-				component: UtilsReForm,
+				component: DetailArticle,
 				action: PermistionAction.VIEW,
+				requirePermission: FeatureModule.ARTICLE_MANAGEMENT,
+			},
+			{
+				name: 'Cập nhật bài viết',
+				layout: '/admin',
+				path: '/article/edit',
+				component: DetailArticle,
+				action: PermistionAction.UPDATE,
 				requirePermission: FeatureModule.ARTICLE_MANAGEMENT,
 			},
 		],

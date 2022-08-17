@@ -26,7 +26,7 @@ const UtilsReForm: React.FC = () => {
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { data, isFetched, refetch } = useQuery(['detail', id], () => getUtilsReById(id || ''));
-	const mutationDELETE = useMutation(confirmUtilsReById);
+	const mutationDelete = useMutation(confirmUtilsReById);
 
 	const onSubmit = () => {
 		onOpen();
@@ -35,7 +35,7 @@ const UtilsReForm: React.FC = () => {
 	const onConfirm = async () => {
 		try {
 			if (!id && !paymentMethod) return;
-			await mutationDELETE.mutateAsync({ id: id || '', paymentMethod: paymentMethod || '' });
+			await mutationDelete.mutateAsync({ id: id || '', paymentMethod: paymentMethod || '' });
 			toast({ title: 'Cập nhật phương thức thanh toán thành công' });
 			onClose();
 			refetch();

@@ -6,12 +6,12 @@ export const uploadFile = async (files: File[] | FileList, service: string) => {
 		payload.append('files', files[index] as unknown as string);
 	}
 	payload.append('service', service);
-	const { data } = await http.post<{ data: { items: { fileId: string }[] } }>('/v1/files/upload/public', payload);
+	const { data } = await http.post<{ data: { items: { fileId: string }[] } }>('/v1/files/upload/private', payload);
 	return data;
 };
 
 export const loadImage = async (fileName: string) => {
-	const { data } = await http.get<Blob>(`/v1/files/download/${fileName}`, {
+	const { data } = await http.get<Blob>(`/v1/files/download/private/${fileName}`, {
 		responseType: 'blob',
 	});
 	return new Promise<string>((resolve, reject) => {

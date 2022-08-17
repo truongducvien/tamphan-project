@@ -1,12 +1,5 @@
 import http from 'services/http';
 
-interface FileParams {
-	saveOriginal?: boolean;
-	targetClass?: string;
-	targetId?: string;
-	[k: string]: string | boolean | undefined;
-}
-
 export interface IFile extends File {
 	objectId?: string;
 	sizeLargeUrl?: string;
@@ -17,9 +10,14 @@ export interface IFile extends File {
 	height?: number;
 }
 
-export async function uploadFile(files: IFile[], params?: FileParams): Promise<File[]> {
+export async function uploadFile(files: IFile[]): Promise<File[]> {
 	try {
-		const resp = await http.post<{ files: IFile[]; params: FileParams }, IFile[]>('/file/upload', { files, params });
+		const formData = new FormData();
+		formData.append('service', 'ARTICLES');
+		for (const iterator of files) {
+			formData.append('files', iterator);
+		}
+		const resp = await http.post<{ files: IFile[] }, IFile[]>('/v1/files/upload/private', formData);
 		return resp;
 	} catch (error) {
 		return [];

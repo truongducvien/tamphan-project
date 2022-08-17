@@ -21,6 +21,7 @@ interface EditorState {
 interface EditorProps {
 	contents: string;
 	onChange?: (data: string) => void;
+	isDisable?: boolean;
 }
 
 export interface EditorRef {
@@ -29,7 +30,7 @@ export interface EditorRef {
 
 type RangeStatic = { index: number; length: number };
 
-const CustomToolbar: React.FC = () => {
+const CustomToolbar: React.FC<{ isDisable?: boolean }> = ({ isDisable }) => {
 	const bg = useColorModeValue('secondaryGray.100', 'secondaryGray.100');
 	const [isOpenPickers, setIsOpenPicker] = React.useState(false);
 	const [color, setColor] = React.useState('#fff');
@@ -42,7 +43,7 @@ const CustomToolbar: React.FC = () => {
 			borderBottom="0px solid transparent !important"
 			backgroundColor={bg}
 		>
-			<select className="ql-header" defaultValue="" onChange={e => e.persist()}>
+			<select className="ql-header" disabled={isDisable} onChange={e => e.persist()}>
 				<option value="1">Heading 1</option>
 				<option value="2">Heading 2</option>
 				<option selected>Nomal</option>
@@ -53,6 +54,7 @@ const CustomToolbar: React.FC = () => {
 				alignItems="center !important"
 				me="5px !important"
 				className="ql-bold"
+				isDisabled={isDisable}
 			/>
 			<Button
 				display="flex !important"
@@ -60,6 +62,7 @@ const CustomToolbar: React.FC = () => {
 				alignItems="center !important"
 				me="5px !important"
 				className="ql-italic"
+				isDisabled={isDisable}
 			/>
 			<Button
 				display="flex !important"
@@ -67,6 +70,7 @@ const CustomToolbar: React.FC = () => {
 				alignItems="center !important"
 				me="5px !important"
 				className="ql-underline"
+				isDisabled={isDisable}
 			/>
 			<Button
 				variant="admin"
@@ -76,6 +80,7 @@ const CustomToolbar: React.FC = () => {
 				me="5px !important"
 				className="ql-list"
 				value="ordered"
+				isDisabled={isDisable}
 			/>
 			<Button
 				display="flex !important"
@@ -83,6 +88,7 @@ const CustomToolbar: React.FC = () => {
 				alignItems="center !important"
 				className="ql-list"
 				value="bullet"
+				isDisabled={isDisable}
 			/>
 			<Button
 				display="flex !important"
@@ -90,13 +96,7 @@ const CustomToolbar: React.FC = () => {
 				alignItems="center !important"
 				className="ql-image"
 				value="image"
-			/>
-			<Button
-				display="flex !important"
-				justifyContent="center !important"
-				alignItems="center !important"
-				className="ql-image"
-				value="image"
+				isDisabled={isDisable}
 			/>
 			<Button
 				display="flex !important"
@@ -104,6 +104,7 @@ const CustomToolbar: React.FC = () => {
 				alignItems="center !important"
 				className="ql-strike"
 				value="strike"
+				isDisabled={isDisable}
 			/>
 			<Button
 				display="flex !important"
@@ -111,6 +112,7 @@ const CustomToolbar: React.FC = () => {
 				alignItems="center !important"
 				className="ql-blockquote"
 				value="blockquote"
+				isDisabled={isDisable}
 			/>
 			<Button
 				display="flex !important"
@@ -119,6 +121,7 @@ const CustomToolbar: React.FC = () => {
 				className="ql-color"
 				value={color}
 				onClick={() => setIsOpenPicker(true)}
+				isDisabled={isDisable}
 			/>
 			<Button
 				display="flex !important"
@@ -126,6 +129,7 @@ const CustomToolbar: React.FC = () => {
 				alignItems="center !important"
 				className="ql-link"
 				value="link"
+				isDisabled={isDisable}
 			/>
 			<Button
 				display="flex !important"
@@ -133,6 +137,7 @@ const CustomToolbar: React.FC = () => {
 				alignItems="center !important"
 				className="ql-video"
 				value="video"
+				isDisabled={isDisable}
 			/>
 			<Modal size="sm" isOpen={isOpenPickers} onClose={() => setIsOpenPicker(false)}>
 				<ModalContent alignItems="center" bg="transparent">
@@ -200,7 +205,6 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 		const nowDate = new Date().getTime();
 		const w = { ...workings, [nowDate]: true };
 		this.setState({ workings });
-
 		return uploadFile([file]).then(
 			(results: IFile[]) => {
 				const { sizeLargeUrl, objectId } = results[0];
@@ -285,9 +289,11 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 
 	render() {
 		const { contents } = this.state;
+		const { isDisable } = this.props;
+
 		return (
 			<div className="text-editor">
-				<CustomToolbar />
+				<CustomToolbar isDisable={isDisable} />
 				<ReactQuill
 					ref={el => {
 						this.quillRef = el;
@@ -299,6 +305,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 					onBlur={this.onBlur}
 					modules={this.modules}
 					formats={this.formats}
+					readOnly={isDisable}
 				/>
 				<Dropzone
 					ref={el => {
@@ -321,6 +328,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 
 export const EditorWithRef = React.forwardRef<EditorRef, EditorProps>(({ contents, ...props }, ref) => {
 	const [data, setData] = React.useState(contents);
+
 	React.useImperativeHandle(
 		ref,
 		() => ({
@@ -328,5 +336,6 @@ export const EditorWithRef = React.forwardRef<EditorRef, EditorProps>(({ content
 		}),
 		[data],
 	);
-	return <Editor contents={data} {...props} onChange={d => setData(d)} />;
+
+	return <Editor {...props} contents={data} onChange={d => setData(d)} />;
 });

@@ -28,33 +28,37 @@ const useActionPage = () => {
 		detail: false,
 	};
 
-	const changeAction = (act: ActionPages, i?: string, navigate = true) => {
+	const changeAction = (act: ActionPages, i?: string) => {
 		if (act === action) return;
-		query.set('action', act);
 		switch (act) {
 			case 'create':
 				history.push({
-					pathname: navigate ? `${location.pathname}/form` : location.pathname,
+					pathname: `${location.pathname}/form`,
 				});
 				break;
 			case 'detail':
 				history.push({
-					pathname: navigate ? `${location.pathname}/detail` : location.pathname,
+					pathname: `${location.pathname}/detail`,
 					search: i ? `id=${i}` : '',
 				});
 				break;
 			case 'edit':
-				history.push({
-					pathname: navigate ? `${location.pathname}/edit` : location.pathname,
-					search: i ? `id=${i}` : ``,
-				});
+				if (action !== 'detail') {
+					history.push({
+						pathname: `${location.pathname}/edit`,
+						search: i ? `id=${i}` : ``,
+					});
+				} else {
+					history.replace({
+						pathname: location.pathname,
+						search: i ? `id=${i}&action=edit` : ``,
+					});
+				}
 				break;
 			default:
 				break;
 		}
 	};
-	console.log(action);
-
 	return {
 		actionPage: Object.keys(actionPage).reduce((accumulator, key) => {
 			return { ...accumulator, [key]: key === action };

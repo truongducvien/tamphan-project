@@ -147,7 +147,7 @@ const DetailSubdivision: React.FC = () => {
 					</Stack>
 					<HStack pt={3} justify="end">
 						{action === 'detail' && (
-							<Button type="button" onClick={() => changeAction('edit', id || '', false)} variant="brand">
+							<Button type="button" onClick={() => changeAction('edit', id || '')} variant="brand">
 								Chỉnh sửa
 							</Button>
 						)}

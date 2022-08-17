@@ -21,7 +21,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 	const { data, isLoading, refetch } = useQuery(['listUtilsGroup', keyword], () => getUtilsGroup(keyword));
 	const { changeAction } = useActionPage();
 
-	const mutationDELETE = useMutation(deleteUtilsGroup);
+	const mutationDelete = useMutation(deleteUtilsGroup);
 	const onDELETE = async (row: IUtilsGroup) => {
 		try {
 			await alert({
@@ -29,7 +29,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 				title: 'Bạn có muốn xoá ?',
 				description: row.name,
 			});
-			await mutationDELETE.mutateAsync(row.id);
+			await mutationDelete.mutateAsync(row.id);
 			toast({ title: 'Xoá thành công' });
 			refetch();
 		} catch {
@@ -116,7 +116,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 					data={data?.items || []}
 					action={[PermistionAction.UPDATE, PermistionAction.DELETE, PermistionAction.VIEW]}
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises
-					onClickDELETE={row => onDELETE(row)}
+					onClickDelete={row => onDELETE(row)}
 					onClickEdit={row => onEdit(row.id)}
 					onClickDetail={row => onDetail(row.id)}
 				/>

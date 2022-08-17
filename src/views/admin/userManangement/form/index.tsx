@@ -221,7 +221,7 @@ const UserForm: React.FC = () => {
 					</HStack> */}
 					<HStack pb={3} justifyContent="flex-end">
 						{action === 'detail' && (
-							<Button type="button" onClick={() => changeAction('edit', id || '', false)} variant="brand">
+							<Button type="button" onClick={() => changeAction('edit', id || '')} variant="brand">
 								Chỉnh sửa
 							</Button>
 						)}
