@@ -17,7 +17,7 @@ export async function uploadFile(files: IFile[]): Promise<File[]> {
 		for (const iterator of files) {
 			formData.append('files', iterator);
 		}
-		const resp = await http.post<{ files: IFile[] }, IFile[]>('/v1/files/upload/private', formData);
+		const resp = await http.post<{ files: IFile[] }, IFile[]>('/v1/files/upload/public', formData);
 		return resp;
 	} catch (error) {
 		return [];

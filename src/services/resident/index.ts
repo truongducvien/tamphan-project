@@ -45,3 +45,10 @@ export const updateResident = async (payload: IResidentPayload) => {
 	const { data } = await http.put<BaseResponeAction>(`/v1/residents/${payload.id || ''}`, payload);
 	return data || null;
 };
+
+export const getResidentOfProperty = async (payload: { id: string; propertyId: string }) => {
+	const { data } = await http.get<BaseResponeDetail<IResident>>(
+		`/v1/residents/${payload.id}/property/${payload.propertyId}`,
+	);
+	return data || null;
+};

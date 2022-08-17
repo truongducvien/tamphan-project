@@ -12,7 +12,7 @@ import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { useHistory } from 'react-router-dom';
 import { getApartment } from 'services/apartment';
-import { createResident, getResidentById, updateResident } from 'services/resident';
+import { createResident, getResidentOfProperty, updateResident } from 'services/resident';
 import {
 	Gender,
 	gender,
@@ -72,13 +72,18 @@ const ResidentForm: React.FC = () => {
 	const { data: dataApartment, isFetched: isFetchedApartment } = useQuery(['listApartment', keywordDebounce], () =>
 		getApartment({ code: keywordDebounce }),
 	);
+
 	const {
 		data: detailData,
 		isFetched,
 		isError,
-	} = useQuery(['detail', id], () => getResidentById(id || ''), {
-		enabled: !!id && isFetchedApartment,
-	});
+	} = useQuery(
+		['getResidentOfProperty', id, propertyId],
+		() => getResidentOfProperty({ id: id || '', propertyId: propertyId || '' }),
+		{
+			enabled: !!id && isFetchedApartment && !!propertyId,
+		},
+	);
 
 	const history = useHistory();
 	const mutationCreate = useMutation(createResident);
@@ -117,7 +122,7 @@ const ResidentForm: React.FC = () => {
 		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
 	};
 
-	if (!!id && (isError || !isFetched)) return null;
+	if (!!id && !!propertyId && (isError || !isFetched)) return null;
 
 	const defaultValue = {
 		...detailData?.data,
@@ -125,6 +130,9 @@ const ResidentForm: React.FC = () => {
 		type: residentType.find(i => i.value === detailData?.data?.type),
 		identityCardType: identityCardType.find(i => i.value === detailData?.data?.identityCardType),
 		gender: gender.find(i => i.value === detailData?.data?.gender),
+		propertyId: dataApartment?.items
+			.map(i => ({ label: i.name, value: i.id }))
+			.find(i => i.value === detailData?.data?.propertyId),
 	};
 
 	return (
@@ -194,14 +202,7 @@ const ResidentForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<PullDowndHookForm
-							label="Vai trò"
-							name="type"
-							isRequired
-							options={residentType}
-							isMulti
-							isSearchable={false}
-						/>
+						<PullDowndHookForm label="Vai trò" name="type" isRequired options={residentType} isSearchable={false} />
 						<TextFieldHookForm isRequired label="Email" type="email" name="email" variant="admin" />
 					</Stack>
 					<Stack
@@ -210,19 +211,7 @@ const ResidentForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<PullDowndHookForm
-							label="Mối quan hệ chủ sở hữu"
-							name="role"
-							isRequired
-							options={[
-								{
-									label: 'Vợ',
-									value: '1',
-								},
-							]}
-							isMulti
-							isSearchable={false}
-						/>
+						<TextFieldHookForm label="Mối quan hệ chủ sở hữu" name="role" />
 						<TextFieldHookForm isRequired label="Địa chỉ thường trú" name="permanentAddress" variant="admin" />
 					</Stack>
 					<Stack
@@ -254,7 +243,11 @@ const ResidentForm: React.FC = () => {
 					</Box>
 					<HStack pb={3} justifyContent="flex-end">
 						{action === 'detail' && (
-							<Button type="button" onClick={() => changeAction('edit', id || '')} variant="brand">
+							<Button
+								type="button"
+								onClick={() => changeAction('edit', `${id || ''},${propertyId || ''}`)}
+								variant="brand"
+							>
 								Chỉnh sửa
 							</Button>
 						)}
