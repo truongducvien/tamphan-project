@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
 import { FaBuffer, FaBuilding, FaClipboardList, FaMicrosoft, FaRegistered, FaTh, FaUserAlt } from 'react-icons/fa';
-import { MdAccountBox, MdHouse, MdLock, MdOutlineArticle } from 'react-icons/md';
+import { MdAccountBox, MdCreditCard, MdHouse, MdLock, MdOutlineArticle } from 'react-icons/md';
 import { FeatureModule } from 'services/role/type';
 import { PermistionAction } from 'variables/permission';
 import ApartMentManagement from 'views/admin/apartment';
@@ -15,6 +15,8 @@ import PositionManagement from 'views/admin/position';
 import PositionForm from 'views/admin/position/form';
 import ResidentManagement from 'views/admin/resident';
 import ResidentForm from 'views/admin/resident/form';
+import ResdidentCardManagement from 'views/admin/residentCard';
+import DetailResidentCard from 'views/admin/residentCard/form';
 import SubdivisionManagement from 'views/admin/subdivision';
 import DetailSubdivision from 'views/admin/subdivision/form';
 import UserManagement from 'views/admin/userManangement';
@@ -376,6 +378,25 @@ const routes: Route[] = [
 				path: '/article/edit',
 				component: DetailArticle,
 				action: PermistionAction.UPDATE,
+				requirePermission: FeatureModule.ARTICLE_MANAGEMENT,
+			},
+		],
+	},
+	{
+		name: 'Quản lý thẻ cư dân',
+		layout: '/admin',
+		path: `/resident-card`,
+		icon: <Icon as={MdCreditCard} width="20px" height="20px" color="inherit" />,
+		component: ResdidentCardManagement,
+		action: PermistionAction.VIEW,
+		requirePermission: FeatureModule.ARTICLE_MANAGEMENT,
+		items: [
+			{
+				name: 'Chi tiết thẻ cư dân',
+				layout: '/admin',
+				path: '/resident-card/detail',
+				component: DetailResidentCard,
+				action: PermistionAction.VIEW,
 				requirePermission: FeatureModule.ARTICLE_MANAGEMENT,
 			},
 		],

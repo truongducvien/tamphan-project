@@ -11,7 +11,7 @@ import Table, { IColumn } from 'components/table';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
-import { MdDelete, MdLibraryAdd } from 'react-icons/md';
+import { MdLibraryAdd } from 'react-icons/md';
 import { getArea } from 'services/area';
 import { deleteUtils, getUtils } from 'services/utils';
 import { getUtilsGroup } from 'services/utils/group';
