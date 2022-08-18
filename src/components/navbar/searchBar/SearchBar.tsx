@@ -43,7 +43,7 @@ const SearchBar: React.FC<Props> = props => {
 				fontWeight="500"
 				_placeholder={{ color: 'gray.400', fontSize: '14px' }}
 				borderRadius={borderRadius || '30px'}
-				placeholder={placeholder || 'Search...'}
+				placeholder={placeholder || 'Tìm kiếm...'}
 			/>
 		</InputGroup>
 	);

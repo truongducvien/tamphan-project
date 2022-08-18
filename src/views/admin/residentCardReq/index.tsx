@@ -1,24 +1,28 @@
 import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, SimpleGrid, Stack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
-import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { DatePickerdHookForm } from 'components/form/DatePicker';
+import { BaseOption, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { useDebounce } from 'hooks/useDebounce';
 import { getApartment } from 'services/apartment';
-import { getResidentCard } from 'services/residentCard';
-import { IResidentCard, IResidentCardParams } from 'services/residentCard/type';
-import { Status, statusOption2 } from 'variables/status';
+import { getResidentCardReq } from 'services/residentCardReq';
+import { IResidentCardReq, IResidentCardReqParams, statusCardReq, typeCardReq } from 'services/residentCardReq/type';
+import { statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
 
 interface FormData {
-	propertyId: Option;
-	cardNumber: string;
-	state: Option;
+	from?: string;
+	to?: string;
+	fullName?: string;
+	propertyId?: BaseOption<string>;
+	status?: typeof statusCardReq[0];
+	type?: typeof typeCardReq[0];
 }
 
 const validationSchema = Yup.object({
@@ -30,14 +34,14 @@ const validationSchema = Yup.object({
 	}).nullable(),
 });
 
-const ResdidentCardManagement: React.FC = () => {
+const ResdidentCardReqManagement: React.FC = () => {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
 
 	const [keyword, setKeyword] = useState('');
 	const keywordDebounce = useDebounce(keyword);
 
-	const [params, setParams] = useState<Omit<IResidentCardParams, 'page' | 'size'>>();
+	const [params, setParams] = useState<Omit<IResidentCardReqParams, 'page' | 'size'>>();
 
 	const { data: dataApartment } = useQuery(['listApartment', keywordDebounce], () =>
 		getApartment({
@@ -46,19 +50,24 @@ const ResdidentCardManagement: React.FC = () => {
 	);
 
 	const { data, isLoading } = useQuery(['listResidentCard', params, currentPage, currentPageSize], () =>
-		getResidentCard({
+		getResidentCardReq({
 			page: currentPage,
 			size: currentPageSize,
 			...params,
 		}),
 	);
 
-	const COLUMNS: Array<IColumn<IResidentCard>> = [
-		{ key: 'cardNumber', label: 'Mã số thẻ' },
-		{ key: 'property', label: 'Mã căn hộ', cell: ({ property }) => property.code },
-		{ key: 'state', label: 'Trạng thái thẻ', cell: ({ state }) => statusOption2.find(i => i.value === state)?.label },
-		{ key: 'updatedDate', label: 'Ngày cập nhật' },
-		{ key: 'modifyBy', label: 'Người cập nhật' },
+	const COLUMNS: Array<IColumn<IResidentCardReq>> = [
+		{ key: 'type', label: 'Loại yêu cầu', cell: ({ type }) => typeCardReq.find(i => i.value === type)?.label },
+		{ key: 'propertyCode', label: 'Mã căn hộ' },
+		{ key: 'requesterPhoneNumber', label: 'Mã số thẻ yêu cầu' },
+		{ key: 'requesterName', label: 'Người yêu cầu' },
+		{ key: 'requesterPhoneNumber', label: 'Số điện thoại' },
+		{ key: 'note', label: 'Ghi chú' },
+		{ key: 'requestedDate', label: 'Ngày yêu cầu' },
+		{ key: 'fee', label: 'Phí cấp thẻ' },
+		{ key: 'newCardNumber', label: 'Mã số thẻ cấp mới' },
+		{ key: 'status', label: 'Trạng thái', cell: ({ status }) => statusCardReq.find(i => i.value === status)?.label },
 	];
 
 	const pageInfo = {
@@ -70,8 +79,9 @@ const ResdidentCardManagement: React.FC = () => {
 	const onSearch = (payload: FormData) => {
 		const preData = {
 			...payload,
-			propertyId: payload.propertyId?.value as string,
-			state: payload.state?.value as Status,
+			propertyId: payload.propertyId?.value,
+			status: payload.status?.value,
+			type: payload.type?.value,
 		};
 		setParams(preData);
 	};
@@ -81,34 +91,25 @@ const ResdidentCardManagement: React.FC = () => {
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
 				<Box px={{ sm: 2, md: 5 }}>
 					<FormContainer onSubmit={onSearch} validationSchema={validationSchema}>
-						<Stack
-							spacing={5}
-							align="end"
-							justify={{ base: 'center', md: 'left', xl: 'left' }}
-							direction={{ base: 'column', md: 'row' }}
-						>
-							<TextFieldHookForm name="cardNumber" label="Mã số thẻ" />
-							<PullDowndHookForm
-								label="Căn hộ"
-								name="propertyId"
-								onInputChange={setKeyword}
-								isClearable
-								options={dataApartment?.items.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id })) || []}
-							/>
-							<PullDowndHookForm isClearable label="Trạng thái thẻ" name="state" options={statusOption2} />
-							<Flex align="center">
-								<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
-									Tìm kiếm
-								</Button>
-							</Flex>
-						</Stack>
+						<SimpleGrid spacing={5} templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(4, 2fr)' }} gap={6}>
+							<PullDowndHookForm label="Loại yêu cầu" name="type" isClearable options={typeCardReq} />
+							<TextFieldHookForm name="fullName" label="Họ và tên" />
+							<PullDowndHookForm isClearable label="Trạng thái yêu cầu" name="status" options={statusCardReq} />
+							<PullDowndHookForm isClearable label="Căn hộ" name="state" options={statusOption2} />
+							<DatePickerdHookForm label="Từ ngày" name="from" />
+						</SimpleGrid>
+						<Flex align="end" justify="end" mt={3}>
+							<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
+								Tìm kiếm
+							</Button>
+						</Flex>
 					</FormContainer>
 				</Box>
 			</Card>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
-						Danh sách thẻ cư dân
+						Danh sách yêy cầu thẻ cư dân
 					</Heading>
 				</Center>
 				<Table
@@ -132,4 +133,4 @@ const ResdidentCardManagement: React.FC = () => {
 	);
 };
 
-export default ResdidentCardManagement;
+export default ResdidentCardReqManagement;

@@ -3,4 +3,7 @@ export enum PermistionAction {
 	UPDATE = 'UPDATE',
 	DELETE = 'DELETE',
 	VIEW = 'VIEW',
+	IMPORT = 'IMPORT',
+	APPROVE = 'APPROVE',
+	REJECT = 'REJECT',
 }

@@ -123,7 +123,14 @@ const Table = <T,>({
 											</Td>
 										)}
 										{columns.map((column, colIndex) => (
-											<Td key={`${index}${colIndex}`}>
+											<Td
+												key={`${index}${colIndex}`}
+												color={textColor}
+												fontSize="sm"
+												fontWeight="700"
+												maxH={200}
+												overflow="scroll"
+											>
 												{column.cell && column.key ? (
 													column.cell(row)
 												) : (

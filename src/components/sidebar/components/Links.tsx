@@ -41,7 +41,7 @@ export const SidebarLinks: React.FC<Props> = props => {
 		const element: React.ReactElement[] = r.map((route, index) => {
 			const { requirePermission, action } = route;
 			if (permission && requirePermission && action) {
-				const hasPermission = permission?.[requirePermission].includes(action);
+				const hasPermission = permission?.[requirePermission]?.includes(action);
 				if (!hasPermission) return <Fragment key={route.name + index.toString()}></Fragment>;
 			}
 

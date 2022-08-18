@@ -23,6 +23,12 @@ export interface Option {
 	label: string;
 	value: string | number;
 }
+
+export interface BaseOption<D> {
+	label: string;
+	value: D;
+}
+
 type TagVariant = 'subtle' | 'solid' | 'outline';
 export interface PullDownHookFormProps extends OptionBase {
 	name: string;

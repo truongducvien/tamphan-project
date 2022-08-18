@@ -21,7 +21,7 @@ import SearchBar from 'components/navbar/searchBar/SearchBar';
 import { FaEthereum } from 'react-icons/fa';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { MdNotificationsNone } from 'react-icons/md';
-import { useAppDispatch } from 'store';
+import { useAppDispatch, useAppSelector } from 'store';
 import { logout } from 'store/actionCreators';
 
 export interface Props {
@@ -35,6 +35,7 @@ export interface Props {
 
 const HeaderLinks: React.FC<Props> = props => {
 	const dispatch = useAppDispatch();
+	const { info } = useAppSelector(state => state.user);
 	const { secondary } = props;
 	const { colorMode, toggleColorMode } = useColorMode();
 	// Chakra Color Mode
@@ -149,15 +150,15 @@ const HeaderLinks: React.FC<Props> = props => {
 							fontWeight="700"
 							color={textColor}
 						>
-							👋&nbsp; Hey, Adela
+							👋&nbsp; {info?.fullName || 'Admin'}
 						</Text>
 					</Flex>
 					<Flex flexDirection="column" p="10px">
 						<MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} borderRadius="8px" px="14px">
-							<Text fontSize="sm">Profile Settings</Text>
+							<Text fontSize="sm">Cập nhật thông tin</Text>
 						</MenuItem>
 						<MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} borderRadius="8px" px="14px">
-							<Text fontSize="sm">Newsletter Settings</Text>
+							<Text fontSize="sm">Cài đặt</Text>
 						</MenuItem>
 						<MenuItem
 							_hover={{ bg: 'none' }}
@@ -167,7 +168,7 @@ const HeaderLinks: React.FC<Props> = props => {
 							borderRadius="8px"
 							px="14px"
 						>
-							<Text fontSize="sm">Log out</Text>
+							<Text fontSize="sm">Đăng xuất</Text>
 						</MenuItem>
 					</Flex>
 				</MenuList>

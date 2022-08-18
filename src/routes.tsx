@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
 import { FaBuffer, FaBuilding, FaClipboardList, FaMicrosoft, FaRegistered, FaTh, FaUserAlt } from 'react-icons/fa';
-import { MdAccountBox, MdCreditCard, MdHouse, MdLock, MdOutlineArticle } from 'react-icons/md';
+import { MdAccountBox, MdCreditCard, MdCreditCardOff, MdHouse, MdLock, MdOutlineArticle } from 'react-icons/md';
 import { FeatureModule } from 'services/role/type';
 import { PermistionAction } from 'variables/permission';
 import ApartMentManagement from 'views/admin/apartment';
@@ -16,7 +16,7 @@ import PositionForm from 'views/admin/position/form';
 import ResidentManagement from 'views/admin/resident';
 import ResidentForm from 'views/admin/resident/form';
 import ResdidentCardManagement from 'views/admin/residentCard';
-import DetailResidentCard from 'views/admin/residentCard/form';
+import ResdidentCardReqManagement from 'views/admin/residentCardReq';
 import SubdivisionManagement from 'views/admin/subdivision';
 import DetailSubdivision from 'views/admin/subdivision/form';
 import UserManagement from 'views/admin/userManangement';
@@ -389,17 +389,17 @@ const routes: Route[] = [
 		icon: <Icon as={MdCreditCard} width="20px" height="20px" color="inherit" />,
 		component: ResdidentCardManagement,
 		action: PermistionAction.VIEW,
-		requirePermission: FeatureModule.ARTICLE_MANAGEMENT,
-		items: [
-			{
-				name: 'Chi tiết thẻ cư dân',
-				layout: '/admin',
-				path: '/resident-card/detail',
-				component: DetailResidentCard,
-				action: PermistionAction.VIEW,
-				requirePermission: FeatureModule.ARTICLE_MANAGEMENT,
-			},
-		],
+		requirePermission: FeatureModule.RESIDENT_CARD_MANAGEMENT,
+	},
+	{
+		name: 'Quản lý yêu cầu thẻ cư dân',
+		layout: '/admin',
+		path: `/resident-card-request`,
+		icon: <Icon as={MdCreditCardOff} width="20px" height="20px" color="inherit" />,
+		component: ResdidentCardReqManagement,
+		action: PermistionAction.VIEW,
+		// TODO: replace this permission
+		requirePermission: FeatureModule.RESIDENT_CARD_MANAGEMENT,
 	},
 	{
 		name: 'Sign In',
