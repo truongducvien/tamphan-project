@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, Flex, Heading, SimpleGrid, Stack } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
@@ -13,7 +13,6 @@ import { useDebounce } from 'hooks/useDebounce';
 import { getApartment } from 'services/apartment';
 import { getResidentCardReq } from 'services/residentCardReq';
 import { IResidentCardReq, IResidentCardReqParams, statusCardReq, typeCardReq } from 'services/residentCardReq/type';
-import { statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
 
 interface FormData {
@@ -28,7 +27,7 @@ interface FormData {
 const validationSchema = Yup.object({
 	cardNumber: Yup.string(),
 	propertyId: Yup.object({ label: Yup.string(), value: Yup.string() }).nullable(),
-	state: Yup.object({
+	status: Yup.object({
 		label: Yup.string(),
 		value: Yup.string(),
 	}).nullable(),
@@ -91,12 +90,18 @@ const ResdidentCardReqManagement: React.FC = () => {
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
 				<Box px={{ sm: 2, md: 5 }}>
 					<FormContainer onSubmit={onSearch} validationSchema={validationSchema}>
-						<SimpleGrid spacing={5} templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(4, 2fr)' }} gap={6}>
+						<SimpleGrid spacing={5} templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(3, 2fr)' }} gap={6}>
 							<PullDowndHookForm label="Loại yêu cầu" name="type" isClearable options={typeCardReq} />
 							<TextFieldHookForm name="fullName" label="Họ và tên" />
 							<PullDowndHookForm isClearable label="Trạng thái yêu cầu" name="status" options={statusCardReq} />
-							<PullDowndHookForm isClearable label="Căn hộ" name="state" options={statusOption2} />
+							<PullDowndHookForm
+								isClearable
+								label="Căn hộ"
+								name="propertyId"
+								options={dataApartment?.items.map(i => ({ label: i.code, value: i.id })) || []}
+							/>
 							<DatePickerdHookForm label="Từ ngày" name="from" />
+							<DatePickerdHookForm label="Đến ngày" name="to" />
 						</SimpleGrid>
 						<Flex align="end" justify="end" mt={3}>
 							<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
@@ -109,7 +114,7 @@ const ResdidentCardReqManagement: React.FC = () => {
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
-						Danh sách yêy cầu thẻ cư dân
+						Danh sách yêu cầu thẻ cư dân
 					</Heading>
 				</Center>
 				<Table
