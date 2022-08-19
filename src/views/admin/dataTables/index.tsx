@@ -21,7 +21,7 @@ const fetchPokemons = async (pageSize: number, offset: number): Promise<Record<s
 const Settings: React.FC = () => {
 	const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
+	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 
 	const [pokemons, setPokemons] = useState<{ name: string; url: string }[]>([]);
 	const [pageInfo, setPageInfo] = useState<{ total: string; hasNextPage: boolean; hasPreviousPage: boolean } | null>(

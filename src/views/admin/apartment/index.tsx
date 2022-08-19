@@ -28,8 +28,8 @@ const validationSchema = Yup.object({
 });
 
 const ApartMentManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(0);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 	const [keywordArea, setKeywordArea] = useState('');
 	const keywordAreaDebound = useDebounce(keywordArea, 500);
 	const [param, setParams] = useState<IApartmentParams | null>(null);
@@ -54,7 +54,7 @@ const ApartMentManagement: React.FC = () => {
 	];
 
 	const pageInfo = {
-		total: data?.totalPages,
+		total: data?.totalItems,
 		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
 		hasPreviousPage: data ? data?.pageNum < 0 : false,
 	};

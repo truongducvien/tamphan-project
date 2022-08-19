@@ -10,6 +10,7 @@ export interface IArea {
 	type: string;
 	updateDate: string;
 	id: string;
+	code: string;
 	mapLink: string;
 	avatarLink: string;
 }

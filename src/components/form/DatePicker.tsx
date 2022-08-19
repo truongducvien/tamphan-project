@@ -37,6 +37,7 @@ export const DatePickerdHookForm: React.FC<DatePickerdHookFormProps> = ({
 						{...innerProps}
 						onChange={onChange}
 						defaultValue={value as string}
+						defaultDay={value as string}
 						variant={variant}
 						placeholder={placeholder}
 					/>

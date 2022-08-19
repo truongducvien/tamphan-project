@@ -14,10 +14,9 @@ import { Icon, Select, useColorModeValue } from '@chakra-ui/react';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 
 const PAGE_SIZE_OPTIONS = [
-	{ value: '5', text: '5' },
-	{ value: '25', text: '25' },
-	{ value: '50', text: '50' },
-	{ value: 'ALL', text: 'All' },
+	{ value: '10', text: '10' },
+	{ value: '20', text: '20' },
+	{ value: '30', text: '30' },
 ];
 
 export type PaginationProps = {
@@ -49,7 +48,7 @@ const Pagination = ({
 		pagesCount: totalPages,
 		initialState: { currentPage: value, pageSize },
 		limits: {
-			outer: 1,
+			outer: 2,
 			inner: 2,
 		},
 	});
@@ -111,7 +110,7 @@ const Pagination = ({
 							_hover={{ bg: 'made.80' }}
 							size="md"
 							w={7}
-							jumpSize={1}
+							jumpSize={3}
 						/>
 					}
 				>

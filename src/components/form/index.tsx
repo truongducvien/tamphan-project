@@ -10,9 +10,16 @@ export interface FormContainerProps<F> {
 	children: React.ReactNode;
 	defaultValues?: { [x: string]: string };
 	onSubmit?: (data: F, reset: UseFormReturn['reset']) => void;
+	onReset?: () => void;
 }
 
-export function FormContainer<F>({ children, validationSchema, onSubmit, ...innerProps }: FormContainerProps<F>) {
+export function FormContainer<F>({
+	children,
+	validationSchema,
+	onSubmit,
+	onReset,
+	...innerProps
+}: FormContainerProps<F>) {
 	const methods = useForm({
 		mode: 'all',
 		...innerProps,
@@ -21,15 +28,16 @@ export function FormContainer<F>({ children, validationSchema, onSubmit, ...inne
 		...(validationSchema ? { resolver: yupResolver(validationSchema) } : {}),
 	});
 
-	const onReset = () => {
+	const handleReset = () => {
 		methods.reset();
+		onReset?.();
 	};
 
 	return (
 		<FormProvider {...methods}>
 			<form
 				noValidate
-				onReset={onReset}
+				onReset={handleReset}
 				onSubmit={onSubmit ? methods.handleSubmit(data => onSubmit(data as unknown as F, methods.reset)) : undefined}
 			>
 				{children}

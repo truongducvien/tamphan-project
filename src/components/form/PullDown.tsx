@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 
 import { FormControl, FormErrorMessage, FormLabel, Text, useColorModeValue } from '@chakra-ui/react';
-import { Select, GroupBase } from 'chakra-react-select';
+import { Select, GroupBase, SelectInstance } from 'chakra-react-select';
 import useDerivedProps from 'hooks/useDerivedProps';
+import useEffectWithoutMounted from 'hooks/useEffectWithoutMounted';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
 
 export interface PullDownReference {
@@ -52,13 +53,21 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 	...innerProps
 }) => {
 	const dropdownRef = useRef<PullDownReference | null>(null);
+	const refs = useRef<SelectInstance<Option, boolean, GroupBase<Option>>>(null);
 	const {
 		control,
-		formState: { errors },
+		formState: { errors, isSubmitted, isDirty },
 		getValues,
 		clearErrors,
 		setValue,
 	} = useFormContext();
+
+	useEffectWithoutMounted(() => {
+		if (!isSubmitted && !isDirty) {
+			refs.current?.clearValue();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isDirty]);
 
 	useEffect(() => {
 		if (defaultValue) setValue(name, defaultValue);
@@ -96,6 +105,8 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 						<Select<Option, boolean, GroupBase<Option>>
 							{...innerProps}
 							{...innerField}
+							ref={refs}
+							classNamePrefix="select"
 							chakraStyles={{
 								singleValue: provided => ({
 									...provided,

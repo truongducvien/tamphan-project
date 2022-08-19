@@ -1,6 +1,20 @@
 import { useState } from 'react';
 
-import { Box, Button, HStack, Stack, Tabs, TabList, TabPanels, Tab, TabPanel, Flex } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	HStack,
+	Stack,
+	Tabs,
+	TabList,
+	TabPanels,
+	Tab,
+	TabPanel,
+	Flex,
+	Alert,
+	AlertIcon,
+	AlertDescription,
+} from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
@@ -115,7 +129,7 @@ const AparmentForm: React.FC = () => {
 		isFetched: isFetchedingOwner,
 		isError: isErrorOwner,
 	} = useQuery(['detailOwner', id], () => getResidentOwner(id || ''), {
-		enabled: !!id,
+		enabled: !!id && action !== 'create',
 	});
 
 	const handelCreateApartment = async (data: IApartmentPayload) => {
@@ -190,7 +204,7 @@ const AparmentForm: React.FC = () => {
 		if (id) setIdApartment(id);
 	});
 
-	if (!!id && (isFetching || isError || isErrorOwner || !isFetchedingOwner)) return null;
+	if (!!id && (isFetching || isError || !isFetchedingOwner)) return null;
 
 	const defaultApartment = {
 		...detailData?.data,
@@ -209,11 +223,18 @@ const AparmentForm: React.FC = () => {
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+				{isErrorOwner && (
+					<Alert status="error">
+						<AlertIcon />
+						<AlertDescription>Không tìm thấy thông tin chủ sở hữu cho căn hộ này</AlertDescription>
+					</Alert>
+				)}
+
 				<Tabs>
 					<TabList>
 						<Tab>Thông tin căn hộ</Tab>
-						<Tab>Thông tin Chủ sở hữu</Tab>
-						<Tab hidden={!idApartment}>Dang sách cư dân</Tab>
+						<Tab hidden={isErrorOwner || !idApartment}>Thông tin Chủ sở hữu</Tab>
+						<Tab hidden={!idApartment || isErrorOwner}>Dang sách cư dân</Tab>
 					</TabList>
 					<TabPanels>
 						<TabPanel>
@@ -392,16 +413,16 @@ const AparmentForm: React.FC = () => {
 									<TextFieldHookForm type="email" label="Email" name="email" variant="admin" />
 								</Box>
 								<HStack pt={3} justify="end">
-									{action === 'detail' && (
+									{/* {action === 'detail' && (
 										<Button type="button" onClick={() => changeAction('edit', id || '')} variant="brand">
 											Chỉnh sửa
 										</Button>
 									)}
 									<Button w="20" isDisabled={!idApartment} type="submit" variant="brand">
 										Lưu
-									</Button>
-									<Button w="20" type="button" variant="gray" onClick={() => history.goBack()}>
-										Huỷ
+									</Button> */}
+									<Button type="button" variant="gray" onClick={() => history.goBack()}>
+										Quay lại
 									</Button>
 								</HStack>
 							</FormContainer>

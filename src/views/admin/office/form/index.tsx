@@ -41,7 +41,7 @@ const DetailOffice: React.FC = () => {
 	const mutationUpdate = useMutation(updateOffice);
 
 	const handelCreate = async (data: DataForm, reset: () => void) => {
-		const prepareData = { ...data, parentId: data.parentId.value as string };
+		const prepareData = { ...data, parentId: data.parentId?.value as string };
 		try {
 			await mutationCreate.mutateAsync(prepareData);
 			toast({ title: 'Tạo mới thành công' });
@@ -52,7 +52,7 @@ const DetailOffice: React.FC = () => {
 	};
 
 	const handelUpdate = async (data: DataForm) => {
-		const prepareData = { ...data, parentId: data.parentId.value as string, id: id || '' };
+		const prepareData = { ...data, parentId: data.parentId?.value as string, id: id || '' };
 		try {
 			await mutationUpdate.mutateAsync(prepareData);
 			toast({ title: 'Cập nhật thành công' });
@@ -111,10 +111,17 @@ const DetailOffice: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextAreaFieldHookForm label="Mô tả" isDisabled={action === 'detail'} name="description" variant="admin" />
+						<TextAreaFieldHookForm
+							label="Mô tả"
+							w={action === 'create' ? { base: '100%', md: '50%' } : undefined}
+							isDisabled={action === 'detail'}
+							name="description"
+							variant="admin"
+						/>
 						<TextFieldHookForm
+							hidden={action === 'create'}
 							label="Ngày tạo"
-							name="crateAt"
+							name=""
 							defaultValue={dayjs().format('DD/MM/YYYY')}
 							isDisabled
 							variant="admin"

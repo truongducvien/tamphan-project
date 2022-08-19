@@ -94,7 +94,7 @@ const DetailSubdivision: React.FC = () => {
 						pb={3}
 					>
 						<TextFieldHookForm isDisabled={isDisabled} isRequired label="Tên phân khu" name="name" variant="admin" />
-						<TextFieldHookForm isDisabled={isDisabled} label="Điện thoại liên hệ" name="contactPhone" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} label="Mã phân khu" name="code" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -109,7 +109,7 @@ const DetailSubdivision: React.FC = () => {
 							options={typeAreas}
 							isSearchable={false}
 						/>
-						<TextFieldHookForm isDisabled={isDisabled} label="Email" name="contactEmail" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} label="Điện thoại liên hệ" name="contactPhone" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -118,8 +118,11 @@ const DetailSubdivision: React.FC = () => {
 						pb={3}
 					>
 						<TextFieldHookForm isDisabled={isDisabled} label="Diện tích" type="number" name="acreage" variant="admin" />
-						<TextFieldHookForm isDisabled={isDisabled} label="Vị trí" name="location" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} label="Email" name="contactEmail" variant="admin" />
 					</Stack>
+					<Box pr={2} mb={3} w={{ base: '100%', md: '50%' }}>
+						<TextFieldHookForm isDisabled={isDisabled} label="Vị trí" name="location" variant="admin" />
+					</Box>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
 						direction={{ base: 'column', md: 'row' }}

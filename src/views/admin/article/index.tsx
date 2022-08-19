@@ -15,8 +15,8 @@ import { PermistionAction } from 'variables/permission';
 
 const ArticleManagement: React.FC = () => {
 	const { toast } = useToastInstance();
-	const [currentPage, setCurrentPage] = useState(0);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 	const keywordRef = useRef<HTMLInputElement>(null);
 	const [keyword, setKeyword] = useState('');
 
@@ -64,7 +64,7 @@ const ArticleManagement: React.FC = () => {
 	};
 
 	const pageInfo = {
-		total: data?.totalPages,
+		total: data?.totalItems,
 		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
 		hasPreviousPage: data ? data?.pageNum < 0 : false,
 	};

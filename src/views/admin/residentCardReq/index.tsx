@@ -10,6 +10,7 @@ import { BaseOption, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { useDebounce } from 'hooks/useDebounce';
+import { MdResetTv } from 'react-icons/md';
 import { getApartment } from 'services/apartment';
 import { getResidentCardReq } from 'services/residentCardReq';
 import { IResidentCardReq, IResidentCardReqParams, statusCardReq, typeCardReq } from 'services/residentCardReq/type';
@@ -34,8 +35,8 @@ const validationSchema = Yup.object({
 });
 
 const ResdidentCardReqManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(0);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 
 	const [keyword, setKeyword] = useState('');
 	const keywordDebounce = useDebounce(keyword);
@@ -70,7 +71,7 @@ const ResdidentCardReqManagement: React.FC = () => {
 	];
 
 	const pageInfo = {
-		total: data?.totalPages,
+		total: data?.totalItems,
 		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
 		hasPreviousPage: data ? data?.pageNum < 0 : false,
 	};
@@ -104,6 +105,9 @@ const ResdidentCardReqManagement: React.FC = () => {
 							<DatePickerdHookForm label="Đến ngày" name="to" />
 						</SimpleGrid>
 						<Flex align="end" justify="end" mt={3}>
+							<Button variant="lightBrand" mr={3} type="reset" leftIcon={<MdResetTv />}>
+								Mặc định
+							</Button>
 							<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
 								Tìm kiếm
 							</Button>

@@ -12,8 +12,8 @@ import { IArea, typeAreas } from 'services/area/type';
 import { PermistionAction } from 'variables/permission';
 
 const SubdivisionManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(0);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 
 	const keywordRef = useRef<HTMLInputElement>(null);
 
@@ -29,6 +29,7 @@ const SubdivisionManagement: React.FC = () => {
 
 	const COLUMNS: Array<IColumn<IArea>> = [
 		{ key: 'name', label: 'Tên phân khu' },
+		{ key: 'code', label: 'Mã phân khu' },
 		{ key: 'type', label: 'Loại hình BDS', cell: ({ type }) => typeAreas.find(i => i.value === type)?.label },
 		{ key: 'acreage', label: 'Diện tích' },
 		{ key: 'location', label: 'Vị trí' },
@@ -37,7 +38,7 @@ const SubdivisionManagement: React.FC = () => {
 	];
 
 	const pageInfo = {
-		total: data?.totalPages,
+		total: data?.totalItems,
 		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
 		hasPreviousPage: data ? data?.pageNum < 0 : false,
 	};

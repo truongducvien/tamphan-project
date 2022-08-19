@@ -17,8 +17,8 @@ import { statusOption2 } from 'variables/status';
 type DaraForm = Omit<IRoleParams, 'page' | 'size'>;
 
 const PositionManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(0);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 
 	const [params, setParams] = useState<DaraForm>({});
 
@@ -39,7 +39,7 @@ const PositionManagement: React.FC = () => {
 	};
 
 	const pageInfo = {
-		total: data?.totalPages,
+		total: data?.totalItems,
 		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
 		hasPreviousPage: data ? data?.pageNum < 0 : false,
 	};
@@ -49,25 +49,32 @@ const PositionManagement: React.FC = () => {
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
-				<FormContainer onSubmit={onSearch}>
-					<Stack
-						spacing={5}
-						align="end"
-						justify={{ base: 'center', md: 'left', xl: 'left' }}
-						direction={{ base: 'column', md: 'row' }}
-					>
-						<TextFieldHookForm name="name" label="Tên chức vụ" />
-						<TextFieldHookForm label="Mã chức vụ" name="code" />
-						<Flex align="center">
-							<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
-								Tìm kiếm
-							</Button>
-							<Button onClick={() => changeAction('create')} marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
-								Thêm mới
-							</Button>
-						</Flex>
-					</Stack>
-				</FormContainer>
+				<Box px={{ sm: 2, md: 5 }}>
+					<FormContainer onSubmit={onSearch}>
+						<Stack
+							spacing={5}
+							align="end"
+							justify={{ base: 'center', md: 'left', xl: 'left' }}
+							direction={{ base: 'column', md: 'row' }}
+						>
+							<TextFieldHookForm name="name" label="Tên chức vụ" />
+							<TextFieldHookForm label="Mã chức vụ" name="code" />
+							<Flex align="center">
+								<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
+									Tìm kiếm
+								</Button>
+								<Button
+									onClick={() => changeAction('create')}
+									marginLeft={1}
+									variant="brand"
+									leftIcon={<MdLibraryAdd />}
+								>
+									Thêm mới
+								</Button>
+							</Flex>
+						</Stack>
+					</FormContainer>
+				</Box>
 			</Card>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>

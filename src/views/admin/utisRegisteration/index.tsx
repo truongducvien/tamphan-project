@@ -19,8 +19,8 @@ import { IUtilsRe, IUtilsReSearchForm, IUtilsReSearchPayload } from 'services/ut
 import { PermistionAction } from 'variables/permission';
 
 const UtilsReManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(0);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 	const [param, setParams] = useState<Omit<IUtilsReSearchPayload, 'page' | 'size'>>({});
 
 	const [keyword, setKeywordGroup] = useState('');
@@ -40,12 +40,13 @@ const UtilsReManagement: React.FC = () => {
 		{ key: 'facilityName', label: 'Tên tiện ích' },
 		{ key: 'userName', label: 'Tên người đặt' },
 		{ key: 'phoneNumber', label: 'Số điện thoại' },
+		{ key: 'bookingCode', label: 'Mã đặt chỗ' },
+		{ key: 'reservationDate', label: 'Ngày đặt chỗ' },
 		{
 			key: 'bookingTimeSlot',
 			label: 'Giờ đặt chỗ',
 			cell: ({ bookingTimeSlot }) => `${bookingTimeSlot?.start} - ${bookingTimeSlot?.end}`,
 		},
-		{ key: 'reservationDate', label: 'Ngày đặt chỗ' },
 		{ key: 'quantityOfPerson', label: 'Số lượng' },
 		{ key: 'depositAmount', label: 'Số tiền đặt cọc' },
 		{ key: 'status', label: 'Trạng thái' },
@@ -54,7 +55,7 @@ const UtilsReManagement: React.FC = () => {
 	];
 
 	const pageInfo = {
-		total: data?.totalPages,
+		total: data?.totalItems,
 		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
 		hasPreviousPage: data ? data?.pageNum < 0 : false,
 	};
@@ -62,10 +63,14 @@ const UtilsReManagement: React.FC = () => {
 	const onSearch = (dt: IUtilsReSearchForm) => {
 		const prepareData = {
 			...dt,
-			areaId: dt.areaId.value as string,
-			facilityGroupId: dt.facilityGroupId.value as string,
+			areaId: dt.areaId?.value as string,
+			facilityGroupId: dt.facilityGroupId?.value as string,
 		};
 		setParams(prev => ({ ...prev, ...prepareData }));
+	};
+
+	const onReset = () => {
+		setParams({});
 	};
 
 	const { changeAction } = useActionPage();
@@ -74,7 +79,7 @@ const UtilsReManagement: React.FC = () => {
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
 				<Box px={{ sm: 2, md: 5 }}>
-					<FormContainer onSubmit={onSearch}>
+					<FormContainer onSubmit={onSearch} onReset={onReset}>
 						<SimpleGrid columns={{ sm: 1, md: 3 }} spacing={3}>
 							<DatePickerdHookForm label="Từ ngày" name="bookingFromTime" />
 							<DatePickerdHookForm label="Đến ngày" name="bookingToTime" />

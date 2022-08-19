@@ -58,6 +58,7 @@ const Table = <T,>({
 	const textColor = useColorModeValue('gray.600', 'whiteSmoke.100');
 	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
 	const iconDELETE = useColorModeValue('red.300', 'red.800');
+
 	return (
 		<>
 			<Box
@@ -69,7 +70,15 @@ const Table = <T,>({
 				overflowX="scroll"
 				overflowY="scroll"
 				boxSizing="border-box"
+				minH={200}
 			>
+				{(loading || !data?.[0]) && (
+					<Box width="100%" height={280} position="absolute" zIndex="overlay">
+						<Center position="absolute" left="50%" top="40%" transform="translate(-50%, 0px)">
+							{loading ? <Spinner /> : 'Không có dữ liệu'}
+						</Center>
+					</Box>
+				)}
 				<ChakraTable minW={minWith || '100%'}>
 					<Thead borderBottomColor={borderColor} borderBottomWidth={1}>
 						{columns && (
@@ -87,64 +96,53 @@ const Table = <T,>({
 							</Tr>
 						)}
 					</Thead>
-					{loading || !data?.[0] ? (
-						<Tbody flexDirection="column">
-							<Tr width="100vw" height={200} position="relative">
-								<Td>
-									<Center position="absolute" left="50%" top="50%" transform="translate(-50%, 0px)">
-										{loading ? <Spinner /> : 'Không có dữ liệu'}
-									</Center>
-								</Td>
-							</Tr>
-						</Tbody>
-					) : (
-						<Tbody flexDirection="column">
-							{data.map((row, index) => {
-								return (
-									<Tr key={index} bg="made.40" data-testid={`row-${index}`}>
-										{action && (
-											<Td>
-												<HStack justify="center" align="center">
-													{action.includes(PermistionActionBase.VIEW) && (
-														<Icon onClick={() => onClickDetail?.(row)} as={MdPreview} cursor="pointer" />
-													)}
-													{action.includes(PermistionActionBase.UPDATE) && (
-														<Icon onClick={() => onClickEdit?.(row)} as={MdBorderColor} cursor="pointer" />
-													)}
-													{action.includes(PermistionActionBase.DELETE) && (
-														<Icon
-															as={FaTrashAlt}
-															onClick={() => onClickDelete?.(row)}
-															color={iconDELETE}
-															cursor="pointer"
-														/>
-													)}
-												</HStack>
-											</Td>
-										)}
-										{columns.map((column, colIndex) => (
-											<Td
-												key={`${index}${colIndex}`}
-												color={textColor}
-												fontSize="sm"
-												fontWeight="700"
-												maxH={200}
-												overflow="scroll"
-											>
-												{column.cell && column.key ? (
-													column.cell(row)
-												) : (
-													<Text color={textColor} fontSize="sm" fontWeight="700" maxH={200} overflow="scroll">
-														{column.key ? (row[column.key] as unknown as string) : ''}
-													</Text>
+
+					<Tbody flexDirection="column">
+						{data.map((row, index) => {
+							return (
+								<Tr key={index} bg="made.40" data-testid={`row-${index}`}>
+									{action && (
+										<Td>
+											<HStack justify="center" align="center">
+												{action.includes(PermistionActionBase.VIEW) && (
+													<Icon onClick={() => onClickDetail?.(row)} as={MdPreview} cursor="pointer" />
 												)}
-											</Td>
-										))}
-									</Tr>
-								);
-							})}
-						</Tbody>
-					)}
+												{action.includes(PermistionActionBase.UPDATE) && (
+													<Icon onClick={() => onClickEdit?.(row)} as={MdBorderColor} cursor="pointer" />
+												)}
+												{action.includes(PermistionActionBase.DELETE) && (
+													<Icon
+														as={FaTrashAlt}
+														onClick={() => onClickDelete?.(row)}
+														color={iconDELETE}
+														cursor="pointer"
+													/>
+												)}
+											</HStack>
+										</Td>
+									)}
+									{columns.map((column, colIndex) => (
+										<Td
+											key={`${index}${colIndex}`}
+											color={textColor}
+											fontSize="sm"
+											fontWeight="700"
+											maxH={200}
+											overflow="scroll"
+										>
+											{column.cell && column.key ? (
+												column.cell(row)
+											) : (
+												<Text color={textColor} fontSize="sm" fontWeight="700" maxH={200} overflow="scroll">
+													{column.key ? (row[column.key] as unknown as string) : ''}
+												</Text>
+											)}
+										</Td>
+									))}
+								</Tr>
+							);
+						})}
+					</Tbody>
 				</ChakraTable>
 			</Box>
 			{pagination && <Pagination {...pagination} />}

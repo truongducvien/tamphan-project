@@ -31,8 +31,8 @@ const validationSchema = Yup.object({
 });
 
 const ResdidentCardManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(0);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(5);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 
 	const [keyword, setKeyword] = useState('');
 	const keywordDebounce = useDebounce(keyword);
@@ -55,14 +55,14 @@ const ResdidentCardManagement: React.FC = () => {
 
 	const COLUMNS: Array<IColumn<IResidentCard>> = [
 		{ key: 'cardNumber', label: 'Mã số thẻ' },
-		{ key: 'property', label: 'Mã căn hộ', cell: ({ property }) => property.code },
+		{ key: 'property', label: 'Mã căn hộ', cell: ({ property }) => property?.code },
 		{ key: 'state', label: 'Trạng thái thẻ', cell: ({ state }) => statusOption2.find(i => i.value === state)?.label },
 		{ key: 'updatedDate', label: 'Ngày cập nhật' },
 		{ key: 'modifyBy', label: 'Người cập nhật' },
 	];
 
 	const pageInfo = {
-		total: data?.totalPages,
+		total: data?.totalItems,
 		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
 		hasPreviousPage: data ? data?.pageNum < 0 : false,
 	};

@@ -1,6 +1,13 @@
-import { useState, createRef, useRef } from 'react';
+import { useState, useRef } from 'react';
 
-import { ArrowLeftIcon, ArrowRightIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import {
+	ArrowLeftIcon,
+	ArrowRightIcon,
+	ChevronDownIcon,
+	ChevronLeftIcon,
+	ChevronRightIcon,
+	Icon,
+} from '@chakra-ui/icons';
 import {
 	InputProps as ChakraInputProps,
 	Button,
@@ -21,8 +28,10 @@ import {
 	PopoverContent,
 	Portal,
 	useDisclosure,
+	Flex,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
+import { MdClear } from 'react-icons/md';
 
 import { daysMap, getMonthDetails, getMonthStr } from './utils';
 
@@ -30,7 +39,7 @@ const oneDay = 60 * 60 * 24 * 1000;
 const todayTimestamp = Date.now() - (Date.now() % oneDay) + new Date().getTimezoneOffset() * 1000 * 60;
 
 export interface IDatePickerProps extends Omit<ChakraInputProps, 'onChange'> {
-	defaultDay?: Date;
+	defaultDay?: string;
 	dateFormat?: string;
 	onChange?: (date: string) => void;
 }
@@ -44,9 +53,9 @@ export const DatePicker = ({ defaultDay, onChange, dateFormat = 'YYYY-MM-DD', ..
 	const [month, setMonth] = useState(date.getMonth());
 	const [monthDetails, setMonthDetails] = useState(getMonthDetails(year, month));
 	const [selectedDay, setSelectedDay] = useState<number | undefined>(
-		defaultDay ? defaultDay.setHours(0, 0, 0, 0) : undefined,
+		defaultDay ? new Date(defaultDay).setHours(0, 0, 0, 0) : undefined,
 	);
-	const inputRef = createRef<HTMLInputElement>();
+	const inputRef = useRef<HTMLInputElement>(null);
 	const isCurrentDay = (day: { timestamp: number; dayString: string }) => {
 		const tooday = new Date().toLocaleTimeString('vi-VI', { weekday: 'short' });
 		return day.timestamp === todayTimestamp && tooday.includes(day.dayString);
@@ -67,6 +76,7 @@ export const DatePicker = ({ defaultDay, onChange, dateFormat = 'YYYY-MM-DD', ..
 			inputRef.current.value = getDateStringFromTimestamp(day.timestamp);
 			onChange?.(inputRef.current.value);
 		}
+		onClose();
 	};
 
 	const setYearAction = (offset: number) => {
@@ -94,6 +104,7 @@ export const DatePicker = ({ defaultDay, onChange, dateFormat = 'YYYY-MM-DD', ..
 	const curentDayColor = useColorModeValue('blue.200', 'blue.600');
 	const activeBgColor = useColorModeValue('blue.500', 'blue.800');
 	const forcusBorder = useColorModeValue('blue.300', 'blue.700');
+
 	return (
 		<Popover
 			isOpen={isOpen}
@@ -108,15 +119,46 @@ export const DatePicker = ({ defaultDay, onChange, dateFormat = 'YYYY-MM-DD', ..
 			<PopoverTrigger>
 				<InputGroup>
 					<Input
-						defaultValue={defaultDay ? getDateStringFromTimestamp(defaultDay.setHours(0, 0, 0, 0)) : undefined}
+						defaultValue={
+							defaultDay ? getDateStringFromTimestamp(new Date(defaultDay).setHours(0, 0, 0, 0)) : undefined
+						}
 						color={color}
 						ref={inputRef}
 						{...rest}
 						borderWidth={1}
 						borderColor={isOpen ? forcusBorder : borderColor}
+						position="relative"
 					/>
-					<InputRightElement>
-						<ChevronDownIcon w={5} h={5} />
+
+					<InputRightElement p={0} zIndex="inherit">
+						<Icon
+							as={MdClear}
+							onClick={e => {
+								e.stopPropagation();
+								if (inputRef?.current?.value) inputRef.current.value = '';
+								setSelectedDay(undefined);
+							}}
+							w={5}
+							h={5}
+							// m={0.5}
+							position="absolute"
+							right={63}
+							cursor="pointer"
+							display={!selectedDay ? 'none' : 'block'}
+						/>
+						<Flex
+							justifyContent="center"
+							position="absolute"
+							alignItems="center"
+							backgroundColor="whiteAlpha.300"
+							w={53}
+							h="100%"
+							borderBottomEndRadius="16px"
+							borderTopEndRadius="16px"
+							right={0}
+						>
+							<ChevronDownIcon w={5} h={5} m={0.5} />
+						</Flex>
 					</InputRightElement>
 				</InputGroup>
 			</PopoverTrigger>
