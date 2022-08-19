@@ -7,6 +7,11 @@ export interface IOffice {
 	name: string;
 	parentId: string;
 	updatedDate: string;
+	areas: {
+		code: string;
+		id: string;
+		name: string;
+	}[];
 }
 
 export type IOfficeResponse = BaseResponeList<IOffice>;
@@ -16,4 +21,5 @@ export interface IOfficePayload {
 	name: string;
 	parentId: string;
 	id?: string;
+	areaIds: string[];
 }

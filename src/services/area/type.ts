@@ -4,6 +4,7 @@ import { BaseParams, BaseResponeList } from 'services/type';
 export interface IArea {
 	name: string;
 	acreage: string;
+	areaId: string;
 	location: string;
 	contactPhone: string;
 	contactEmail: string;
@@ -49,6 +50,7 @@ export interface IAreaPayload {
 	contactEmail: string;
 	contactPhone: string;
 	location: string;
+	areaId: string;
 	mapLink?: string;
 	name: string;
 	id?: string;

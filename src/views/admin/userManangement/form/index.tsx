@@ -11,7 +11,6 @@ import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { useHistory } from 'react-router-dom';
-import { getArea } from 'services/area';
 import { getOffice } from 'services/office';
 import { Gender, gender } from 'services/resident/type';
 import { getRole } from 'services/role';
@@ -24,12 +23,10 @@ const validationSchema = Yup.object({
 	fullName: Yup.string().required('Vui lòng nhập tên họ tên'),
 	organizationId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn đơn vị') }),
 	roleId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn vai trò') }),
-	areaId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn phân khu') }),
 });
 
-interface DataForm extends Omit<IUserPayload, 'gender' | 'areaId' | 'organizationId' | 'roleId'> {
+interface DataForm extends Omit<IUserPayload, 'gender' | 'organizationId' | 'roleId'> {
 	gender: Option;
-	areaId: Option;
 	organizationId: Option;
 	roleId: Option;
 }
@@ -38,20 +35,13 @@ const UserForm: React.FC = () => {
 	const { changeAction, id, action } = useActionPage();
 	const { toast } = useToastInstance();
 
-	const [keywordArea, setKeywordArea] = useState('');
-	const keywordAreaDebound = useDebounce(keywordArea);
-
 	const [keywordOffice, setKeywordOffice] = useState('');
 	const keywordOfficeDebound = useDebounce(keywordOffice);
 
 	const [keywordRole, setKeywordRole] = useState('');
 	const keywordRoleDebound = useDebounce(keywordRole);
 
-	const { data: dataArea, isFetched: isFecthedArea } = useQuery(['listArea', keywordAreaDebound], () =>
-		getArea({ name: keywordAreaDebound }),
-	);
-
-	const { data: dataOffice, isFetched: isFecthedOffice } = useQuery(['listOffice', keywordAreaDebound], () =>
+	const { data: dataOffice, isFetched: isFecthedOffice } = useQuery(['listOffice', keywordOfficeDebound], () =>
 		getOffice(keywordOfficeDebound),
 	);
 
@@ -64,7 +54,7 @@ const UserForm: React.FC = () => {
 		isFetched,
 		isError,
 	} = useQuery(['detail', id], () => getUserById(id || ''), {
-		enabled: !!id && (isFecthedArea || isFecthedOffice || isFecthedRole),
+		enabled: !!id && (isFecthedOffice || isFecthedRole),
 	});
 
 	const history = useHistory();
@@ -94,7 +84,6 @@ const UserForm: React.FC = () => {
 	const onSubmit = (data: DataForm, reset: () => void) => {
 		const prepareData = {
 			...data,
-			areaId: data.areaId.value as string,
 			organizationId: data.organizationId.value as string,
 			roleId: data.roleId.value as string,
 			gender: data.gender.value as Gender,
@@ -108,7 +97,6 @@ const UserForm: React.FC = () => {
 
 	const defaultData = {
 		...detailData?.data,
-		areaId: dataArea?.items.map(i => ({ label: i.name, value: i.id })).find(i => i.value === detailData?.data?.areaId),
 		organizationId: dataOffice?.items
 			.map(i => ({ label: i.name, value: i.id }))
 			.find(i => i.value === detailData?.data?.organizationId),
@@ -157,14 +145,7 @@ const UserForm: React.FC = () => {
 							name="phoneNumber"
 							variant="admin"
 						/>
-						<PullDowndHookForm
-							label="Phân khu quản lý"
-							isRequired
-							isDisabled={isDisabled}
-							name="areaId"
-							options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
-							onInputChange={setKeywordArea}
-						/>
+						<TextFieldHookForm isDisabled={isDisabled} label="Địa chỉ" name="addrress" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -196,29 +177,6 @@ const UserForm: React.FC = () => {
 							onInputChange={setKeywordRole}
 						/>
 					</Stack>
-					<Stack
-						justify="start"
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-						maxW={{ base: '100%', md: '50%' }}
-					>
-						<TextFieldHookForm isDisabled={isDisabled} label="Địa chỉ" name="addrress" variant="admin" />
-					</Stack>
-					{/* <HStack pb={3} pr={1.5} w={{ sm: '100%', md: '50%' }}>
-						<PullDowndHookForm
-							label="Trạng thái hoạt động"
-							name="state"
-							options={[
-								{
-									label: 'a',
-									value: '1',
-								},
-							]}
-							isMulti
-							isSearchable={false}
-						/>
-					</HStack> */}
 					<HStack pb={3} justifyContent="flex-end">
 						{action === 'detail' && (
 							<Button type="button" onClick={() => changeAction('edit', id || '')} variant="brand">

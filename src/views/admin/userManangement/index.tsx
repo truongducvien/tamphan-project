@@ -42,10 +42,7 @@ const UserManagement: React.FC = () => {
 		{ key: 'phoneNumber', label: 'Sô điện thoại' },
 		{ key: 'roleId', label: 'Vai trò người dùng' },
 		{ key: 'organizationName', label: 'Đơn vị' },
-		{
-			key: 'areaName',
-			label: 'Phân khu',
-		},
+
 		// { key: 'status', label: 'Trạng thái' },
 	];
 

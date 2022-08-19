@@ -104,6 +104,7 @@ export const DatePicker = ({ defaultDay, onChange, dateFormat = 'YYYY-MM-DD', ..
 	const curentDayColor = useColorModeValue('blue.200', 'blue.600');
 	const activeBgColor = useColorModeValue('blue.500', 'blue.800');
 	const forcusBorder = useColorModeValue('blue.300', 'blue.700');
+	const bg = useColorModeValue('gray.100', 'whiteAlpha.300');
 
 	return (
 		<Popover
@@ -150,7 +151,7 @@ export const DatePicker = ({ defaultDay, onChange, dateFormat = 'YYYY-MM-DD', ..
 							justifyContent="center"
 							position="absolute"
 							alignItems="center"
-							backgroundColor="whiteAlpha.300"
+							backgroundColor={bg}
 							w={53}
 							h="100%"
 							borderBottomEndRadius="16px"

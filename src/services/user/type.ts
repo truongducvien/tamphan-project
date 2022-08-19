@@ -25,7 +25,6 @@ export type IUserResponse = BaseResponeList<IUser>;
 
 export interface IUserPayload {
 	address: string;
-	areaId: string;
 	dateOfBirth: string;
 	email: string;
 	fullName: string;
