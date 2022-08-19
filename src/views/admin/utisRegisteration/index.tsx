@@ -15,7 +15,13 @@ import { MdResetTv } from 'react-icons/md';
 import { getArea } from 'services/area';
 import { getUtilsGroup } from 'services/utils/group';
 import { getUtilsRe } from 'services/utilsRegisteration';
-import { IUtilsRe, IUtilsReSearchForm, IUtilsReSearchPayload } from 'services/utilsRegisteration/type';
+import {
+	IUtilsRe,
+	IUtilsReSearchForm,
+	IUtilsReSearchPayload,
+	paymentMethods,
+	statusUtilsRe,
+} from 'services/utilsRegisteration/type';
 import { PermistionAction } from 'variables/permission';
 
 const UtilsReManagement: React.FC = () => {
@@ -49,9 +55,13 @@ const UtilsReManagement: React.FC = () => {
 		},
 		{ key: 'quantityOfPerson', label: 'Số lượng' },
 		{ key: 'depositAmount', label: 'Số tiền đặt cọc' },
-		{ key: 'status', label: 'Trạng thái' },
+		{ key: 'status', label: 'Trạng thái', cell: ({ status }) => statusUtilsRe.find(i => i.value === status)?.label },
 		{ key: 'note', label: 'Mô tả' },
-		{ key: 'paymentMethod', label: 'Phhương thức thanh toán' },
+		{
+			key: 'paymentMethod',
+			label: 'Phhương thức thanh toán',
+			cell: ({ paymentMethod }) => paymentMethods.find(i => i.value === paymentMethod)?.label,
+		},
 	];
 
 	const pageInfo = {

@@ -12,7 +12,7 @@ import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useHistory } from 'react-router-dom';
 import { confirmUtilsReById, getUtilsReById } from 'services/utilsRegisteration';
-import { PaymentMethod, paymentMethods } from 'services/utilsRegisteration/type';
+import { PaymentMethod, paymentMethods, statusUtilsRe } from 'services/utilsRegisteration/type';
 
 const UtilsReForm: React.FC = () => {
 	const history = useHistory();
@@ -44,6 +44,7 @@ const UtilsReForm: React.FC = () => {
 		...data?.data,
 		bookingTimeSlot: `${data?.data?.bookingTimeSlot.start || ''}-${data?.data?.bookingTimeSlot.end || ''}`,
 		paymentMethod: paymentMethods.find(i => i.value === data?.data?.paymentMethod)?.label,
+		status: statusUtilsRe.find(i => i.value === data?.data?.status)?.label,
 	};
 
 	if (!isFetched) return null;
