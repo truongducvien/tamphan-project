@@ -54,7 +54,7 @@ const UtilitiesForm: React.FC = () => {
 	const keywordAreaDebound = useDebounce(keywordArea, 500);
 
 	const { data: dataGroup, isFetchedAfterMount: fetchedGroup } = useQuery(['listDataGroup', keywordGroupDebound], () =>
-		getUtilsGroup(keywordGroupDebound),
+		getUtilsGroup({ name: keywordGroupDebound }),
 	);
 	const { data: dataArea, isFetchedAfterMount: fetchedArea } = useQuery(['listDataArea', keywordAreaDebound], () =>
 		getArea({ name: keywordAreaDebound }),

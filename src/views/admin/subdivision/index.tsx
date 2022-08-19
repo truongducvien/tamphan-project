@@ -20,7 +20,7 @@ const SubdivisionManagement: React.FC = () => {
 	const [keyword, setKeyword] = useState('');
 	const { data, isLoading } = useQuery(['list', keyword, currentPage, currentPageSize], () =>
 		getArea({
-			page: currentPage,
+			page: currentPage - 1,
 			size: currentPageSize,
 			name: keyword,
 		}),
@@ -39,8 +39,8 @@ const SubdivisionManagement: React.FC = () => {
 
 	const pageInfo = {
 		total: data?.totalItems,
-		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
-		hasPreviousPage: data ? data?.pageNum < 0 : false,
+		hasNextPage: data ? currentPage < data?.totalPages : false,
+		hasPreviousPage: data ? currentPage > 0 : false,
 	};
 
 	return (

@@ -15,10 +15,14 @@ import { IUtilsGroup } from 'services/utils/group/type';
 import { PermistionAction } from 'variables/permission';
 
 const TypeUtilitiesManagement: React.FC = () => {
+	const [currentPage] = useState(1);
+	const [currentPageSize] = useState<number>(10);
 	const keywordRef = useRef<HTMLInputElement>(null);
 	const { toast } = useToastInstance();
 	const [keyword, setKeyword] = useState('');
-	const { data, isLoading, refetch } = useQuery(['listUtilsGroup', keyword], () => getUtilsGroup(keyword));
+	const { data, isLoading, refetch } = useQuery(['listUtilsGroup', keyword, currentPage, currentPageSize], () =>
+		getUtilsGroup({ name: keyword, page: currentPage - 1, size: currentPageSize }),
+	);
 	const { changeAction } = useActionPage();
 
 	const mutationDelete = useMutation(deleteUtilsGroup);
@@ -59,6 +63,12 @@ const TypeUtilitiesManagement: React.FC = () => {
 		{ key: 'state', label: 'Trạng thái hoạt động' },
 		{ key: 'updatedDate', label: 'Ngày cập nhật' },
 	];
+
+	// const pageInfo = {
+	// 	total: data?.totalItems,
+	// 	hasNextPage: data ? currentPage < data?.totalPages : false,
+	// 	hasPreviousPage: data ? currentPage > 0 : false,
+	// };
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -115,6 +125,15 @@ const TypeUtilitiesManagement: React.FC = () => {
 					columns={COLUMNS}
 					data={data?.items || []}
 					action={[PermistionAction.UPDATE, PermistionAction.DELETE, PermistionAction.VIEW]}
+					// pagination={{
+					// 	total: Number(pageInfo?.total || 0),
+					// 	pageSize: currentPageSize,
+					// 	value: currentPage,
+					// 	hasNextPage: pageInfo?.hasNextPage,
+					// 	hasPreviousPage: pageInfo?.hasPreviousPage,
+					// 	onPageChange: page => setCurrentPage(page),
+					// 	onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
+					// }}
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises
 					onClickDelete={row => onDELETE(row)}
 					onClickEdit={row => onEdit(row.id)}

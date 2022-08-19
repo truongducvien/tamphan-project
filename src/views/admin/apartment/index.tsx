@@ -36,7 +36,7 @@ const ApartMentManagement: React.FC = () => {
 
 	const { data: dataArea } = useQuery(['listArea', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
 	const { data, isLoading } = useQuery(['listApartment', param, currentPage, currentPageSize], () =>
-		getApartment({ ...param, page: currentPage, size: currentPageSize }),
+		getApartment({ ...param, page: currentPage - 1, size: currentPageSize }),
 	);
 
 	const COLUMNS: Array<IColumn<IApartment>> = [
@@ -55,8 +55,8 @@ const ApartMentManagement: React.FC = () => {
 
 	const pageInfo = {
 		total: data?.totalItems,
-		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
-		hasPreviousPage: data ? data?.pageNum < 0 : false,
+		hasNextPage: data ? currentPage < data?.totalPages : false,
+		hasPreviousPage: data ? currentPage > 0 : false,
 	};
 
 	const onSearch = (payload: SearchForm) => {

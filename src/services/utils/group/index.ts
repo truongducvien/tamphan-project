@@ -1,13 +1,11 @@
 import http from 'services/http';
 import { BaseResponeAction, BaseResponeDetail } from 'services/type';
 
-import { IUtilsGroup, IUtilsGroupPayload, IUtilsGroupResponse } from './type';
+import { IUtilsGroup, IUtilsGroupParams, IUtilsGroupPayload, IUtilsGroupResponse } from './type';
 
-export const getUtilsGroup = async (name?: string) => {
+export const getUtilsGroup = async (payload: IUtilsGroupParams) => {
 	const { data } = await http.get<IUtilsGroupResponse>('/v1/facility-groups/search', {
-		params: {
-			name,
-		},
+		params: payload,
 	});
 	return data?.data || null;
 };

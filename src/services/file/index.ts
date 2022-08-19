@@ -11,7 +11,7 @@ export const uploadFile = async (files: File[] | FileList, service: string) => {
 };
 
 export const loadImage = async (fileName: string) => {
-	const { data } = await http.get<Blob>(`/v1/files/download/private/${fileName}`, {
+	const { data } = await http.get<Blob>(`/v1/files/download/${fileName}`, {
 		responseType: 'blob',
 	});
 	return new Promise<string>((resolve, reject) => {

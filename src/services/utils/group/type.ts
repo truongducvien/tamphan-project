@@ -1,4 +1,4 @@
-import { BaseResponeList } from 'services/type';
+import { BaseParams, BaseResponeList } from 'services/type';
 
 export interface IUtilsGroup {
 	description: string;
@@ -17,4 +17,8 @@ export interface IUtilsGroupPayload {
 	name: string;
 	state: string | number;
 	id?: string;
+}
+
+export interface IUtilsGroupParams extends BaseParams {
+	name?: string;
 }

@@ -29,12 +29,12 @@ const UtilsReManagement: React.FC = () => {
 	const keywordAreaDebound = useDebounce(keywordArea);
 
 	const { data, isLoading } = useQuery(['listUtilsRe', param, currentPage, currentPageSize], () =>
-		getUtilsRe({ ...param, page: currentPage, size: currentPageSize }),
+		getUtilsRe({ ...param, page: currentPage - 1, size: currentPageSize }),
 	);
 
 	const { data: dataArea } = useQuery(['listArea', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
 
-	const { data: dataGroup } = useQuery(['listGroup', keywordDebound], () => getUtilsGroup(keywordDebound));
+	const { data: dataGroup } = useQuery(['listGroup', keywordDebound], () => getUtilsGroup({ name: keywordDebound }));
 
 	const COLUMNS: Array<IColumn<IUtilsRe>> = [
 		{ key: 'facilityName', label: 'Tên tiện ích' },
@@ -56,8 +56,8 @@ const UtilsReManagement: React.FC = () => {
 
 	const pageInfo = {
 		total: data?.totalItems,
-		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
-		hasPreviousPage: data ? data?.pageNum < 0 : false,
+		hasNextPage: data ? currentPage < data?.totalPages : false,
+		hasPreviousPage: data ? currentPage > 0 : false,
 	};
 
 	const onSearch = (dt: IUtilsReSearchForm) => {

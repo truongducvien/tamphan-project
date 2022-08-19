@@ -57,9 +57,11 @@ const UtilitiesManagement: React.FC = () => {
 	const keywordAreaDebound = useDebounce(keywordArea, 500);
 	const [selectedArea, setArea] = useState<Option>();
 
-	const { data: dataGroup } = useQuery(['listGroup', keywordGroupDebound], () => getUtilsGroup(keywordGroupDebound));
+	const { data: dataGroup } = useQuery(['listGroup', keywordGroupDebound], () =>
+		getUtilsGroup({ name: keywordGroupDebound }),
+	);
 	const { data, isLoading, refetch } = useQuery(['listUtils', param, currentPage, currentPageSize], () =>
-		getUtils({ ...param, page: currentPage, size: currentPageSize }),
+		getUtils({ ...param, page: currentPage - 1, size: currentPageSize }),
 	);
 	const { data: dataArea } = useQuery(['listArea', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
 	const mutationDelete = useMutation(deleteUtils);
@@ -90,8 +92,8 @@ const UtilitiesManagement: React.FC = () => {
 
 	const pageInfo = {
 		total: data?.totalItems,
-		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
-		hasPreviousPage: data ? data?.pageNum < 0 : false,
+		hasNextPage: data ? currentPage < data?.totalPages : false,
+		hasPreviousPage: data ? currentPage > 0 : false,
 	};
 
 	const { changeAction } = useActionPage();

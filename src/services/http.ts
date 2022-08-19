@@ -18,6 +18,7 @@ const createHTTP = (httpConfig: AxiosRequestConfig) => {
 			const authConfig = {
 				authorization: `Bearer ${accessToken || ''}`,
 			};
+
 			return {
 				...config,
 				...(config.headers.authorization !== false

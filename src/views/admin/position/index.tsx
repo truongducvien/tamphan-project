@@ -23,7 +23,7 @@ const PositionManagement: React.FC = () => {
 	const [params, setParams] = useState<DaraForm>({});
 
 	const { data, isLoading } = useQuery(['listRole', params, currentPage, currentPageSize], () =>
-		getRole({ page: currentPage, size: currentPageSize, ...params }),
+		getRole({ page: currentPage - 1, size: currentPageSize, ...params }),
 	);
 
 	const COLUMNS: Array<IColumn<IRole>> = [
@@ -40,8 +40,8 @@ const PositionManagement: React.FC = () => {
 
 	const pageInfo = {
 		total: data?.totalItems,
-		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
-		hasPreviousPage: data ? data?.pageNum < 0 : false,
+		hasNextPage: data ? currentPage < data?.totalPages : false,
+		hasPreviousPage: data ? currentPage > 0 : false,
 	};
 
 	const { changeAction } = useActionPage();

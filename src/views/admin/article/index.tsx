@@ -23,7 +23,7 @@ const ArticleManagement: React.FC = () => {
 	const { data, isLoading, refetch } = useQuery(['listArticle', keyword, currentPage, currentPageSize], () =>
 		getArticle({
 			keyword,
-			page: currentPage,
+			page: currentPage - 1,
 			size: currentPageSize,
 		}),
 	);
@@ -65,8 +65,8 @@ const ArticleManagement: React.FC = () => {
 
 	const pageInfo = {
 		total: data?.totalItems,
-		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
-		hasPreviousPage: data ? data?.pageNum < 0 : false,
+		hasNextPage: data ? currentPage < data?.totalPages : false,
+		hasPreviousPage: data ? currentPage > 0 : false,
 	};
 
 	const { changeAction } = useActionPage();

@@ -33,7 +33,7 @@ const UserManagement: React.FC = () => {
 	const { data: dataOffice } = useQuery(['list', deboundKeyword], () => getOffice(deboundKeyword));
 
 	const { data, isLoading, isError } = useQuery(['users', currentPage, currentPageSize, params], () =>
-		getUser({ page: currentPage, size: currentPageSize, ...params }),
+		getUser({ page: currentPage - 1, size: currentPageSize, ...params }),
 	);
 
 	const COLUMNS: Array<IColumn<IUser>> = [
@@ -51,8 +51,8 @@ const UserManagement: React.FC = () => {
 
 	const pageInfo = {
 		total: data?.totalItems,
-		hasNextPage: data ? data?.pageNum < data?.totalPages : false,
-		hasPreviousPage: data ? data?.pageNum < 0 : false,
+		hasNextPage: data ? currentPage < data?.totalPages : false,
+		hasPreviousPage: data ? currentPage > 0 : false,
 	};
 	const handleFillter = (payload: { fullName: string; organizationId: Option; username: string }) => {
 		setParams({ ...payload, organizationId: payload.organizationId.value as string });
