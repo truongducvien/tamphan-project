@@ -56,7 +56,7 @@ const ResdidentCardManagement: React.FC = () => {
 	const COLUMNS: Array<IColumn<IResidentCard>> = [
 		{ key: 'cardNumber', label: 'Mã số thẻ' },
 		{ key: 'property', label: 'Mã căn hộ', cell: ({ property }) => property?.code },
-		{ key: 'state', label: 'Trạng thái thẻ', cell: ({ state }) => statusOption2.find(i => i.value === state)?.label },
+		{ key: 'state', label: 'Trạng thái thẻ', tag: ({ state }) => statusOption2.find(i => i.value === state) },
 		{ key: 'updatedDate', label: 'Ngày cập nhật' },
 		{ key: 'modifyBy', label: 'Người cập nhật' },
 	];

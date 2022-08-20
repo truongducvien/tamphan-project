@@ -17,6 +17,7 @@ import { deleteUtils, getUtils } from 'services/utils';
 import { getUtilsGroup } from 'services/utils/group';
 import { IUtils } from 'services/utils/type';
 import { PermistionAction } from 'variables/permission';
+import { statusOption2 } from 'variables/status';
 
 const COLUMNS: Array<IColumn<IUtils>> = [
 	{ key: 'name', label: 'Tên tiện ích' },
@@ -36,7 +37,7 @@ const COLUMNS: Array<IColumn<IUtils>> = [
 		label: 'Cho phép đặt chỗ qua App',
 		cell: ({ isAllowBookViaApp }) => (isAllowBookViaApp ? 'Có' : 'Không'),
 	},
-	{ key: 'state', label: 'Trạng thái' },
+	{ key: 'state', label: 'Trạng thái', tag: ({ state }) => statusOption2.find(i => i.value === state) },
 ];
 
 const UtilitiesManagement: React.FC = () => {

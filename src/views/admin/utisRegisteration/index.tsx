@@ -55,12 +55,12 @@ const UtilsReManagement: React.FC = () => {
 		},
 		{ key: 'quantityOfPerson', label: 'Số lượng' },
 		{ key: 'depositAmount', label: 'Số tiền đặt cọc' },
-		{ key: 'status', label: 'Trạng thái', cell: ({ status }) => statusUtilsRe.find(i => i.value === status)?.label },
+		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => statusUtilsRe.find(i => i.value === status) },
 		{ key: 'note', label: 'Mô tả' },
 		{
 			key: 'paymentMethod',
 			label: 'Phhương thức thanh toán',
-			cell: ({ paymentMethod }) => paymentMethods.find(i => i.value === paymentMethod)?.label,
+			tag: ({ paymentMethod }) => paymentMethods.find(i => i.value === paymentMethod),
 		},
 	];
 

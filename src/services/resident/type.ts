@@ -11,10 +11,12 @@ export const residentType: Array<Option> = [
 	{
 		label: 'Chủ sở hữu',
 		value: ResidentType.OWNER,
+		tag: 'cyan',
 	},
 	{
 		label: 'Cư dân',
 		value: ResidentType.RESIDENT,
+		tag: 'orange',
 	},
 ];
 

@@ -43,8 +43,8 @@ const ArticleManagement: React.FC = () => {
 				</>
 			),
 		},
-		{ key: 'type', label: 'Chuyên mục', cell: ({ type }) => typeArticles.find(i => i.value === type)?.label },
-		{ key: 'status', label: 'Trạng thái', cell: ({ status }) => statusArticle.find(i => i.value === status)?.label },
+		{ key: 'type', label: 'Chuyên mục', tag: ({ type }) => typeArticles.find(i => i.value === type) },
+		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => statusArticle.find(i => i.value === status) },
 		{ key: 'createdAt', label: 'Ngày tạo' },
 	];
 

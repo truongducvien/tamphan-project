@@ -31,7 +31,7 @@ const PositionManagement: React.FC = () => {
 		{ key: 'code', label: 'Mã chức vụ' },
 		{ key: 'createdDate', label: 'Ngày tạo' },
 		{ key: 'updatedDate', label: 'Ngày cập nhật' },
-		{ key: 'state', label: 'Trạng thái', cell: ({ state }) => statusOption2.find(i => i.value === state)?.label },
+		{ key: 'state', label: 'Trạng thái', tag: ({ state }) => statusOption2.find(i => i.value === state) },
 	];
 
 	const onSearch = (payload: DaraForm) => {

@@ -13,22 +13,27 @@ export const statusApartment: Array<Option> = [
 	{
 		label: 'Đang thi công',
 		value: StatusApartment.UNDER_CONSTRUCTION,
+		tag: 'gray',
 	},
 	{
-		label: 'Bàn giao',
+		label: 'Đã bàn giao',
 		value: StatusApartment.HAND_OVER,
+		tag: 'green',
 	},
 	{
 		label: 'Chuẩn bị bàn giao',
 		value: StatusApartment.PREPARING_HANDOVER,
+		tag: 'yellow',
 	},
 	{
 		label: 'Chờ bàn giao',
 		value: StatusApartment.WAITING_HANDOVER,
+		tag: 'orange',
 	},
 	{
 		label: 'Đang sử dụng',
 		value: StatusApartment.IN_USE,
+		tag: 'blue',
 	},
 ];
 

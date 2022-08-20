@@ -12,7 +12,7 @@ import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { MdImportExport, MdLibraryAdd } from 'react-icons/md';
 import { getApartment } from 'services/apartment';
-import { IApartment, IApartmentParams } from 'services/apartment/type';
+import { IApartment, IApartmentParams, statusApartment } from 'services/apartment/type';
 import { getArea } from 'services/area';
 import { PermistionAction } from 'variables/permission';
 import * as Yup from 'yup';
@@ -45,7 +45,7 @@ const ApartMentManagement: React.FC = () => {
 		{ key: 'type', label: 'Loại căn hộ' },
 		{ key: 'floorNumber', label: 'Tầng' },
 		{ key: 'block', label: 'Khối' },
-		{ key: 'status', label: 'Trạng thái' },
+		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => statusApartment.find(i => i.value === status) },
 		{ key: 'acreage', label: 'Diện tích' },
 		{ key: 'numberOfBedRoom', label: 'Sô phòng ngủ' },
 		{ key: 'numberOfBathRoom', label: 'Số phòng tắm' },

@@ -58,7 +58,7 @@ const ResdidentCardReqManagement: React.FC = () => {
 	);
 
 	const COLUMNS: Array<IColumn<IResidentCardReq>> = [
-		{ key: 'type', label: 'Loại yêu cầu', cell: ({ type }) => typeCardReq.find(i => i.value === type)?.label },
+		{ key: 'type', label: 'Loại yêu cầu', tag: ({ type }) => typeCardReq.find(i => i.value === type) },
 		{ key: 'propertyCode', label: 'Mã căn hộ' },
 		{ key: 'requesterPhoneNumber', label: 'Mã số thẻ yêu cầu' },
 		{ key: 'requesterName', label: 'Người yêu cầu' },
@@ -67,7 +67,7 @@ const ResdidentCardReqManagement: React.FC = () => {
 		{ key: 'requestedDate', label: 'Ngày yêu cầu' },
 		{ key: 'fee', label: 'Phí cấp thẻ' },
 		{ key: 'newCardNumber', label: 'Mã số thẻ cấp mới' },
-		{ key: 'status', label: 'Trạng thái', cell: ({ status }) => statusCardReq.find(i => i.value === status)?.label },
+		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => statusCardReq.find(i => i.value === status) },
 	];
 
 	const pageInfo = {
@@ -100,6 +100,7 @@ const ResdidentCardReqManagement: React.FC = () => {
 								label="Căn hộ"
 								name="propertyId"
 								options={dataApartment?.items.map(i => ({ label: i.code, value: i.id })) || []}
+								onInputChange={setKeyword}
 							/>
 							<DatePickerdHookForm label="Từ ngày" name="from" />
 							<DatePickerdHookForm label="Đến ngày" name="to" />

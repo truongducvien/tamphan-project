@@ -6,14 +6,16 @@ export enum PaymentMethod {
 	BANK = 'BANK',
 }
 
-export const paymentMethods = [
+export const paymentMethods: Array<Option> = [
 	{
 		label: 'Tiền mặt',
 		value: PaymentMethod.CASH,
+		tag: 'green',
 	},
 	{
 		label: 'Chuyển khoản',
 		value: PaymentMethod.BANK,
+		tag: 'linkedin',
 	},
 ];
 
@@ -24,18 +26,21 @@ export enum StatusUtilsRe {
 	CANCEL = 'CANCEL',
 }
 
-export const statusUtilsRe = [
+export const statusUtilsRe: Array<Option> = [
 	{
 		label: 'Hoàn tất',
 		value: StatusUtilsRe.DONE,
+		tag: 'cyan',
 	},
 	{
 		label: 'Đang đợi',
 		value: StatusUtilsRe.WAITING,
+		tag: 'yellow',
 	},
 	{
 		label: 'Đợi thanh toán',
 		value: StatusUtilsRe.PAYMENT_WAITING,
+		tag: 'orange',
 	},
 ];
 

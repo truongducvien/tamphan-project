@@ -13,6 +13,7 @@ import { MdDelete, MdLibraryAdd } from 'react-icons/md';
 import { deleteUtilsGroup, getUtilsGroup } from 'services/utils/group';
 import { IUtilsGroup } from 'services/utils/group/type';
 import { PermistionAction } from 'variables/permission';
+import { statusOption2 } from 'variables/status';
 
 const TypeUtilitiesManagement: React.FC = () => {
 	const [currentPage] = useState(1);
@@ -60,7 +61,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 				return <LazyImage src={imageLink} />;
 			},
 		},
-		{ key: 'state', label: 'Trạng thái hoạt động' },
+		{ key: 'state', label: 'Trạng thái hoạt động', tag: ({ state }) => statusOption2.find(i => i.value === state) },
 		{ key: 'updatedDate', label: 'Ngày cập nhật' },
 	];
 

@@ -34,12 +34,12 @@ const ResidentManagement: React.FC = () => {
 		{ key: 'identityCreateDate', label: 'Ngày cấp' },
 		{ key: 'identityLocationIssued', label: 'Nới cấp' },
 		{ key: 'propertyName', label: 'Căn hộ' },
-		{ key: 'type', label: 'Vai trò', cell: ({ type }) => residentType.find(i => i.value === type)?.label },
+		{ key: 'type', label: 'Vai trò', tag: ({ type }) => residentType.find(i => i.value === type) },
 		{ key: 'email', label: 'Email' },
 		{ key: 'phoneNumber', label: 'Số điện thoại' },
 		{ key: 'permanentAddress', label: 'Địa chỉ thường trú' },
 		{ key: 'temporaryAddress', label: 'Địa chỉ tạm trú' },
-		{ key: 'state', label: 'Trạng thái', cell: ({ state }) => statusOption2.find(i => i.value === state)?.label },
+		{ key: 'state', label: 'Trạng thái', tag: ({ state }) => statusOption2.find(i => i.value === state) },
 	];
 
 	const [params, setParams] = useState<IResidentParams>();

@@ -15,7 +15,9 @@ import {
 	Box,
 	Center,
 } from '@chakra-ui/react';
+import { BaseOption, Option } from 'components/form/PullDown';
 import Pagination, { PaginationProps } from 'components/pagination';
+import { Tag } from 'components/tag';
 import { FaTrashAlt } from 'react-icons/fa';
 import { MdBorderColor, MdPreview } from 'react-icons/md';
 import { PermistionAction as PermistionActionBase } from 'variables/permission';
@@ -27,6 +29,7 @@ export type IColumn<T> = {
 	key?: keyof T;
 	label: string;
 	cell?: (value: T) => React.ReactNode;
+	tag?: (value: T) => Option | undefined;
 };
 
 type TableProps<T> = {
@@ -89,7 +92,13 @@ const Table = <T,>({
 									</Th>
 								)}
 								{columns.map((column, index) => (
-									<Th fontSize={{ sm: '10px', lg: '12px' }} minW={200} color="gray.400" key={index}>
+									<Th
+										fontSize={{ sm: '10px', lg: '12px' }}
+										minW={200}
+										textAlign={column.tag ? 'center' : 'start'}
+										color="gray.400"
+										key={index}
+									>
 										{column.label}
 									</Th>
 								))}
@@ -132,6 +141,10 @@ const Table = <T,>({
 										>
 											{column.cell && column.key ? (
 												column.cell(row)
+											) : column.tag && column.tag(row) ? (
+												<Center>
+													<Tag colorScheme={column.tag(row)?.tag}>{column.tag(row)?.label}</Tag>
+												</Center>
 											) : (
 												<Text color={textColor} fontSize="sm" fontWeight="700" maxH={200} overflow="scroll">
 													{column.key ? (row[column.key] as unknown as string) : ''}

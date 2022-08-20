@@ -11,10 +11,12 @@ export const notificationWays: Array<Option> = [
 	{
 		label: 'Gửi qua úng dụng',
 		value: NotificationWays.APP_NOTIFICATION,
+		tag: 'purple',
 	},
 	{
 		label: 'Gửi qua mail',
 		value: NotificationWays.EMAIL,
+		tag: 'teal',
 	},
 ];
 
@@ -60,22 +62,27 @@ export const statusArticle: Array<Option> = [
 	{
 		label: 'Bản nháp',
 		value: StatusArticle.DRAFT,
+		tag: 'gray',
 	},
 	{
 		label: 'Chờ duyệt',
 		value: StatusArticle.WAITING_APPROVE,
+		tag: 'yellow',
 	},
 	{
 		label: 'Xuất bản',
 		value: StatusArticle.PUBLISH,
+		tag: 'linkedin',
 	},
 	{
 		label: 'Từ chối',
 		value: StatusArticle.REJECT,
+		tag: 'red',
 	},
 	{
 		label: 'Vô hiệu',
 		value: StatusArticle.CANCEL,
+		tag: 'gray',
 	},
 ];
 
@@ -91,22 +98,27 @@ export const typeArticles: Array<Option> = [
 	{
 		label: 'Ưu đãi',
 		value: TypeArticle.NEWS,
+		tag: 'cyan',
 	},
 	{
 		label: 'Tin tức',
 		value: TypeArticle.PROMOTION,
+		tag: 'pink',
 	},
 	{
 		label: 'Bản tin cư dân',
 		value: TypeArticle.RESIDENT_NEWS,
+		tag: 'orange',
 	},
 	{
 		label: 'Thông báo',
 		value: TypeArticle.NOTIFICATION,
+		tag: 'blue',
 	},
 	{
 		label: 'Sổ tay cư dân',
 		value: TypeArticle.RESIDENT_HANDBOOK,
+		tag: 'purple',
 	},
 ];
 

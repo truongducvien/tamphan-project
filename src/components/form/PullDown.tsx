@@ -6,6 +6,8 @@ import useDerivedProps from 'hooks/useDerivedProps';
 import useEffectWithoutMounted from 'hooks/useEffectWithoutMounted';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
 
+import { Props as TagProps } from '../tag';
+
 export interface PullDownReference {
 	reset: () => void;
 	getSelectedOption: () => Option | undefined;
@@ -23,11 +25,13 @@ type OptionBase = {
 export interface Option {
 	label: string;
 	value: string | number;
+	tag?: TagProps['colorScheme'];
 }
 
 export interface BaseOption<D> {
 	label: string;
 	value: D;
+	tag?: TagProps['colorScheme'];
 }
 
 type TagVariant = 'subtle' | 'solid' | 'outline';
