@@ -7,15 +7,15 @@ import { Box, BoxProps, Flex, FormLabel, Switch, Text, useColorModeValue } from 
 export interface Props extends BoxProps {
 	id: string;
 	label: string;
-	isChecked: boolean;
-	onChange(): void;
-	desc: string;
-	textWidth: string;
-	reversed: string;
-	fontSize: string;
+	isChecked?: boolean;
+	onChange?(): void;
+	desc?: string;
+	textWidth?: string;
+	reversed?: string;
+	fontSize?: string;
 }
 
-const Default: React.FC<Props> = ({ id, label, isChecked, onChange, desc, textWidth, reversed, fontSize, ...rest }) => {
+const Swich: React.FC<Props> = ({ id, label, isChecked, onChange, desc, textWidth, reversed, fontSize, ...rest }) => {
 	const textColorPrimary = useColorModeValue('secondaryGray.900', 'white');
 	return (
 		<Box w="100%" fontWeight="500" {...rest}>
@@ -77,4 +77,4 @@ const Default: React.FC<Props> = ({ id, label, isChecked, onChange, desc, textWi
 	);
 };
 
-export default Default;
+export default Swich;

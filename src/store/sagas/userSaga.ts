@@ -1,5 +1,11 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { clearAccessToken, saveAccessToken, saveSessionAccessToken } from 'helpers/storage';
+import {
+	clearAccessToken,
+	loadAccessToken,
+	loadSessionAccessToken,
+	saveAccessToken,
+	saveSessionAccessToken,
+} from 'helpers/storage';
 import { put, call, takeEvery, all, fork, StrictEffect, cancel } from 'redux-saga/effects';
 import { BaseResponeDetail } from 'services/type';
 import { getByAccessToken, login, LoginResponse } from 'services/user';
@@ -33,6 +39,8 @@ function* watchOnRequesstLogin() {
 
 export function* requestGetUserInfo(): Generator<StrictEffect, void, BaseResponeDetail<IUser>> {
 	try {
+		const ascessToken = loadAccessToken() || loadSessionAccessToken();
+		if (!ascessToken) throw new Error("don't have ascessToken");
 		const response = yield call(getByAccessToken);
 		if (!response.data) {
 			throw new Error('Get init failure');

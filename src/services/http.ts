@@ -1,5 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { loadAccessToken, loadSessionAccessToken } from 'helpers/storage';
+import { store } from 'store';
+import { logout } from 'store/actionCreators';
 
 const createHTTP = (httpConfig: AxiosRequestConfig) => {
 	const httpInstance = axios.create({
@@ -38,6 +40,10 @@ const createHTTP = (httpConfig: AxiosRequestConfig) => {
 			return response;
 		},
 		(error: AxiosError) => {
+			if (error.response?.status === 401) {
+				store.dispatch(logout());
+			}
+
 			return Promise.reject(error);
 		},
 	);

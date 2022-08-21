@@ -178,6 +178,7 @@ const UploadImage = React.forwardRef<UploadImageRef, Props>(({ isMulti, isDisabl
 	useDidMount(() => {
 		const loadImg = async () => {
 			if (!defaultValue) return [];
+			fileRef.current = defaultValue || [];
 			const data: string[] = [];
 			for await (const f of defaultValue) {
 				await loadImage(f)
@@ -191,7 +192,6 @@ const UploadImage = React.forwardRef<UploadImageRef, Props>(({ isMulti, isDisabl
 		};
 		loadImg().then(d => {
 			setFiles(d);
-			fileRef.current = defaultValue || [];
 		});
 	});
 
@@ -205,7 +205,7 @@ const UploadImage = React.forwardRef<UploadImageRef, Props>(({ isMulti, isDisabl
 				reader.readAsDataURL(prefile);
 				setFiles(prev => (isMulti ? [...prev, URL.createObjectURL(prefile)] : [URL.createObjectURL(prefile)]));
 			}
-			fileRef.current = data.items.map(i => i.fileId);
+			fileRef.current = isMulti ? [...fileRef.current, ...data.items.map(i => i.link)] : data.items.map(i => i.link);
 		} catch (error) {
 			toast({
 				status: 'error',
@@ -281,7 +281,7 @@ const UploadImage = React.forwardRef<UploadImageRef, Props>(({ isMulti, isDisabl
 										setFiles([]);
 										fileRef.current = [];
 									}}
-									zIndex={10}
+									zIndex={1}
 								>
 									<CloseButton />
 								</Box>

@@ -1,15 +1,23 @@
 import React, { useRef } from 'react';
 
-import { Checkbox, CheckboxProps, FormControl, FormErrorMessage } from '@chakra-ui/react';
+import {
+	Checkbox,
+	CheckboxProps,
+	FormControl,
+	FormErrorMessage,
+	FormLabel,
+	Switch,
+	SwitchProps,
+} from '@chakra-ui/react';
 import useEffectWithoutMounted from 'hooks/useEffectWithoutMounted';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
 
-export interface CheckboxHookFormProps extends CheckboxProps {
+export interface SwichHookFormProp extends SwitchProps {
 	name: string;
 	label: string;
 }
 
-export const CheckboxHookForm: React.FC<CheckboxHookFormProps> = ({ name, label, ...innerProps }) => {
+export const SwichHookForm: React.FC<SwichHookFormProp> = ({ name, label, ...innerProps }) => {
 	const {
 		control,
 		formState: { errors, isSubmitted, isDirty },
@@ -28,9 +36,14 @@ export const CheckboxHookForm: React.FC<CheckboxHookFormProps> = ({ name, label,
 			render={({ field: { ref, ...innerField } }) => {
 				return (
 					<FormControl isRequired={innerProps.isRequired} isInvalid={!!errors?.[name]}>
-						<Checkbox borderColor={errors?.[name] ? '#FC8181' : undefined} {...innerProps} {...innerField} ref={refs}>
-							{label}
-						</Checkbox>
+						<FormLabel htmlFor={name}>{label}</FormLabel>
+						<Switch
+							borderColor={errors?.[name] ? '#FC8181' : undefined}
+							{...innerProps}
+							{...innerField}
+							isChecked={{ ...innerField }.value as unknown as boolean}
+							ref={refs}
+						/>
 						<FormErrorMessage>
 							{(errors?.[name] as unknown as FieldError)?.message as unknown as string}
 						</FormErrorMessage>

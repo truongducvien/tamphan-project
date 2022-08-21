@@ -4,8 +4,8 @@ import { Box, Button, Flex, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
-import { CheckboxHookForm } from 'components/form/Checkbox';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { SwichHookForm } from 'components/form/SwichHookForm';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
@@ -239,7 +239,8 @@ const ResidentForm: React.FC = () => {
 						<TextFieldHookForm isRequired label="Ngày cập nhật" isDisabled name="createAt" variant="admin" />
 					</Stack>
 					<Box>
-						<CheckboxHookForm label="Cho phép sử dụng NOVAID" name="useNovaId" variant="admin" />
+						{/* <Swich label="Cho phép sử dụng NOVAID" id="useNovaId" /> */}
+						<SwichHookForm label="Cho phép sử dụng NOVAID" name="useNovaId" variant="admin" />
 					</Box>
 					<HStack pb={3} justifyContent="flex-end">
 						{action === 'detail' && (

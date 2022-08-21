@@ -1,8 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { FormControl, FormErrorMessage, FormLabel, Text, useColorModeValue } from '@chakra-ui/react';
 import { Select, GroupBase, SelectInstance } from 'chakra-react-select';
-import useDerivedProps from 'hooks/useDerivedProps';
 import useEffectWithoutMounted from 'hooks/useEffectWithoutMounted';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
 
@@ -56,14 +55,10 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 	label,
 	...innerProps
 }) => {
-	const dropdownRef = useRef<PullDownReference | null>(null);
 	const refs = useRef<SelectInstance<Option, boolean, GroupBase<Option>>>(null);
 	const {
 		control,
 		formState: { errors, isSubmitted, isDirty },
-		getValues,
-		clearErrors,
-		setValue,
 	} = useFormContext();
 
 	useEffectWithoutMounted(() => {
@@ -72,23 +67,6 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isDirty]);
-
-	useEffect(() => {
-		if (defaultValue) setValue(name, defaultValue);
-		else setValue(name, getValues(name));
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [defaultValue]);
-
-	useDerivedProps((prevValue, currentValue) => {
-		if (typeof currentValue === 'undefined' && prevValue !== null && currentValue !== prevValue) {
-			setTimeout(() => {
-				dropdownRef.current?.reset();
-			}, 0);
-			setTimeout(() => {
-				clearErrors(name);
-			}, 0);
-		}
-	}, getValues(name));
 
 	const bg = useColorModeValue('white', 'navy.900');
 	const border = '1px';

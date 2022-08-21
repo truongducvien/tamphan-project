@@ -1,12 +1,12 @@
-import { useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { Box, Button, FormControl, FormLabel, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
-import { CheckboxHookForm } from 'components/form/Checkbox';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { SwichHookForm } from 'components/form/SwichHookForm';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
@@ -266,7 +266,7 @@ const UtilitiesForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<CheckboxHookForm
+						<SwichHookForm
 							isDisabled={action === 'detail'}
 							label="Cho phép đặt chỗ qua App"
 							variant="admin"
