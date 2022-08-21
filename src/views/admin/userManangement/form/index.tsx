@@ -141,7 +141,7 @@ const UserForm: React.FC = () => {
 						<TextFieldHookForm
 							isDisabled={isDisabled}
 							isRequired
-							label="Sô điện thoại"
+							label="Số điện thoại"
 							name="phoneNumber"
 							variant="admin"
 						/>

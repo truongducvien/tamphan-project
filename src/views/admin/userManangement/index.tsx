@@ -39,7 +39,7 @@ const UserManagement: React.FC = () => {
 	const COLUMNS: Array<IColumn<IUser>> = [
 		{ key: 'username', label: 'Tài khoản' },
 		{ key: 'fullName', label: 'Họ tên' },
-		{ key: 'phoneNumber', label: 'Sô điện thoại' },
+		{ key: 'phoneNumber', label: 'Số điện thoại' },
 		{ key: 'roleId', label: 'Vai trò người dùng' },
 		{ key: 'organizationName', label: 'Đơn vị' },
 

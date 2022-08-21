@@ -60,7 +60,8 @@ const Table = <T,>({
 }: TableProps<T>): JSX.Element => {
 	const textColor = useColorModeValue('gray.600', 'whiteSmoke.100');
 	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
-	const iconDELETE = useColorModeValue('red.300', 'red.800');
+	const iconDelete = useColorModeValue('red.300', 'red.800');
+	const scrollColor = useColorModeValue('blue.500', 'blue.800');
 
 	return (
 		<>
@@ -70,10 +71,19 @@ const Table = <T,>({
 				width="100%"
 				height="100%"
 				flex={1}
-				overflowX="scroll"
-				overflowY="scroll"
+				overflowX="auto"
 				boxSizing="border-box"
 				minH={200}
+				sx={{
+					'&::-webkit-scrollbar': {
+						height: '10px',
+						borderRadius: '8px',
+						backgroundColor: borderColor,
+					},
+					'&::-webkit-scrollbar-thumb': {
+						backgroundColor: scrollColor,
+					},
+				}}
 			>
 				{(loading || !data?.[0]) && (
 					<Box width="100%" height={280} position="absolute" zIndex="overlay">
@@ -123,7 +133,7 @@ const Table = <T,>({
 													<Icon
 														as={FaTrashAlt}
 														onClick={() => onClickDelete?.(row)}
-														color={iconDELETE}
+														color={iconDelete}
 														cursor="pointer"
 													/>
 												)}
@@ -137,7 +147,10 @@ const Table = <T,>({
 											fontSize="sm"
 											fontWeight="700"
 											maxH={200}
-											overflow="scroll"
+											overflowY="scroll"
+											css={{
+												'&::-webkit-scrollbar': { display: 'none' },
+											}}
 										>
 											{column.cell && column.key ? (
 												column.cell(row)
@@ -146,7 +159,7 @@ const Table = <T,>({
 													<Tag colorScheme={column.tag(row)?.tag}>{column.tag(row)?.label}</Tag>
 												</Center>
 											) : (
-												<Text color={textColor} fontSize="sm" fontWeight="700" maxH={200} overflow="scroll">
+												<Text color={textColor} fontSize="sm" fontWeight="700">
 													{column.key ? (row[column.key] as unknown as string) : ''}
 												</Text>
 											)}

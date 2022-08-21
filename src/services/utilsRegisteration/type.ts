@@ -42,6 +42,11 @@ export const statusUtilsRe: Array<Option> = [
 		value: StatusUtilsRe.PAYMENT_WAITING,
 		tag: 'orange',
 	},
+	{
+		label: 'Đã hủy',
+		value: StatusUtilsRe.CANCEL,
+		tag: 'red',
+	},
 ];
 
 export interface IUtilsRe {
