@@ -13,9 +13,9 @@ import {
 	Text,
 	useColorModeValue,
 	useColorMode,
+	Center,
 } from '@chakra-ui/react';
 // Custom Components
-import ItemContent from 'components/menu/ItemContent';
 import SearchBar from 'components/navbar/searchBar/SearchBar';
 // Assets
 import { FaEthereum } from 'react-icons/fa';
@@ -97,18 +97,19 @@ const HeaderLinks: React.FC<Props> = props => {
 				>
 					<Flex justifyItems="space-between" w="100%" mb="20px">
 						<Text fontSize="md" fontWeight="600" color={textColor}>
-							Notifications
+							Thông báo
 						</Text>
 						<Text fontSize="sm" fontWeight="500" color={textColorBrand} ms="auto" cursor="pointer">
-							Mark all read
+							Đọc tất cả
 						</Text>
 					</Flex>
 					<Flex flexDirection="column">
 						<MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} px="0" borderRadius="8px" mb="10px">
-							<ItemContent info="Horizon UI Dashboard PRO" />
-						</MenuItem>
-						<MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} px="0" borderRadius="8px" mb="10px">
-							<ItemContent info="Horizon Design System Free" />
+							<Center w="100%">
+								<Text textAlign="center" fontSize="sm">
+									Không có dữ liệu
+								</Text>
+							</Center>
 						</MenuItem>
 					</Flex>
 				</MenuList>
