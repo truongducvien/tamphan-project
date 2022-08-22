@@ -2,6 +2,7 @@ import { useRef } from 'react';
 
 import { Box, Button, FormControl, FormLabel, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import Card from 'components/card/Card';
 import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
@@ -11,6 +12,7 @@ import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useHistory } from 'react-router-dom';
+import { BaseResponeAction } from 'services/type';
 import { createUtilsGroup, getUtilsGroupById, updateUtilsGroup } from 'services/utils/group';
 import { IUtilsGroupPayload } from 'services/utils/group/type';
 import { statusOption2 } from 'variables/status';
@@ -18,6 +20,7 @@ import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên nhóm'),
+	state: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn trạng thái') }),
 });
 
 interface IUtilsGroupForm extends Omit<IUtilsGroupPayload, 'state' | 'id'> {
@@ -47,7 +50,14 @@ const TypeUtilitiesForm: React.FC = () => {
 			await mutationCreate.mutateAsync(prepareData);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
-		} catch {
+			imageRef.current?.onReset();
+		} catch (error) {
+			const err = error as AxiosError<BaseResponeAction>;
+			if (err.response?.data?.code === 'FACILITY_GROUP_DUPLICATE_NAME') {
+				toast({ title: 'Tên loại tiện ích đã tồn tại', status: 'error' });
+				return;
+			}
+
 			toast({ title: 'Tạo mới thất bại', status: 'error' });
 		}
 	};
@@ -116,6 +126,15 @@ const TypeUtilitiesForm: React.FC = () => {
 							name="description"
 							variant="admin"
 						/>
+						<TextAreaFieldHookForm
+							isDisabled={action === 'detail'}
+							rows={10}
+							label="Điều khoản và điều kiện"
+							name="termAndCondition"
+							variant="admin"
+						/>
+					</Stack>
+					<Box pb={3} w={{ base: '50%', md: '100%' }} mr="2">
 						<FormControl>
 							<FormLabel>Hình ảnh</FormLabel>
 							<UploadImage
@@ -125,7 +144,7 @@ const TypeUtilitiesForm: React.FC = () => {
 								defaultValue={detailData?.data?.imageLink ? [detailData?.data?.imageLink] : []}
 							/>
 						</FormControl>
-					</Stack>
+					</Box>
 					<HStack pt={3} justify="end">
 						{action === 'detail' && (
 							<Button type="button" onClick={() => changeAction('edit', id || '')} variant="brand">

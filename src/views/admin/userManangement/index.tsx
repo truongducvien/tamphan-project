@@ -47,10 +47,11 @@ const UserManagement: React.FC = () => {
 	];
 
 	const pageInfo = {
-		total: data?.totalItems,
+		total: data?.totalPages,
 		hasNextPage: data ? currentPage < data?.totalPages : false,
 		hasPreviousPage: data ? currentPage > 0 : false,
 	};
+
 	const handleFillter = (payload: { fullName: string; organizationId: Option; username: string }) => {
 		setParams({ ...payload, organizationId: payload.organizationId.value as string });
 	};
@@ -106,7 +107,10 @@ const UserManagement: React.FC = () => {
 						hasNextPage: pageInfo?.hasNextPage,
 						hasPreviousPage: pageInfo?.hasPreviousPage,
 						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
+						onPageSizeChange: pageSize => {
+							setCurrentPage(1);
+							setCurrentPageSize(pageSize);
+						},
 					}}
 					loading={isLoading}
 					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}

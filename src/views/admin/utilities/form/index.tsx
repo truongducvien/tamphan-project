@@ -16,23 +16,33 @@ import { useHistory } from 'react-router-dom';
 import { getArea } from 'services/area';
 import { createUtils, getUtilsById, updateUtils } from 'services/utils';
 import { getUtilsGroup } from 'services/utils/group';
-import { IUtilsCreatePayload } from 'services/utils/type';
+import { IUtilsCreatePayload, TimeSlotType, timeSlotTypeOption } from 'services/utils/type';
 import { statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên tiện ích'),
-	areaId: Yup.object({ label: Yup.string(), value: Yup.string() }).required('Vui lòng chọn phân khu'),
+	areaId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn phân khu') }),
+	timeSlotType: Yup.object({ label: Yup.string(), value: Yup.string() }).nullable(),
+	capacity: Yup.number().typeError('Vui lòng nhập số').required('Vui lòng nhập sức chứa'),
 	facilityGroupId: Yup.object({
 		label: Yup.string(),
-		value: Yup.string(),
-	}).required('Vui lòng chọn loại tiện ích'),
+		value: Yup.string().required('Vui lòng chọn loại tiện ích'),
+	}),
 });
 
 interface IUtilsForm
 	extends Omit<
 		IUtilsCreatePayload,
-		'state' | 'id' | 'areaId' | 'facilityGroupId' | 'operatingTime' | 'timeSlots' | 'capacity' | 'dateOffs'
+		| 'state'
+		| 'id'
+		| 'areaId'
+		| 'facilityGroupId'
+		| 'operatingTime'
+		| 'timeSlots'
+		| 'capacity'
+		| 'dateOffs'
+		| 'timeSlotType'
 	> {
 	areaId: Option;
 	state: Option;
@@ -41,6 +51,7 @@ interface IUtilsForm
 	timeSlots: string;
 	capacity: string;
 	dateOffs: string;
+	timeSlotType: Option;
 }
 const UtilitiesForm: React.FC = () => {
 	const { toast } = useToastInstance();
@@ -91,26 +102,27 @@ const UtilitiesForm: React.FC = () => {
 	});
 
 	const onSubmit = (data: IUtilsForm, reset: () => void) => {
-		const operatingTime = data.operatingTime ? data.operatingTime.split('-') : '';
-		const timeSlots = data.timeSlots ? data.timeSlots.split(',') : '';
+		const operatingTime = data.operatingTime ? data.operatingTime?.split('-') : '';
+		const timeSlots = data.timeSlots ? data.timeSlots?.split(',') : '';
 		const imageLink = imageRef.current?.onSubmit();
 		const prepareData = {
 			...data,
-			state: data.state.value as string,
-			areaId: (data.areaId.value as string) || detailData?.data?.areaId || '',
-			facilityGroupId: (data.facilityGroupId.value as string) || detailData?.data?.facilityGroupId || '',
+			state: data.state?.value as string,
+			areaId: (data.areaId?.value as string) || detailData?.data?.areaId || '',
+			facilityGroupId: (data.facilityGroupId?.value as string) || detailData?.data?.facilityGroupId || '',
 			capacity: Number(data.capacity),
 			maxOrderNumber: Number(data.maxOrderNumber),
 			depositAmount: Number(data.depositAmount),
 			operatingTime: operatingTime ? { start: operatingTime[0], end: operatingTime[1] } : operatingTime,
 			timeSlots: timeSlots
 				? timeSlots.map(i => {
-						const items = i.split('-');
+						const items = i?.split('-');
 						return { start: items[0], end: items[1] };
 				  })
 				: timeSlots,
-			dateOffs: data.dateOffs.split(','),
+			dateOffs: data.dateOffs?.split(','),
 			imageLink: imageLink?.files || [],
+			timeSlotType: (data?.timeSlotType.value as TimeSlotType) || detailData?.data?.timeSlotType,
 		};
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
@@ -124,7 +136,9 @@ const UtilitiesForm: React.FC = () => {
 		facilityGroupId: dataGroup?.items
 			.map(i => ({ label: i.name, value: i.id }))
 			.find(i => i.value === detailData?.data?.facilityGroupId),
-		operatingTime: `${detailData?.data?.operatingTime.start || ''} - ${detailData?.data?.operatingTime.end || ''}`,
+		operatingTime: detailData?.data?.operatingTime
+			? `${detailData?.data?.operatingTime.start || ''} - ${detailData?.data?.operatingTime.end || ''}`
+			: '',
 		timeSlots: detailData?.data?.timeSlots.map(i => `${i.start} - ${i.end}`).join(', '),
 		dateOffs: detailData?.data?.dateOffs.join(','),
 		state: statusOption2.find(i => i.value === detailData?.data?.state),
@@ -195,6 +209,7 @@ const UtilitiesForm: React.FC = () => {
 							label="Sức chứa"
 							name="capacity"
 							variant="admin"
+							isRequired
 							type="number"
 						/>
 					</Stack>
@@ -205,15 +220,15 @@ const UtilitiesForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm
+						<PullDowndHookForm
 							isDisabled={action === 'detail'}
 							label="Loại khung giờ sử dụng"
 							name="timeSlotType"
-							variant="admin"
+							options={timeSlotTypeOption}
 						/>
 						<TextFieldHookForm
 							isDisabled={action === 'detail'}
-							label="Số tiền đặc cọc"
+							label="Số tiền đặt cọc"
 							name="depositAmount"
 							variant="admin"
 						/>
@@ -248,7 +263,7 @@ const UtilitiesForm: React.FC = () => {
 						<TextFieldHookForm
 							isDisabled={action === 'detail'}
 							placeholder="2021-03-20,2021-03-20"
-							label="Ngày nghĩ"
+							label="Ngày nghỉ"
 							name="dateOffs"
 							variant="admin"
 						/>
@@ -277,7 +292,6 @@ const UtilitiesForm: React.FC = () => {
 							name="state"
 							isDisabled={action === 'detail'}
 							options={statusOption2}
-							defaultValue={statusOption2[0]}
 							isSearchable={false}
 						/>
 					</Stack>

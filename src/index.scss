@@ -113,4 +113,8 @@
 	flex: 1;
 	overflow-y: auto;
 	width: 100%;
+	overflow: visible;
+}
+.ql-tooltip {
+	// left: unset !important;
 }

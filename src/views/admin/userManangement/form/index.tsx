@@ -19,7 +19,7 @@ import { IUserPayload } from 'services/user/type';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
-	username: Yup.string().required('Vui lòng nhập tên tài khoản'),
+	username: Yup.string().email('Định dạng là email').required('Vui lòng nhập tên tài khoản'),
 	fullName: Yup.string().required('Vui lòng nhập tên họ tên'),
 	organizationId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn đơn vị') }),
 	roleId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn vai trò') }),

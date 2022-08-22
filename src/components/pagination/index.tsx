@@ -40,9 +40,7 @@ const Pagination = ({
 	onPageSizeChange,
 	value = 1,
 }: PaginationProps): JSX.Element | null => {
-	const totalPages = useMemo(() => {
-		return Math.round(total / pageSize) || total;
-	}, [total, pageSize]);
+	const totalPages = total;
 
 	const { currentPage, setCurrentPage, pages } = usePagination({
 		pagesCount: totalPages,
@@ -54,6 +52,7 @@ const Pagination = ({
 	});
 
 	const handlePageSizeChange = (event: ChangeEvent<HTMLSelectElement>): void => {
+		setCurrentPage(1);
 		const pS = event.target.value === 'ALL' ? total : Number(event.target.value);
 		onPageSizeChange?.(pS);
 	};

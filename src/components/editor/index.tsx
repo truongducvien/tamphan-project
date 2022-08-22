@@ -1,7 +1,7 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import * as React from 'react';
 
-import { Button, Box, useColorModeValue, Modal, ModalContent } from '@chakra-ui/react';
-import { HexColorPicker } from 'react-colorful';
+import { Button, Box, useColorModeValue } from '@chakra-ui/react';
 import Dropzone, { DropzoneRef } from 'react-dropzone';
 import ReactQuill from 'react-quill';
 
@@ -32,8 +32,6 @@ type RangeStatic = { index: number; length: number };
 
 const CustomToolbar: React.FC<{ isDisable?: boolean }> = ({ isDisable }) => {
 	const bg = useColorModeValue('secondaryGray.100', 'secondaryGray.100');
-	const [isOpenPickers, setIsOpenPicker] = React.useState(false);
-	const [color, setColor] = React.useState('#fff');
 
 	return (
 		<Box
@@ -114,15 +112,22 @@ const CustomToolbar: React.FC<{ isDisable?: boolean }> = ({ isDisable }) => {
 				value="blockquote"
 				isDisabled={isDisable}
 			/>
-			<Button
-				display="flex !important"
-				justifyContent="center !important"
-				alignItems="center !important"
-				className="ql-color"
-				value={color}
-				onClick={() => setIsOpenPicker(true)}
-				isDisabled={isDisable}
-			/>
+			<select className="ql-color">
+				<option value="red" />
+				<option value="black" />
+				<option value="white" />
+				<option value="green" />
+				<option value="blue" />
+				<option value="orange" />
+				<option value="yellow" />
+				<option value="#7a8011" />
+				<option value="#4e1180" />
+				<option value="violet" />
+				<option value="gray" />
+				<option value="#ddd" />
+				<option value="#d0d1d2" />
+				<option selected />
+			</select>
 			<Button
 				display="flex !important"
 				justifyContent="center !important"
@@ -139,17 +144,6 @@ const CustomToolbar: React.FC<{ isDisable?: boolean }> = ({ isDisable }) => {
 				value="video"
 				isDisabled={isDisable}
 			/>
-			<Modal size="sm" isOpen={isOpenPickers} onClose={() => setIsOpenPicker(false)}>
-				<ModalContent alignItems="center" bg="transparent">
-					<HexColorPicker
-						color={color}
-						onChange={c => {
-							setColor(c);
-							setIsOpenPicker(false);
-						}}
-					/>
-				</ModalContent>
-			</Modal>
 		</Box>
 	);
 };
@@ -200,21 +194,22 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 		};
 	}
 
-	saveFile = (file: IFile) => {
+	saveFile = (file: File) => {
 		const { workings, fileIds } = this.state;
 		const nowDate = new Date().getTime();
 		const w = { ...workings, [nowDate]: true };
 		this.setState({ workings });
 		return uploadFile([file]).then(
-			(results: IFile[]) => {
-				const { sizeLargeUrl, objectId } = results[0];
-
+			results => {
+				const { link, fileId } = results?.data?.items?.[0] || {};
 				w[nowDate] = false;
 				this.setState({
 					workings,
-					fileIds: fileIds ? [...fileIds, objectId || ''] : [objectId || ''],
+					fileIds: fileIds ? [...fileIds, fileId || ''] : [fileId || ''],
 				});
-				return Promise.resolve({ url: sizeLargeUrl });
+				return Promise.resolve({
+					url: `${process.env.REACT_APP_API_BASE_URL || 'https://aquacity.staging.novaid.vn/web/api/'}/${link || ''}`,
+				});
 			},
 			error => {
 				console.error('saveFile error:', error);
@@ -225,7 +220,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 		);
 	};
 
-	onDrop = async (acceptedFiles: IFile[]) => {
+	onDrop = async (acceptedFiles: File[]) => {
 		try {
 			await acceptedFiles.reduce((pacc, _file) => {
 				return pacc.then(async () => {
@@ -292,7 +287,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 		const { isDisable } = this.props;
 
 		return (
-			<div className="text-editor">
+			<div className="text-editor" data-text-editor="name">
 				<CustomToolbar isDisable={isDisable} />
 				<ReactQuill
 					ref={el => {
@@ -306,6 +301,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 					modules={this.modules}
 					formats={this.formats}
 					readOnly={isDisable}
+					bounds={`[data-text-editor="name"]`}
 				/>
 				<Dropzone
 					ref={el => {

@@ -1,5 +1,12 @@
+import { BaseOption } from 'components/form/PullDown';
 import { BaseResponeList } from 'services/type';
 
+export type TimeSlotType = 'HOUR' | 'DATE';
+
+export const timeSlotTypeOption: BaseOption<TimeSlotType>[] = [
+	{ label: 'HOUR', value: 'HOUR' },
+	{ label: 'DATE', value: 'DATE' },
+];
 export interface IUtils {
 	id: string;
 	address: string;
@@ -19,7 +26,7 @@ export interface IUtils {
 	};
 	phoneNumber: string;
 	state: string;
-	timeSlotType: string;
+	timeSlotType: TimeSlotType;
 	timeSlots: [
 		{
 			end: string;
@@ -63,7 +70,7 @@ export interface IUtilsCreatePayload {
 		| string;
 	phoneNumber: string;
 	state: string;
-	timeSlotType: string;
+	timeSlotType: TimeSlotType;
 	timeSlots:
 		| {
 				end: string;

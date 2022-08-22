@@ -7,6 +7,7 @@ export interface IUtilsGroup {
 	name: string;
 	state: string;
 	updatedDate: string;
+	termAndCondition: string;
 }
 
 export type IUtilsGroupResponse = BaseResponeList<IUtilsGroup>;
@@ -17,6 +18,7 @@ export interface IUtilsGroupPayload {
 	name: string;
 	state: string | number;
 	id?: string;
+	termAndCondition: string;
 }
 
 export interface IUtilsGroupParams extends BaseParams {

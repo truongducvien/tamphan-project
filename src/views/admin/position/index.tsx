@@ -39,7 +39,7 @@ const PositionManagement: React.FC = () => {
 	};
 
 	const pageInfo = {
-		total: data?.totalItems,
+		total: data?.totalPages,
 		hasNextPage: data ? currentPage < data?.totalPages : false,
 		hasPreviousPage: data ? currentPage > 0 : false,
 	};
@@ -96,7 +96,10 @@ const PositionManagement: React.FC = () => {
 						hasNextPage: pageInfo?.hasNextPage,
 						hasPreviousPage: pageInfo?.hasPreviousPage,
 						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
+						onPageSizeChange: pageSize => {
+							setCurrentPage(1);
+							setCurrentPageSize(pageSize);
+						},
 					}}
 					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
 					onClickDetail={({ id }) => changeAction('detail', id)}

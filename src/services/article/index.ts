@@ -4,7 +4,7 @@ import { BaseResponeAction, BaseResponeDetail } from 'services/type';
 import { IArticle, IArticleParams, IArticlePayload, IArticleResponse } from './type';
 
 export const getArticle = async (params: IArticleParams) => {
-	const { data } = await http.get<IArticleResponse>('/v1/articles', {
+	const { data } = await http.get<IArticleResponse>('/v1/articles/search', {
 		params: {
 			...params,
 		},

@@ -26,7 +26,7 @@ const COLUMNS: Array<IColumn<IUtils>> = [
 	{ key: 'address', label: 'Địa chỉ' },
 	{ key: 'maxOrderNumber', label: 'Sức chứa' },
 	{ key: 'depositAmount', label: 'Yêu cầu đặt cọc', cell: ({ depositAmount }) => (depositAmount ? 'Có' : 'Không') },
-	{ key: 'depositAmount', label: 'Số tiền đặc cọc' },
+	{ key: 'depositAmount', label: 'Số tiền đặt cọc' },
 	{
 		key: 'timeSlots',
 		label: 'Giờ hoạt động',
@@ -92,7 +92,7 @@ const UtilitiesManagement: React.FC = () => {
 	};
 
 	const pageInfo = {
-		total: data?.totalItems,
+		total: data?.totalPages,
 		hasNextPage: data ? currentPage < data?.totalPages : false,
 		hasPreviousPage: data ? currentPage > 0 : false,
 	};
@@ -177,7 +177,10 @@ const UtilitiesManagement: React.FC = () => {
 						hasNextPage: pageInfo?.hasNextPage,
 						hasPreviousPage: pageInfo?.hasPreviousPage,
 						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
+						onPageSizeChange: pageSize => {
+							setCurrentPage(1);
+							setCurrentPageSize(pageSize);
+						},
 					}}
 					action={[PermistionAction.UPDATE, PermistionAction.DELETE, PermistionAction.VIEW]}
 					onClickDetail={row => changeAction('detail', row.id)}

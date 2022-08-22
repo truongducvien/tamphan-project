@@ -141,17 +141,7 @@ const Table = <T,>({
 										</Td>
 									)}
 									{columns.map((column, colIndex) => (
-										<Td
-											key={`${index}${colIndex}`}
-											color={textColor}
-											fontSize="sm"
-											fontWeight="700"
-											maxH={200}
-											overflowY="scroll"
-											css={{
-												'&::-webkit-scrollbar': { display: 'none' },
-											}}
-										>
+										<Td key={`${index}${colIndex}`} color={textColor} fontSize="sm" fontWeight="700">
 											{column.cell && column.key ? (
 												column.cell(row)
 											) : column.tag && column.tag(row) ? (
@@ -159,7 +149,7 @@ const Table = <T,>({
 													<Tag colorScheme={column.tag(row)?.tag}>{column.tag(row)?.label}</Tag>
 												</Center>
 											) : (
-												<Text color={textColor} fontSize="sm" fontWeight="700">
+												<Text color={textColor} fontSize="sm" fontWeight="700" maxH={200} overflowY="auto">
 													{column.key ? (row[column.key] as unknown as string) : ''}
 												</Text>
 											)}
