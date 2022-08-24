@@ -4,7 +4,7 @@ import { Box, Button, Flex, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
-import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { BaseOption, Option, PullDowndHookForm } from 'components/form/PullDown';
 import { SwichHookForm } from 'components/form/SwichHookForm';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
@@ -44,7 +44,7 @@ const validationSchema = Yup.object({
 interface DataForm {
 	dateOfBirth: string;
 	email: string;
-	propertyId: string;
+	propertyId: BaseOption<string>;
 	propertyName?: string;
 	fullName: string;
 	gender: Option;
@@ -113,9 +113,10 @@ const ResidentForm: React.FC = () => {
 		const prepareData = {
 			...data,
 			state: data.state?.value as Status,
-			type: data.type.value as ResidentType,
-			identityCardType: data.identityCardType.value as IdentityCardType,
-			gender: data.gender.value as Gender,
+			type: data.type?.value as ResidentType,
+			identityCardType: data.identityCardType?.value as IdentityCardType,
+			gender: data.gender?.value as Gender,
+			propertyId: data.propertyId?.value,
 		};
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions

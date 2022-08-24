@@ -1,13 +1,15 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import * as React from 'react';
 
-import { Button, Box, useColorModeValue } from '@chakra-ui/react';
+import { Box, useColorModeValue, createStandaloneToast } from '@chakra-ui/react';
 import Dropzone, { DropzoneRef } from 'react-dropzone';
 import ReactQuill from 'react-quill';
 
-import { uploadFile, IFile } from './utils';
+import { uploadFile } from './utils';
 
 import 'react-quill/dist/quill.snow.css';
+
+const { ToastContainer, toast } = createStandaloneToast();
 
 const ISMSIE = !!navigator.userAgent.match(/Trident/i);
 const ISIOS = !!navigator.userAgent.match(/iPad|iPhone|iPod/i);
@@ -19,7 +21,7 @@ interface EditorState {
 }
 
 interface EditorProps {
-	contents: string;
+	contents?: string;
 	onChange?: (data: string) => void;
 	isDisable?: boolean;
 }
@@ -30,7 +32,7 @@ export interface EditorRef {
 
 type RangeStatic = { index: number; length: number };
 
-const CustomToolbar: React.FC<{ isDisable?: boolean }> = ({ isDisable }) => {
+const CustomToolbar: React.FC<{ isDisable?: boolean }> = () => {
 	const bg = useColorModeValue('secondaryGray.100', 'secondaryGray.100');
 
 	return (
@@ -41,109 +43,54 @@ const CustomToolbar: React.FC<{ isDisable?: boolean }> = ({ isDisable }) => {
 			borderBottom="0px solid transparent !important"
 			backgroundColor={bg}
 		>
-			<select className="ql-header" disabled={isDisable} onChange={e => e.persist()}>
-				<option value="1">Heading 1</option>
-				<option value="2">Heading 2</option>
-				<option selected>Nomal</option>
-			</select>
-			<Button
-				display="flex !important"
-				justifyContent="center !important"
-				alignItems="center !important"
-				me="5px !important"
-				className="ql-bold"
-				isDisabled={isDisable}
-			/>
-			<Button
-				display="flex !important"
-				justifyContent="center !important"
-				alignItems="center !important"
-				me="5px !important"
-				className="ql-italic"
-				isDisabled={isDisable}
-			/>
-			<Button
-				display="flex !important"
-				justifyContent="center !important"
-				alignItems="center !important"
-				me="5px !important"
-				className="ql-underline"
-				isDisabled={isDisable}
-			/>
-			<Button
-				variant="admin"
-				display="flex !important"
-				justifyContent="center !important"
-				alignItems="center !important"
-				me="5px !important"
-				className="ql-list"
-				value="ordered"
-				isDisabled={isDisable}
-			/>
-			<Button
-				display="flex !important"
-				justifyContent="center !important"
-				alignItems="center !important"
-				className="ql-list"
-				value="bullet"
-				isDisabled={isDisable}
-			/>
-			<Button
-				display="flex !important"
-				justifyContent="center !important"
-				alignItems="center !important"
-				className="ql-image"
-				value="image"
-				isDisabled={isDisable}
-			/>
-			<Button
-				display="flex !important"
-				justifyContent="center !important"
-				alignItems="center !important"
-				className="ql-strike"
-				value="strike"
-				isDisabled={isDisable}
-			/>
-			<Button
-				display="flex !important"
-				justifyContent="center !important"
-				alignItems="center !important"
-				className="ql-blockquote"
-				value="blockquote"
-				isDisabled={isDisable}
-			/>
-			<select className="ql-color">
-				<option value="red" />
-				<option value="black" />
-				<option value="white" />
-				<option value="green" />
-				<option value="blue" />
-				<option value="orange" />
-				<option value="yellow" />
-				<option value="#7a8011" />
-				<option value="#4e1180" />
-				<option value="violet" />
-				<option value="gray" />
-				<option value="#ddd" />
-				<option value="#d0d1d2" />
-				<option selected />
-			</select>
-			<Button
-				display="flex !important"
-				justifyContent="center !important"
-				alignItems="center !important"
-				className="ql-link"
-				value="link"
-				isDisabled={isDisable}
-			/>
-			<Button
-				display="flex !important"
-				justifyContent="center !important"
-				alignItems="center !important"
-				className="ql-video"
-				value="video"
-				isDisabled={isDisable}
-			/>
+			<span className="ql-formats">
+				<select className="ql-font" />
+				<select className="ql-size" />
+			</span>
+			<span className="ql-formats">
+				<button type="button" className="ql-bold" />
+				<button type="button" className="ql-italic" />
+				<button type="button" className="ql-underline" />
+				<button type="button" className="ql-strike" />
+			</span>
+			<span className="ql-formats">
+				<select className="ql-color" />
+				<select className="ql-background" />
+			</span>
+			<span className="ql-formats">
+				<button type="button" className="ql-script" value="sub" />
+				<button type="button" className="ql-script" value="super" />
+			</span>
+			<span className="ql-formats">
+				<button type="button" className="ql-header" value="1" />
+				<button type="button" className="ql-header" value="2" />
+				<button type="button" className="ql-blockquote" />
+				<button type="button" className="ql-code-block" />
+			</span>
+			<span className="ql-formats">
+				<button type="button" className="ql-list" value="ordered" />
+				<button type="button" className="ql-list" value="bullet" />
+				<button type="button" className="ql-indent" value="-1" />
+				<button type="button" className="ql-indent" value="+1" />
+			</span>
+			<span className="ql-formats">
+				<button type="button" className="ql-direction" value="rtl" />
+				<span className="ql-formats">
+					<button type="button" className="ql-align" value="" />
+					<button type="button" className="ql-align" value="center" />
+					<button type="button" className="ql-align" value="right" />
+					<button type="button" className="ql-align" value="justify" />
+				</span>
+			</span>
+			<span className="ql-formats">
+				<button type="button" className="ql-link" />
+				<button type="button" className="ql-image" />
+				<button type="button" className="ql-video" />
+				<button type="button" className="ql-formula" />
+			</span>
+			<span className="ql-formats">
+				<button type="button" className="ql-clean" />
+			</span>
 		</Box>
 	);
 };
@@ -156,6 +103,8 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 	protected onKeyEvent = false;
 
 	protected formats = [
+		'script',
+		'font',
 		'header',
 		'bold',
 		'italic',
@@ -164,6 +113,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 		'blockquote',
 		'size',
 		'color',
+		'background',
 		'list',
 		'bullet',
 		'indent',
@@ -171,6 +121,11 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 		'image',
 		'video',
 		'align',
+		'formula',
+		'clean',
+		'code-block',
+		'direction',
+		'formula',
 	];
 
 	protected modules;
@@ -179,7 +134,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 		super(props);
 		const { contents } = props;
 		this.state = {
-			contents,
+			contents: contents || '',
 			workings: {},
 			fileIds: [],
 		};
@@ -192,6 +147,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 			},
 			clipboard: { matchVisual: false },
 		};
+		this.onChangeContents = this.onChangeContents.bind(this);
 	}
 
 	saveFile = (file: File) => {
@@ -207,6 +163,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 					workings,
 					fileIds: fileIds ? [...fileIds, fileId || ''] : [fileId || ''],
 				});
+				if (!link) throw new Error('!link');
 				return Promise.resolve({
 					url: `${process.env.REACT_APP_API_BASE_URL || 'https://aquacity.staging.novaid.vn/web/api/'}/${link || ''}`,
 				});
@@ -225,6 +182,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 			await acceptedFiles.reduce((pacc, _file) => {
 				return pacc.then(async () => {
 					const { url } = await this.saveFile(_file);
+					if (!url) return;
 					const quill = this.quillRef?.getEditor();
 					if (!quill) return;
 					const range = quill.getSelection();
@@ -235,6 +193,13 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 				});
 			}, Promise.resolve());
 		} catch (error) {
+			toast({
+				title: 'Không thể tải file lên',
+				status: 'error',
+				duration: 5000,
+				isClosable: true,
+				position: 'top-right',
+			});
 			console.log(error);
 		}
 	};
@@ -317,6 +282,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 						</div>
 					)}
 				</Dropzone>
+				<ToastContainer />
 			</div>
 		);
 	}
@@ -328,10 +294,10 @@ export const EditorWithRef = React.forwardRef<EditorRef, EditorProps>(({ content
 	React.useImperativeHandle(
 		ref,
 		() => ({
-			submit: () => data,
+			submit: () => data || '',
 		}),
 		[data],
 	);
 
-	return <Editor {...props} contents={data} onChange={d => setData(d)} />;
+	return <Editor {...props} contents={data} onChange={setData} />;
 });
