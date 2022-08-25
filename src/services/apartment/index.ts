@@ -1,7 +1,7 @@
 import http from 'services/http';
 import { BaseResponeAction, BaseResponeDetail } from 'services/type';
 
-import { IApartment, IApartmentPayload, IApartmentResponse, IApartmentParams } from './type';
+import { IApartment, IApartmentPayload, IApartmentResponse, IApartmentParams, UpdatePropertyPayload } from './type';
 
 export const getApartment = async (payload: IApartmentParams) => {
 	const { data } = await http.get<IApartmentResponse>('/v1/properties/search', {
@@ -24,5 +24,11 @@ export const getApartmentById = async (id: string) => {
 
 export const updateApartment = async (payload: IApartmentPayload) => {
 	const { data } = await http.put<BaseResponeAction>(`/v1/properties/${payload.id || ''}`, payload);
+	return data || null;
+};
+
+export const updatePropertyInApartment = async (payload: UpdatePropertyPayload) => {
+	const { id, ...params } = payload;
+	const { data } = await http.put<BaseResponeAction>(`/v1/properties/${id}`, params);
 	return data || null;
 };

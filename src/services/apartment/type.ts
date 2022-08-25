@@ -1,4 +1,5 @@
 import { Option } from 'components/form/PullDown';
+import { ResidentType } from 'services/resident/type';
 import { BaseParams, BaseResponeList } from 'services/type';
 
 export enum StatusApartment {
@@ -84,4 +85,11 @@ export interface IApartmentPayload {
 export interface IApartmentParams extends BaseParams {
 	code?: string;
 	areaId?: string;
+}
+
+export interface UpdatePropertyPayload {
+	newProperty: string;
+	newResidentType: ResidentType;
+	oldProperty: string;
+	id: string;
 }

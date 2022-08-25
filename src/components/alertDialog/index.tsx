@@ -18,7 +18,7 @@ export interface Props extends Omit<AlertDialogProps, 'leastDestructiveRef' | 'c
 	centerTitle?: boolean;
 	body?: React.ReactNode;
 	onConfirm?: () => void;
-	type?: 'default' | 'error';
+	type?: 'default' | 'error' | 'message';
 }
 
 const AlertDialog: React.FC<Props> = ({
@@ -42,16 +42,19 @@ const AlertDialog: React.FC<Props> = ({
 		>
 			<AlertDialogOverlay />
 			<AlertDialogContent>
-				<AlertDialogHeader textAlign={centerTitle ? 'center' : 'start'} color={type === 'error' ? color : 'whitesmoke'}>
+				<AlertDialogHeader
+					textAlign={centerTitle ? 'center' : 'start'}
+					color={type === 'error' || type === 'message' ? color : 'whitesmoke'}
+				>
 					{title}
 				</AlertDialogHeader>
-				<AlertDialogCloseButton />
+				<AlertDialogCloseButton top={0} right={0} />
 				<AlertDialogBody>{body}</AlertDialogBody>
 				<AlertDialogFooter>
 					<Button ref={cancelRef} onClick={onClose}>
 						Huỷ
 					</Button>
-					<Button colorScheme="red" ml={3} onClick={onConfirm}>
+					<Button hidden={type === 'message'} colorScheme="red" ml={3} onClick={onConfirm}>
 						Đồng ý
 					</Button>
 				</AlertDialogFooter>

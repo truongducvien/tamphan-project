@@ -24,8 +24,8 @@ import { statusOption2 } from 'variables/status';
 
 const COLUMNS: Array<IColumn<IUtils>> = [
 	{ key: 'name', label: 'Tên tiện ích' },
-	{ key: 'facilityGroupId', label: 'Loại tiện ích' },
-	{ key: 'areaId', label: 'Phân khu' },
+	{ key: 'facilityGroupName', label: 'Loại tiện ích' },
+	{ key: 'areaName', label: 'Phân khu' },
 	{ key: 'address', label: 'Địa chỉ' },
 	{ key: 'maxOrderNumber', label: 'Sức chứa' },
 	{ key: 'depositAmount', label: 'Yêu cầu đặt cọc', cell: ({ depositAmount }) => (depositAmount ? 'Có' : 'Không') },

@@ -119,7 +119,7 @@ const PreviewImage = forwardRef<PreviewImageProp, typeof Box>(({ src, ...props }
 	);
 });
 
-const PreviewMoadle: React.FC<{ isOpen: boolean; onClose: () => void; files: string[] }> = ({
+const PreviewModal: React.FC<{ isOpen: boolean; onClose: () => void; files: string[] }> = ({
 	isOpen,
 	onClose,
 	files,
@@ -138,8 +138,8 @@ const PreviewMoadle: React.FC<{ isOpen: boolean; onClose: () => void; files: str
 			onClose={onClose}
 			size="xl"
 			src={src || ''}
-			onNext={() => setCurrent(prev => prev + 1)}
-			onPrev={() => setCurrent(prev => prev - 1)}
+			onNext={() => (current < files.length - 1 ? setCurrent(prev => prev + 1) : undefined)}
+			onPrev={() => (current < 0 ? setCurrent(prev => prev - 1) : undefined)}
 		/>
 	);
 };
@@ -315,7 +315,7 @@ const UploadImage = React.forwardRef<UploadImageRef, Props>(({ isMulti, isDisabl
 					</Box>
 				</AspectRatio>
 			</Box>
-			<PreviewMoadle onClose={onClose} files={files} isOpen={isOpen} />
+			<PreviewModal onClose={onClose} files={files} isOpen={isOpen} />
 		</>
 	);
 });

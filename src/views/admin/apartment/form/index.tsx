@@ -1,6 +1,13 @@
 import { useState } from 'react';
 
 import {
+	Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalHeader,
+	ModalFooter,
+	ModalBody,
+	ModalCloseButton,
 	Box,
 	Button,
 	HStack,
@@ -13,6 +20,7 @@ import {
 	Alert,
 	AlertIcon,
 	AlertDescription,
+	useDisclosure,
 } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
@@ -20,22 +28,25 @@ import { FormContainer } from 'components/form';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
+import { PullDown } from 'components/pulldown';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import useDidMount from 'hooks/useDidMount';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
-import { createApartment, getApartmentById, updateApartment } from 'services/apartment';
+import { createApartment, getApartmentById, updateApartment, updatePropertyInApartment } from 'services/apartment';
 import { IApartmentPayload, StatusApartment, statusApartment } from 'services/apartment/type';
 import { getArea } from 'services/area';
 import { IArea, IAreaParams } from 'services/area/type';
-import { createResident, getResidentOwner, updateResident } from 'services/resident';
+import { createResident, getResident, getResidentOwner, updateResident } from 'services/resident';
 import {
 	Gender,
 	gender,
 	IdentityCardType,
 	identityCardType,
+	IResident,
+	IResidentParams,
 	IResidentPayload,
 	ResidentType,
 } from 'services/resident/type';
@@ -99,15 +110,23 @@ interface DataForm2 {
 }
 
 const AparmentForm: React.FC = () => {
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [idApartment, setIdApartment] = useState<string>();
 	const [keyword, setKeyword] = useState('');
 	const keywordDebounce = useDebounce(keyword);
+
+	const [keywordResident, setKeywordResident] = useState('');
+	const keyworResidentdDebounce = useDebounce(keywordResident);
+
+	const [changeOwnerId, setOwnerID] = useState('');
 
 	const history = useHistory();
 	const mutationCreate = useMutation(createApartment);
 	const mutationUpdate = useMutation(updateApartment);
 	const mutationCreateOwner = useMutation(createResident);
 	const mutationUpdateOwner = useMutation(updateResident);
+
+	const mutationUpdateProperty = useMutation(updatePropertyInApartment);
 
 	const { changeAction, id, action } = useActionPage();
 	const { toast } = useToastInstance();
@@ -123,6 +142,16 @@ const AparmentForm: React.FC = () => {
 	});
 
 	const {
+		data: dataResident,
+		isLoading: isLoadingResident,
+		fetchMore: fetchMoreResident,
+	} = useLoadMore<IResident, IResidentParams>({
+		id: ['listResident', keyworResidentdDebounce],
+		func: getResident,
+		payload: { fullName: keyworResidentdDebounce },
+	});
+
+	const {
 		data: detailData,
 		isFetching,
 		isError,
@@ -134,6 +163,7 @@ const AparmentForm: React.FC = () => {
 		data: dataOwnner,
 		isFetched: isFetchedingOwner,
 		isError: isErrorOwner,
+		refetch,
 	} = useQuery(['detailOwner', id], () => getResidentOwner(id || ''), {
 		enabled: !!id && action !== 'create',
 	});
@@ -206,6 +236,22 @@ const AparmentForm: React.FC = () => {
 		action === 'create' ? handelCreateOwner(prepareData) : handelUpdateOwner(prepareData);
 	};
 
+	const onChangeOwner = async () => {
+		try {
+			await mutationUpdateProperty.mutateAsync({
+				id: dataOwnner?.id || '',
+				newResidentType: ResidentType.OWNER,
+				oldProperty: idApartment || '',
+				newProperty: changeOwnerId,
+			});
+			toast({ title: 'Đổi chủ sở hữu thành công' });
+			onClose();
+			refetch();
+		} catch (error) {
+			toast({ title: 'Đổi chủ sở hữu thất bại', status: 'error' });
+		}
+	};
+
 	useDidMount(() => {
 		if (id) setIdApartment(id);
 	});
@@ -224,6 +270,8 @@ const AparmentForm: React.FC = () => {
 			identityCardType.find(i => i.value === dataOwnner?.identityCardType) || dataOwnner?.identityCardType,
 		gender: gender.find(i => i.value === dataOwnner?.gender),
 	};
+
+	const isDisabled = action === 'detail';
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -254,8 +302,14 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm isRequired label="Mã căn hộ" name="code" variant="admin" />
-									<TextFieldHookForm isRequired label="Tên căn hộ" name="name" variant="admin" />
+									<TextFieldHookForm isDisabled={isDisabled} isRequired label="Mã căn hộ" name="code" variant="admin" />
+									<TextFieldHookForm
+										isDisabled={isDisabled}
+										isRequired
+										label="Tên căn hộ"
+										name="name"
+										variant="admin"
+									/>
 								</Stack>
 								<Stack
 									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -263,8 +317,9 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm label="Loại căn hộ" name="type" />
+									<TextFieldHookForm isDisabled={isDisabled} label="Loại căn hộ" name="type" />
 									<PullDowndHookForm
+										isDisabled={isDisabled}
 										label="Tình trạng xây dựng"
 										name="status"
 										options={statusApartment}
@@ -277,8 +332,14 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm type="number" label="Tầng" name="floorNumber" variant="admin" />
-									<TextFieldHookForm type="number" label="Block" name="block" variant="admin" />
+									<TextFieldHookForm
+										isDisabled={isDisabled}
+										type="number"
+										label="Tầng"
+										name="floorNumber"
+										variant="admin"
+									/>
+									<TextFieldHookForm isDisabled={isDisabled} type="number" label="Block" name="block" variant="admin" />
 								</Stack>
 								<Stack
 									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -289,12 +350,19 @@ const AparmentForm: React.FC = () => {
 									<PullDowndHookForm
 										label="Phân khu"
 										name="areaId"
+										isDisabled={isDisabled}
 										options={dataArea.map(i => ({ label: i.name, value: i.id })) || []}
 										onLoadMore={fetchMoreArea}
 										isLoading={isLoadingArea}
 										onInputChange={setKeyword}
 									/>
-									<TextFieldHookForm type="number" label="Diện tích đất" name="acreage" variant="admin" />
+									<TextFieldHookForm
+										isDisabled={isDisabled}
+										type="number"
+										label="Diện tích đất"
+										name="acreage"
+										variant="admin"
+									/>
 								</Stack>
 								<Stack
 									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -302,8 +370,20 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm type="number" label="Số phòng ngủ" name="numberOfBedRoom" variant="admin" />
-									<TextFieldHookForm type="number" label="Diện tích sử dụng" name="inUserAcreage" variant="admin" />
+									<TextFieldHookForm
+										isDisabled={isDisabled}
+										type="number"
+										label="Số phòng ngủ"
+										name="numberOfBedRoom"
+										variant="admin"
+									/>
+									<TextFieldHookForm
+										isDisabled={isDisabled}
+										type="number"
+										label="Diện tích sử dụng"
+										name="inUserAcreage"
+										variant="admin"
+									/>
 								</Stack>
 								<Stack
 									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -311,8 +391,20 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm type="number" label="Địa chỉ" name="address" variant="admin" />
-									<TextFieldHookForm type="number" label="Số phòng tắm" name="numberOfBathRoom" variant="admin" />
+									<TextFieldHookForm
+										isDisabled={isDisabled}
+										type="number"
+										label="Địa chỉ"
+										name="address"
+										variant="admin"
+									/>
+									<TextFieldHookForm
+										isDisabled={isDisabled}
+										type="number"
+										label="Số phòng tắm"
+										name="numberOfBathRoom"
+										variant="admin"
+									/>
 								</Stack>
 								<Stack
 									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -320,8 +412,20 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm type="number" label="Số tầng" name="numberOfFloor" variant="admin" />
-									<TextFieldHookForm type="text" label="Hướng" name="direction" variant="admin" />
+									<TextFieldHookForm
+										isDisabled={isDisabled}
+										type="number"
+										label="Số tầng"
+										name="numberOfFloor"
+										variant="admin"
+									/>
+									<TextFieldHookForm
+										isDisabled={isDisabled}
+										type="text"
+										label="Hướng"
+										name="direction"
+										variant="admin"
+									/>
 								</Stack>
 								<Stack
 									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -329,15 +433,24 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm type="number" label="Số lượng cư dân tối đa" name="maxResident" variant="admin" />
-									<TextAreaFieldHookForm label="Mô tả" name="description" variant="admin" />
+									<TextFieldHookForm
+										isDisabled={isDisabled}
+										type="number"
+										label="Số lượng cư dân tối đa"
+										name="maxResident"
+										variant="admin"
+									/>
+									<TextAreaFieldHookForm isDisabled={isDisabled} label="Mô tả" name="description" variant="admin" />
 								</Stack>
 								<HStack pt={3} justify="end">
-									{action === 'detail' && (
-										<Button type="button" onClick={() => changeAction('edit', id || '')} variant="brand">
-											Chỉnh sửa
-										</Button>
-									)}
+									<Button
+										type="button"
+										hidden={action !== 'detail'}
+										onClick={() => changeAction('edit', id || '')}
+										variant="brand"
+									>
+										Chỉnh sửa
+									</Button>
 									<Button w="20" disabled={action === 'detail'} type="submit" variant="brand">
 										Lưu
 									</Button>
@@ -359,8 +472,22 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm type="text" isRequired label="Họ và tên" name="fullName" variant="admin" />
-									<PullDowndHookForm label="Giới tính" isRequired name="gender" options={gender} isSearchable={false} />
+									<TextFieldHookForm
+										isDisabled
+										type="text"
+										isRequired
+										label="Họ và tên"
+										name="fullName"
+										variant="admin"
+									/>
+									<PullDowndHookForm
+										isDisabled
+										label="Giới tính"
+										isRequired
+										name="gender"
+										options={gender}
+										isSearchable={false}
+									/>
 								</Stack>
 								<Stack
 									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -368,13 +495,21 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm type="text" label="Ngày sinh" isRequired name="dateOfBirth" variant="admin" />
+									<TextFieldHookForm
+										isDisabled
+										type="text"
+										label="Ngày sinh"
+										isRequired
+										name="dateOfBirth"
+										variant="admin"
+									/>
 									<TextFieldHookForm
 										type="number"
 										isRequired
 										label="Số điện thoại"
 										name="phoneNumber"
 										variant="admin"
+										isDisabled
 									/>
 								</Stack>
 								<Stack
@@ -389,6 +524,7 @@ const AparmentForm: React.FC = () => {
 										variant="admin"
 										options={identityCardType}
 										isRequired
+										isDisabled
 									/>
 									<TextFieldHookForm
 										type="number"
@@ -396,6 +532,7 @@ const AparmentForm: React.FC = () => {
 										name="identityCardNumber"
 										variant="admin"
 										isRequired
+										isDisabled
 									/>
 								</Stack>
 								<Stack
@@ -404,8 +541,20 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm type="text" label="Địa chỉ thường trú" name="permanentAddress" variant="admin" />
-									<TextFieldHookForm type="text" label="Ngày cấp" name="identityCreateDate" variant="admin" />
+									<TextFieldHookForm
+										isDisabled
+										type="text"
+										label="Địa chỉ thường trú"
+										name="permanentAddress"
+										variant="admin"
+									/>
+									<TextFieldHookForm
+										isDisabled
+										type="text"
+										label="Ngày cấp"
+										name="identityCreateDate"
+										variant="admin"
+									/>
 								</Stack>
 								<Stack
 									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -413,21 +562,28 @@ const AparmentForm: React.FC = () => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm type="text" label="Địa chỉ tạm trú" name="temporaryAddress" variant="admin" />
-									<TextFieldHookForm type="text" label="Nơi cấp" name="identityLocationIssued" variant="admin" />
+									<TextFieldHookForm
+										isDisabled
+										type="text"
+										label="Địa chỉ tạm trú"
+										name="temporaryAddress"
+										variant="admin"
+									/>
+									<TextFieldHookForm
+										isDisabled
+										type="text"
+										label="Nơi cấp"
+										name="identityLocationIssued"
+										variant="admin"
+									/>
 								</Stack>
 								<Box pb={3} maxW={{ base: '100%', md: '50%' }}>
 									<TextFieldHookForm type="email" label="Email" name="email" variant="admin" />
 								</Box>
 								<HStack pt={3} justify="end">
-									{/* {action === 'detail' && (
-										<Button type="button" onClick={() => changeAction('edit', id || '')} variant="brand">
-											Chỉnh sửa
-										</Button>
-									)}
-									<Button w="20" isDisabled={!idApartment} type="submit" variant="brand">
-										Lưu
-									</Button> */}
+									<Button isDisabled={!idApartment} onClick={() => onOpen()} type="button" variant="brand">
+										Thay đổi chủ sở hữu
+									</Button>
 									<Button type="button" variant="gray" onClick={() => history.goBack()}>
 										Quay lại
 									</Button>
@@ -440,6 +596,37 @@ const AparmentForm: React.FC = () => {
 					</TabPanels>
 				</Tabs>
 			</Card>
+			<Modal isOpen={isOpen} onClose={onClose} isCentered>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader>Thay đổi chủ sở hữu</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody>
+						<PullDown
+							placeholder="Chọn chủ sở hữu mới"
+							options={dataResident.map(i => ({
+								label: `${i.fullName} - ${i.phoneNumber}`,
+								value: i.id,
+							}))}
+							name="resident"
+							menuPortalTarget={false}
+							onInputChange={setKeywordResident}
+							onLoadMore={fetchMoreResident}
+							isLoading={isLoadingResident}
+							onChange={newValue => setOwnerID(newValue.value as string)}
+						/>
+					</ModalBody>
+					<ModalFooter>
+						{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+						<Button colorScheme="blue" isDisabled={!changeOwnerId} mr={3} onClick={onChangeOwner}>
+							Xác nhận
+						</Button>
+						<Button w={20} variant="gray" onClick={onClose}>
+							Huỷ
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</Box>
 	);
 };

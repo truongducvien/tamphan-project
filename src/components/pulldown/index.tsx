@@ -33,6 +33,7 @@ export interface PullDownHookFormProps extends OptionBase {
 	onInputChange?: (e: string) => void;
 	onLoadMore?: () => Promise<void>;
 	isLoading?: boolean;
+	menuPortalTarget?: boolean;
 }
 
 export const PullDown: React.FC<PullDownHookFormProps> = ({
@@ -41,6 +42,7 @@ export const PullDown: React.FC<PullDownHookFormProps> = ({
 	onChange,
 	onLoadMore,
 	isLoading,
+	menuPortalTarget = true,
 	...innerProps
 }) => {
 	const bg = useColorModeValue('white', 'navy.900');
@@ -135,7 +137,7 @@ export const PullDown: React.FC<PullDownHookFormProps> = ({
 				onChange?.(newvalue);
 			}}
 			placeholder={placeholder}
-			menuPortalTarget={document.body}
+			menuPortalTarget={menuPortalTarget ? document.body : undefined}
 			defaultValue={defaultValue}
 		/>
 	);

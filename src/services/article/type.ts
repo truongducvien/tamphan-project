@@ -97,12 +97,12 @@ export enum TypeArticle {
 export const typeArticles: Array<Option> = [
 	{
 		label: 'Ưu đãi',
-		value: TypeArticle.NEWS,
+		value: TypeArticle.PROMOTION,
 		tag: 'cyan',
 	},
 	{
 		label: 'Tin tức',
-		value: TypeArticle.PROMOTION,
+		value: TypeArticle.NEWS,
 		tag: 'pink',
 	},
 	{

@@ -145,6 +145,8 @@ const ResidentForm: React.FC = () => {
 		},
 	};
 
+	const isDisabled = action === 'detail';
+
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
@@ -159,7 +161,7 @@ const ResidentForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isRequired label="Họ và tên" name="fullName" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} isRequired label="Họ và tên" name="fullName" variant="admin" />
 						<Flex minW={{ base: '100%', md: '50%' }}>
 							<Box width={300} mr={2}>
 								<PullDowndHookForm
@@ -168,9 +170,16 @@ const ResidentForm: React.FC = () => {
 									variant="admin"
 									options={identityCardType}
 									isRequired
+									isDisabled={isDisabled}
 								/>
 							</Box>
-							<TextFieldHookForm isRequired label="CMND.CCCD/Hộ chiếu" name="identityCardNumber" variant="admin" />
+							<TextFieldHookForm
+								isDisabled={isDisabled}
+								isRequired
+								label="CMND.CCCD/Hộ chiếu"
+								name="identityCardNumber"
+								variant="admin"
+							/>
 						</Flex>
 					</Stack>
 					<Stack
@@ -179,8 +188,14 @@ const ResidentForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm label="Ngày sinh" isRequired name="dateOfBirth" variant="admin" />
-						<TextFieldHookForm label="Ngày cấp" name="identityCreateDate" variant="admin" />
+						<TextFieldHookForm
+							isDisabled={isDisabled}
+							label="Ngày sinh"
+							isRequired
+							name="dateOfBirth"
+							variant="admin"
+						/>
+						<TextFieldHookForm isDisabled={isDisabled} label="Ngày cấp" name="identityCreateDate" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -188,8 +203,15 @@ const ResidentForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<PullDowndHookForm label="Giới tính" name="gender" isRequired options={gender} isSearchable={false} />
-						<TextFieldHookForm label="Nơi cấp" name="identityLocationIssued" variant="admin" />
+						<PullDowndHookForm
+							isDisabled={isDisabled}
+							label="Giới tính"
+							name="gender"
+							isRequired
+							options={gender}
+							isSearchable={false}
+						/>
+						<TextFieldHookForm isDisabled={isDisabled} label="Nơi cấp" name="identityLocationIssued" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -201,12 +223,13 @@ const ResidentForm: React.FC = () => {
 							label="Căn hộ"
 							name="propertyId"
 							isRequired
+							isDisabled={action !== 'create'}
 							isLoading={isLoadingApartment}
 							onLoadMore={fetchMore}
 							options={dataApartment.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id }))}
 							onInputChange={setKeyword}
 						/>
-						<TextFieldHookForm label="Số điện thoại" name="phoneNumber" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} label="Số điện thoại" name="phoneNumber" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -214,8 +237,22 @@ const ResidentForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<PullDowndHookForm label="Vai trò" name="type" isRequired options={residentType} isSearchable={false} />
-						<TextFieldHookForm isRequired label="Email" type="email" name="email" variant="admin" />
+						<PullDowndHookForm
+							isDisabled={action !== 'create'}
+							label="Vai trò"
+							name="type"
+							isRequired
+							options={residentType}
+							isSearchable={false}
+						/>
+						<TextFieldHookForm
+							isDisabled={isDisabled}
+							isRequired
+							label="Email"
+							type="email"
+							name="email"
+							variant="admin"
+						/>
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -223,8 +260,14 @@ const ResidentForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm label="Mối quan hệ chủ sở hữu" name="role" />
-						<TextFieldHookForm isRequired label="Địa chỉ thường trú" name="permanentAddress" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} label="Mối quan hệ chủ sở hữu" name="role" />
+						<TextFieldHookForm
+							isDisabled={isDisabled}
+							isRequired
+							label="Địa chỉ thường trú"
+							name="permanentAddress"
+							variant="admin"
+						/>
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -236,10 +279,17 @@ const ResidentForm: React.FC = () => {
 							label="Trạng thái hoạt động"
 							name="state"
 							isRequired
+							isDisabled={isDisabled}
 							options={statusOption2}
 							isSearchable={false}
 						/>
-						<TextFieldHookForm isRequired label="Địa chỉ tạm trú" name="temporaryAddress" variant="admin" />
+						<TextFieldHookForm
+							isDisabled={isDisabled}
+							isRequired
+							label="Địa chỉ tạm trú"
+							name="temporaryAddress"
+							variant="admin"
+						/>
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -247,8 +297,14 @@ const ResidentForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isRequired label="Thông tin uỷ quyền" name="uyquyen" variant="admin" />
-						<TextFieldHookForm isRequired label="Ngày cập nhật" isDisabled name="createAt" variant="admin" />
+						<TextFieldHookForm
+							isDisabled={isDisabled}
+							isRequired
+							label="Thông tin uỷ quyền"
+							name="uyquyen"
+							variant="admin"
+						/>
+						<TextFieldHookForm label="Ngày cập nhật" isDisabled name="createAt" variant="admin" />
 					</Stack>
 					<Box>
 						{/* <Swich label="Cho phép sử dụng NOVAID" id="useNovaId" /> */}

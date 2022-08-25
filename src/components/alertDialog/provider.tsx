@@ -10,7 +10,7 @@ interface PromiseRef {
 export interface DialogServiceOption {
 	title: string;
 	description?: React.ReactNode;
-	type?: 'error';
+	type?: 'error' | 'message';
 }
 
 export interface DialogServiceState extends DialogServiceOption {

@@ -38,7 +38,7 @@ export const getResidentById = async (id: string) => {
 };
 export const getResidentByProperty = async (id: string) => {
 	const { data } = await http.get<IResidentResponse>(`/v1/residents/property/${id}`);
-	return data || null;
+	return data?.data || null;
 };
 
 export const updateResident = async (payload: IResidentPayload) => {
