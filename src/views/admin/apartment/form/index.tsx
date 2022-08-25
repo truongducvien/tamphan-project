@@ -25,10 +25,12 @@ import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import useDidMount from 'hooks/useDidMount';
+import { useLoadMore } from 'hooks/useLoadMore';
 import { Link, useHistory } from 'react-router-dom';
 import { createApartment, getApartmentById, updateApartment } from 'services/apartment';
 import { IApartmentPayload, StatusApartment, statusApartment } from 'services/apartment/type';
 import { getArea } from 'services/area';
+import { IArea, IAreaParams } from 'services/area/type';
 import { createResident, getResidentOwner, updateResident } from 'services/resident';
 import {
 	Gender,
@@ -110,18 +112,22 @@ const AparmentForm: React.FC = () => {
 	const { changeAction, id, action } = useActionPage();
 	const { toast } = useToastInstance();
 
-	const { data: dataArea, isFetched: isFetchedArea } = useQuery(['listArea', keywordDebounce], () =>
-		getArea({
-			name: keywordDebounce,
-		}),
-	);
+	const {
+		data: dataArea,
+		isLoading: isLoadingArea,
+		fetchMore: fetchMoreArea,
+	} = useLoadMore<IArea, IAreaParams>({
+		id: ['listArea', keywordDebounce],
+		func: getArea,
+		payload: { name: keywordDebounce },
+	});
 
 	const {
 		data: detailData,
 		isFetching,
 		isError,
 	} = useQuery(['detail', id], () => getApartmentById(id || ''), {
-		enabled: !!id && isFetchedArea,
+		enabled: !!id,
 	});
 
 	const {
@@ -209,12 +215,11 @@ const AparmentForm: React.FC = () => {
 	const defaultApartment = {
 		...detailData?.data,
 		status: statusApartment.find(i => i.value === detailData?.data?.status),
-		areaId: dataArea?.items.map(i => ({ label: i.name, value: i.id })).find(i => i.value === detailData?.data?.areaId),
+		areaId: { label: detailData?.data?.areaName, value: detailData?.data?.areaId },
 	};
 
 	const defaultOwner = {
 		...dataOwnner,
-		areaId: dataArea?.items.map(i => ({ label: i.name, value: i.id })).find(i => i.value === detailData?.data?.areaId),
 		identityCardType:
 			identityCardType.find(i => i.value === dataOwnner?.identityCardType) || dataOwnner?.identityCardType,
 		gender: gender.find(i => i.value === dataOwnner?.gender),
@@ -284,7 +289,9 @@ const AparmentForm: React.FC = () => {
 									<PullDowndHookForm
 										label="Phân khu"
 										name="areaId"
-										options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
+										options={dataArea.map(i => ({ label: i.name, value: i.id })) || []}
+										onLoadMore={fetchMoreArea}
+										isLoading={isLoadingArea}
 										onInputChange={setKeyword}
 									/>
 									<TextFieldHookForm type="number" label="Diện tích đất" name="acreage" variant="admin" />

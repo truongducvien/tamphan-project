@@ -10,8 +10,10 @@ import { BaseOption, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { useDebounce } from 'hooks/useDebounce';
+import { useLoadMore } from 'hooks/useLoadMore';
 import { MdResetTv } from 'react-icons/md';
 import { getApartment } from 'services/apartment';
+import { IApartment, IApartmentParams } from 'services/apartment/type';
 import { getResidentCardReq } from 'services/residentCardReq';
 import { IResidentCardReq, IResidentCardReqParams, statusCardReq, typeCardReq } from 'services/residentCardReq/type';
 import * as Yup from 'yup';
@@ -43,11 +45,15 @@ const ResdidentCardReqManagement: React.FC = () => {
 
 	const [params, setParams] = useState<Omit<IResidentCardReqParams, 'page' | 'size'>>();
 
-	const { data: dataApartment } = useQuery(['listApartment', keywordDebounce], () =>
-		getApartment({
-			code: keywordDebounce,
-		}),
-	);
+	const {
+		data: dataApartment,
+		isLoading: isLoadingApartment,
+		fetchMore,
+	} = useLoadMore<IApartment, IApartmentParams>({
+		id: ['listApartment', keywordDebounce],
+		func: getApartment,
+		payload: { code: keywordDebounce },
+	});
 
 	const { data, isLoading } = useQuery(['listResidentCard', params, currentPage, currentPageSize], () =>
 		getResidentCardReq({
@@ -99,8 +105,10 @@ const ResdidentCardReqManagement: React.FC = () => {
 								isClearable
 								label="Căn hộ"
 								name="propertyId"
-								options={dataApartment?.items.map(i => ({ label: i.code, value: i.id })) || []}
+								options={dataApartment?.map(i => ({ label: i.code, value: i.id })) || []}
 								onInputChange={setKeyword}
+								onLoadMore={fetchMore}
+								isLoading={isLoadingApartment}
 							/>
 							<DatePickerdHookForm label="Từ ngày" name="from" />
 							<DatePickerdHookForm label="Đến ngày" name="to" />

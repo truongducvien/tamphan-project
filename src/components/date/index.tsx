@@ -44,7 +44,13 @@ export interface IDatePickerProps extends Omit<ChakraInputProps, 'onChange'> {
 	onChange?: (date: string) => void;
 }
 
-export const DatePicker = ({ defaultDay, onChange, dateFormat = 'YYYY-MM-DD', ...rest }: IDatePickerProps) => {
+export const DatePicker = ({
+	defaultDay,
+	onChange,
+	dateFormat = 'YYYY-MM-DD',
+	isDisabled,
+	...rest
+}: IDatePickerProps) => {
 	const date = new Date();
 	const firstFieldRef = useRef(null);
 
@@ -110,7 +116,10 @@ export const DatePicker = ({ defaultDay, onChange, dateFormat = 'YYYY-MM-DD', ..
 		<Popover
 			isOpen={isOpen}
 			initialFocusRef={firstFieldRef}
-			onOpen={onOpen}
+			onOpen={() => {
+				if (isDisabled) return;
+				onOpen();
+			}}
 			onClose={onClose}
 			placement="bottom-start"
 			closeOnBlur
@@ -125,6 +134,7 @@ export const DatePicker = ({ defaultDay, onChange, dateFormat = 'YYYY-MM-DD', ..
 						}
 						color={color}
 						ref={inputRef}
+						isDisabled={isDisabled}
 						{...rest}
 						borderWidth={1}
 						borderColor={isOpen ? forcusBorder : borderColor}

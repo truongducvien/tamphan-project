@@ -16,8 +16,8 @@ import { PermistionAction } from 'variables/permission';
 import { statusOption2 } from 'variables/status';
 
 const TypeUtilitiesManagement: React.FC = () => {
-	const [currentPage] = useState(1);
-	const [currentPageSize] = useState<number>(10);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 	const keywordRef = useRef<HTMLInputElement>(null);
 	const { toast } = useToastInstance();
 	const [keyword, setKeyword] = useState('');
@@ -65,11 +65,11 @@ const TypeUtilitiesManagement: React.FC = () => {
 		{ key: 'updatedDate', label: 'Ngày cập nhật' },
 	];
 
-	// const pageInfo = {
-	// 	total: data?.totalItems,
-	// 	hasNextPage: data ? currentPage < data?.totalPages : false,
-	// 	hasPreviousPage: data ? currentPage > 0 : false,
-	// };
+	const pageInfo = {
+		total: data?.totalItems,
+		hasNextPage: data ? currentPage < data?.totalPages : false,
+		hasPreviousPage: data ? currentPage > 0 : false,
+	};
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -126,15 +126,15 @@ const TypeUtilitiesManagement: React.FC = () => {
 					columns={COLUMNS}
 					data={data?.items || []}
 					action={[PermistionAction.UPDATE, PermistionAction.DELETE, PermistionAction.VIEW]}
-					// pagination={{
-					// 	total: Number(pageInfo?.total || 0),
-					// 	pageSize: currentPageSize,
-					// 	value: currentPage,
-					// 	hasNextPage: pageInfo?.hasNextPage,
-					// 	hasPreviousPage: pageInfo?.hasPreviousPage,
-					// 	onPageChange: page => setCurrentPage(page),
-					// 	onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
-					// }}
+					pagination={{
+						total: Number(pageInfo?.total || 0),
+						pageSize: currentPageSize,
+						value: currentPage,
+						hasNextPage: pageInfo?.hasNextPage,
+						hasPreviousPage: pageInfo?.hasPreviousPage,
+						onPageChange: page => setCurrentPage(page),
+						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
+					}}
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises
 					onClickDelete={row => onDELETE(row)}
 					onClickEdit={row => onEdit(row.id)}

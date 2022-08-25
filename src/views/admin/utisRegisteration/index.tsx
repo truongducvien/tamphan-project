@@ -11,9 +11,12 @@ import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
+import { useLoadMore } from 'hooks/useLoadMore';
 import { MdResetTv } from 'react-icons/md';
 import { getArea } from 'services/area';
+import { IArea, IAreaParams } from 'services/area/type';
 import { getUtilsGroup } from 'services/utils/group';
+import { IUtilsGroup, IUtilsGroupParams } from 'services/utils/group/type';
 import { getUtilsRe } from 'services/utilsRegisteration';
 import {
 	IUtilsRe,
@@ -38,9 +41,25 @@ const UtilsReManagement: React.FC = () => {
 		getUtilsRe({ ...param, page: currentPage - 1, size: currentPageSize }),
 	);
 
-	const { data: dataArea } = useQuery(['listArea', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
+	const {
+		data: dataArea,
+		isLoading: isLoadingArea,
+		fetchMore: fetchMoreArea,
+	} = useLoadMore<IArea, IAreaParams>({
+		id: ['listArea', keywordAreaDebound],
+		func: getArea,
+		payload: { name: keywordAreaDebound },
+	});
 
-	const { data: dataGroup } = useQuery(['listGroup', keywordDebound], () => getUtilsGroup({ name: keywordDebound }));
+	const {
+		data: dataGroup,
+		isLoading: isLoadingGroup,
+		fetchMore: fetchMoreGroup,
+	} = useLoadMore<IUtilsGroup, IUtilsGroupParams>({
+		id: ['listGroup', keywordDebound],
+		func: getUtilsGroup,
+		payload: { name: keywordDebound },
+	});
 
 	const COLUMNS: Array<IColumn<IUtilsRe>> = [
 		{ key: 'facilityName', label: 'Tên tiện ích' },
@@ -97,14 +116,18 @@ const UtilsReManagement: React.FC = () => {
 							<PullDowndHookForm
 								label="Loại tiện ích"
 								name="facilityGroupId"
-								options={dataGroup?.items.map(i => ({ label: i.name, value: i.id })) || []}
+								isLoading={isLoadingGroup}
+								onLoadMore={fetchMoreGroup}
+								options={dataGroup.map(i => ({ label: i.name, value: i.id })) || []}
 								onInputChange={setKeywordGroup}
 								isClearable
 							/>
 							<PullDowndHookForm
 								label="Phân khu"
 								name="areaId"
-								options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
+								isLoading={isLoadingArea}
+								onLoadMore={fetchMoreArea}
+								options={dataArea.map(i => ({ label: i.name, value: i.id })) || []}
 								onInputChange={setKeywordArea}
 								isClearable
 							/>

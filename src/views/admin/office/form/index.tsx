@@ -10,8 +10,10 @@ import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
+import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
 import { getArea } from 'services/area';
+import { IArea, IAreaParams } from 'services/area/type';
 import { createOffice, getAllOffice, getOfficeById, updateOffice } from 'services/office';
 import { IOfficePayload } from 'services/office/type';
 import * as Yup from 'yup';
@@ -38,16 +40,22 @@ const DetailOffice: React.FC = () => {
 
 	const { data: dataParent, isFetched: isFetchedParent } = useQuery(['list'], getAllOffice);
 
-	const { data: dataArea, isFetched: isFetchedArea } = useQuery(['listArea', keywordAreaDebound], () =>
-		getArea({ name: keywordAreaDebound }),
-	);
+	const {
+		data: dataArea,
+		isLoading: isLoadingArea,
+		fetchMore: fetchMoreArea,
+	} = useLoadMore<IArea, IAreaParams>({
+		id: ['listArea', keywordAreaDebound],
+		func: getArea,
+		payload: { name: keywordAreaDebound },
+	});
 
 	const {
 		data: detailData,
 		isFetched,
 		isError,
 	} = useQuery(['detail', id], () => getOfficeById(id || ''), {
-		enabled: !!id && isFetchedParent && isFetchedArea,
+		enabled: !!id && isFetchedParent,
 	});
 
 	const history = useHistory();
@@ -138,7 +146,9 @@ const DetailOffice: React.FC = () => {
 							isDisabled={action === 'detail'}
 							name="areaIds"
 							isMulti
-							options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
+							options={dataArea.map(i => ({ label: i.name, value: i.id }))}
+							isLoading={isLoadingArea}
+							onLoadMore={fetchMoreArea}
 							onInputChange={setKeywordArea}
 						/>
 					</Stack>

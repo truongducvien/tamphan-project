@@ -11,7 +11,9 @@ export interface IUtils {
 	id: string;
 	address: string;
 	facilityGroupId: string;
+	facilityGroupName: string;
 	areaId: string;
+	areaName: string;
 	capacity: number;
 	dateOffs: Array<string>;
 	depositAmount: number;

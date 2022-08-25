@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { FormControl, FormErrorMessage, FormLabel, Text, useColorModeValue } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormLabel, Spinner, Text, useColorModeValue } from '@chakra-ui/react';
 import { Select, GroupBase, SelectInstance } from 'chakra-react-select';
 import useEffectWithoutMounted from 'hooks/useEffectWithoutMounted';
+import { useForceUpdate } from 'hooks/useForceUpdate';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
 
 import { Props as TagProps } from '../tag';
@@ -45,7 +46,15 @@ export interface PullDownHookFormProps extends OptionBase {
 	placeholder?: string;
 	onInputChange?: (e: string) => void;
 	isClearable?: boolean;
+	onLoadMore?: () => Promise<unknown>;
+	isLoading?: boolean;
 }
+
+const renderLoading = () => (
+	<div style={{ height: 25 }}>
+		<Spinner />
+	</div>
+);
 
 export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 	name,
@@ -53,13 +62,58 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 	isRequired,
 	placeholder = 'Chọn ...',
 	label,
+	onLoadMore,
+	isLoading,
 	...innerProps
 }) => {
 	const refs = useRef<SelectInstance<Option, boolean, GroupBase<Option>>>(null);
+	const loadingRef = useRef<boolean>(false);
+	const [isExpanded, setExpanded] = useState<boolean>(false);
+
 	const {
 		control,
 		formState: { errors, isSubmitted, isDirty },
 	} = useFormContext();
+
+	const forceUpdate = useForceUpdate();
+
+	const detectLoadMore = useCallback(
+		async (element: HTMLElement) => {
+			if (loadingRef.current || !onLoadMore) return;
+
+			const { scrollTop, clientHeight, scrollHeight } = element;
+			const isTriggerDistance = Math.round(scrollTop + clientHeight + 38) >= scrollHeight;
+
+			if (!isTriggerDistance) return;
+
+			// @see https://medium.com/geographit/accessing-react-state-in-event-listeners-with-usestate-and-useref-hooks-8cceee73c559
+			loadingRef.current = true;
+			forceUpdate();
+
+			await onLoadMore();
+
+			loadingRef.current = false;
+			forceUpdate();
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[onLoadMore],
+	);
+
+	useEffect(() => {
+		if (!onLoadMore) return undefined;
+		const menuList = refs.current?.menuListRef;
+		if (!menuList) return undefined;
+
+		const onTriggerCallback = () => {
+			detectLoadMore(menuList);
+		};
+
+		menuList.addEventListener('scroll', onTriggerCallback);
+
+		return () => {
+			menuList.removeEventListener('scroll', onTriggerCallback);
+		};
+	}, [detectLoadMore, onLoadMore, isExpanded]);
 
 	useEffectWithoutMounted(() => {
 		if (!isSubmitted && !isDirty) {
@@ -88,6 +142,9 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 							{...innerProps}
 							{...innerField}
 							ref={refs}
+							loadingMessage={renderLoading}
+							onMenuOpen={() => setExpanded(true)}
+							onMenuClose={() => setExpanded(false)}
 							classNamePrefix="select"
 							chakraStyles={{
 								singleValue: provided => ({
@@ -117,6 +174,7 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 							defaultValue={defaultValue}
 							placeholder={placeholder}
 							menuPortalTarget={document.body}
+							isLoading={isLoading}
 							// eslint-disable-next-line react/no-unstable-nested-components
 							noOptionsMessage={() => <Text fontSize="xs">Không có dữ liệu</Text>}
 						/>

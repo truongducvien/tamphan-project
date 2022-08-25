@@ -26,8 +26,6 @@
 		"chakra-react-select": "^4.1.4",
 		"dayjs": "^1.11.4",
 		"framer-motion": "^4.1.17",
-		"quill-image-resize-module": "3.0.0",
-		"quill-image-resize-module-react": "^3.0.0",
 		"react": "^18.2.0",
 		"react-apexcharts": "^1.4.0",
 		"react-calendar": "^3.7.0",

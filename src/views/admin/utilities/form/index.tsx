@@ -12,10 +12,13 @@ import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
+import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
 import { getArea } from 'services/area';
+import { IArea, IAreaParams } from 'services/area/type';
 import { createUtils, getUtilsById, updateUtils } from 'services/utils';
 import { getUtilsGroup } from 'services/utils/group';
+import { IUtilsGroup, IUtilsGroupParams } from 'services/utils/group/type';
 import { IUtilsCreatePayload, TimeSlotType, timeSlotTypeOption } from 'services/utils/type';
 import { statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
@@ -64,12 +67,25 @@ const UtilitiesForm: React.FC = () => {
 	const keywordGroupDebound = useDebounce(keywordGroup, 500);
 	const keywordAreaDebound = useDebounce(keywordArea, 500);
 
-	const { data: dataGroup, isFetchedAfterMount: fetchedGroup } = useQuery(['listDataGroup', keywordGroupDebound], () =>
-		getUtilsGroup({ name: keywordGroupDebound }),
-	);
-	const { data: dataArea, isFetchedAfterMount: fetchedArea } = useQuery(['listDataArea', keywordAreaDebound], () =>
-		getArea({ name: keywordAreaDebound }),
-	);
+	const {
+		data: dataArea,
+		isLoading: isLoadingArea,
+		fetchMore: fetchMoreArea,
+	} = useLoadMore<IArea, IAreaParams>({
+		id: ['listArea', keywordAreaDebound],
+		func: getArea,
+		payload: { name: keywordAreaDebound },
+	});
+
+	const {
+		data: dataGroup,
+		isLoading: isLoadingGroup,
+		fetchMore: fetchMoreGroup,
+	} = useLoadMore<IUtilsGroup, IUtilsGroupParams>({
+		id: ['listGroup', keywordGroupDebound],
+		func: getUtilsGroup,
+		payload: { name: keywordGroupDebound },
+	});
 
 	const mutationCreate = useMutation(createUtils);
 	const mutationUpdate = useMutation(updateUtils);
@@ -98,7 +114,7 @@ const UtilitiesForm: React.FC = () => {
 		isFetched,
 		isError,
 	} = useQuery(['detail', id], () => getUtilsById(id || ''), {
-		enabled: !!id && fetchedGroup && fetchedArea,
+		enabled: !!id,
 	});
 
 	const onSubmit = (data: IUtilsForm, reset: () => void) => {
@@ -132,10 +148,8 @@ const UtilitiesForm: React.FC = () => {
 
 	const dataDefault = {
 		...detailData?.data,
-		areaId: dataArea?.items.map(i => ({ label: i.name, value: i.id })).find(i => i.value === detailData?.data?.areaId),
-		facilityGroupId: dataGroup?.items
-			.map(i => ({ label: i.name, value: i.id }))
-			.find(i => i.value === detailData?.data?.facilityGroupId),
+		areaId: { label: detailData?.data?.areaName, value: detailData?.data?.areaId },
+		facilityGroupId: { label: detailData?.data?.facilityGroupId, value: detailData?.data?.facilityGroupName },
 		operatingTime: detailData?.data?.operatingTime
 			? `${detailData?.data?.operatingTime.start || ''} - ${detailData?.data?.operatingTime.end || ''}`
 			: '',
@@ -170,8 +184,10 @@ const UtilitiesForm: React.FC = () => {
 							name="areaId"
 							isDisabled={action === 'detail'}
 							isRequired
-							options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
+							options={dataArea.map(i => ({ label: i.name, value: i.id })) || []}
 							onInputChange={setKeywordArea}
+							onLoadMore={fetchMoreArea}
+							isLoading={isLoadingArea}
 						/>
 					</Stack>
 					<Stack
@@ -185,8 +201,10 @@ const UtilitiesForm: React.FC = () => {
 							isDisabled={action === 'detail'}
 							isRequired
 							name="facilityGroupId"
-							options={dataGroup?.items.map(i => ({ label: i.name, value: i.id })) || []}
+							options={dataGroup.map(i => ({ label: i.name, value: i.id })) || []}
 							onInputChange={setKeywordGroup}
+							onLoadMore={fetchMoreGroup}
+							isLoading={isLoadingGroup}
 						/>
 						<TextFieldHookForm isDisabled={action === 'detail'} label="Địa chỉ" name="address" variant="admin" />
 					</Stack>

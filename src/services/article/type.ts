@@ -9,7 +9,7 @@ export enum NotificationWays {
 
 export const notificationWays: Array<Option> = [
 	{
-		label: 'Gửi qua úng dụng',
+		label: 'Gửi qua ứng dụng',
 		value: NotificationWays.APP_NOTIFICATION,
 		tag: 'purple',
 	},

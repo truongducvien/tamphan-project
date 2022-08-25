@@ -7,7 +7,7 @@ export const getApartment = async (payload: IApartmentParams) => {
 	const { data } = await http.get<IApartmentResponse>('/v1/properties/search', {
 		params: payload,
 	});
-	return data?.data || null;
+	return data?.data ? { ...data?.data, nextPage: (data?.data?.pageNum || 0) + 1 } : null;
 };
 
 export const createApartment = async (payload: IApartmentPayload) => {

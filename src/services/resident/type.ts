@@ -83,7 +83,7 @@ export interface IResident {
 }
 
 export interface IResidentParams extends BaseParams {
-	propertyId?: string;
+	code?: string;
 	areaId?: string;
 	fullName?: string;
 }

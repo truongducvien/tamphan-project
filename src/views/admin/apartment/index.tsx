@@ -10,10 +10,12 @@ import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
+import { useLoadMore } from 'hooks/useLoadMore';
 import { MdImportExport, MdLibraryAdd } from 'react-icons/md';
 import { getApartment } from 'services/apartment';
 import { IApartment, IApartmentParams, statusApartment } from 'services/apartment/type';
 import { getArea } from 'services/area';
+import { IArea, IAreaParams } from 'services/area/type';
 import { PermistionAction } from 'variables/permission';
 import * as Yup from 'yup';
 
@@ -34,7 +36,16 @@ const ApartMentManagement: React.FC = () => {
 	const keywordAreaDebound = useDebounce(keywordArea, 500);
 	const [param, setParams] = useState<IApartmentParams | null>(null);
 
-	const { data: dataArea } = useQuery(['listArea', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
+	const {
+		data: dataArea,
+		isLoading: isLoadingArea,
+		fetchMore: fetchMoreArea,
+	} = useLoadMore<IArea, IAreaParams>({
+		id: ['listArea', keywordAreaDebound],
+		func: getArea,
+		payload: { name: keywordAreaDebound },
+	});
+
 	const { data, isLoading } = useQuery(['listApartment', param, currentPage, currentPageSize], () =>
 		getApartment({ ...param, page: currentPage - 1, size: currentPageSize }),
 	);
@@ -82,7 +93,9 @@ const ApartMentManagement: React.FC = () => {
 								label="Phân khu"
 								isClearable
 								onInputChange={setKeywordArea}
-								options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
+								isLoading={isLoadingArea}
+								onLoadMore={fetchMoreArea}
+								options={dataArea.map(i => ({ label: i.name, value: i.id })) || []}
 							/>
 							<Flex>
 								<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>

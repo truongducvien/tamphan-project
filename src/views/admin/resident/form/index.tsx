@@ -10,8 +10,10 @@ import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
+import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
 import { getApartment } from 'services/apartment';
+import { IApartment, IApartmentParams } from 'services/apartment/type';
 import { createResident, getResidentOfProperty, updateResident } from 'services/resident';
 import {
 	Gender,
@@ -69,9 +71,15 @@ const ResidentForm: React.FC = () => {
 	const [keyword, setKeyword] = useState('');
 	const keywordDebounce = useDebounce(keyword);
 
-	const { data: dataApartment, isFetched: isFetchedApartment } = useQuery(['listApartment', keywordDebounce], () =>
-		getApartment({ code: keywordDebounce }),
-	);
+	const {
+		data: dataApartment,
+		isLoading: isLoadingApartment,
+		fetchMore,
+	} = useLoadMore<IApartment, IApartmentParams>({
+		id: ['listApartment', keywordDebounce],
+		func: getApartment,
+		payload: { code: keywordDebounce },
+	});
 
 	const {
 		data: detailData,
@@ -81,7 +89,7 @@ const ResidentForm: React.FC = () => {
 		['getResidentOfProperty', id, propertyId],
 		() => getResidentOfProperty({ id: id || '', propertyId: propertyId || '' }),
 		{
-			enabled: !!id && isFetchedApartment && !!propertyId,
+			enabled: !!id && !!propertyId,
 		},
 	);
 
@@ -131,9 +139,10 @@ const ResidentForm: React.FC = () => {
 		type: residentType.find(i => i.value === detailData?.data?.type),
 		identityCardType: identityCardType.find(i => i.value === detailData?.data?.identityCardType),
 		gender: gender.find(i => i.value === detailData?.data?.gender),
-		propertyId: dataApartment?.items
-			.map(i => ({ label: i.name, value: i.id }))
-			.find(i => i.value === detailData?.data?.propertyId),
+		propertyId: {
+			label: detailData?.data?.propertyName,
+			value: detailData?.data?.propertyId,
+		},
 	};
 
 	return (
@@ -192,7 +201,9 @@ const ResidentForm: React.FC = () => {
 							label="Căn hộ"
 							name="propertyId"
 							isRequired
-							options={dataApartment?.items.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id })) || []}
+							isLoading={isLoadingApartment}
+							onLoadMore={fetchMore}
+							options={dataApartment.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id }))}
 							onInputChange={setKeyword}
 						/>
 						<TextFieldHookForm label="Số điện thoại" name="phoneNumber" variant="admin" />

@@ -11,10 +11,13 @@ import Table, { IColumn } from 'components/table';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
+import { useLoadMore } from 'hooks/useLoadMore';
 import { MdLibraryAdd } from 'react-icons/md';
 import { getArea } from 'services/area';
+import { IArea, IAreaParams } from 'services/area/type';
 import { deleteUtils, getUtils } from 'services/utils';
 import { getUtilsGroup } from 'services/utils/group';
+import { IUtilsGroup, IUtilsGroupParams } from 'services/utils/group/type';
 import { IUtils } from 'services/utils/type';
 import { PermistionAction } from 'variables/permission';
 import { statusOption2 } from 'variables/status';
@@ -58,13 +61,30 @@ const UtilitiesManagement: React.FC = () => {
 	const keywordAreaDebound = useDebounce(keywordArea, 500);
 	const [selectedArea, setArea] = useState<Option>();
 
-	const { data: dataGroup } = useQuery(['listGroup', keywordGroupDebound], () =>
-		getUtilsGroup({ name: keywordGroupDebound }),
-	);
 	const { data, isLoading, refetch } = useQuery(['listUtils', param, currentPage, currentPageSize], () =>
 		getUtils({ ...param, page: currentPage - 1, size: currentPageSize }),
 	);
-	const { data: dataArea } = useQuery(['listArea', keywordAreaDebound], () => getArea({ name: keywordAreaDebound }));
+
+	const {
+		data: dataArea,
+		isLoading: isLoadingArea,
+		fetchMore: fetchMoreArea,
+	} = useLoadMore<IArea, IAreaParams>({
+		id: ['listArea', keywordAreaDebound],
+		func: getArea,
+		payload: { name: keywordAreaDebound },
+	});
+
+	const {
+		data: dataGroup,
+		isLoading: isLoadingGroup,
+		fetchMore: fetchMoreGroup,
+	} = useLoadMore<IUtilsGroup, IUtilsGroupParams>({
+		id: ['listGroup', keywordGroupDebound],
+		func: getUtilsGroup,
+		payload: { name: keywordGroupDebound },
+	});
+
 	const mutationDelete = useMutation(deleteUtils);
 
 	const handleApllyFilter = () => {
@@ -115,9 +135,11 @@ const UtilitiesManagement: React.FC = () => {
 							</FormLabel>
 							<PullDown
 								name="type"
-								options={dataGroup?.items.map(i => ({ label: i.name, value: i.id })) || []}
+								options={dataGroup.map(i => ({ label: i.name, value: i.id })) || []}
 								onChange={value => setGroup(value)}
 								onInputChange={setKeywordGroup}
+								isLoading={isLoadingGroup}
+								onLoadMore={fetchMoreGroup}
 							/>
 						</FormControl>
 						<FormControl>
@@ -140,10 +162,12 @@ const UtilitiesManagement: React.FC = () => {
 							</FormLabel>
 							<PullDown
 								name="subdivision"
-								options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
+								options={dataArea.map(i => ({ label: i.name, value: i.id })) || []}
 								onChange={setArea}
 								isSearchable={false}
+								isLoading={isLoadingArea}
 								onInputChange={setKeywordArea}
+								onLoadMore={fetchMoreArea}
 							/>
 						</FormControl>
 					</Stack>

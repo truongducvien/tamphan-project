@@ -11,7 +11,7 @@ import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { useHistory } from 'react-router-dom';
-import { getOffice } from 'services/office';
+import { getAllOffice, getOffice } from 'services/office';
 import { Gender, gender } from 'services/resident/type';
 import { getRole } from 'services/role';
 import { createUser, getUserById, updateUser } from 'services/user';
@@ -35,15 +35,10 @@ const UserForm: React.FC = () => {
 	const { changeAction, id, action } = useActionPage();
 	const { toast } = useToastInstance();
 
-	const [keywordOffice, setKeywordOffice] = useState('');
-	const keywordOfficeDebound = useDebounce(keywordOffice);
-
 	const [keywordRole, setKeywordRole] = useState('');
 	const keywordRoleDebound = useDebounce(keywordRole);
 
-	const { data: dataOffice, isFetched: isFecthedOffice } = useQuery(['listOffice', keywordOfficeDebound], () =>
-		getOffice(keywordOfficeDebound),
-	);
+	const { data: dataOffice, isFetched: isFecthedOffice } = useQuery(['listOffice'], getAllOffice);
 
 	const { data: dataRole, isFetched: isFecthedRole } = useQuery(['listRole', keywordRoleDebound], () =>
 		getRole({ name: keywordRoleDebound }),
@@ -159,7 +154,6 @@ const UserForm: React.FC = () => {
 							isRequired
 							isDisabled={isDisabled}
 							options={dataOffice?.items.map(i => ({ label: i.name, value: i.id })) || []}
-							onInputChange={setKeywordOffice}
 						/>
 						<PullDowndHookForm
 							isRequired

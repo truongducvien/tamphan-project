@@ -12,8 +12,11 @@ import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
+import { useDebounce } from 'hooks/useDebounce';
+import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
 import { getArea } from 'services/area';
+import { IArea, IAreaParams } from 'services/area/type';
 import { createArticle, getArticleById, updateArticle } from 'services/article';
 import {
 	IArticlePayload,
@@ -58,11 +61,17 @@ const DetailArticle: React.FC = () => {
 	const { toast } = useToastInstance();
 
 	const [keyword, setKeyword] = useState('');
-	const { data: dataArea, isFetched: isFetchedArea } = useQuery(['listArea', keyword], () =>
-		getArea({
-			name: keyword,
-		}),
-	);
+	const keywordDebounce = useDebounce(keyword);
+
+	const {
+		data: dataArea,
+		isLoading: isLoadingApartment,
+		fetchMore,
+	} = useLoadMore<IArea, IAreaParams>({
+		id: ['listArea', keywordDebounce],
+		func: getArea,
+		payload: { name: keywordDebounce },
+	});
 
 	const {
 		data: detailData,
@@ -70,7 +79,7 @@ const DetailArticle: React.FC = () => {
 		isError,
 		refetch,
 	} = useQuery(['detail', id], () => getArticleById(id || ''), {
-		enabled: !!id && isFetchedArea,
+		enabled: !!id,
 	});
 
 	const history = useHistory();
@@ -166,10 +175,12 @@ const DetailArticle: React.FC = () => {
 							label="Thuộc phân khu"
 							name="areaIds"
 							isDisabled={action === 'detail'}
-							options={dataArea?.items.map(i => ({ label: i.name, value: i.id })) || []}
+							options={dataArea.map(i => ({ label: i.name, value: i.id })) || []}
 							isMulti
 							onInputChange={setKeyword}
 							isClearable
+							isLoading={isLoadingApartment}
+							onLoadMore={fetchMore}
 						/>
 					</Stack>
 					<Stack

@@ -9,9 +9,8 @@ import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import useActionPage from 'hooks/useActionPage';
-import { useDebounce } from 'hooks/useDebounce';
 import { MdLibraryAdd } from 'react-icons/md';
-import { getOffice } from 'services/office';
+import { getAllOffice } from 'services/office';
 import { getUser } from 'services/user';
 import { IUser, IUserParams } from 'services/user/type';
 import { PermistionAction } from 'variables/permission';
@@ -26,11 +25,9 @@ const validationSchema = Yup.object({
 const UserManagement: React.FC = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
-	const [keyword, setKeyword] = useState('');
-	const deboundKeyword = useDebounce(keyword);
 	const [params, setParams] = useState<Omit<IUserParams, 'page' | 'size'>>();
 
-	const { data: dataOffice } = useQuery(['list', deboundKeyword], () => getOffice(deboundKeyword));
+	const { data: dataOffice } = useQuery(['listOffice'], getAllOffice);
 
 	const { data, isLoading, isError } = useQuery(['users', currentPage, currentPageSize, params], () =>
 		getUser({ page: currentPage - 1, size: currentPageSize, ...params }),
@@ -72,7 +69,6 @@ const UserManagement: React.FC = () => {
 								isSearchable
 								name="organizationId"
 								options={dataOffice?.items.map(i => ({ label: i.name, value: i.id })) || []}
-								onInputChange={setKeyword}
 							/>
 							<TextFieldHookForm label="Họ tên" name="fullName" />
 							<TextFieldHookForm label="Tài khoản" name="username" />
