@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useColorModeValue } from '@chakra-ui/react';
+import { Text, useColorModeValue } from '@chakra-ui/react';
 import { Select, GroupBase, SelectInstance } from 'chakra-react-select';
 import { useForceUpdate } from 'hooks/useForceUpdate';
 
@@ -139,6 +139,8 @@ export const PullDown: React.FC<PullDownHookFormProps> = ({
 			placeholder={placeholder}
 			menuPortalTarget={menuPortalTarget ? document.body : undefined}
 			defaultValue={defaultValue}
+			// eslint-disable-next-line react/no-unstable-nested-components
+			noOptionsMessage={() => <Text>Không có dữ liệu</Text>}
 		/>
 	);
 };

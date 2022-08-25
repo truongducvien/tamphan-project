@@ -287,7 +287,7 @@ const AparmentForm: React.FC = () => {
 					<TabList>
 						<Tab>Thông tin căn hộ</Tab>
 						<Tab hidden={isErrorOwner || !idApartment}>Thông tin Chủ sở hữu</Tab>
-						<Tab hidden={!idApartment || isErrorOwner}>Dang sách cư dân</Tab>
+						<Tab hidden={!idApartment || isErrorOwner}>Danh sách cư dân</Tab>
 					</TabList>
 					<TabPanels>
 						<TabPanel>
