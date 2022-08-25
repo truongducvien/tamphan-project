@@ -10,7 +10,6 @@ import {
 	TabPanels,
 	Tab,
 	TabPanel,
-	Flex,
 	Alert,
 	AlertIcon,
 	AlertDescription,
@@ -26,7 +25,7 @@ import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import useDidMount from 'hooks/useDidMount';
 import { useLoadMore } from 'hooks/useLoadMore';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { createApartment, getApartmentById, updateApartment } from 'services/apartment';
 import { IApartmentPayload, StatusApartment, statusApartment } from 'services/apartment/type';
 import { getArea } from 'services/area';
@@ -40,8 +39,9 @@ import {
 	IResidentPayload,
 	ResidentType,
 } from 'services/resident/type';
-import { patchs } from 'variables/patch';
 import * as Yup from 'yup';
+
+import { ResidentTab } from './ResidentTab';
 
 const validationApartment = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên căn hộ'),
@@ -435,11 +435,7 @@ const AparmentForm: React.FC = () => {
 							</FormContainer>
 						</TabPanel>
 						<TabPanel>
-							<Flex alignItems="center" minH={200} justifyContent="center">
-								<Link to={`/admin/${patchs.Resident}/:propertyId=${idApartment || ''}`}>
-									<Button variant="link">Quản lý cư dân</Button>
-								</Link>
-							</Flex>
+							<ResidentTab id={idApartment || ''} />
 						</TabPanel>
 					</TabPanels>
 				</Tabs>
