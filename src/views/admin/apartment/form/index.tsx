@@ -35,21 +35,12 @@ import { useDebounce } from 'hooks/useDebounce';
 import useDidMount from 'hooks/useDidMount';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
-import { createApartment, getApartmentById, updateApartment, updatePropertyInApartment } from 'services/apartment';
+import { createApartment, getApartmentById, updateApartment, updateOwner } from 'services/apartment';
 import { IApartmentPayload, StatusApartment, statusApartment } from 'services/apartment/type';
 import { getArea } from 'services/area';
 import { IArea, IAreaParams } from 'services/area/type';
-import { createResident, getResident, getResidentOwner, updateResident } from 'services/resident';
-import {
-	Gender,
-	gender,
-	IdentityCardType,
-	identityCardType,
-	IResident,
-	IResidentParams,
-	IResidentPayload,
-	ResidentType,
-} from 'services/resident/type';
+import { getResident, getResidentOwner } from 'services/resident';
+import { gender, identityCardType, IResident, IResidentParams } from 'services/resident/type';
 import * as Yup from 'yup';
 
 import { ResidentTab } from './ResidentTab';
@@ -61,19 +52,7 @@ const validationApartment = Yup.object({
 	status: Yup.object().shape({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn trạng thái') }),
 });
 
-const validationSchema = Yup.object({
-	fullName: Yup.string().required('Vui lòng nhập họ tên'),
-	gender: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn giới tính') }),
-	dateOfBirth: Yup.string().required('Vui lòng nhập ngày sinh'),
-	phoneNumber: Yup.string().required('Vui lòng nhập số điện thoại'),
-	identityCardType: Yup.object({
-		label: Yup.string(),
-		value: Yup.string().required('Vui lòng chọn loại giấy tờ tuỳ thân'),
-	}),
-	identityCardNumber: Yup.string().required('Vui lòng nhập giấy tờ tuỳ thân'),
-});
-
-interface DataForm1 {
+interface DataForm {
 	acreage: string;
 	address: string;
 	areaId: Option;
@@ -92,23 +71,6 @@ interface DataForm1 {
 	type: string;
 }
 
-interface DataForm2 {
-	dateOfBirth: string;
-	email: string;
-	flatId: string;
-	fullName: string;
-	gender: Option;
-	identityCardNumber: string;
-	identityCardType: Option;
-	identityCreateDate: string;
-	identityLocationIssued: string;
-	permanentAddress: string;
-	phoneNumber: string;
-	temporaryAddress: string;
-	type: Option;
-	id: string;
-}
-
 const AparmentForm: React.FC = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [idApartment, setIdApartment] = useState<string>();
@@ -123,10 +85,8 @@ const AparmentForm: React.FC = () => {
 	const history = useHistory();
 	const mutationCreate = useMutation(createApartment);
 	const mutationUpdate = useMutation(updateApartment);
-	const mutationCreateOwner = useMutation(createResident);
-	const mutationUpdateOwner = useMutation(updateResident);
 
-	const mutationUpdateProperty = useMutation(updatePropertyInApartment);
+	const mutationUpdateOwner = useMutation(updateOwner);
 
 	const { changeAction, id, action } = useActionPage();
 	const { toast } = useToastInstance();
@@ -163,6 +123,7 @@ const AparmentForm: React.FC = () => {
 		data: dataOwnner,
 		isFetched: isFetchedingOwner,
 		isError: isErrorOwner,
+		isRefetching,
 		refetch,
 	} = useQuery(['detailOwner', id], () => getResidentOwner(id || ''), {
 		enabled: !!id && action !== 'create',
@@ -187,25 +148,7 @@ const AparmentForm: React.FC = () => {
 		}
 	};
 
-	const handelCreateOwner = async (data: IResidentPayload) => {
-		try {
-			await mutationCreateOwner.mutateAsync(data);
-			toast({ title: 'Tạo mới thành công' });
-		} catch {
-			toast({ title: 'Tạo mới thất bại', status: 'error' });
-		}
-	};
-
-	const handelUpdateOwner = async (data: IResidentPayload) => {
-		try {
-			await mutationUpdateOwner.mutateAsync(data);
-			toast({ title: 'Cập nhật thành công' });
-		} catch {
-			toast({ title: 'Cập nhật thất bại', status: 'error' });
-		}
-	};
-
-	const onSubmitApartment = (data: DataForm1) => {
+	const onSubmitApartment = (data: DataForm) => {
 		const prepareData = {
 			...data,
 			status: data.status.value as StatusApartment,
@@ -223,26 +166,11 @@ const AparmentForm: React.FC = () => {
 		action === 'create' ? handelCreateApartment(prepareData) : handelUpdateApartment(prepareData);
 	};
 
-	const onSubmit = (data: DataForm2) => {
-		if (!idApartment) return;
-		const prepareData: IResidentPayload = {
-			...data,
-			propertyId: idApartment,
-			gender: (data.gender.value as Gender) || dataOwnner?.gender,
-			identityCardType: data.identityCardType.value as IdentityCardType,
-			type: ResidentType.OWNER,
-		};
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		action === 'create' ? handelCreateOwner(prepareData) : handelUpdateOwner(prepareData);
-	};
-
 	const onChangeOwner = async () => {
 		try {
-			await mutationUpdateProperty.mutateAsync({
-				id: dataOwnner?.id || '',
-				newResidentType: ResidentType.OWNER,
-				oldProperty: idApartment || '',
-				newProperty: changeOwnerId,
+			await mutationUpdateOwner.mutateAsync({
+				id: id || '',
+				newOwner: changeOwnerId,
 			});
 			toast({ title: 'Đổi chủ sở hữu thành công' });
 			onClose();
@@ -256,7 +184,7 @@ const AparmentForm: React.FC = () => {
 		if (id) setIdApartment(id);
 	});
 
-	if (!!id && (isFetching || isError || !isFetchedingOwner)) return null;
+	if (!!id && (isFetching || isError || !isFetchedingOwner || isRefetching)) return null;
 
 	const defaultApartment = {
 		...detailData?.data,
@@ -461,11 +389,7 @@ const AparmentForm: React.FC = () => {
 							</FormContainer>
 						</TabPanel>
 						<TabPanel>
-							<FormContainer
-								onSubmit={onSubmit}
-								validationSchema={validationSchema}
-								defaultValues={defaultOwner as unknown as { [x: string]: string }}
-							>
+							<FormContainer defaultValues={defaultOwner as unknown as { [x: string]: string }}>
 								<Stack
 									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
 									direction={{ base: 'column', md: 'row' }}

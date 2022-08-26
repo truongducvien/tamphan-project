@@ -36,8 +36,10 @@ const ArticleManagement: React.FC = () => {
 			// eslint-disable-next-line react/no-unstable-nested-components
 			cell: ({ title, shortContent }) => (
 				<>
-					<Text fontWeight={700}>{title}</Text>
-					<Text fontSize={12} textOverflow="ellipsis">
+					<Text fontWeight={700} maxH={50} overflow="hidden">
+						{title}
+					</Text>
+					<Text fontSize={12} textOverflow="ellipsis" maxH={100} overflow="hidden">
 						{shortContent}
 					</Text>
 				</>
@@ -126,7 +128,7 @@ const ArticleManagement: React.FC = () => {
 						hasPreviousPage: pageInfo?.hasPreviousPage,
 						onPageChange: page => setCurrentPage(page),
 						onPageSizeChange: pageSize => {
-							setCurrentPage(0);
+							setCurrentPage(1);
 							setCurrentPageSize(pageSize);
 						},
 					}}

@@ -118,3 +118,10 @@
 .ql-tooltip {
 	// left: unset !important;
 }
+
+.table-tiny th,
+.table-tiny td {
+	padding-left: 4px;
+	padding-right: 4px;
+	min-width: unset;
+}

@@ -52,7 +52,7 @@ const ApartMentManagement: React.FC = () => {
 
 	const COLUMNS: Array<IColumn<IApartment>> = [
 		{ key: 'code', label: 'Mã căn hộ' },
-		{ key: 'name', label: 'Tên đơn vị' },
+		{ key: 'name', label: 'Tên căn vị' },
 		{ key: 'type', label: 'Loại căn hộ' },
 		{ key: 'floorNumber', label: 'Tầng' },
 		{ key: 'block', label: 'Khối' },

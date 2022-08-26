@@ -87,9 +87,7 @@ export interface IApartmentParams extends BaseParams {
 	areaId?: string;
 }
 
-export interface UpdatePropertyPayload {
-	newProperty: string;
-	newResidentType: ResidentType;
-	oldProperty: string;
+export interface UpdateOwnerPayload {
+	newOwner: string;
 	id: string;
 }

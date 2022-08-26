@@ -14,7 +14,7 @@ export const getResidentCardReqById = async (id: string) => {
 	return data?.data || null;
 };
 
-export const getResidentCardAcept = async (payload: { id: string; approvalNote?: string; cardNumber?: string }) => {
+export const getResidentCardAcept = async (payload: { id: string; approvalNote: string; cardNumber?: string }) => {
 	const { id, approvalNote, cardNumber } = payload;
 	const { data } = await http.put<IResidentCardReqDetail>(`/v1/card-request-processes/${id}/accept`, {
 		approvalNote,
@@ -23,7 +23,7 @@ export const getResidentCardAcept = async (payload: { id: string; approvalNote?:
 	return data?.data || null;
 };
 
-export const getResidentCardReject = async (payload: { id: string; approvalNote?: string }) => {
+export const getResidentCardReject = async (payload: { id: string; approvalNote: string }) => {
 	const { id, approvalNote } = payload;
 	const { data } = await http.put<IResidentCardReqDetail>(`/v1/card-request-processes/${id}/reject`, { approvalNote });
 	return data?.data || null;

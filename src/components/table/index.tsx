@@ -14,8 +14,10 @@ import {
 	HStack,
 	Box,
 	Center,
+	TableProps as BaseProps,
 } from '@chakra-ui/react';
-import { BaseOption, Option } from 'components/form/PullDown';
+import { CSSObject } from '@emotion/react';
+import { Option } from 'components/form/PullDown';
 import Pagination, { PaginationProps } from 'components/pagination';
 import { Tag } from 'components/tag';
 import { FaTrashAlt } from 'react-icons/fa';
@@ -28,6 +30,7 @@ export type PermissionAction = PermistionActionBase.UPDATE | PermistionActionBas
 export type IColumn<T> = {
 	key?: keyof T;
 	label: string;
+	isCenter?: boolean;
 	cell?: (value: T) => React.ReactNode;
 	tag?: (value: T) => Option | undefined;
 };
@@ -44,7 +47,8 @@ type TableProps<T> = {
 	onClickEdit?: (row: T) => void;
 	onClickDelete?: (row: T) => void;
 	onClickDetail?: (row: T) => void;
-};
+	stylcsse?: CSSObject;
+} & BaseProps;
 
 const Table = <T,>({
 	data = [],
@@ -57,11 +61,13 @@ const Table = <T,>({
 	onClickEdit,
 	onClickDelete,
 	onClickDetail,
+	...innerProps
 }: TableProps<T>): JSX.Element => {
 	const textColor = useColorModeValue('gray.600', 'whiteSmoke.100');
 	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
 	const iconDelete = useColorModeValue('red.300', 'red.800');
 	const scrollColor = useColorModeValue('blue.500', 'blue.800');
+	const bg = useColorModeValue('gray.100', 'blue.800');
 
 	return (
 		<>
@@ -76,12 +82,14 @@ const Table = <T,>({
 				minH={200}
 				sx={{
 					'&::-webkit-scrollbar': {
-						height: '10px',
+						height: '7px',
+						width: '7px',
 						borderRadius: '8px',
 						backgroundColor: borderColor,
 					},
 					'&::-webkit-scrollbar-thumb': {
 						backgroundColor: scrollColor,
+						borderRadius: '8px',
 					},
 				}}
 			>
@@ -92,74 +100,94 @@ const Table = <T,>({
 						</Center>
 					</Box>
 				)}
-				<ChakraTable minW={minWith || '100%'}>
-					<Thead borderBottomColor={borderColor} borderBottomWidth={1}>
-						{columns && (
-							<Tr>
-								{action && (
-									<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" textAlign="center">
-										Thao tác
-									</Th>
-								)}
-								{columns.map((column, index) => (
-									<Th
-										fontSize={{ sm: '10px', lg: '12px' }}
-										minW={200}
-										textAlign={column.tag ? 'center' : 'start'}
-										color="gray.400"
-										key={index}
-									>
-										{column.label}
-									</Th>
-								))}
-							</Tr>
-						)}
-					</Thead>
-
-					<Tbody flexDirection="column">
-						{data.map((row, index) => {
-							return (
-								<Tr key={index} bg="made.40" data-testid={`row-${index}`}>
+				<Box
+					maxH={innerProps.maxH}
+					sx={{
+						'&::-webkit-scrollbar': {
+							height: '5px',
+							borderRadius: '8px',
+							backgroundColor: 'red',
+						},
+						'&::-webkit-scrollbar-thumb': {
+							backgroundColor: scrollColor,
+						},
+					}}
+				>
+					<ChakraTable minW={minWith || '100%'} {...innerProps}>
+						<Thead
+							borderBottomColor={borderColor}
+							borderBottomWidth={1}
+							{...(innerProps.maxH ? { position: 'sticky', zIndex: 'docked' } : {})}
+							top={0}
+							bg={bg}
+						>
+							{columns && (
+								<Tr>
 									{action && (
-										<Td>
-											<HStack justify="center" align="center">
-												{action.includes(PermistionActionBase.VIEW) && (
-													<Icon onClick={() => onClickDetail?.(row)} as={MdPreview} cursor="pointer" />
-												)}
-												{action.includes(PermistionActionBase.UPDATE) && (
-													<Icon onClick={() => onClickEdit?.(row)} as={MdBorderColor} cursor="pointer" />
-												)}
-												{action.includes(PermistionActionBase.DELETE) && (
-													<Icon
-														as={FaTrashAlt}
-														onClick={() => onClickDelete?.(row)}
-														color={iconDelete}
-														cursor="pointer"
-													/>
-												)}
-											</HStack>
-										</Td>
+										<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" textAlign="center">
+											Thao tác
+										</Th>
 									)}
-									{columns.map((column, colIndex) => (
-										<Td key={`${index}${colIndex}`} color={textColor} fontSize="sm" fontWeight="700">
-											{column.cell && column.key ? (
-												column.cell(row)
-											) : column.tag && column.tag(row) ? (
-												<Center>
-													<Tag colorScheme={column.tag(row)?.tag}>{column.tag(row)?.label}</Tag>
-												</Center>
-											) : (
-												<Text color={textColor} fontSize="sm" fontWeight="700" maxH={200} overflowY="auto">
-													{column.key ? (row[column.key] as unknown as string) : ''}
-												</Text>
-											)}
-										</Td>
+									{columns.map((column, index) => (
+										<Th
+											fontSize={{ sm: '10px', lg: '12px' }}
+											minW={200}
+											textAlign={column.tag || column?.isCenter ? 'center' : 'start'}
+											color="gray.400"
+											key={index}
+										>
+											{column.label}
+										</Th>
 									))}
 								</Tr>
-							);
-						})}
-					</Tbody>
-				</ChakraTable>
+							)}
+						</Thead>
+
+						<Tbody flexDirection="column">
+							{data.map((row, index) => {
+								return (
+									<Tr key={index} bg="made.40" data-testid={`row-${index}`}>
+										{action && (
+											<Td>
+												<HStack justify="center" align="center">
+													{action.includes(PermistionActionBase.VIEW) && (
+														<Icon onClick={() => onClickDetail?.(row)} as={MdPreview} cursor="pointer" />
+													)}
+													{action.includes(PermistionActionBase.UPDATE) && (
+														<Icon onClick={() => onClickEdit?.(row)} as={MdBorderColor} cursor="pointer" />
+													)}
+													{action.includes(PermistionActionBase.DELETE) && (
+														<Icon
+															as={FaTrashAlt}
+															onClick={() => onClickDelete?.(row)}
+															color={iconDelete}
+															cursor="pointer"
+														/>
+													)}
+												</HStack>
+											</Td>
+										)}
+										{columns.map((column, colIndex) => (
+											<Td key={`${index}${colIndex}`} color={textColor} fontSize="sm" fontWeight="700">
+												{column.cell && column.key ? (
+													column.cell(row)
+												) : column.tag && column.tag(row) ? (
+													<Center>
+														<Tag colorScheme={column.tag(row)?.tag}>{column.tag(row)?.label}</Tag>
+													</Center>
+												) : (
+													<Text color={textColor} fontSize="sm" fontWeight="700" maxH={200} overflowY="auto">
+														{column.key ? (row[column.key] as unknown as string) : ''}
+													</Text>
+												)}
+											</Td>
+										))}
+									</Tr>
+								);
+							})}
+						</Tbody>
+					</ChakraTable>
+				</Box>
 			</Box>
 			{pagination && <Pagination {...pagination} />}
 		</>

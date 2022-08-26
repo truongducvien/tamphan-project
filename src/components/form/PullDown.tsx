@@ -49,6 +49,7 @@ export interface PullDownHookFormProps extends OptionBase {
 	isClearable?: boolean;
 	onLoadMore?: () => Promise<unknown>;
 	isLoading?: boolean;
+	menuPortalTarget?: boolean;
 }
 
 const renderLoading = () => (
@@ -65,6 +66,7 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 	label,
 	onLoadMore,
 	isLoading,
+	menuPortalTarget = true,
 	...innerProps
 }) => {
 	const refs = useRef<SelectInstance<Option, boolean, GroupBase<Option>>>(null);
@@ -215,10 +217,11 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 									padding: '4px 0',
 									bg: bgMenu,
 								}),
+								menu: provided => ({ ...provided, zIndex: 9999 }),
 							}}
 							defaultValue={defaultValue}
 							placeholder={placeholder}
-							menuPortalTarget={document.body}
+							menuPortalTarget={menuPortalTarget ? document.body : undefined}
 							isLoading={isLoading}
 							// eslint-disable-next-line react/no-unstable-nested-components
 							noOptionsMessage={() => <Text fontSize="xs">Không có dữ liệu</Text>}
