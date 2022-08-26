@@ -9,7 +9,12 @@ interface TextAreaFieldHookFormProps extends TextareaProps {
 	label: string;
 }
 
-export const TextAreaFieldHookForm: React.FC<TextAreaFieldHookFormProps> = ({ name, label, ...innerProps }) => {
+export const TextAreaFieldHookForm: React.FC<TextAreaFieldHookFormProps> = ({
+	name,
+	label,
+	visibility,
+	...innerProps
+}) => {
 	const {
 		control,
 		formState: { errors, isSubmitted, isDirty },
@@ -28,7 +33,7 @@ export const TextAreaFieldHookForm: React.FC<TextAreaFieldHookFormProps> = ({ na
 			control={control}
 			render={({ field: { ref, ...innerField } }) => {
 				return (
-					<FormControl isRequired={innerProps.isRequired} isInvalid={!!errors?.[name]}>
+					<FormControl isRequired={innerProps.isRequired} isInvalid={!!errors?.[name]} visibility={visibility}>
 						<FormLabel htmlFor={name}>{label}</FormLabel>
 						<Textarea borderColor={errors?.[name] ? '#FC8181' : undefined} ref={refs} {...innerProps} {...innerField} />
 						<FormErrorMessage>

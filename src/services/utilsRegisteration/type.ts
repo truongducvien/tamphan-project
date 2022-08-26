@@ -15,7 +15,7 @@ export const paymentMethods: Array<Option> = [
 	{
 		label: 'Chuyển khoản',
 		value: PaymentMethod.BANK,
-		tag: 'linkedin',
+		tag: 'blue',
 	},
 ];
 

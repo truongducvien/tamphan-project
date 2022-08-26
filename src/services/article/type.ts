@@ -72,7 +72,7 @@ export const statusArticle: Array<Option> = [
 	{
 		label: 'Xuất bản',
 		value: StatusArticle.PUBLISH,
-		tag: 'linkedin',
+		tag: 'green',
 	},
 	{
 		label: 'Từ chối',

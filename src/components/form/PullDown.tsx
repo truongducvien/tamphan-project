@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { FormControl, FormErrorMessage, FormLabel, Spinner, Text, useColorModeValue } from '@chakra-ui/react';
 import { Select, GroupBase, SelectInstance } from 'chakra-react-select';
+import chroma from 'chroma-js';
 import useEffectWithoutMounted from 'hooks/useEffectWithoutMounted';
 import { useForceUpdate } from 'hooks/useForceUpdate';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
@@ -147,9 +148,53 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 							onMenuClose={() => setExpanded(false)}
 							classNamePrefix="select"
 							chakraStyles={{
-								singleValue: provided => ({
-									...provided,
-									color,
+								singleValue: (provided, { data }) => {
+									if (!data.tag)
+										return {
+											...provided,
+											color,
+										};
+									const cl = chroma(data.tag);
+									return {
+										...provided,
+										color: data.tag,
+										backgroundColor: cl.alpha(0.1).css(),
+										borderRadius: 'md',
+										padding: '2px 7px 2px 7px',
+									};
+								},
+
+								multiValue: (provided, { data }) => {
+									if (!data.tag)
+										return {
+											...provided,
+											color,
+										};
+									const cl = chroma(data.tag);
+									return {
+										...provided,
+										backgroundColor: cl.alpha(0.1).css(),
+									};
+								},
+
+								multiValueLabel: (provided, { data }) => {
+									if (!data.tag)
+										return {
+											...provided,
+											color,
+										};
+									return {
+										...provided,
+										color: data.tag,
+									};
+								},
+								multiValueRemove: (styles, { data }) => ({
+									...styles,
+									color: data?.tag,
+									':hover': {
+										backgroundColor: data?.tag,
+										color: 'white',
+									},
 								}),
 								control: provided => ({
 									...provided,

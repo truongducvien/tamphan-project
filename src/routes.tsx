@@ -17,6 +17,7 @@ import ResidentManagement from 'views/admin/resident';
 import ResidentForm from 'views/admin/resident/form';
 import ResdidentCardManagement from 'views/admin/residentCard';
 import ResdidentCardReqManagement from 'views/admin/residentCardReq';
+import ResdidentCardReqDetail from 'views/admin/residentCardReq/form';
 import SubdivisionManagement from 'views/admin/subdivision';
 import DetailSubdivision from 'views/admin/subdivision/form';
 import UserManagement from 'views/admin/userManangement';
@@ -400,6 +401,16 @@ const routes: Route[] = [
 		action: PermistionAction.VIEW,
 		// TODO: replace this permission
 		requirePermission: FeatureModule.RESIDENT_CARD_MANAGEMENT,
+		items: [
+			{
+				name: 'Chi tiết yêu cầu thẻ cư dân',
+				layout: '/admin',
+				path: '/resident-card-request/detail',
+				component: ResdidentCardReqDetail,
+				action: PermistionAction.VIEW,
+				requirePermission: FeatureModule.RESIDENT_CARD_MANAGEMENT,
+			},
+		],
 	},
 	{
 		name: 'Sign In',

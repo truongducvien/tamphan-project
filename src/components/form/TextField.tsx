@@ -17,6 +17,7 @@ export const TextFieldHookForm: React.FC<TextFieldHookFormProps> = ({
 	variant = 'admin',
 	placeholder = 'Nhập ...',
 	hidden,
+	visibility,
 	...innerProps
 }) => {
 	const {
@@ -42,6 +43,7 @@ export const TextFieldHookForm: React.FC<TextFieldHookFormProps> = ({
 						flexDirection={horial ? 'row' : 'column'}
 						isRequired={innerProps.isRequired}
 						isInvalid={!!errors?.[name]}
+						visibility={visibility}
 					>
 						<FormLabel htmlFor={name}>{label}</FormLabel>
 						<Input

@@ -9,6 +9,7 @@ import { DatePickerdHookForm } from 'components/form/DatePicker';
 import { BaseOption, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
+import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { MdResetTv } from 'react-icons/md';
@@ -16,6 +17,7 @@ import { getApartment } from 'services/apartment';
 import { IApartment, IApartmentParams } from 'services/apartment/type';
 import { getResidentCardReq } from 'services/residentCardReq';
 import { IResidentCardReq, IResidentCardReqParams, statusCardReq, typeCardReq } from 'services/residentCardReq/type';
+import { PermistionAction } from 'variables/permission';
 import * as Yup from 'yup';
 
 interface FormData {
@@ -92,6 +94,8 @@ const ResdidentCardReqManagement: React.FC = () => {
 		setParams(preData);
 	};
 
+	const { changeAction } = useActionPage();
+
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
@@ -148,6 +152,8 @@ const ResdidentCardReqManagement: React.FC = () => {
 							setCurrentPageSize(pageSize);
 						},
 					}}
+					action={PermistionAction.VIEW}
+					onClickDetail={({ id }) => changeAction('detail', id)}
 				/>
 			</Card>
 		</Box>

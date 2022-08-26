@@ -1,6 +1,5 @@
-import { BaseOption, Option } from 'components/form/PullDown';
-import { BaseParams, BaseResponeList } from 'services/type';
-import { Status } from 'variables/status';
+import { BaseOption } from 'components/form/PullDown';
+import { BaseParams, BaseResponeDetail, BaseResponeList } from 'services/type';
 
 enum StatusCardReq {
 	WAITING = 'WAITING',
@@ -26,7 +25,7 @@ export const statusCardReq: Array<BaseOption<keyof typeof StatusCardReq>> = [
 	{
 		label: 'Đã duyệt',
 		value: 'ACCEPTED',
-		tag: 'linkedin',
+		tag: 'teal',
 	},
 	{
 		label: 'Từ chối',
@@ -94,3 +93,4 @@ export interface IResidentCardReqParams extends BaseParams {
 }
 
 export type IResidentCardReqResponse = BaseResponeList<IResidentCardReq>;
+export type IResidentCardReqDetail = BaseResponeDetail<IResidentCardReq>;
