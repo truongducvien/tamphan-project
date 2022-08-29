@@ -131,6 +131,10 @@ export const PullDown: React.FC<PullDownHookFormProps> = ({
 					bg: bgMenu,
 					zIndex: 9999,
 				}),
+				option: provided => ({
+					...provided,
+					opacity: 1,
+				}),
 			}}
 			onChange={value => {
 				const newvalue = value as Option;

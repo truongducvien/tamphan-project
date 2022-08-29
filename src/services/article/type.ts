@@ -103,7 +103,7 @@ export const typeArticles: Array<Option> = [
 	{
 		label: 'Tin tức',
 		value: TypeArticle.NEWS,
-		tag: 'pink',
+		tag: 'green',
 	},
 	{
 		label: 'Bản tin cư dân',

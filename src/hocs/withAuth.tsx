@@ -12,7 +12,7 @@ export const withAuth =
 			return (
 				<Portal>
 					<Center height="100vh">
-						<Spinner />
+						<Spinner color="blue.500" emptyColor="gray.200" speed="0.65s" />
 					</Center>
 				</Portal>
 			);

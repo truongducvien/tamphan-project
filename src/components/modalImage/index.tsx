@@ -1,6 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 
-import { Button, Image, Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, ModalProps } from '@chakra-ui/react';
+import {
+	Button,
+	Image,
+	Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalFooter,
+	ModalBody,
+	ModalProps,
+	Box,
+	Flex,
+} from '@chakra-ui/react';
 import { TransformComponent, ReactZoomPanPinchRef, TransformWrapper } from 'react-zoom-pan-pinch';
 
 import './index.scss';
@@ -40,10 +51,13 @@ export const ModalImage: React.FC<Props> = ({ src, onPrev, onNext, ...modalProps
 					<ModalBody>
 						<TransformWrapper initialScale={1} centerOnInit ref={ref}>
 							{({ zoomIn, zoomOut, resetTransform }) => (
-								<div className="d-flex align-items-center justify-content-center o-modalimage_container">
-									<TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
-										<Image src={src} alt="" />
-									</TransformComponent>
+								<div className="o-modalimage_container">
+									<Box className="o-modalimage_tranform">
+										<TransformComponent wrapperStyle={{ width: '100%', height: 'calc(100vh - 200px)' }}>
+											<Image src={src} alt="" />
+										</TransformComponent>
+									</Box>
+
 									<ModalFooter p={2} justifyContent="center">
 										{onPrev && (
 											<Button m={1} ref={prevRef} type="button" onClick={onPrev}>

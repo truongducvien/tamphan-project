@@ -59,11 +59,11 @@ const ResidentModal: React.FC<{
 		fullName: string;
 	}
 	const { toast } = useToastInstance();
-	const mutationAdd = useMutation(addResident);
+	const { mutateAsync: mmutationAdd, isLoading: isAdding } = useMutation(addResident);
 
 	const handleAdd = async () => {
 		try {
-			await mutationAdd.mutateAsync({ id, residentIds: ids });
+			await mmutationAdd({ id, residentIds: ids });
 			toast({
 				title: 'Thêm cư dân thành công!',
 			});
@@ -219,8 +219,14 @@ const ResidentModal: React.FC<{
 					</Box>
 				</ModalBody>
 				<ModalFooter>
-					{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-					<Button colorScheme="blue" isDisabled={!ids[0]} mr={3} onClick={handleAdd}>
+					<Button
+						colorScheme="blue"
+						isDisabled={!ids[0]}
+						mr={3}
+						// eslint-disable-next-line @typescript-eslint/no-misused-promises
+						onClick={handleAdd}
+						isLoading={isAdding}
+					>
 						Xác nhận
 					</Button>
 					<Button w={20} variant="gray" onClick={onClose}>
@@ -238,19 +244,19 @@ export const ResidentTab: React.FC<{ id: string }> = ({ id: idApartment }) => {
 	const [ids, setIds] = useState<string[]>([]);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	const mutationRemove = useMutation(removeResident);
+	const { mutateAsync: mutationRemove, isLoading: isRemoving } = useMutation(removeResident);
 	const { toast } = useToastInstance();
 	const handelRemove = async () => {
 		await alert({
 			title: 'Bạn có muốn xoá cư dân ra khỏi căn hộ ?',
 			type: 'error',
 		});
-		refetch();
 		try {
-			await mutationRemove.mutateAsync({ id: idApartment, residentIds: ids });
+			await mutationRemove({ id: idApartment, residentIds: ids });
 			toast({
 				title: 'Xoá cư dân thành công!',
 			});
+			refetch();
 		} catch (error) {
 			toast({
 				title: 'Xoá cư dân thất bại!',
@@ -291,8 +297,15 @@ export const ResidentTab: React.FC<{ id: string }> = ({ id: idApartment }) => {
 	return (
 		<Box>
 			<Flex justifyContent="end">
-				{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-				<Button marginLeft={1} onClick={handelRemove} variant="delete" disabled={!ids[0]} leftIcon={<MdDelete />}>
+				<Button
+					marginLeft={1}
+					// eslint-disable-next-line @typescript-eslint/no-misused-promises
+					onClick={handelRemove}
+					variant="delete"
+					disabled={!ids[0]}
+					leftIcon={<MdDelete />}
+					isLoading={isRemoving}
+				>
 					Xoá cư dân
 				</Button>
 				<Button marginLeft={1} onClick={onOpen} variant="brand" leftIcon={<MdLibraryAdd />}>

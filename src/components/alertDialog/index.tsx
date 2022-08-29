@@ -39,6 +39,7 @@ const AlertDialog: React.FC<Props> = ({
 			onClose={onClose}
 			isOpen={isOpen}
 			isCentered
+			closeOnEsc
 		>
 			<AlertDialogOverlay />
 			<AlertDialogContent>
@@ -49,8 +50,8 @@ const AlertDialog: React.FC<Props> = ({
 					{title}
 				</AlertDialogHeader>
 				<AlertDialogCloseButton top={0} right={0} />
-				<AlertDialogBody>{body}</AlertDialogBody>
-				<AlertDialogFooter>
+				{body && <AlertDialogBody>{body}</AlertDialogBody>}
+				<AlertDialogFooter justifyContent="center">
 					<Button ref={cancelRef} onClick={onClose}>
 						Huỷ
 					</Button>

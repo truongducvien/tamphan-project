@@ -125,3 +125,7 @@
 	padding-right: 4px;
 	min-width: unset;
 }
+.select__control--is-disabled {
+	opacity: 1 !important;
+	cursor: default !important;
+}

@@ -5,6 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import AlertDialog from 'components/alertDialog';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
+import { Loading } from 'components/form/Loading';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { PullDown } from 'components/pulldown';
@@ -21,7 +22,7 @@ const UtilsReForm: React.FC = () => {
 	const [paymentMethod, setPay] = useState<PaymentMethod>();
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { data, isFetched, refetch } = useQuery(['detail', id], () => getUtilsReById(id || ''));
+	const { data, isLoading, refetch } = useQuery(['detail', id], () => getUtilsReById(id || ''));
 	const mutationDelete = useMutation(confirmUtilsReById);
 
 	const onSubmit = () => {
@@ -47,7 +48,7 @@ const UtilsReForm: React.FC = () => {
 		status: statusUtilsRe.find(i => i.value === data?.data?.status)?.label,
 	};
 
-	if (!isFetched) return null;
+	if (isLoading) return <Loading />;
 	// bookingCode
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -132,11 +133,19 @@ const UtilsReForm: React.FC = () => {
 			<AlertDialog
 				centerTitle
 				title="Chọn phương thức thanh toán"
+				type="error"
 				isOpen={isOpen}
 				onClose={onClose}
 				// eslint-disable-next-line @typescript-eslint/no-misused-promises
 				onConfirm={onConfirm}
-				body={<PullDown name="pay" onChange={opt => setPay(opt.value as PaymentMethod)} options={paymentMethods} />}
+				body={
+					<PullDown
+						name="pay"
+						menuPortalTarget={false}
+						onChange={opt => setPay(opt.value as PaymentMethod)}
+						options={paymentMethods}
+					/>
+				}
 			/>
 		</Box>
 	);

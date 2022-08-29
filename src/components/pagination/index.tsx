@@ -28,6 +28,7 @@ export type PaginationProps = {
 	hasPreviousPage?: boolean;
 	onPageChange?: (page: number) => void;
 	onPageSizeChange?: (pageSize: number) => void;
+	isLoading?: boolean;
 };
 
 const Pagination = ({
@@ -39,6 +40,7 @@ const Pagination = ({
 	onPageChange,
 	onPageSizeChange,
 	value = 1,
+	isLoading = false,
 }: PaginationProps): JSX.Element | null => {
 	const totalPages = total;
 
@@ -71,7 +73,12 @@ const Pagination = ({
 	if (isHidden) return null;
 
 	return (
-		<ChakraPagination pagesCount={total} currentPage={currentPage} onPageChange={handlePageChange}>
+		<ChakraPagination
+			pagesCount={total}
+			currentPage={currentPage}
+			onPageChange={handlePageChange}
+			isDisabled={isLoading}
+		>
 			<PaginationContainer mt={5} align="center" justify="center" w="full">
 				<Select
 					data-testid="page-size-dropdown"
@@ -103,7 +110,7 @@ const Pagination = ({
 					align="center"
 					separator={
 						<PaginationSeparator
-							isDisabled={!hasNextPage && !hasPreviousPage}
+							isDisabled={isLoading || (!hasNextPage && !hasPreviousPage)}
 							color={textColor}
 							bg={bgColor}
 							_hover={{ bg: 'made.80' }}

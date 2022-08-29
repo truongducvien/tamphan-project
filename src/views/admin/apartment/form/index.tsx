@@ -21,10 +21,13 @@ import {
 	AlertIcon,
 	AlertDescription,
 	useDisclosure,
+	AlertTitle,
+	Flex,
 } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
+import { Loading } from 'components/form/Loading';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
@@ -83,10 +86,10 @@ const AparmentForm: React.FC = () => {
 	const [changeOwnerId, setOwnerID] = useState('');
 
 	const history = useHistory();
-	const mutationCreate = useMutation(createApartment);
-	const mutationUpdate = useMutation(updateApartment);
+	const { mutateAsync: mutationCreate, isLoading: isCreating } = useMutation(createApartment);
+	const { mutateAsync: mutationUpdate, isLoading: isUpdateingApartment } = useMutation(updateApartment);
 
-	const mutationUpdateOwner = useMutation(updateOwner);
+	const { mutateAsync: mutationUpdateOwner, isLoading: isUpdatetingOwner } = useMutation(updateOwner);
 
 	const { changeAction, id, action } = useActionPage();
 	const { toast } = useToastInstance();
@@ -123,6 +126,7 @@ const AparmentForm: React.FC = () => {
 		data: dataOwnner,
 		isFetched: isFetchedingOwner,
 		isError: isErrorOwner,
+		isFetching: isFetchingOwner,
 		isRefetching,
 		refetch,
 	} = useQuery(['detailOwner', id], () => getResidentOwner(id || ''), {
@@ -131,7 +135,7 @@ const AparmentForm: React.FC = () => {
 
 	const handelCreateApartment = async (data: IApartmentPayload) => {
 		try {
-			const response = await mutationCreate.mutateAsync(data);
+			const response = await mutationCreate(data);
 			setIdApartment(response?.data?.id);
 			toast({ title: 'Tạo mới thành công' });
 		} catch {
@@ -141,7 +145,7 @@ const AparmentForm: React.FC = () => {
 
 	const handelUpdateApartment = async (data: IApartmentPayload) => {
 		try {
-			await mutationUpdate.mutateAsync(data);
+			await mutationUpdate(data);
 			toast({ title: 'Cập nhật thành công' });
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
@@ -168,7 +172,7 @@ const AparmentForm: React.FC = () => {
 
 	const onChangeOwner = async () => {
 		try {
-			await mutationUpdateOwner.mutateAsync({
+			await mutationUpdateOwner({
 				id: id || '',
 				newOwner: changeOwnerId,
 			});
@@ -184,7 +188,7 @@ const AparmentForm: React.FC = () => {
 		if (id) setIdApartment(id);
 	});
 
-	if (!!id && (isFetching || isError || !isFetchedingOwner || isRefetching)) return null;
+	if (!!id && (isFetching || isError || !isFetchedingOwner || isRefetching || isFetchingOwner)) return <Loading />;
 
 	const defaultApartment = {
 		...detailData?.data,
@@ -205,9 +209,16 @@ const AparmentForm: React.FC = () => {
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				{isErrorOwner && (
-					<Alert status="error">
-						<AlertIcon />
-						<AlertDescription>Không tìm thấy thông tin chủ sở hữu cho căn hộ này</AlertDescription>
+					<Alert status="error" display="flex" justifyContent="space-between">
+						<Flex>
+							<AlertIcon />
+							<AlertTitle>Không tìm thấy thông tin chủ sở hữu cho căn hộ này</AlertTitle>
+						</Flex>
+						<AlertDescription>
+							<Button size="sm" variant="brand" onClick={onOpen}>
+								Đã có chủ sở hữu
+							</Button>
+						</AlertDescription>
 					</Alert>
 				)}
 
@@ -379,7 +390,13 @@ const AparmentForm: React.FC = () => {
 									>
 										Chỉnh sửa
 									</Button>
-									<Button w="20" disabled={action === 'detail'} type="submit" variant="brand">
+									<Button
+										w="20"
+										disabled={action === 'detail'}
+										type="submit"
+										variant="brand"
+										isLoading={isUpdateingApartment || isCreating}
+									>
 										Lưu
 									</Button>
 									<Button w="20" type="button" variant="gray" onClick={() => history.goBack()}>
@@ -541,8 +558,14 @@ const AparmentForm: React.FC = () => {
 						/>
 					</ModalBody>
 					<ModalFooter>
-						{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-						<Button colorScheme="blue" isDisabled={!changeOwnerId} mr={3} onClick={onChangeOwner}>
+						<Button
+							colorScheme="blue"
+							isDisabled={!changeOwnerId}
+							mr={3}
+							// eslint-disable-next-line @typescript-eslint/no-misused-promises
+							onClick={onChangeOwner}
+							isLoading={isUpdatetingOwner}
+						>
 							Xác nhận
 						</Button>
 						<Button w={20} variant="gray" onClick={onClose}>

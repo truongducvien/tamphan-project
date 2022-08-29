@@ -76,7 +76,7 @@ const PositionManagement: React.FC = () => {
 					</FormContainer>
 				</Box>
 			</Card>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+			<Card flexDirection="column" w="100%" px="10px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách chức vụ

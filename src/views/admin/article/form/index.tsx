@@ -3,10 +3,12 @@ import { useRef, useState } from 'react';
 
 import { Box, Button, FormControl, FormLabel, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { alert } from 'components/alertDialog/hook';
 import Card from 'components/card/Card';
 import { EditorRef, EditorWithRef } from 'components/editor';
 import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
+import { Loading } from 'components/form/Loading';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
@@ -77,18 +79,19 @@ const DetailArticle: React.FC = () => {
 		data: detailData,
 		isFetched,
 		isError,
+		isLoading,
 		refetch,
 	} = useQuery(['detail', id], () => getArticleById(id || ''), {
 		enabled: !!id,
 	});
 
 	const history = useHistory();
-	const mutationCreate = useMutation(createArticle);
-	const mutationUpdate = useMutation(updateArticle);
+	const { mutateAsync: mutationCreate, isLoading: isCreating } = useMutation(createArticle);
+	const { mutateAsync: mutationUpdate, isLoading: isUpdatting } = useMutation(updateArticle);
 
 	const handelCreate = async (data: Omit<IArticlePayload, 'id'>, reset: () => void) => {
 		try {
-			await mutationCreate.mutateAsync(data);
+			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
 		} catch {
@@ -99,7 +102,7 @@ const DetailArticle: React.FC = () => {
 	const handelUpdate = async (data: Omit<IArticlePayload, 'id'>) => {
 		const prepareData = { ...data, id: id || '' };
 		try {
-			await mutationUpdate.mutateAsync(prepareData);
+			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
@@ -139,8 +142,12 @@ const DetailArticle: React.FC = () => {
 			status,
 		};
 		const text = title || statusArticle.find(i => i.value === status)?.label || '';
+		await alert({
+			title: `Bạn muốn ${text} bài viết?`,
+			type: 'error',
+		});
 		try {
-			await mutationUpdate.mutateAsync(prepareData);
+			await mutationUpdate(prepareData);
 			toast({ title: `${text} bài viết thành công` });
 			refetch();
 		} catch {
@@ -148,7 +155,7 @@ const DetailArticle: React.FC = () => {
 		}
 	};
 
-	if (!!id && (!isFetched || isError)) return null;
+	if (!!id && (!isFetched || isError || isLoading)) return <Loading />;
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -274,7 +281,7 @@ const DetailArticle: React.FC = () => {
 						>
 							Chỉnh sửa
 						</Button>
-						<Button hidden={action === 'detail'} type="submit" variant="brand">
+						<Button hidden={action === 'detail'} type="submit" variant="brand" isLoading={isUpdatting || isCreating}>
 							Lưu bản nháp
 						</Button>
 						<Button
@@ -282,6 +289,7 @@ const DetailArticle: React.FC = () => {
 							type="button"
 							variant="brand"
 							onClick={() => handleAction(StatusArticle.WAITING_APPROVE, 'Chuyển duyệt')}
+							isLoading={isUpdatting}
 						>
 							Chuyển duyệt
 						</Button>
@@ -290,6 +298,7 @@ const DetailArticle: React.FC = () => {
 							type="button"
 							variant="brand"
 							onClick={() => handleAction(StatusArticle.PUBLISH)}
+							isLoading={isUpdatting}
 						>
 							Xuât bản
 						</Button>
@@ -298,6 +307,7 @@ const DetailArticle: React.FC = () => {
 							type="button"
 							variant="delete"
 							onClick={() => handleAction(StatusArticle.REJECT)}
+							isLoading={isUpdatting}
 						>
 							Từ chối
 						</Button>
@@ -306,6 +316,7 @@ const DetailArticle: React.FC = () => {
 							type="button"
 							variant="lightBrand"
 							onClick={() => handleAction(StatusArticle.DRAFT, 'Mở')}
+							isLoading={isUpdatting}
 						>
 							Mở bài viết
 						</Button>
@@ -314,6 +325,7 @@ const DetailArticle: React.FC = () => {
 							type="button"
 							variant="delete"
 							onClick={() => handleAction(StatusArticle.CANCEL)}
+							isLoading={isUpdatting}
 						>
 							Vô hiệu
 						</Button>

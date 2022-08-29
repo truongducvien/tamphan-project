@@ -4,6 +4,7 @@ import { Box, Button, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
+import { Loading } from 'components/form/Loading';
 import { BaseOption, Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
@@ -54,18 +55,19 @@ const DetailOffice: React.FC = () => {
 		data: detailData,
 		isFetched,
 		isError,
+		isLoading,
 	} = useQuery(['detail', id], () => getOfficeById(id || ''), {
 		enabled: !!id && isFetchedParent,
 	});
 
 	const history = useHistory();
-	const mutationCreate = useMutation(createOffice);
-	const mutationUpdate = useMutation(updateOffice);
+	const { mutateAsync: mutationCreate, isLoading: isCreating } = useMutation(createOffice);
+	const { mutateAsync: mutationUpdate, isLoading: isUpdating } = useMutation(updateOffice);
 
 	const handelCreate = async (data: DataForm, reset: () => void) => {
 		const prepareData = { ...data, parentId: data.parentId?.value as string, areaIds: data.areaIds.map(i => i.value) };
 		try {
-			await mutationCreate.mutateAsync(prepareData);
+			await mutationCreate(prepareData);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
 		} catch {
@@ -81,7 +83,7 @@ const DetailOffice: React.FC = () => {
 			areaIds: data.areaIds.map(i => i.value),
 		};
 		try {
-			await mutationUpdate.mutateAsync(prepareData);
+			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
@@ -93,7 +95,7 @@ const DetailOffice: React.FC = () => {
 		action === 'create' ? handelCreate(data, reset) : handelUpdate(data);
 	};
 
-	if (!!id && (!isFetched || isError)) return null;
+	if (!!id && (!isFetched || isError || isLoading)) return <Loading />;
 
 	const defaultValue = {
 		...detailData?.data,
@@ -158,7 +160,13 @@ const DetailOffice: React.FC = () => {
 								Chỉnh sửa
 							</Button>
 						)}
-						<Button w="20" disabled={action === 'detail'} type="submit" variant="brand">
+						<Button
+							w="20"
+							disabled={action === 'detail'}
+							type="submit"
+							isLoading={isCreating || isUpdating}
+							variant="brand"
+						>
 							Lưu
 						</Button>
 						<Button w="20" onClick={() => history.goBack()} type="button" variant="gray">

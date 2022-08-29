@@ -48,6 +48,7 @@ type TableProps<T> = {
 	onClickDelete?: (row: T) => void;
 	onClickDetail?: (row: T) => void;
 	stylcsse?: CSSObject;
+	editable?: (row: T) => boolean;
 } & BaseProps;
 
 const Table = <T,>({
@@ -61,6 +62,7 @@ const Table = <T,>({
 	onClickEdit,
 	onClickDelete,
 	onClickDetail,
+	editable,
 	...innerProps
 }: TableProps<T>): JSX.Element => {
 	const textColor = useColorModeValue('gray.600', 'whiteSmoke.100');
@@ -96,7 +98,7 @@ const Table = <T,>({
 				{(loading || !data?.[0]) && (
 					<Box width="100%" height={280} position="absolute" zIndex="overlay">
 						<Center position="absolute" left="50%" top="40%" transform="translate(-50%, 0px)">
-							{loading ? <Spinner /> : 'Không có dữ liệu'}
+							{loading ? <Spinner color="blue.500" emptyColor="gray.200" speed="0.65s" /> : 'Không có dữ liệu'}
 						</Center>
 					</Box>
 				)}
@@ -131,7 +133,6 @@ const Table = <T,>({
 									{columns.map((column, index) => (
 										<Th
 											fontSize={{ sm: '10px', lg: '12px' }}
-											minW={200}
 											textAlign={column.tag || column?.isCenter ? 'center' : 'start'}
 											color="gray.400"
 											key={index}
@@ -154,7 +155,12 @@ const Table = <T,>({
 														<Icon onClick={() => onClickDetail?.(row)} as={MdPreview} cursor="pointer" />
 													)}
 													{action.includes(PermistionActionBase.UPDATE) && (
-														<Icon onClick={() => onClickEdit?.(row)} as={MdBorderColor} cursor="pointer" />
+														<Icon
+															onClick={() => (editable && !editable(row) ? {} : onClickEdit?.(row))}
+															as={MdBorderColor}
+															cursor={editable && !editable(row) ? undefined : 'pointer'}
+															color={editable && !editable(row) ? 'gray' : undefined}
+														/>
 													)}
 													{action.includes(PermistionActionBase.DELETE) && (
 														<Icon
@@ -189,7 +195,7 @@ const Table = <T,>({
 					</ChakraTable>
 				</Box>
 			</Box>
-			{pagination && <Pagination {...pagination} />}
+			{pagination && <Pagination {...pagination} isLoading={loading} />}
 		</>
 	);
 };

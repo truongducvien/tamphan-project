@@ -181,8 +181,8 @@ const DetailPosition: React.FC = () => {
 	const { toast } = useToastInstance();
 	const { changeAction, action, id } = useActionPage();
 	const [loading, setLoading] = useState(true);
-	const mutationCreate = useMutation(createRole);
-	const mutationUpdate = useMutation(updateRole);
+	const { mutateAsync: mutationCreate, isLoading: isCreating } = useMutation(createRole);
+	const { mutateAsync: mutationUpdate, isLoading: isUpdating } = useMutation(updateRole);
 	const {
 		data: detailData,
 		isFetched,
@@ -199,7 +199,7 @@ const DetailPosition: React.FC = () => {
 
 	const handelCreate = async (data: Omit<IRolePayload, 'id' | 'state'>, reset: () => void) => {
 		try {
-			await mutationCreate.mutateAsync(data);
+			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
 			checkBoxRef.current.forEach(i => i?.reset());
 			reset();
@@ -211,7 +211,7 @@ const DetailPosition: React.FC = () => {
 	const handelUpdate = async (data: Omit<IRolePayload, 'id'>) => {
 		const prepareData = { ...data, id: id || '' };
 		try {
-			await mutationUpdate.mutateAsync(prepareData);
+			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
 			refetch();
 		} catch {

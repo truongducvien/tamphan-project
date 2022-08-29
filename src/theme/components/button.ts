@@ -12,6 +12,11 @@ export const buttonStyles = {
 				_focus: {
 					boxShadow: 'none',
 				},
+				_hover: {
+					_disabled: {
+						bg: 'gray',
+					},
+				},
 				_active: {
 					boxShadow: 'none',
 				},
@@ -37,13 +42,13 @@ export const buttonStyles = {
 					bg: mode('red.500', 'red.800')(props),
 					color: 'whiteSmoke',
 					_focus: {
-						bg: mode('brand.500', 'brand.400')(props),
+						bg: mode('red.300', 'red.600')(props),
 					},
 					_active: {
-						bg: mode('brand.500', 'brand.400')(props),
+						bg: mode('red.300', 'red.600')(props),
 					},
 					_hover: {
-						bg: mode('brand.600', 'brand.400')(props),
+						bg: mode('red.300', 'red.600')(props),
 					},
 				}),
 				darkBrand: (props: StyleFunctionProps | Dict<string>) => ({

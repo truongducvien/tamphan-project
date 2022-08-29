@@ -52,12 +52,6 @@ export interface PullDownHookFormProps extends OptionBase {
 	menuPortalTarget?: boolean;
 }
 
-const renderLoading = () => (
-	<div style={{ height: 25 }}>
-		<Spinner />
-	</div>
-);
-
 export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 	name,
 	defaultValue,
@@ -145,7 +139,6 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 							{...innerProps}
 							{...innerField}
 							ref={refs}
-							loadingMessage={renderLoading}
 							onMenuOpen={() => setExpanded(true)}
 							onMenuClose={() => setExpanded(false)}
 							classNamePrefix="select"
@@ -218,6 +211,7 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 									bg: bgMenu,
 								}),
 								menu: provided => ({ ...provided, zIndex: 9999 }),
+								inputContainer: provided => ({ ...provided, opacity: 1 }),
 							}}
 							defaultValue={defaultValue}
 							placeholder={placeholder}

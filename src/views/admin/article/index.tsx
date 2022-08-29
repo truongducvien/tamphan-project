@@ -10,7 +10,7 @@ import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { MdLibraryAdd } from 'react-icons/md';
 import { deleteArticle, getArticle } from 'services/article';
-import { IArticle, statusArticle, typeArticles } from 'services/article/type';
+import { IArticle, StatusArticle, statusArticle, typeArticles } from 'services/article/type';
 import { PermistionAction } from 'variables/permission';
 
 const ArticleManagement: React.FC = () => {
@@ -108,7 +108,7 @@ const ArticleManagement: React.FC = () => {
 					</HStack>
 				</Box>
 			</Card>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+			<Card flexDirection="column" w="100%" px="10px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách bài viết
@@ -137,6 +137,7 @@ const ArticleManagement: React.FC = () => {
 					onClickEdit={({ id }) => changeAction('edit', id)}
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises
 					onClickDelete={handleDelete}
+					editable={({ status }) => [StatusArticle.WAITING_APPROVE, StatusArticle.DRAFT].includes(status)}
 				/>
 			</Card>
 		</Box>

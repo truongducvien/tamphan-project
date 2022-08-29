@@ -1,5 +1,4 @@
 import { Option } from 'components/form/PullDown';
-import { ResidentType } from 'services/resident/type';
 import { BaseParams, BaseResponeList } from 'services/type';
 
 export enum StatusApartment {
