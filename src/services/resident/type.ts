@@ -65,8 +65,11 @@ export const identityCardType: Array<Option> = [
 export interface IResident {
 	dateOfBirth: string;
 	email: string;
-	propertyId: string;
-	propertyName?: string;
+	property: {
+		id: string;
+		name?: string;
+		code: string;
+	};
 	fullName: string;
 	gender: Gender;
 	identityCardNumber: string;
@@ -90,4 +93,6 @@ export interface IResidentParams extends BaseParams {
 
 export type IResidentResponse = BaseResponeList<IResident>;
 
-export type IResidentPayload = IResident;
+export interface IResidentPayload extends Omit<IResident, 'property'> {
+	propertyId: string;
+}

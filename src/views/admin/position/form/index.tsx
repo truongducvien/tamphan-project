@@ -4,6 +4,7 @@ import { Box, Button, Checkbox, FormControl, FormLabel, Heading, HStack, SimpleG
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
+import { Loading } from 'components/form/Loading';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
@@ -188,6 +189,7 @@ const DetailPosition: React.FC = () => {
 		isFetched,
 		isError,
 		refetch,
+		isLoading,
 	} = useQuery(['detail', id], () => getRoleById(id || ''), {
 		enabled: !!id,
 		onSuccess: ({ data }) => {
@@ -238,7 +240,7 @@ const DetailPosition: React.FC = () => {
 
 	const history = useHistory();
 
-	if (loading && !!id && (isError || !isFetched)) return null;
+	if (loading && !!id && (isError || !isFetched || isLoading)) return <Loading />;
 
 	const defaultValues = { ...detailData?.data, state: statusOption2.find(i => i.value === detailData?.data?.state) };
 	const isDisable = action === 'detail';
@@ -293,7 +295,13 @@ const DetailPosition: React.FC = () => {
 								Chỉnh sửa
 							</Button>
 						)}
-						<Button w="20" disabled={action === 'detail'} type="submit" variant="brand">
+						<Button
+							w="20"
+							disabled={action === 'detail'}
+							type="submit"
+							variant="brand"
+							isLoading={isCreating || isUpdating}
+						>
 							Lưu
 						</Button>
 						<Button w="20" onClick={() => history.goBack()} type="button" variant="gray">

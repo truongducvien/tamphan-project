@@ -22,6 +22,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
+import { Loading } from 'components/form/Loading';
 import { PullDowndHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
@@ -49,6 +50,7 @@ const ResdidentCardReqDetail: React.FC = () => {
 		isFetched,
 		isError,
 		refetch,
+		isLoading,
 		isRefetching,
 	} = useQuery(['detail', id], () => getResidentCardReqById(id || ''), {
 		enabled: !!id,
@@ -93,7 +95,7 @@ const ResdidentCardReqDetail: React.FC = () => {
 		if (!isRefetching) update();
 	}, [isRefetching]);
 
-	if (!!id && (!isFetched || isError || isRefetching)) return null;
+	if (!!id && (!isFetched || isError || isLoading || isRefetching)) return <Loading />;
 
 	const defaultValue = {
 		...detailData,

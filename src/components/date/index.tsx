@@ -155,7 +155,7 @@ export const DatePicker = ({
 							position="absolute"
 							right={63}
 							cursor="pointer"
-							display={!selectedDay ? 'none' : 'block'}
+							display={isDisabled || !selectedDay ? 'none' : 'block'}
 						/>
 						<Flex
 							justifyContent="center"

@@ -5,6 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
+import { Loading } from 'components/form/Loading';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
@@ -34,18 +35,19 @@ const DetailSubdivision: React.FC = () => {
 		data: detailData,
 		isFetching,
 		isError,
+		isLoading,
 	} = useQuery(['detail', id], () => getAreaById(id || ''), {
 		enabled: !!id,
 	});
 
 	const history = useHistory();
-	const mutationCreate = useMutation(createArea);
-	const mutationUpdate = useMutation(updateArea);
+	const { mutateAsync: mutationCreate, isLoading: isCreating } = useMutation(createArea);
+	const { mutateAsync: mutationUpdate, isLoading: isUpdating } = useMutation(updateArea);
 	const { toast } = useToastInstance();
 
 	const handelCreate = async (data: IAreaPayload, reset: () => void) => {
 		try {
-			await mutationCreate.mutateAsync(data);
+			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
 		} catch {
@@ -56,7 +58,7 @@ const DetailSubdivision: React.FC = () => {
 	const handelUpdate = async (data: IAreaPayload) => {
 		const prepareData = { ...data, id: id || '' };
 		try {
-			await mutationUpdate.mutateAsync(prepareData);
+			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
@@ -74,7 +76,7 @@ const DetailSubdivision: React.FC = () => {
 		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
 	};
 
-	if (isFetching || isError) return null;
+	if (isFetching || isError || isLoading) return <Loading />;
 
 	const defaultData = { ...detailData?.data, type: typeAreas.find(i => i.value === detailData?.data?.type) };
 	const isDisabled = action === 'detail';
@@ -154,7 +156,13 @@ const DetailSubdivision: React.FC = () => {
 								Chỉnh sửa
 							</Button>
 						)}
-						<Button w="20" disabled={action === 'detail'} type="submit" variant="brand">
+						<Button
+							w="20"
+							disabled={action === 'detail'}
+							type="submit"
+							variant="brand"
+							isLoading={isCreating || isUpdating}
+						>
 							Lưu
 						</Button>
 						<Button w="20" type="button" variant="gray" onClick={() => history.goBack()}>

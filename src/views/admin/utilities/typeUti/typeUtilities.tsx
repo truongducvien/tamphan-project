@@ -27,7 +27,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 	const { changeAction } = useActionPage();
 
 	const mutationDelete = useMutation(deleteUtilsGroup);
-	const onDELETE = async (row: IUtilsGroup) => {
+	const onDelete = async (row: IUtilsGroup) => {
 		try {
 			await alert({
 				type: 'error',
@@ -58,7 +58,11 @@ const TypeUtilitiesManagement: React.FC = () => {
 			// eslint-disable-next-line react/no-unstable-nested-components
 			cell: ({ imageLink }) => {
 				if (!imageLink) return null;
-				return <LazyImage src={imageLink} />;
+				return (
+					<Box width={100}>
+						<LazyImage src={imageLink} />
+					</Box>
+				);
 			},
 		},
 		{ key: 'state', label: 'Trạng thái hoạt động', tag: ({ state }) => statusOption2.find(i => i.value === state) },
@@ -113,7 +117,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 					</Stack>
 				</Box>
 			</Card>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+			<Card flexDirection="column" w="100%" px="10px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách loại tiện ích
@@ -136,7 +140,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
 					}}
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises
-					onClickDelete={row => onDELETE(row)}
+					onClickDelete={row => onDelete(row)}
 					onClickEdit={row => onEdit(row.id)}
 					onClickDetail={row => onDetail(row.id)}
 				/>

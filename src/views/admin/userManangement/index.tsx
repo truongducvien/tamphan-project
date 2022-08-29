@@ -37,7 +37,7 @@ const UserManagement: React.FC = () => {
 		{ key: 'username', label: 'Tài khoản' },
 		{ key: 'fullName', label: 'Họ tên' },
 		{ key: 'phoneNumber', label: 'Số điện thoại' },
-		{ key: 'roleId', label: 'Vai trò người dùng' },
+		{ key: 'role', label: 'Vai trò người dùng', cell: ({ role }) => role?.name },
 		{ key: 'organizationName', label: 'Đơn vị' },
 
 		// { key: 'status', label: 'Trạng thái' },
@@ -84,7 +84,7 @@ const UserManagement: React.FC = () => {
 					</FormContainer>
 				</Box>
 			</Card>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+			<Card flexDirection="column" w="100%" px="10px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách người dùng

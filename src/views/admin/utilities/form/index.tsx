@@ -5,6 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
+import { Loading } from 'components/form/Loading';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { SwichHookForm } from 'components/form/SwichHookForm';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
@@ -87,12 +88,12 @@ const UtilitiesForm: React.FC = () => {
 		payload: { name: keywordGroupDebound },
 	});
 
-	const mutationCreate = useMutation(createUtils);
-	const mutationUpdate = useMutation(updateUtils);
+	const { mutateAsync: mutationCreate, isLoading: isCreating } = useMutation(createUtils);
+	const { mutateAsync: mutationUpdate, isLoading: isUpdating } = useMutation(updateUtils);
 
 	const handelCreate = async (data: IUtilsCreatePayload, reset: () => void) => {
 		try {
-			await mutationCreate.mutateAsync(data);
+			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
 		} catch {
@@ -103,7 +104,7 @@ const UtilitiesForm: React.FC = () => {
 	const handelUpdate = async (data: IUtilsCreatePayload) => {
 		const prepareData = { ...data, id: id || '' };
 		try {
-			await mutationUpdate.mutateAsync(prepareData);
+			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
@@ -113,6 +114,7 @@ const UtilitiesForm: React.FC = () => {
 		data: detailData,
 		isFetched,
 		isError,
+		isLoading,
 	} = useQuery(['detail', id], () => getUtilsById(id || ''), {
 		enabled: !!id,
 	});
@@ -138,13 +140,13 @@ const UtilitiesForm: React.FC = () => {
 				: timeSlots,
 			dateOffs: data.dateOffs?.split(','),
 			imageLink: imageLink?.files || [],
-			timeSlotType: (data?.timeSlotType.value as TimeSlotType) || detailData?.data?.timeSlotType,
+			timeSlotType: (data?.timeSlotType?.value as TimeSlotType) || detailData?.data?.timeSlotType,
 		};
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
 	};
 
-	if (!!id && (!isFetched || isError)) return null;
+	if (!!id && (!isFetched || isError || isLoading)) return <Loading />;
 
 	const dataDefault = {
 		...detailData?.data,
@@ -156,6 +158,7 @@ const UtilitiesForm: React.FC = () => {
 		timeSlots: detailData?.data?.timeSlots.map(i => `${i.start} - ${i.end}`).join(', '),
 		dateOffs: detailData?.data?.dateOffs.join(','),
 		state: statusOption2.find(i => i.value === detailData?.data?.state),
+		timeSlotType: timeSlotTypeOption.find(i => i.value === detailData?.data?.timeSlotType),
 	};
 
 	return (
@@ -338,7 +341,13 @@ const UtilitiesForm: React.FC = () => {
 								Chỉnh sửa
 							</Button>
 						)}
-						<Button w="20" disabled={action === 'detail'} type="submit" variant="brand">
+						<Button
+							w="20"
+							disabled={action === 'detail'}
+							type="submit"
+							variant="brand"
+							isLoading={isCreating || isUpdating}
+						>
 							Lưu
 						</Button>
 						<Button w="20" type="button" variant="gray" onClick={() => history.goBack()}>

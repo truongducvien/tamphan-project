@@ -41,7 +41,7 @@ const ResidentManagement: React.FC = () => {
 		{ key: 'identityCardNumber', label: 'CMND/ CCCD/ HC' },
 		{ key: 'identityCreateDate', label: 'Ngày cấp' },
 		{ key: 'identityLocationIssued', label: 'Nới cấp' },
-		{ key: 'propertyName', label: 'Căn hộ' },
+		{ key: 'property', label: 'Căn hộ', cell: ({ property }) => property?.name },
 		{ key: 'type', label: 'Vai trò', tag: ({ type }) => residentType.find(i => i.value === type) },
 		{ key: 'email', label: 'Email' },
 		{ key: 'phoneNumber', label: 'Số điện thoại' },
@@ -125,7 +125,7 @@ const ResidentManagement: React.FC = () => {
 					</FormContainer>
 				</Box>
 			</Card>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+			<Card flexDirection="column" w="100%" px="10px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách cư dân
@@ -151,8 +151,8 @@ const ResidentManagement: React.FC = () => {
 						},
 					}}
 					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
-					onClickDetail={({ id, propertyId }) => changeAction('detail', `${id},${propertyId}`)}
-					onClickEdit={({ id, propertyId }) => changeAction('edit', `${id},${propertyId}`)}
+					onClickDetail={({ id, property }) => changeAction('detail', `${id},${property?.id}`)}
+					onClickEdit={({ id, property }) => changeAction('edit', `${id},${property?.id}`)}
 				/>
 			</Card>
 		</Box>

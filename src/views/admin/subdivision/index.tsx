@@ -77,7 +77,7 @@ const SubdivisionManagement: React.FC = () => {
 					</Flex>
 				</HStack>
 			</Card>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+			<Card flexDirection="column" w="100%" px="10px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách phân khu
@@ -86,6 +86,7 @@ const SubdivisionManagement: React.FC = () => {
 				<Table
 					testId="consignments-dashboard"
 					keyField="name"
+					minWidth={1200}
 					columns={COLUMNS}
 					data={data?.items || []}
 					loading={isLoading}

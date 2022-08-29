@@ -5,13 +5,14 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { DatePickerdHookForm } from 'components/form/DatePicker';
+import { Loading } from 'components/form/Loading';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { useHistory } from 'react-router-dom';
-import { getAllOffice, getOffice } from 'services/office';
+import { getAllOffice } from 'services/office';
 import { Gender, gender } from 'services/resident/type';
 import { getRole } from 'services/role';
 import { createUser, getUserById, updateUser } from 'services/user';
@@ -48,17 +49,18 @@ const UserForm: React.FC = () => {
 		data: detailData,
 		isFetched,
 		isError,
+		isLoading,
 	} = useQuery(['detail', id], () => getUserById(id || ''), {
 		enabled: !!id && (isFecthedOffice || isFecthedRole),
 	});
 
 	const history = useHistory();
-	const mutationCreate = useMutation(createUser);
-	const mutationUpdate = useMutation(updateUser);
+	const { mutateAsync: mutationCreate, isLoading: isCreating } = useMutation(createUser);
+	const { mutateAsync: mutationUpdate, isLoading: isUpdating } = useMutation(updateUser);
 
 	const handelCreate = async (data: IUserPayload, reset: () => void) => {
 		try {
-			await mutationCreate.mutateAsync(data);
+			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
 		} catch {
@@ -69,7 +71,7 @@ const UserForm: React.FC = () => {
 	const handelUpdate = async (data: IUserPayload) => {
 		const prepareData = { ...data, id: id || '' };
 		try {
-			await mutationUpdate.mutateAsync(prepareData);
+			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
@@ -88,7 +90,7 @@ const UserForm: React.FC = () => {
 		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
 	};
 
-	if (!!id && (!isFetched || isError)) return null;
+	if (!!id && (!isFetched || isError || isLoading)) return <Loading />;
 
 	const defaultData = {
 		...detailData?.data,
@@ -177,7 +179,13 @@ const UserForm: React.FC = () => {
 								Chỉnh sửa
 							</Button>
 						)}
-						<Button w="20" disabled={action === 'detail'} type="submit" variant="brand">
+						<Button
+							w="20"
+							disabled={action === 'detail'}
+							type="submit"
+							variant="brand"
+							isLoading={isCreating || isUpdating}
+						>
 							Lưu
 						</Button>
 						<Button w="20" onClick={() => history.goBack()} type="button" variant="gray">

@@ -4,6 +4,8 @@ import { Box, Button, Flex, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
+import { DatePickerdHookForm } from 'components/form/DatePicker';
+import { Loading } from 'components/form/Loading';
 import { BaseOption, Option, PullDowndHookForm } from 'components/form/PullDown';
 import { SwichHookForm } from 'components/form/SwichHookForm';
 import { TextFieldHookForm } from 'components/form/TextField';
@@ -85,6 +87,7 @@ const ResidentForm: React.FC = () => {
 		data: detailData,
 		isFetched,
 		isError,
+		isLoading,
 	} = useQuery(
 		['getResidentOfProperty', id, propertyId],
 		() => getResidentOfProperty({ id: id || '', propertyId: propertyId || '' }),
@@ -94,12 +97,12 @@ const ResidentForm: React.FC = () => {
 	);
 
 	const history = useHistory();
-	const mutationCreate = useMutation(createResident);
-	const mutationUpdate = useMutation(updateResident);
+	const { mutateAsync: mutationCreate, isLoading: isCreating } = useMutation(createResident);
+	const { mutateAsync: mutationUpdate, isLoading: isUpdating } = useMutation(updateResident);
 
 	const handelCreate = async (data: Omit<IResidentPayload, 'id'>, reset: () => void) => {
 		try {
-			await mutationCreate.mutateAsync(data);
+			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
 		} catch {
@@ -110,7 +113,7 @@ const ResidentForm: React.FC = () => {
 	const handelUpdate = async (data: Omit<IResidentPayload, 'id'>) => {
 		const prepareData = { ...data, id: id || '' };
 		try {
-			await mutationUpdate.mutateAsync(prepareData);
+			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
@@ -131,7 +134,7 @@ const ResidentForm: React.FC = () => {
 		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
 	};
 
-	if (!!id && !!propertyId && (isError || !isFetched)) return null;
+	if (!!id && !!propertyId && (isError || !isFetched || isLoading)) return <Loading />;
 
 	const defaultValue = {
 		...detailData?.data,
@@ -140,8 +143,8 @@ const ResidentForm: React.FC = () => {
 		identityCardType: identityCardType.find(i => i.value === detailData?.data?.identityCardType),
 		gender: gender.find(i => i.value === detailData?.data?.gender),
 		propertyId: {
-			label: detailData?.data?.propertyName,
-			value: detailData?.data?.propertyId,
+			label: detailData?.data?.property?.name,
+			value: detailData?.data?.property?.id,
 		},
 	};
 
@@ -188,7 +191,7 @@ const ResidentForm: React.FC = () => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm
+						<DatePickerdHookForm
 							isDisabled={isDisabled}
 							label="Ngày sinh"
 							isRequired
@@ -320,7 +323,13 @@ const ResidentForm: React.FC = () => {
 								Chỉnh sửa
 							</Button>
 						)}
-						<Button w="20" disabled={action === 'detail'} type="submit" variant="brand">
+						<Button
+							w="20"
+							isLoading={isCreating || isUpdating}
+							disabled={action === 'detail'}
+							type="submit"
+							variant="brand"
+						>
 							Lưu
 						</Button>
 						<Button w="20" onClick={() => history.goBack()} type="button" variant="gray">

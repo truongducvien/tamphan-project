@@ -6,6 +6,7 @@ import { AxiosError } from 'axios';
 import Card from 'components/card/Card';
 import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
+import { Loading } from 'components/form/Loading';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
@@ -34,20 +35,21 @@ const TypeUtilitiesForm: React.FC = () => {
 		data: detailData,
 		isFetching,
 		isError,
+		isLoading,
 	} = useQuery(['detail', id], () => getUtilsGroupById(id || ''), {
 		enabled: !!id,
 	});
 
 	const history = useHistory();
-	const mutationCreate = useMutation(createUtilsGroup);
-	const mutationUpdate = useMutation(updateUtilsGroup);
+	const { mutateAsync: mutationCreate, isLoading: isCeating } = useMutation(createUtilsGroup);
+	const { mutateAsync: mutationUpdate, isLoading: isUpdating } = useMutation(updateUtilsGroup);
 	const { toast } = useToastInstance();
 
 	const handelCreate = async (data: IUtilsGroupForm, reset: () => void) => {
 		const imageLink = imageRef.current?.onSubmit();
 		const prepareData = { ...data, state: data.state.value, imageLink: imageLink?.files[0] || '' };
 		try {
-			await mutationCreate.mutateAsync(prepareData);
+			await mutationCreate(prepareData);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
 			imageRef.current?.onReset();
@@ -67,7 +69,7 @@ const TypeUtilitiesForm: React.FC = () => {
 
 		const prepareData = { ...data, state: data.state.value, imageLink: imageLink?.files[0] || '', id: id || '' };
 		try {
-			await mutationUpdate.mutateAsync(prepareData);
+			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
@@ -79,7 +81,7 @@ const TypeUtilitiesForm: React.FC = () => {
 		action === 'create' ? handelCreate(data, reset) : handelUpdate(data);
 	};
 
-	if (isFetching || isError) return null;
+	if (isFetching || isError || isLoading) return <Loading />;
 
 	const defaultValue = { ...detailData?.data, state: statusOption2.find(i => i.value === detailData?.data?.state) };
 
@@ -151,7 +153,13 @@ const TypeUtilitiesForm: React.FC = () => {
 								Chỉnh sửa
 							</Button>
 						)}
-						<Button w="20" disabled={action === 'detail'} type="submit" variant="brand">
+						<Button
+							w="20"
+							disabled={action === 'detail'}
+							type="submit"
+							variant="brand"
+							isLoading={isCeating || isUpdating}
+						>
 							Lưu
 						</Button>
 						<Button w="20" type="button" variant="gray" onClick={() => history.goBack()}>

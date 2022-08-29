@@ -181,7 +181,7 @@ const UtilitiesManagement: React.FC = () => {
 					</Flex>
 				</Box>
 			</Card>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+			<Card flexDirection="column" w="100%" px="10px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách tiện ích
@@ -189,7 +189,7 @@ const UtilitiesManagement: React.FC = () => {
 				</Center>
 				<Table
 					testId="consignments-dashboard"
-					minWith="1500px"
+					minWith="2000px"
 					keyField="name"
 					columns={COLUMNS}
 					data={data?.items || []}
