@@ -68,6 +68,7 @@ const ResidentModal: React.FC<{
 				title: 'Thêm cư dân thành công!',
 			});
 			onSubmit();
+			setIds([]);
 		} catch (error) {
 			toast({
 				title: 'Thêm cư dân thất bại!',
@@ -92,7 +93,7 @@ const ResidentModal: React.FC<{
 				<HStack align="center" justify="center" w={10}>
 					<Checkbox
 						variant="admin"
-						isChecked={ids.includes(idResident)}
+						isChecked={ids.includes(idResident) || defaultArr.includes(idResident)}
 						isDisabled={defaultArr.includes(idResident)}
 						onChange={() =>
 							setIds(prev =>
@@ -149,10 +150,6 @@ const ResidentModal: React.FC<{
 		hasNextPage: data ? currentPage < data?.totalPages : false,
 		hasPreviousPage: data ? currentPage > 0 : false,
 	};
-
-	useEffect(() => {
-		setIds(defaultArr);
-	}, [defaultArr]);
 
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} isCentered size="6xl">
