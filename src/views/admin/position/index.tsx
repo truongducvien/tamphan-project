@@ -7,7 +7,9 @@ import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { MdLibraryAdd } from 'react-icons/md';
 import { getRole } from 'services/role';
 import { IRole, IRoleParams } from 'services/role/type';
@@ -16,7 +18,8 @@ import { statusOption2 } from 'variables/status';
 
 type DaraForm = Omit<IRoleParams, 'page' | 'size'>;
 
-const PositionManagement: React.FC = () => {
+const PositionManagement: React.FC<BaseComponentProps> = ({ request }) => {
+	const { actions, permistionAction } = useActionPermission(request);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 
@@ -67,6 +70,7 @@ const PositionManagement: React.FC = () => {
 									onClick={() => changeAction('create')}
 									marginLeft={1}
 									variant="brand"
+									hidden={!permistionAction.ADD}
 									leftIcon={<MdLibraryAdd />}
 								>
 									Thêm mới
@@ -101,7 +105,7 @@ const PositionManagement: React.FC = () => {
 							setCurrentPageSize(pageSize);
 						},
 					}}
-					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
+					action={actions.filter(i => [PermistionAction.UPDATE, PermistionAction.VIEW].some(ii => ii === i))}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}
 				/>

@@ -9,7 +9,9 @@ import { BaseOption, Option, PullDowndHookForm } from 'components/form/PullDown'
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
@@ -32,7 +34,8 @@ interface DataForm extends Omit<IOfficePayload, 'parentId' | 'areaIds'> {
 	areaIds: Array<BaseOption<string>>;
 }
 
-const DetailOffice: React.FC = () => {
+const DetailOffice: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction } = useActionPermission(request);
 	const { changeAction, id, action } = useActionPage();
 	const { toast } = useToastInstance();
 	const [keywordArea, setKeywordArea] = useState('');
@@ -155,11 +158,14 @@ const DetailOffice: React.FC = () => {
 						/>
 					</Stack>
 					<HStack pb={3} justifyContent="flex-end">
-						{action === 'detail' && (
-							<Button type="button" onClick={() => changeAction('edit', id || '')} variant="brand">
-								Chỉnh sửa
-							</Button>
-						)}
+						<Button
+							type="button"
+							hidden={!permistionAction.UPDATE || action !== 'detail'}
+							onClick={() => changeAction('edit', id || '')}
+							variant="brand"
+						>
+							Chỉnh sửa
+						</Button>
 						<Button
 							w="20"
 							disabled={action === 'detail'}
@@ -169,8 +175,8 @@ const DetailOffice: React.FC = () => {
 						>
 							Lưu
 						</Button>
-						<Button w="20" onClick={() => history.goBack()} type="button" variant="gray">
-							Huỷ
+						<Button type="button" variant="gray" onClick={() => history.goBack()}>
+							Quay lại
 						</Button>
 					</HStack>
 				</FormContainer>

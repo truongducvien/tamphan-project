@@ -8,7 +8,9 @@ import { Loading } from 'components/form/Loading';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { useHistory } from 'react-router-dom';
 import { createRole, getRoleById, updateRole } from 'services/role';
 import { FeatureModuleKey, IRolePayload, PermistionActionKey } from 'services/role/type';
@@ -98,55 +100,55 @@ const permissions: Array<PermissionProps> = [
 		id: '1',
 		value: 'OPERATION_MANAGEMENT',
 		title: 'Quản lý người dùng',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE'],
 	},
 	{
 		id: '2',
 		value: 'ORGANIZATIONS_MANAGEMENT',
-		title: 'Quản lý sơ đồ tổ chức',
+		title: 'Quản lý đơn vj',
 		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
 	},
 	{
 		id: '3',
 		value: 'ROLE_MANAGEMENT',
 		title: 'Quản lý chức vụ',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE'],
 	},
 	{
 		id: '4',
 		value: 'AREA_MANAGEMENT',
 		title: 'Quản lý phân khu',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE'],
 	},
 	{
 		id: '5',
 		value: 'PROPERTIES_MANAGEMENT',
 		title: 'Quản lý căn hộ',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE'],
 	},
 	{
 		id: '6',
 		value: 'RESIDENT_MANAGEMENT',
 		title: 'Quản lý cư dân',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE'],
 	},
 	{
 		id: '7',
 		value: 'RESIDENT_CARD_MANAGEMENT',
 		title: 'Quản lý thẻ cư dân',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW'],
 	},
 	{
 		id: '8',
 		value: 'RESIDENT_CARD_REQUEST_MANAGEMENT',
 		title: 'Quản lý yêu cầu thẻ cư dân',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW'],
 	},
 	{
 		id: '9',
 		value: 'RESIDENT_CARD_PROCESS_MANAGEMENT',
 		title: 'Phê duyệt yêu cầu cấp thẻ',
-		permistion: ['REJECT', 'APPROVE'],
+		permistion: ['APPROVE'],
 	},
 	{
 		id: '10',
@@ -164,19 +166,19 @@ const permissions: Array<PermissionProps> = [
 		id: '12',
 		value: 'FACILITY_BOOKING_MANAGEMENT',
 		title: 'Quản lý đăng kí tiện ích',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW', 'APPROVE'],
 	},
 	{
 		id: '13',
 		value: 'ARTICLE_MANAGEMENT',
 		title: 'Quản lý bài viết',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE', 'APPROVE', 'REJECT'],
 	},
 ];
 
-const DetailPosition: React.FC = () => {
+const DetailPosition: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction } = useActionPermission(request);
 	const checkBoxRef = useRef<Array<PermissionRef | null>>([]);
-
 	const [defaultPermission, setPermission] = useState<Array<PermissionProps>>(permissions);
 
 	const { toast } = useToastInstance();
@@ -290,11 +292,14 @@ const DetailPosition: React.FC = () => {
 						))}
 					</SimpleGrid>
 					<HStack pb={3} justifyContent="flex-end">
-						{action === 'detail' && (
-							<Button type="button" onClick={() => changeAction('edit', id || '')} variant="brand">
-								Chỉnh sửa
-							</Button>
-						)}
+						<Button
+							type="button"
+							hidden={!permistionAction.UPDATE || action !== 'detail'}
+							onClick={() => changeAction('edit', id || '')}
+							variant="brand"
+						>
+							Chỉnh sửa
+						</Button>
 						<Button
 							w="20"
 							disabled={action === 'detail'}
@@ -304,8 +309,8 @@ const DetailPosition: React.FC = () => {
 						>
 							Lưu
 						</Button>
-						<Button w="20" onClick={() => history.goBack()} type="button" variant="gray">
-							Huỷ
+						<Button type="button" variant="gray" onClick={() => history.goBack()}>
+							Quay lại
 						</Button>
 					</HStack>
 				</FormContainer>

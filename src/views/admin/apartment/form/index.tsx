@@ -33,7 +33,9 @@ import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { PullDown } from 'components/pulldown';
 import { useToastInstance } from 'components/toast';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import useDidMount from 'hooks/useDidMount';
 import { useLoadMore } from 'hooks/useLoadMore';
@@ -74,7 +76,8 @@ interface DataForm {
 	type: string;
 }
 
-const AparmentForm: React.FC = () => {
+const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction } = useActionPermission(request);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [idApartment, setIdApartment] = useState<string>();
 	const [keyword, setKeyword] = useState('');
@@ -384,7 +387,7 @@ const AparmentForm: React.FC = () => {
 								<HStack pt={3} justify="end">
 									<Button
 										type="button"
-										hidden={action !== 'detail'}
+										hidden={action !== 'detail' || !permistionAction.UPDATE}
 										onClick={() => changeAction('edit', id || '')}
 										variant="brand"
 									>
@@ -399,8 +402,8 @@ const AparmentForm: React.FC = () => {
 									>
 										Lưu
 									</Button>
-									<Button w="20" type="button" variant="gray" onClick={() => history.goBack()}>
-										Huỷ
+									<Button w="20" onClick={() => history.goBack()} type="button" variant="gray">
+										Quay lại
 									</Button>
 								</HStack>
 							</FormContainer>
@@ -522,7 +525,13 @@ const AparmentForm: React.FC = () => {
 									<TextFieldHookForm type="email" label="Email" name="email" variant="admin" />
 								</Box>
 								<HStack pt={3} justify="end">
-									<Button isDisabled={!idApartment} onClick={() => onOpen()} type="button" variant="brand">
+									<Button
+										isDisabled={!idApartment}
+										onClick={() => onOpen()}
+										type="button"
+										variant="brand"
+										hidden={!permistionAction.UPDATE}
+									>
 										Thay đổi chủ sở hữu
 									</Button>
 									<Button type="button" variant="gray" onClick={() => history.goBack()}>
@@ -533,6 +542,11 @@ const AparmentForm: React.FC = () => {
 						</TabPanel>
 						<TabPanel>
 							<ResidentTab id={idApartment || ''} />
+							<HStack pt={3} justify="end">
+								<Button type="button" variant="gray" onClick={() => history.goBack()}>
+									Quay lại
+								</Button>
+							</HStack>
 						</TabPanel>
 					</TabPanels>
 				</Tabs>

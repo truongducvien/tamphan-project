@@ -11,7 +11,9 @@ import { SwichHookForm } from 'components/form/SwichHookForm';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
@@ -57,7 +59,8 @@ interface IUtilsForm
 	dateOffs: string;
 	timeSlotType: Option;
 }
-const UtilitiesForm: React.FC = () => {
+const UtilitiesForm: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction } = useActionPermission(request);
 	const { toast } = useToastInstance();
 	const history = useHistory();
 	const { changeAction, id, action } = useActionPage();
@@ -339,11 +342,14 @@ const UtilitiesForm: React.FC = () => {
 					</Stack>
 
 					<HStack pt={3} justify="end">
-						{action === 'detail' && (
-							<Button type="button" onClick={() => changeAction('edit', id || '')} variant="brand">
-								Chỉnh sửa
-							</Button>
-						)}
+						<Button
+							hidden={!permistionAction.UPDATE || action !== 'detail'}
+							type="button"
+							onClick={() => changeAction('edit', id || '')}
+							variant="brand"
+						>
+							Chỉnh sửa
+						</Button>
 						<Button
 							w="20"
 							disabled={action === 'detail'}
@@ -353,8 +359,8 @@ const UtilitiesForm: React.FC = () => {
 						>
 							Lưu
 						</Button>
-						<Button w="20" type="button" variant="gray" onClick={() => history.goBack()}>
-							Huỷ
+						<Button type="button" variant="gray" onClick={() => history.goBack()}>
+							Quay lại
 						</Button>
 					</HStack>
 				</FormContainer>

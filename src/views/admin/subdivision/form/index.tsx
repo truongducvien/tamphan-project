@@ -9,7 +9,9 @@ import { Loading } from 'components/form/Loading';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { useHistory } from 'react-router-dom';
 import { createArea, getAreaById, updateArea } from 'services/area';
 import { IAreaPayload, TypeArea, typeAreas } from 'services/area/type';
@@ -29,7 +31,8 @@ interface DataForm extends Omit<IAreaPayload, 'type'> {
 	type: Option;
 }
 
-const DetailSubdivision: React.FC = () => {
+const DetailSubdivision: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction } = useActionPermission(request);
 	const mapImageRef = useRef<UploadImageRef>(null);
 	const avatarImageRef = useRef<UploadImageRef>(null);
 	const cardImageRef = useRef<UploadImageRef>(null);
@@ -175,11 +178,14 @@ const DetailSubdivision: React.FC = () => {
 						</FormControl>
 					</Stack>
 					<HStack pt={3} justify="end">
-						{action === 'detail' && (
-							<Button type="button" onClick={() => changeAction('edit', id || '')} variant="brand">
-								Chỉnh sửa
-							</Button>
-						)}
+						<Button
+							type="button"
+							hidden={!permistionAction.UPDATE || action !== 'detail'}
+							onClick={() => changeAction('edit', id || '')}
+							variant="brand"
+						>
+							Chỉnh sửa
+						</Button>
 						<Button
 							w="20"
 							disabled={action === 'detail'}
@@ -189,8 +195,8 @@ const DetailSubdivision: React.FC = () => {
 						>
 							Lưu
 						</Button>
-						<Button w="20" type="button" variant="gray" onClick={() => history.goBack()}>
-							Huỷ
+						<Button type="button" variant="gray" onClick={() => history.goBack()}>
+							Quay lại
 						</Button>
 					</HStack>
 				</FormContainer>

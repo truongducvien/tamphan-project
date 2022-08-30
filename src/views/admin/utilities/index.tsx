@@ -9,7 +9,9 @@ import { Option } from 'components/form/PullDown';
 import { PullDown } from 'components/pulldown';
 import Table, { IColumn } from 'components/table';
 import { useToastInstance } from 'components/toast';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { MdLibraryAdd } from 'react-icons/md';
@@ -43,7 +45,8 @@ const COLUMNS: Array<IColumn<IUtils>> = [
 	{ key: 'state', label: 'Trạng thái', tag: ({ state }) => statusOption2.find(i => i.value === state) },
 ];
 
-const UtilitiesManagement: React.FC = () => {
+const UtilitiesManagement: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction, actions } = useActionPermission(request);
 	const { toast } = useToastInstance();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
@@ -175,7 +178,13 @@ const UtilitiesManagement: React.FC = () => {
 						<Button variant="lightBrand" onClick={handleApllyFilter} leftIcon={<SearchIcon />}>
 							Tìm kiếm
 						</Button>
-						<Button marginLeft={1} variant="brand" onClick={() => changeAction('create')} leftIcon={<MdLibraryAdd />}>
+						<Button
+							hidden={!permistionAction.ADD}
+							marginLeft={1}
+							variant="brand"
+							onClick={() => changeAction('create')}
+							leftIcon={<MdLibraryAdd />}
+						>
 							Thêm mới
 						</Button>
 					</Flex>
@@ -205,7 +214,7 @@ const UtilitiesManagement: React.FC = () => {
 							setCurrentPageSize(pageSize);
 						},
 					}}
-					action={[PermistionAction.UPDATE, PermistionAction.DELETE, PermistionAction.VIEW]}
+					action={actions}
 					onClickDetail={row => changeAction('detail', row.id)}
 					onClickEdit={row => changeAction('edit', row.id)}
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises

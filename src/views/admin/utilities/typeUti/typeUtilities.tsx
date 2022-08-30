@@ -8,14 +8,16 @@ import Card from 'components/card/Card';
 import { LazyImage } from 'components/image';
 import Table, { IColumn } from 'components/table';
 import { useToastInstance } from 'components/toast';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { MdDelete, MdLibraryAdd } from 'react-icons/md';
 import { deleteUtilsGroup, getUtilsGroup } from 'services/utils/group';
 import { IUtilsGroup } from 'services/utils/group/type';
-import { PermistionAction } from 'variables/permission';
 import { statusOption2 } from 'variables/status';
 
-const TypeUtilitiesManagement: React.FC = () => {
+const TypeUtilitiesManagement: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction, actions } = useActionPermission(request);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 	const keywordRef = useRef<HTMLInputElement>(null);
@@ -107,7 +109,13 @@ const TypeUtilitiesManagement: React.FC = () => {
 							>
 								Tìm kiếm
 							</Button>
-							<Button marginLeft={1} onClick={() => changeAction('create')} variant="brand" leftIcon={<MdLibraryAdd />}>
+							<Button
+								hidden={!permistionAction.ADD}
+								marginLeft={1}
+								onClick={() => changeAction('create')}
+								variant="brand"
+								leftIcon={<MdLibraryAdd />}
+							>
 								Thêm mới
 							</Button>
 							<Button marginLeft={1} variant="DELETE" leftIcon={<MdDelete />}>
@@ -129,7 +137,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 					minWidth="1500px"
 					columns={COLUMNS}
 					data={data?.items || []}
-					action={[PermistionAction.UPDATE, PermistionAction.DELETE, PermistionAction.VIEW]}
+					action={actions}
 					pagination={{
 						total: Number(pageInfo?.total || 0),
 						pageSize: currentPageSize,

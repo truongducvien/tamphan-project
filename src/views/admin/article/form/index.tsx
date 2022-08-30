@@ -13,7 +13,9 @@ import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
@@ -54,7 +56,8 @@ interface DataForm
 	status: Option;
 }
 
-const DetailArticle: React.FC = () => {
+const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction } = useActionPermission(request);
 	const imageRef = useRef<UploadImageRef>(null);
 	const thumbnailRef = useRef<UploadImageRef>(null);
 	const editorRef = useRef<EditorRef>(null);
@@ -275,7 +278,9 @@ const DetailArticle: React.FC = () => {
 					<HStack justifyContent="flex-end">
 						<Button
 							type="button"
-							hidden={!(action === 'detail' && detailData?.data?.status !== StatusArticle.PUBLISH)}
+							hidden={
+								!(action === 'detail' && detailData?.data?.status !== StatusArticle.PUBLISH) || !permistionAction.UPDATE
+							}
 							onClick={() => changeAction('edit', id || '')}
 							variant="brand"
 						>
@@ -285,7 +290,7 @@ const DetailArticle: React.FC = () => {
 							Lưu bản nháp
 						</Button>
 						<Button
-							hidden={detailData?.data?.status !== StatusArticle.DRAFT}
+							hidden={detailData?.data?.status !== StatusArticle.DRAFT || !permistionAction.UPDATE}
 							type="button"
 							variant="brand"
 							onClick={() => handleAction(StatusArticle.WAITING_APPROVE, 'Chuyển duyệt')}
@@ -294,7 +299,7 @@ const DetailArticle: React.FC = () => {
 							Chuyển duyệt
 						</Button>
 						<Button
-							hidden={detailData?.data?.status !== StatusArticle.WAITING_APPROVE}
+							hidden={detailData?.data?.status !== StatusArticle.WAITING_APPROVE || !permistionAction.PUBLISH}
 							type="button"
 							variant="brand"
 							onClick={() => handleAction(StatusArticle.PUBLISH)}
@@ -303,7 +308,7 @@ const DetailArticle: React.FC = () => {
 							Xuât bản
 						</Button>
 						<Button
-							hidden={detailData?.data?.status !== StatusArticle.WAITING_APPROVE}
+							hidden={detailData?.data?.status !== StatusArticle.WAITING_APPROVE || !permistionAction.PUBLISH}
 							type="button"
 							variant="delete"
 							onClick={() => handleAction(StatusArticle.REJECT)}
@@ -312,7 +317,7 @@ const DetailArticle: React.FC = () => {
 							Từ chối
 						</Button>
 						<Button
-							hidden={detailData?.data?.status !== StatusArticle.CANCEL}
+							hidden={detailData?.data?.status !== StatusArticle.CANCEL || !permistionAction.DELETE}
 							type="button"
 							variant="lightBrand"
 							onClick={() => handleAction(StatusArticle.DRAFT, 'Mở')}
@@ -321,7 +326,7 @@ const DetailArticle: React.FC = () => {
 							Mở bài viết
 						</Button>
 						<Button
-							hidden={detailData?.data?.status === StatusArticle.CANCEL}
+							hidden={detailData?.data?.status === StatusArticle.CANCEL || !permistionAction.DELETE}
 							type="button"
 							variant="delete"
 							onClick={() => handleAction(StatusArticle.CANCEL)}

@@ -7,10 +7,12 @@ import { PermistionAction } from 'variables/permission';
 
 import notFound from '../assets/img/layout/404.png';
 
-interface WithLoadingProps {
+interface WithPermissionProps {
 	request?: FeatureModule;
 	action?: PermistionAction;
 }
+
+export type BaseComponentProps = WithPermissionProps;
 
 const NotFound: React.FC = () => (
 	<Flex
@@ -27,13 +29,13 @@ const NotFound: React.FC = () => (
 );
 
 export const withPermission =
-	<P extends object>(Component: React.ComponentType<P>): React.FC<P & WithLoadingProps> =>
-	({ request, action, ...props }: WithLoadingProps) => {
+	<P extends object>(Component: React.ComponentType<P>): React.FC<P & WithPermissionProps> =>
+	({ request, action, ...props }: WithPermissionProps) => {
 		const { info } = useAppSelector(state => state.user);
 		const permission = info?.role?.privileges;
 		if (permission && request && action) {
 			const hasPermission = permission?.[request].includes(action);
-			return hasPermission ? <Component {...(props as P)} /> : <NotFound />;
+			return hasPermission ? <Component {...(props as P)} request={request} action={action} /> : <NotFound />;
 		}
 		return <NotFound />;
 	};

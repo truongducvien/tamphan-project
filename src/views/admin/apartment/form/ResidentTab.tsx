@@ -27,6 +27,7 @@ import { BaseOption, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { useToastInstance } from 'components/toast';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { MdDelete, MdLibraryAdd } from 'react-icons/md';
@@ -235,6 +236,8 @@ const ResidentModal: React.FC<{
 };
 
 export const ResidentTab: React.FC<{ id: string }> = ({ id: idApartment }) => {
+	const { permistionAction } = useActionPermission('PROPERTIES_MANAGEMENT');
+
 	const { data, isLoading, refetch } = useQuery(['residentByProperty'], () => getResidentByProperty(idApartment));
 
 	const [ids, setIds] = useState<string[]>([]);
@@ -270,7 +273,7 @@ export const ResidentTab: React.FC<{ id: string }> = ({ id: idApartment }) => {
 				<HStack align="center" justify="center">
 					<Checkbox
 						variant="admin"
-						isDisabled={type === ResidentType.OWNER}
+						isDisabled={type === ResidentType.OWNER || !permistionAction.UPDATE}
 						onChange={() => setIds(prev => (ids.includes(id) ? [...prev.filter(i => i !== id)] : [...prev, id]))}
 					/>
 				</HStack>
@@ -292,7 +295,7 @@ export const ResidentTab: React.FC<{ id: string }> = ({ id: idApartment }) => {
 
 	return (
 		<Box>
-			<Flex justifyContent="end">
+			<Flex justifyContent="end" hidden={!permistionAction.UPDATE}>
 				<Button
 					marginLeft={1}
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises

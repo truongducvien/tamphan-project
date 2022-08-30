@@ -10,12 +10,15 @@ import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { PullDown } from 'components/pulldown';
 import { useToastInstance } from 'components/toast';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { useHistory } from 'react-router-dom';
 import { confirmUtilsReById, getUtilsReById } from 'services/utilsRegisteration';
 import { PaymentMethod, paymentMethods, statusUtilsRe } from 'services/utilsRegisteration/type';
 
-const UtilsReForm: React.FC = () => {
+const UtilsReForm: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction } = useActionPermission(request);
 	const history = useHistory();
 	const { toast } = useToastInstance();
 	const { id } = useActionPage();
@@ -121,11 +124,11 @@ const UtilsReForm: React.FC = () => {
 						<TextAreaFieldHookForm isDisabled label="Ghi chú" name="note" variant="admin" />
 					</Box>
 					<HStack pt={3} justify="end">
-						<Button type="submit" variant="brand">
+						<Button type="submit" variant="brand" hidden={!permistionAction.APPROVE}>
 							Xác nhận thanh toán cọc
 						</Button>
-						<Button w="20" type="button" variant="gray" onClick={() => history.goBack()}>
-							Huỷ
+						<Button type="button" variant="gray" onClick={() => history.goBack()}>
+							Quay lại
 						</Button>
 					</HStack>
 				</FormContainer>

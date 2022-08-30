@@ -5,20 +5,21 @@ import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, HStack, Inp
 import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import Table, { IColumn } from 'components/table';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { MdLibraryAdd } from 'react-icons/md';
 import { getArea } from 'services/area';
 import { IArea, typeAreas } from 'services/area/type';
 import { PermistionAction } from 'variables/permission';
 
-const SubdivisionManagement: React.FC = () => {
+const SubdivisionManagement: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction, actions } = useActionPermission(request);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
-
 	const keywordRef = useRef<HTMLInputElement>(null);
-
 	const [keyword, setKeyword] = useState('');
-	const { data, isLoading } = useQuery(['list', keyword, currentPage, currentPageSize], () =>
+	const { data, isLoading } = useQuery(['listArea', keyword, currentPage, currentPageSize], () =>
 		getArea({
 			page: currentPage - 1,
 			size: currentPageSize,
@@ -71,7 +72,13 @@ const SubdivisionManagement: React.FC = () => {
 						>
 							Tìm kiếm
 						</Button>
-						<Button marginLeft={1} onClick={() => changeAction('create')} variant="brand" leftIcon={<MdLibraryAdd />}>
+						<Button
+							marginLeft={1}
+							hidden={!permistionAction.ADD}
+							onClick={() => changeAction('create')}
+							variant="brand"
+							leftIcon={<MdLibraryAdd />}
+						>
 							Thêm mới
 						</Button>
 					</Flex>
@@ -101,7 +108,7 @@ const SubdivisionManagement: React.FC = () => {
 							setCurrentPageSize(pageSize);
 						},
 					}}
-					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
+					action={actions.filter(i => [PermistionAction.UPDATE, PermistionAction.VIEW].some(ii => ii === i))}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}
 				/>

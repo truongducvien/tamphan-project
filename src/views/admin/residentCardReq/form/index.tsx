@@ -28,7 +28,9 @@ import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
 import { formatDate } from 'helpers/dayjs';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import useEffectWithoutMounted from 'hooks/useEffectWithoutMounted';
 import { useForceUpdate } from 'hooks/useForceUpdate';
 import { useHistory } from 'react-router-dom';
@@ -36,7 +38,8 @@ import { getResidentCardAcept, getResidentCardReject, getResidentCardReqById } f
 import { statusCardReq, typeCardReq } from 'services/residentCardReq/type';
 import { BaseResponeAction } from 'services/type';
 
-const ResdidentCardReqDetail: React.FC = () => {
+const ResdidentCardReqDetail: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction } = useActionPermission(request);
 	const { id } = useActionPage();
 	const { toast } = useToastInstance();
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -190,7 +193,7 @@ const ResdidentCardReqDetail: React.FC = () => {
 					<HStack pb={3} justifyContent="flex-end">
 						<Button
 							w="20"
-							hidden={detailData?.status !== 'WAITING'}
+							hidden={detailData?.status !== 'WAITING' || !permistionAction.APPROVE}
 							// eslint-disable-next-line @typescript-eslint/no-misused-promises
 							onClick={onOpen}
 							type="button"
@@ -202,7 +205,7 @@ const ResdidentCardReqDetail: React.FC = () => {
 							w="20"
 							// eslint-disable-next-line @typescript-eslint/no-misused-promises
 							onClick={onOpenReject}
-							hidden={detailData?.status !== 'WAITING'}
+							hidden={detailData?.status !== 'WAITING' || !permistionAction.APPROVE}
 							type="button"
 							variant="delete"
 						>

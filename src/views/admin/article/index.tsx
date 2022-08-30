@@ -7,13 +7,16 @@ import { alert } from 'components/alertDialog/hook';
 import Card from 'components/card/Card';
 import Table, { IColumn } from 'components/table';
 import { useToastInstance } from 'components/toast';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { MdLibraryAdd } from 'react-icons/md';
 import { deleteArticle, getArticle } from 'services/article';
 import { IArticle, StatusArticle, statusArticle, typeArticles } from 'services/article/type';
-import { PermistionAction } from 'variables/permission';
 
-const ArticleManagement: React.FC = () => {
+const ArticleManagement: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction, actions } = useActionPermission(request);
+
 	const { toast } = useToastInstance();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
@@ -101,7 +104,13 @@ const ArticleManagement: React.FC = () => {
 							>
 								Tìm kiếm
 							</Button>
-							<Button onClick={() => changeAction('create')} marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+							<Button
+								hidden={!permistionAction.ADD}
+								onClick={() => changeAction('create')}
+								marginLeft={1}
+								variant="brand"
+								leftIcon={<MdLibraryAdd />}
+							>
 								Thêm mới
 							</Button>
 						</Flex>
@@ -131,7 +140,7 @@ const ArticleManagement: React.FC = () => {
 							setCurrentPageSize(pageSize);
 						},
 					}}
-					action={[PermistionAction.UPDATE, PermistionAction.VIEW, PermistionAction.DELETE]}
+					action={actions}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises

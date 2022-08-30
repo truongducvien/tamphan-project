@@ -6,4 +6,5 @@ export enum PermistionAction {
 	IMPORT = 'IMPORT',
 	APPROVE = 'APPROVE',
 	REJECT = 'REJECT',
+	PUBLISH = 'PUBLISH',
 }

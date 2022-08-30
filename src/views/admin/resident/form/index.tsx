@@ -10,7 +10,9 @@ import { BaseOption, Option, PullDowndHookForm } from 'components/form/PullDown'
 import { SwichHookForm } from 'components/form/SwichHookForm';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
@@ -64,7 +66,8 @@ interface DataForm {
 	state?: Option;
 }
 
-const ResidentForm: React.FC = () => {
+const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction } = useActionPermission(request);
 	const { changeAction, id: ids, action } = useActionPage();
 	const arrayIds = ids?.split(',');
 	const id = arrayIds?.[0];
@@ -314,15 +317,14 @@ const ResidentForm: React.FC = () => {
 						<SwichHookForm label="Cho phép sử dụng NOVAID" name="useNovaId" variant="admin" />
 					</Box>
 					<HStack pb={3} justifyContent="flex-end">
-						{action === 'detail' && (
-							<Button
-								type="button"
-								onClick={() => changeAction('edit', `${id || ''},${propertyId || ''}`)}
-								variant="brand"
-							>
-								Chỉnh sửa
-							</Button>
-						)}
+						<Button
+							hidden={!permistionAction.UPDATE || action !== 'detail'}
+							type="button"
+							onClick={() => changeAction('edit', `${id || ''},${propertyId || ''}`)}
+							variant="brand"
+						>
+							Chỉnh sửa
+						</Button>
 						<Button
 							w="20"
 							isLoading={isCreating || isUpdating}
@@ -332,8 +334,8 @@ const ResidentForm: React.FC = () => {
 						>
 							Lưu
 						</Button>
-						<Button w="20" onClick={() => history.goBack()} type="button" variant="gray">
-							Huỷ
+						<Button type="button" variant="gray" onClick={() => history.goBack()}>
+							Quay lại
 						</Button>
 					</HStack>
 				</FormContainer>

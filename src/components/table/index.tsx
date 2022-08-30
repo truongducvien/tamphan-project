@@ -23,10 +23,9 @@ import { Tag } from 'components/tag';
 import dayjs from 'dayjs';
 import { FaTrashAlt } from 'react-icons/fa';
 import { MdBorderColor, MdPreview } from 'react-icons/md';
-import { PermistionAction as PermistionActionBase } from 'variables/permission';
+import { PermistionAction } from 'variables/permission';
 
 export type DataTable = { [k: string]: boolean | number | string | undefined | DataTable };
-export type PermissionAction = PermistionActionBase.UPDATE | PermistionActionBase.DELETE | PermistionActionBase.VIEW;
 
 export type IColumn<T> = {
 	key?: keyof T;
@@ -44,7 +43,7 @@ type TableProps<T> = {
 	testId?: string;
 	pagination?: PaginationProps;
 	loading?: boolean;
-	action?: PermissionAction | PermissionAction[];
+	action?: PermistionAction[] | PermistionAction;
 	onClickEdit?: (row: T) => void;
 	onClickDelete?: (row: T) => void;
 	onClickDetail?: (row: T) => void;
@@ -152,10 +151,10 @@ const Table = <T,>({
 										{action && (
 											<Td>
 												<HStack justify="center" align="center">
-													{action.includes(PermistionActionBase.VIEW) && (
+													{action.includes(PermistionAction.VIEW) && (
 														<Icon onClick={() => onClickDetail?.(row)} as={MdPreview} cursor="pointer" />
 													)}
-													{action.includes(PermistionActionBase.UPDATE) && (
+													{action.includes(PermistionAction.UPDATE) && (
 														<Icon
 															onClick={() => (editable && !editable(row) ? {} : onClickEdit?.(row))}
 															as={MdBorderColor}
@@ -163,7 +162,7 @@ const Table = <T,>({
 															color={editable && !editable(row) ? 'gray' : undefined}
 														/>
 													)}
-													{action.includes(PermistionActionBase.DELETE) && (
+													{action.includes(PermistionAction.DELETE) && (
 														<Icon
 															as={FaTrashAlt}
 															onClick={() => onClickDelete?.(row)}

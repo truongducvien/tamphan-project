@@ -8,7 +8,9 @@ import { FormContainer } from 'components/form';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { MdImportExport, MdLibraryAdd } from 'react-icons/md';
@@ -16,7 +18,6 @@ import { getApartment } from 'services/apartment';
 import { IApartment, IApartmentParams, statusApartment } from 'services/apartment/type';
 import { getArea } from 'services/area';
 import { IArea, IAreaParams } from 'services/area/type';
-import { PermistionAction } from 'variables/permission';
 import * as Yup from 'yup';
 
 interface SearchForm {
@@ -29,7 +30,8 @@ const validationSchema = Yup.object({
 	areaId: Yup.object({ label: Yup.string(), value: Yup.string() }).nullable(),
 });
 
-const ApartMentManagement: React.FC = () => {
+const ApartMentManagement: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction, actions } = useActionPermission(request);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 	const [keywordArea, setKeywordArea] = useState('');
@@ -109,6 +111,7 @@ const ApartMentManagement: React.FC = () => {
 									marginLeft={1}
 									variant="brand"
 									leftIcon={<MdLibraryAdd />}
+									hidden={!permistionAction.ADD}
 								>
 									Thêm mới
 								</Button>
@@ -141,7 +144,7 @@ const ApartMentManagement: React.FC = () => {
 							setCurrentPageSize(pageSize);
 						},
 					}}
-					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
+					action={actions}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}
 				/>

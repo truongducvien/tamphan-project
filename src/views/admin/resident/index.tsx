@@ -8,7 +8,9 @@ import { FormContainer } from 'components/form';
 import { BaseOption, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { MdImportExport, MdLibraryAdd } from 'react-icons/md';
@@ -30,7 +32,9 @@ const validation = Yup.object({
 	areaId: Yup.object({ label: Yup.string(), value: Yup.string() }).nullable(),
 });
 
-const ResidentManagement: React.FC = () => {
+const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction, actions } = useActionPermission(request);
+
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 
@@ -118,7 +122,13 @@ const ResidentManagement: React.FC = () => {
 							<Button marginLeft={1} variant="light" leftIcon={<MdImportExport />}>
 								Import
 							</Button>
-							<Button marginLeft={1} onClick={() => changeAction('create')} variant="brand" leftIcon={<MdLibraryAdd />}>
+							<Button
+								hidden={!permistionAction.ADD}
+								marginLeft={1}
+								onClick={() => changeAction('create')}
+								variant="brand"
+								leftIcon={<MdLibraryAdd />}
+							>
 								Thêm mới
 							</Button>
 						</Flex>
@@ -149,7 +159,7 @@ const ResidentManagement: React.FC = () => {
 							setCurrentPageSize(pageSize);
 						},
 					}}
-					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
+					action={actions.filter(i => [PermistionAction.UPDATE, PermistionAction.VIEW].some(ii => ii === i))}
 					onClickDetail={({ id, property }) => changeAction('detail', `${id},${property?.id}`)}
 					onClickEdit={({ id, property }) => changeAction('edit', `${id},${property?.id}`)}
 				/>

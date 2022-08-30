@@ -5,13 +5,17 @@ import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, HStack, Inp
 import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import Table, { IColumn } from 'components/table';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { MdLibraryAdd } from 'react-icons/md';
 import { getOffice } from 'services/office';
 import { IOffice } from 'services/office/type';
 import { PermistionAction } from 'variables/permission';
 
-const OfficeManagement: React.FC = () => {
+const OfficeManagement: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction, actions } = useActionPermission(request);
+
 	const keywordRef = useRef<HTMLInputElement>(null);
 	const [keyword, setKeyword] = useState('');
 
@@ -54,7 +58,13 @@ const OfficeManagement: React.FC = () => {
 							>
 								Tìm kiếm
 							</Button>
-							<Button onClick={() => changeAction('create')} marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+							<Button
+								hidden={!permistionAction.ADD}
+								onClick={() => changeAction('create')}
+								marginLeft={1}
+								variant="brand"
+								leftIcon={<MdLibraryAdd />}
+							>
 								Thêm mới
 							</Button>
 						</Flex>
@@ -72,7 +82,7 @@ const OfficeManagement: React.FC = () => {
 					testId="consignments-dashboard"
 					columns={COLUMNS}
 					data={data?.items || []}
-					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
+					action={actions.filter(i => [PermistionAction.UPDATE, PermistionAction.VIEW].some(ii => ii === i))}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}
 				/>

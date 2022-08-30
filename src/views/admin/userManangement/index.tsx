@@ -8,7 +8,9 @@ import { FormContainer } from 'components/form';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
+import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { MdLibraryAdd } from 'react-icons/md';
 import { getAllOffice } from 'services/office';
 import { getUser } from 'services/user';
@@ -23,7 +25,8 @@ const validationSchema = Yup.object({
 	organizationId: Yup.object({ label: Yup.string(), value: Yup.string() }).nullable(),
 });
 
-const UserManagement: React.FC = () => {
+const UserManagement: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction, actions } = useActionPermission(request);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 	const [params, setParams] = useState<Omit<IUserParams, 'page' | 'size'>>();
@@ -77,7 +80,13 @@ const UserManagement: React.FC = () => {
 							<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
 								Tìm kiếm
 							</Button>
-							<Button onClick={() => changeAction('create')} marginLeft={1} variant="brand" leftIcon={<MdLibraryAdd />}>
+							<Button
+								hidden={!permistionAction.ADD}
+								onClick={() => changeAction('create')}
+								marginLeft={1}
+								variant="brand"
+								leftIcon={<MdLibraryAdd />}
+							>
 								Thêm mới
 							</Button>
 						</Flex>
@@ -109,7 +118,7 @@ const UserManagement: React.FC = () => {
 						},
 					}}
 					loading={isLoading}
-					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}
+					action={actions.filter(i => [PermistionAction.UPDATE, PermistionAction.VIEW].some(ii => ii === i))}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}
 				/>
