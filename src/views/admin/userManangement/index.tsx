@@ -14,6 +14,7 @@ import { getAllOffice } from 'services/office';
 import { getUser } from 'services/user';
 import { IUser, IUserParams } from 'services/user/type';
 import { PermistionAction } from 'variables/permission';
+import { statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
@@ -39,8 +40,7 @@ const UserManagement: React.FC = () => {
 		{ key: 'phoneNumber', label: 'Số điện thoại' },
 		{ key: 'role', label: 'Vai trò người dùng', cell: ({ role }) => role?.name },
 		{ key: 'organizationName', label: 'Đơn vị' },
-
-		// { key: 'status', label: 'Trạng thái' },
+		{ key: 'state', label: 'Trạng thái', tag: ({ state }) => statusOption2.find(i => i.value === state) },
 	];
 
 	const pageInfo = {
@@ -93,7 +93,7 @@ const UserManagement: React.FC = () => {
 				<Table
 					testId="consignments-dashboard"
 					// onSelectionChange={handleSelectionChange}
-					keyField="name"
+
 					columns={COLUMNS}
 					data={data?.items || []}
 					pagination={{

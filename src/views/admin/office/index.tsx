@@ -21,7 +21,7 @@ const OfficeManagement: React.FC = () => {
 		{ key: 'name', label: 'Tên đơn vị' },
 		{ key: 'parentId', label: 'Đơn vị trực thuộc' },
 		{ key: 'description', label: 'Mô tả' },
-		{ key: 'createdDate', label: 'Ngày tạo' },
+		{ key: 'createdDate', label: 'Ngày tạo', dateFormat: 'YYYY-MM-DD' },
 	];
 
 	const { changeAction } = useActionPage();
@@ -61,7 +61,7 @@ const OfficeManagement: React.FC = () => {
 					</HStack>
 				</Box>
 			</Card>
-			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
+			<Card flexDirection="column" w="100%" px="10px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
 						Danh sách Đơn vị
@@ -70,7 +70,6 @@ const OfficeManagement: React.FC = () => {
 				<Table
 					loading={isLoading}
 					testId="consignments-dashboard"
-					keyField="name"
 					columns={COLUMNS}
 					data={data?.items || []}
 					action={[PermistionAction.UPDATE, PermistionAction.VIEW]}

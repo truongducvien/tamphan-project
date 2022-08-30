@@ -27,6 +27,7 @@ import { PullDowndHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
+import { formatDate } from 'helpers/dayjs';
 import useActionPage from 'hooks/useActionPage';
 import useEffectWithoutMounted from 'hooks/useEffectWithoutMounted';
 import { useForceUpdate } from 'hooks/useForceUpdate';
@@ -101,6 +102,7 @@ const ResdidentCardReqDetail: React.FC = () => {
 		...detailData,
 		type: typeCardReq.find(i => i.value === detailData?.type),
 		status: statusCardReq.find(i => i.value === detailData?.status),
+		requestedDate: formatDate(detailData?.requestedDate, { type: 'export' }),
 	};
 
 	return (
@@ -132,7 +134,12 @@ const ResdidentCardReqDetail: React.FC = () => {
 						pb={3}
 					>
 						<TextFieldHookForm label="Mã số thẻ yêu cầu" isDisabled name="currentCardNumber" variant="admin" />
-						<TextFieldHookForm label="Ngày yêu cầu" isDisabled name="requestedDate" />
+						<TextFieldHookForm
+							label="Ngày yêu cầu"
+							// value={formatDate(detailData?.requestedDate, { type: 'export' }) || ''}
+							isDisabled
+							name="requestedDate"
+						/>
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}

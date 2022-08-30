@@ -42,7 +42,9 @@ export const PullDown: React.FC<PullDownHookFormProps> = ({
 	onChange,
 	onLoadMore,
 	isLoading,
+	tagVariant = 'solid',
 	menuPortalTarget = true,
+	colorScheme = 'teal',
 	...innerProps
 }) => {
 	const bg = useColorModeValue('white', 'navy.900');
@@ -101,6 +103,9 @@ export const PullDown: React.FC<PullDownHookFormProps> = ({
 
 	return (
 		<Select<Option, boolean, GroupBase<Option>>
+			tagVariant={tagVariant}
+			colorScheme={colorScheme}
+			placeholder={placeholder}
 			{...innerProps}
 			ref={refs}
 			onMenuOpen={() => setExpanded(true)}
@@ -140,7 +145,6 @@ export const PullDown: React.FC<PullDownHookFormProps> = ({
 				const newvalue = value as Option;
 				onChange?.(newvalue);
 			}}
-			placeholder={placeholder}
 			menuPortalTarget={menuPortalTarget ? document.body : undefined}
 			defaultValue={defaultValue}
 			// eslint-disable-next-line react/no-unstable-nested-components

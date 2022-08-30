@@ -196,7 +196,6 @@ const ResidentModal: React.FC<{
 							overflow="scroll"
 							minWith="1500px"
 							testId="consignments-dashboard"
-							keyField="name"
 							columns={COLUMNS}
 							data={data?.items || []}
 							loading={isLoading}
@@ -317,7 +316,6 @@ export const ResidentTab: React.FC<{ id: string }> = ({ id: idApartment }) => {
 			<Table
 				minWith="2000px"
 				testId="consignments-dashboard"
-				keyField="name"
 				columns={COLUMNS}
 				data={data?.items || []}
 				loading={isLoading}

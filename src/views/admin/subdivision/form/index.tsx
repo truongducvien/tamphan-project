@@ -16,10 +16,13 @@ import { IAreaPayload, TypeArea, typeAreas } from 'services/area/type';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
-	name: Yup.string().required('Vui lòng nhập tên nhóm'),
+	name: Yup.string().required('Vui lòng nhập tên phân khu'),
+	code: Yup.string().required('Vui lòng nhập mã phân khu'),
 	contactPhone: Yup.number().required('Vui lòng nhập SDT'),
-	contactEmail: Yup.string().email('Định dạng email...'),
-	type: Yup.object({ label: Yup.string(), value: Yup.string() }).required('Vui lòng chọn loại BDS'),
+	contactEmail: Yup.string().email('Sai định dạng email'),
+	type: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn loại BDS') }).required(
+		'Vui lòng chọn loại BDS',
+	),
 });
 
 interface DataForm extends Omit<IAreaPayload, 'type'> {
@@ -29,6 +32,7 @@ interface DataForm extends Omit<IAreaPayload, 'type'> {
 const DetailSubdivision: React.FC = () => {
 	const mapImageRef = useRef<UploadImageRef>(null);
 	const avatarImageRef = useRef<UploadImageRef>(null);
+	const cardImageRef = useRef<UploadImageRef>(null);
 
 	const { changeAction, id, action } = useActionPage();
 	const {
@@ -49,6 +53,9 @@ const DetailSubdivision: React.FC = () => {
 		try {
 			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
+			mapImageRef.current?.onReset();
+			avatarImageRef.current?.onReset();
+			cardImageRef.current?.onReset();
 			reset();
 		} catch {
 			toast({ title: 'Tạo mới thất bại', status: 'error' });
@@ -69,6 +76,7 @@ const DetailSubdivision: React.FC = () => {
 		const dataImage = {
 			avatarLink: avatarImageRef.current?.onSubmit().files[0],
 			mapLink: mapImageRef.current?.onSubmit().files[0],
+			residentCardTemplateLink: cardImageRef.current?.onSubmit().files[0],
 		};
 		const prepareData = { ...data, type: data.type.value as TypeArea, ...dataImage };
 
@@ -76,7 +84,7 @@ const DetailSubdivision: React.FC = () => {
 		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
 	};
 
-	if (isFetching || isError || isLoading) return <Loading />;
+	if (!!id && (isFetching || isError || isLoading)) return <Loading />;
 
 	const defaultData = { ...detailData?.data, type: typeAreas.find(i => i.value === detailData?.data?.type) };
 	const isDisabled = action === 'detail';
@@ -111,7 +119,14 @@ const DetailSubdivision: React.FC = () => {
 							options={typeAreas}
 							isSearchable={false}
 						/>
-						<TextFieldHookForm isDisabled={isDisabled} label="Điện thoại liên hệ" name="contactPhone" variant="admin" />
+						<TextFieldHookForm
+							isDisabled={isDisabled}
+							isRequired
+							label="Điện thoại liên hệ"
+							type="number"
+							name="contactPhone"
+							variant="admin"
+						/>
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -147,6 +162,15 @@ const DetailSubdivision: React.FC = () => {
 								service="AREAS"
 								isDisabled={isDisabled}
 								defaultValue={defaultData?.avatarLink ? [defaultData?.avatarLink] : []}
+							/>
+						</FormControl>
+						<FormControl>
+							<FormLabel>Ảnh thẻ cư dân</FormLabel>
+							<UploadImage
+								ref={cardImageRef}
+								service="AREAS"
+								isDisabled={isDisabled}
+								defaultValue={defaultData?.residentCardTemplateLink ? [defaultData?.residentCardTemplateLink] : []}
 							/>
 						</FormControl>
 					</Stack>

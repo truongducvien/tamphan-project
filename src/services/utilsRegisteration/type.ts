@@ -10,12 +10,12 @@ export const paymentMethods: Array<Option> = [
 	{
 		label: 'Tiền mặt',
 		value: PaymentMethod.CASH,
-		tag: 'green',
+		colorScheme: 'green',
 	},
 	{
 		label: 'Chuyển khoản',
 		value: PaymentMethod.BANK,
-		tag: 'blue',
+		colorScheme: 'blue',
 	},
 ];
 
@@ -30,22 +30,22 @@ export const statusUtilsRe: Array<Option> = [
 	{
 		label: 'Hoàn tất',
 		value: StatusUtilsRe.DONE,
-		tag: 'cyan',
+		colorScheme: 'cyan',
 	},
 	{
 		label: 'Đang đợi',
 		value: StatusUtilsRe.WAITING,
-		tag: 'yellow',
+		colorScheme: 'yellow',
 	},
 	{
 		label: 'Đợi thanh toán',
 		value: StatusUtilsRe.PAYMENT_WAITING,
-		tag: 'orange',
+		colorScheme: 'orange',
 	},
 	{
 		label: 'Đã hủy',
 		value: StatusUtilsRe.CANCEL,
-		tag: 'red',
+		colorScheme: 'red',
 	},
 ];
 

@@ -81,7 +81,7 @@ const TypeUtilitiesForm: React.FC = () => {
 		action === 'create' ? handelCreate(data, reset) : handelUpdate(data);
 	};
 
-	if (isFetching || isError || isLoading) return <Loading />;
+	if (!!id && (isFetching || isError || isLoading)) return <Loading />;
 
 	const defaultValue = { ...detailData?.data, state: statusOption2.find(i => i.value === detailData?.data?.state) };
 

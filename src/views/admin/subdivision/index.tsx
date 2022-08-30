@@ -85,7 +85,6 @@ const SubdivisionManagement: React.FC = () => {
 				</Center>
 				<Table
 					testId="consignments-dashboard"
-					keyField="name"
 					minWidth={1200}
 					columns={COLUMNS}
 					data={data?.items || []}

@@ -165,7 +165,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 				});
 				if (!link) throw new Error('!link');
 				return Promise.resolve({
-					url: `${process.env.REACT_APP_API_BASE_URL || 'https://aquacity.staging.novaid.vn/web/api/'}/${link || ''}`,
+					url: `${process.env.REACT_APP_API_BASE_URL || 'https://aquacity.staging.novaid.vn/web/api/'}${link || ''}`,
 				});
 			},
 			error => {

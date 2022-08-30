@@ -20,6 +20,7 @@ import { CSSObject } from '@emotion/react';
 import { Option } from 'components/form/PullDown';
 import Pagination, { PaginationProps } from 'components/pagination';
 import { Tag } from 'components/tag';
+import dayjs from 'dayjs';
 import { FaTrashAlt } from 'react-icons/fa';
 import { MdBorderColor, MdPreview } from 'react-icons/md';
 import { PermistionAction as PermistionActionBase } from 'variables/permission';
@@ -33,13 +34,13 @@ export type IColumn<T> = {
 	isCenter?: boolean;
 	cell?: (value: T) => React.ReactNode;
 	tag?: (value: T) => Option | undefined;
+	dateFormat?: string;
 };
 
 type TableProps<T> = {
 	data: Array<T>;
 	minWith?: string;
 	columns: Array<IColumn<T>>;
-	keyField: string;
 	testId?: string;
 	pagination?: PaginationProps;
 	loading?: boolean;
@@ -47,7 +48,7 @@ type TableProps<T> = {
 	onClickEdit?: (row: T) => void;
 	onClickDelete?: (row: T) => void;
 	onClickDetail?: (row: T) => void;
-	stylcsse?: CSSObject;
+	styleCss?: CSSObject;
 	editable?: (row: T) => boolean;
 } & BaseProps;
 
@@ -179,11 +180,15 @@ const Table = <T,>({
 													column.cell(row)
 												) : column.tag && column.tag(row) ? (
 													<Center>
-														<Tag colorScheme={column.tag(row)?.tag}>{column.tag(row)?.label}</Tag>
+														<Tag colorScheme={column.tag(row)?.colorScheme}>{column.tag(row)?.label}</Tag>
 													</Center>
 												) : (
-													<Text color={textColor} fontSize="sm" fontWeight="700" maxH={200} overflowY="auto">
-														{column.key ? (row[column.key] as unknown as string) : ''}
+													<Text color={textColor} fontSize="sm" fontWeight="700" maxH={100} maxW={500} overflowY="auto">
+														{column.key
+															? column.dateFormat
+																? dayjs(row[column.key] as unknown as string).format(column.dateFormat)
+																: (row[column.key] as unknown as string)
+															: ''}
 													</Text>
 												)}
 											</Td>

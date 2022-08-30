@@ -10,17 +10,17 @@ export const statusOption1: Array<Option> = [
 	{
 		label: 'Khởi tạo',
 		value: Status.INIT,
-		tag: 'gray',
+		colorScheme: 'gray',
 	},
 	{
 		label: 'Đang hoạt động',
 		value: Status.ACTIVE,
-		tag: 'cyan',
+		colorScheme: 'cyan',
 	},
 	{
 		label: 'Ngưng hoạt động',
 		value: Status.INACTIVE,
-		tag: 'red',
+		colorScheme: 'red',
 	},
 ];
 
@@ -28,11 +28,11 @@ export const statusOption2: Array<Option> = [
 	{
 		label: 'Đang hoạt động',
 		value: Status.ACTIVE,
-		tag: 'cyan',
+		colorScheme: 'cyan',
 	},
 	{
 		label: 'Ngưng hoạt động',
 		value: Status.INACTIVE,
-		tag: 'red',
+		colorScheme: 'red',
 	},
 ];

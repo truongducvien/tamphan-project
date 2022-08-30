@@ -14,6 +14,7 @@ export interface IArea {
 	code: string;
 	mapLink: string;
 	avatarLink: string;
+	residentCardTemplateLink: string;
 }
 
 export type IAreaResponse = BaseResponeList<IArea>;

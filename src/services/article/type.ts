@@ -11,12 +11,12 @@ export const notificationWays: Array<Option> = [
 	{
 		label: 'Gửi qua ứng dụng',
 		value: NotificationWays.APP_NOTIFICATION,
-		tag: 'purple',
+		colorScheme: 'purple',
 	},
 	{
 		label: 'Gửi qua mail',
 		value: NotificationWays.EMAIL,
-		tag: 'teal',
+		colorScheme: 'teal',
 	},
 ];
 
@@ -62,27 +62,27 @@ export const statusArticle: Array<Option> = [
 	{
 		label: 'Bản nháp',
 		value: StatusArticle.DRAFT,
-		tag: 'gray',
+		colorScheme: 'gray',
 	},
 	{
 		label: 'Chờ duyệt',
 		value: StatusArticle.WAITING_APPROVE,
-		tag: 'yellow',
+		colorScheme: 'yellow',
 	},
 	{
 		label: 'Xuất bản',
 		value: StatusArticle.PUBLISH,
-		tag: 'green',
+		colorScheme: 'green',
 	},
 	{
 		label: 'Từ chối',
 		value: StatusArticle.REJECT,
-		tag: 'red',
+		colorScheme: 'red',
 	},
 	{
 		label: 'Vô hiệu',
 		value: StatusArticle.CANCEL,
-		tag: 'gray',
+		colorScheme: 'gray',
 	},
 ];
 
@@ -98,27 +98,27 @@ export const typeArticles: Array<Option> = [
 	{
 		label: 'Ưu đãi',
 		value: TypeArticle.PROMOTION,
-		tag: 'cyan',
+		colorScheme: 'cyan',
 	},
 	{
 		label: 'Tin tức',
 		value: TypeArticle.NEWS,
-		tag: 'green',
+		colorScheme: 'green',
 	},
 	{
 		label: 'Bản tin cư dân',
 		value: TypeArticle.RESIDENT_NEWS,
-		tag: 'orange',
+		colorScheme: 'orange',
 	},
 	{
 		label: 'Thông báo',
 		value: TypeArticle.NOTIFICATION,
-		tag: 'blue',
+		colorScheme: 'blue',
 	},
 	{
 		label: 'Sổ tay cư dân',
 		value: TypeArticle.RESIDENT_HANDBOOK,
-		tag: 'purple',
+		colorScheme: 'purple',
 	},
 ];
 

@@ -72,7 +72,7 @@ const ResdidentCardReqManagement: React.FC = () => {
 		{ key: 'requesterName', label: 'Người yêu cầu' },
 		{ key: 'requesterPhoneNumber', label: 'Số điện thoại' },
 		{ key: 'note', label: 'Ghi chú' },
-		{ key: 'requestedDate', label: 'Ngày yêu cầu' },
+		{ key: 'requestedDate', label: 'Ngày yêu cầu', dateFormat: 'YYYY-MM-DD' },
 		{ key: 'fee', label: 'Phí cấp thẻ' },
 		{ key: 'newCardNumber', label: 'Mã số thẻ cấp mới' },
 		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => statusCardReq.find(i => i.value === status) },
@@ -102,7 +102,7 @@ const ResdidentCardReqManagement: React.FC = () => {
 				<Box px={{ sm: 2, md: 5 }}>
 					<FormContainer onSubmit={onSearch} validationSchema={validationSchema}>
 						<SimpleGrid spacing={5} templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(3, 2fr)' }} gap={6}>
-							<PullDowndHookForm label="Loại yêu cầu" name="type" isClearable options={typeCardReq} />
+							<PullDowndHookForm label="Loại yêu cầu" name="type" colorScheme="red" isClearable options={typeCardReq} />
 							<TextFieldHookForm name="fullName" label="Họ và tên" />
 							<PullDowndHookForm isClearable label="Trạng thái yêu cầu" name="status" options={statusCardReq} />
 							<PullDowndHookForm
@@ -138,7 +138,6 @@ const ResdidentCardReqManagement: React.FC = () => {
 					loading={isLoading}
 					minWidth={2000}
 					testId="consignments-dashboard"
-					keyField="name"
 					columns={COLUMNS}
 					data={data?.items || []}
 					pagination={{

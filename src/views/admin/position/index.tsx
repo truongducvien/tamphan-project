@@ -29,8 +29,8 @@ const PositionManagement: React.FC = () => {
 	const COLUMNS: Array<IColumn<IRole>> = [
 		{ key: 'name', label: 'Tên chức vụ' },
 		{ key: 'code', label: 'Mã chức vụ' },
-		{ key: 'createdDate', label: 'Ngày tạo' },
-		{ key: 'updatedDate', label: 'Ngày cập nhật' },
+		{ key: 'createdDate', label: 'Ngày tạo', dateFormat: 'YYYY-MM-DD' },
+		{ key: 'updatedDate', label: 'Ngày cập nhật', dateFormat: 'YYYY-MM-DD' },
 		{ key: 'state', label: 'Trạng thái', tag: ({ state }) => statusOption2.find(i => i.value === state) },
 	];
 
@@ -85,7 +85,7 @@ const PositionManagement: React.FC = () => {
 				<Table
 					testId="consignments-dashboard"
 					// onSelectionChange={handleSelectionChange}
-					keyField="name"
+
 					columns={COLUMNS}
 					data={data?.items || []}
 					loading={isLoading}

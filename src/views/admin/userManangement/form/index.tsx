@@ -17,6 +17,7 @@ import { Gender, gender } from 'services/resident/type';
 import { getRole } from 'services/role';
 import { createUser, getUserById, updateUser } from 'services/user';
 import { IUserPayload } from 'services/user/type';
+import { Status, statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
@@ -24,12 +25,14 @@ const validationSchema = Yup.object({
 	fullName: Yup.string().required('Vui lòng nhập tên họ tên'),
 	organizationId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn đơn vị') }),
 	roleId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn vai trò') }),
+	state: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn trạng thái') }),
 });
 
-interface DataForm extends Omit<IUserPayload, 'gender' | 'organizationId' | 'roleId'> {
+interface DataForm extends Omit<IUserPayload, 'gender' | 'organizationId' | 'roleId' | 'state'> {
 	gender: Option;
 	organizationId: Option;
 	roleId: Option;
+	state: Option;
 }
 
 const UserForm: React.FC = () => {
@@ -81,9 +84,10 @@ const UserForm: React.FC = () => {
 	const onSubmit = (data: DataForm, reset: () => void) => {
 		const prepareData = {
 			...data,
-			organizationId: data.organizationId.value as string,
-			roleId: data.roleId.value as string,
-			gender: data.gender.value as Gender,
+			organizationId: data.organizationId?.value as string,
+			roleId: data.roleId?.value as string,
+			gender: data.gender?.value as Gender,
+			state: data.state?.value as Status,
 		};
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -99,6 +103,7 @@ const UserForm: React.FC = () => {
 			.find(i => i.value === detailData?.data?.organizationId),
 		roleId: dataRole?.items.map(i => ({ label: i.name, value: i.id })).find(i => i.value === detailData?.data?.roleId),
 		gender: gender.find(i => i.value === detailData?.data?.gender),
+		state: statusOption2.find(i => i.value === detailData?.data?.state),
 	};
 
 	const isDisabled = action === 'detail';
@@ -162,17 +167,19 @@ const UserForm: React.FC = () => {
 							label="Vai trò người dùng"
 							name="roleId"
 							isDisabled={isDisabled}
-							options={
-								dataRole?.items.map(i => ({ label: i.name, value: i.id })) || [
-									{
-										label: 'SYSTEM',
-										value: '123e4567-e89b-12d3-a456-426614174000',
-									},
-								]
-							}
+							options={dataRole?.items.map(i => ({ label: i.name, value: i.id })) || []}
 							onInputChange={setKeywordRole}
 						/>
 					</Stack>
+					<Box pb={3} pr={2} w={{ base: '100%', md: '50%' }}>
+						<PullDowndHookForm
+							isRequired
+							label="Trạng thái"
+							name="state"
+							options={statusOption2}
+							isDisabled={isDisabled}
+						/>
+					</Box>
 					<HStack pb={3} justifyContent="flex-end">
 						{action === 'detail' && (
 							<Button type="button" onClick={() => changeAction('edit', id || '')} variant="brand">

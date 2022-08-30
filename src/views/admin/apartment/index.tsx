@@ -125,7 +125,6 @@ const ApartMentManagement: React.FC = () => {
 				</Center>
 				<Table
 					testId="consignments-dashboard"
-					keyField="name"
 					minWith="2000px"
 					columns={COLUMNS}
 					data={data?.items || []}

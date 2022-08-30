@@ -229,8 +229,8 @@ const ResidentForm: React.FC = () => {
 							isDisabled={action !== 'create'}
 							isLoading={isLoadingApartment}
 							onLoadMore={fetchMore}
-							options={dataApartment.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id }))}
 							onInputChange={setKeyword}
+							options={dataApartment.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id }))}
 						/>
 						<TextFieldHookForm isDisabled={isDisabled} label="Số điện thoại" name="phoneNumber" variant="admin" />
 					</Stack>

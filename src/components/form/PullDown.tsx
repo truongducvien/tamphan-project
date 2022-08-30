@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { FormControl, FormErrorMessage, FormLabel, Spinner, Text, useColorModeValue } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormLabel, Text, useColorModeValue } from '@chakra-ui/react';
 import { Select, GroupBase, SelectInstance } from 'chakra-react-select';
-import chroma from 'chroma-js';
+import useDerivedProps from 'hooks/useDerivedProps';
 import useEffectWithoutMounted from 'hooks/useEffectWithoutMounted';
 import { useForceUpdate } from 'hooks/useForceUpdate';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
@@ -26,13 +26,13 @@ type OptionBase = {
 export interface Option {
 	label: string;
 	value: string | number;
-	tag?: TagProps['colorScheme'];
+	colorScheme?: TagProps['colorScheme'];
 }
 
 export interface BaseOption<D> {
 	label: string;
 	value: D;
-	tag?: TagProps['colorScheme'];
+	colorScheme?: TagProps['colorScheme'];
 }
 
 type TagVariant = 'subtle' | 'solid' | 'outline';
@@ -61,15 +61,19 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 	onLoadMore,
 	isLoading,
 	menuPortalTarget = true,
+	tagVariant = 'solid',
+	colorScheme = 'teal',
 	...innerProps
 }) => {
-	const refs = useRef<SelectInstance<Option, boolean, GroupBase<Option>>>(null);
+	const refs = useRef<SelectInstance<Option | undefined, boolean, GroupBase<Option>>>(null);
 	const loadingRef = useRef<boolean>(false);
 	const [isExpanded, setExpanded] = useState<boolean>(false);
 
 	const {
 		control,
 		formState: { errors, isSubmitted, isDirty },
+		clearErrors,
+		getValues,
 	} = useFormContext();
 
 	const forceUpdate = useForceUpdate();
@@ -114,10 +118,18 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 
 	useEffectWithoutMounted(() => {
 		if (!isSubmitted && !isDirty) {
-			refs.current?.clearValue();
+			refs.current?.setValue(undefined, 'select-option');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isDirty]);
+
+	useDerivedProps((prevValue, currentValue) => {
+		if (typeof currentValue === 'undefined' && prevValue !== null && currentValue !== prevValue) {
+			setTimeout(() => {
+				clearErrors(name);
+			}, 0);
+		}
+	}, getValues(name));
 
 	const bg = useColorModeValue('white', 'navy.900');
 	const border = '1px';
@@ -128,6 +140,7 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 	const bgMenu = useColorModeValue('white', 'navy.900');
 	const placeholderSt = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
 	const forcusBorder = useColorModeValue('blue.300', 'blue.700');
+
 	return (
 		<Controller
 			control={control}
@@ -135,62 +148,23 @@ export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
 				return (
 					<FormControl minH="70px" isRequired={isRequired} isInvalid={!!errors?.[name]}>
 						<FormLabel htmlFor={name}>{label}</FormLabel>
-						<Select<Option, boolean, GroupBase<Option>>
+						<Select<Option | undefined, boolean, GroupBase<Option>>
 							{...innerProps}
 							{...innerField}
 							ref={refs}
 							onMenuOpen={() => setExpanded(true)}
 							onMenuClose={() => setExpanded(false)}
+							tagVariant={tagVariant}
+							colorScheme={colorScheme}
 							classNamePrefix="select"
 							chakraStyles={{
-								singleValue: (provided, { data }) => {
-									if (!data.tag)
-										return {
-											...provided,
-											color,
-										};
-									const cl = chroma(data.tag);
+								singleValue: provided => {
 									return {
 										...provided,
-										color: data.tag,
-										backgroundColor: cl.alpha(0.1).css(),
-										borderRadius: 'md',
-										padding: '2px 7px 2px 7px',
+										color,
 									};
 								},
 
-								multiValue: (provided, { data }) => {
-									if (!data.tag)
-										return {
-											...provided,
-											color,
-										};
-									const cl = chroma(data.tag);
-									return {
-										...provided,
-										backgroundColor: cl.alpha(0.1).css(),
-									};
-								},
-
-								multiValueLabel: (provided, { data }) => {
-									if (!data.tag)
-										return {
-											...provided,
-											color,
-										};
-									return {
-										...provided,
-										color: data.tag,
-									};
-								},
-								multiValueRemove: (styles, { data }) => ({
-									...styles,
-									color: data?.tag,
-									':hover': {
-										backgroundColor: data?.tag,
-										color: 'white',
-									},
-								}),
 								control: provided => ({
 									...provided,
 									bg,

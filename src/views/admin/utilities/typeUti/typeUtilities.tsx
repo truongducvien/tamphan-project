@@ -66,7 +66,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 			},
 		},
 		{ key: 'state', label: 'Trạng thái hoạt động', tag: ({ state }) => statusOption2.find(i => i.value === state) },
-		{ key: 'updatedDate', label: 'Ngày cập nhật' },
+		{ key: 'updatedDate', label: 'Ngày cập nhật', dateFormat: 'YYYY-MM-DD' },
 	];
 
 	const pageInfo = {
@@ -126,7 +126,7 @@ const TypeUtilitiesManagement: React.FC = () => {
 				<Table
 					testId="consignments-dashboard"
 					loading={isLoading}
-					keyField="name"
+					minWidth="1500px"
 					columns={COLUMNS}
 					data={data?.items || []}
 					action={[PermistionAction.UPDATE, PermistionAction.DELETE, PermistionAction.VIEW]}

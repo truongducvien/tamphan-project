@@ -151,7 +151,10 @@ const UtilitiesForm: React.FC = () => {
 	const dataDefault = {
 		...detailData?.data,
 		areaId: { label: detailData?.data?.areaName, value: detailData?.data?.areaId },
-		facilityGroupId: { label: detailData?.data?.facilityGroupId, value: detailData?.data?.facilityGroupName },
+		facilityGroupId: {
+			label: detailData?.data?.facilityGroupName,
+			value: detailData?.data?.facilityGroupId,
+		},
 		operatingTime: detailData?.data?.operatingTime
 			? `${detailData?.data?.operatingTime.start || ''} - ${detailData?.data?.operatingTime.end || ''}`
 			: '',

@@ -1,6 +1,7 @@
 import { Gender } from 'services/resident/type';
 import { IRole } from 'services/role/type';
 import { BaseParams, BaseResponeList } from 'services/type';
+import { Status } from 'variables/status';
 
 export interface IUser {
 	areaName: string;
@@ -18,6 +19,7 @@ export interface IUser {
 	roleName: string;
 	username: string;
 	role?: IRole;
+	state: Status;
 }
 
 export type IUserResponse = BaseResponeList<IUser>;
@@ -33,6 +35,7 @@ export interface IUserPayload {
 	roleId: string;
 	username: string;
 	id?: string;
+	state: Status;
 }
 
 export interface IUserParams extends BaseParams {

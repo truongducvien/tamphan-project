@@ -190,7 +190,6 @@ const UtilitiesManagement: React.FC = () => {
 				<Table
 					testId="consignments-dashboard"
 					minWith="2000px"
-					keyField="name"
 					columns={COLUMNS}
 					data={data?.items || []}
 					loading={isLoading}

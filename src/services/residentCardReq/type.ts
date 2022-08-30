@@ -20,22 +20,22 @@ export const statusCardReq: Array<BaseOption<keyof typeof StatusCardReq>> = [
 	{
 		label: 'Chờ duyệt',
 		value: 'WAITING',
-		tag: 'orange',
+		colorScheme: 'orange',
 	},
 	{
 		label: 'Đã duyệt',
 		value: 'ACCEPTED',
-		tag: 'teal',
+		colorScheme: 'teal',
 	},
 	{
 		label: 'Từ chối',
 		value: 'REJECTED',
-		tag: 'red',
+		colorScheme: 'red',
 	},
 	{
 		label: 'Đã huỷ',
 		value: 'CANCEL',
-		tag: 'red',
+		colorScheme: 'red',
 	},
 ];
 
@@ -43,27 +43,27 @@ export const typeCardReq: Array<BaseOption<keyof typeof TypeCardReq>> = [
 	{
 		label: 'Tạo mới thẻ',
 		value: 'CREATE_NEW',
-		tag: 'blue',
+		colorScheme: 'blue',
 	},
 	{
 		label: 'Cấp lại thẻ',
 		value: 'RE_NEW',
-		tag: 'orange',
+		colorScheme: 'orange',
 	},
 	{
 		label: 'Mở thẻ',
 		value: 'ACTIVE',
-		tag: 'cyan',
+		colorScheme: 'cyan',
 	},
 	{
 		label: 'Khoá thẻ',
 		value: 'INACTIVE',
-		tag: 'red',
+		colorScheme: 'red',
 	},
 	{
 		label: 'Huỷ thẻ',
 		value: 'CANCEL',
-		tag: 'red',
+		colorScheme: 'red',
 	},
 ];
 

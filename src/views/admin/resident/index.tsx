@@ -134,7 +134,6 @@ const ResidentManagement: React.FC = () => {
 				<Table
 					minWith="2000px"
 					testId="consignments-dashboard"
-					keyField="name"
 					columns={COLUMNS}
 					data={data?.items || []}
 					loading={isLoading}

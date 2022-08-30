@@ -47,7 +47,7 @@ const ArticleManagement: React.FC = () => {
 		},
 		{ key: 'type', label: 'Chuyên mục', tag: ({ type }) => typeArticles.find(i => i.value === type) },
 		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => statusArticle.find(i => i.value === status) },
-		{ key: 'createdAt', label: 'Ngày tạo' },
+		{ key: 'createdAt', label: 'Ngày tạo', dateFormat: 'YYYY-MM-DD' },
 	];
 
 	const handleDelete = async (row: { id: string; title: string }) => {
@@ -117,7 +117,6 @@ const ArticleManagement: React.FC = () => {
 				<Table
 					loading={isLoading}
 					testId="consignments-dashboard"
-					keyField="name"
 					columns={COLUMNS}
 					data={data?.items || []}
 					pagination={{
