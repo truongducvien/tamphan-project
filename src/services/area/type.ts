@@ -12,7 +12,7 @@ export interface IArea {
 	updateDate: string;
 	id: string;
 	code: string;
-	mapLink: string;
+	mapLink: string[];
 	avatarLink: string;
 	residentCardTemplateLink: string;
 }
@@ -52,7 +52,7 @@ export interface IAreaPayload {
 	contactPhone: string;
 	location: string;
 	areaId: string;
-	mapLink?: string;
+	mapLink?: string[];
 	name: string;
 	id?: string;
 	type: TypeArea;

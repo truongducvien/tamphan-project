@@ -21,7 +21,7 @@ const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên phân khu'),
 	code: Yup.string().required('Vui lòng nhập mã phân khu'),
 	contactPhone: Yup.number().required('Vui lòng nhập SDT'),
-	contactEmail: Yup.string().email('Sai định dạng email'),
+	contactEmail: Yup.string().email('Sai định dạng email').nullable(),
 	type: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn loại BDS') }).required(
 		'Vui lòng chọn loại BDS',
 	),
@@ -78,7 +78,7 @@ const DetailSubdivision: React.FC<BaseComponentProps> = ({ request }) => {
 	const onSubmit = (data: DataForm, reset: () => void) => {
 		const dataImage = {
 			avatarLink: avatarImageRef.current?.onSubmit().files[0],
-			mapLink: mapImageRef.current?.onSubmit().files[0],
+			mapLink: mapImageRef.current?.onSubmit().files,
 			residentCardTemplateLink: cardImageRef.current?.onSubmit().files[0],
 		};
 		const prepareData = { ...data, type: data.type.value as TypeArea, ...dataImage };
@@ -154,8 +154,9 @@ const DetailSubdivision: React.FC<BaseComponentProps> = ({ request }) => {
 							<UploadImage
 								ref={mapImageRef}
 								service="AREAS"
+								isMulti
 								isDisabled={isDisabled}
-								defaultValue={defaultData?.mapLink ? [defaultData?.mapLink] : []}
+								defaultValue={defaultData?.mapLink ? defaultData?.mapLink : []}
 							/>
 						</FormControl>
 						<FormControl>

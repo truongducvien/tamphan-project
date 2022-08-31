@@ -1,8 +1,21 @@
 import React from 'react';
 
 import { Icon } from '@chakra-ui/react';
-import { FaBuffer, FaBuilding, FaClipboardList, FaMicrosoft, FaRegistered, FaTh, FaUserAlt } from 'react-icons/fa';
-import { MdAccountBox, MdCreditCard, MdCreditCardOff, MdHouse, MdLock, MdOutlineArticle } from 'react-icons/md';
+import { FaRegistered } from 'react-icons/fa';
+import {
+	MdAccountBox,
+	MdCreditCard,
+	MdCreditCardOff,
+	MdDeck,
+	MdDomain,
+	MdFactCheck,
+	MdHouse,
+	MdLock,
+	MdManageAccounts,
+	MdOutlineArticle,
+	MdOutlineMarkunreadMailbox,
+	MdWindow,
+} from 'react-icons/md';
 import { FeatureModule } from 'services/role/type';
 import { PermistionAction } from 'variables/permission';
 import ApartMentManagement from 'views/admin/apartment';
@@ -52,7 +65,7 @@ const routes: Route[] = [
 		name: 'Quản lý người dùng',
 		layout: '/admin',
 		path: `/users`,
-		icon: <Icon as={FaUserAlt} width="20px" height="20px" color="inherit" />,
+		icon: <Icon as={MdManageAccounts} width="20px" height="20px" color="inherit" />,
 		component: UserManagement,
 		requirePermission: FeatureModule.OPERATION_MANAGEMENT,
 		action: PermistionAction.VIEW,
@@ -87,7 +100,7 @@ const routes: Route[] = [
 		name: 'Quản lý đơn vị',
 		layout: '/admin',
 		path: `/office`,
-		icon: <Icon as={FaBuilding} width="20px" height="20px" color="inherit" />,
+		icon: <Icon as={MdOutlineMarkunreadMailbox} width="20px" height="20px" color="inherit" />,
 		component: OfficeManagement,
 		requirePermission: FeatureModule.ORGANIZATIONS_MANAGEMENT,
 		action: PermistionAction.VIEW,
@@ -122,7 +135,7 @@ const routes: Route[] = [
 		name: 'Quản lý chức vụ',
 		layout: '/admin',
 		path: `/position`,
-		icon: <Icon as={FaBuffer} width="20px" height="20px" color="inherit" />,
+		icon: <Icon as={MdDomain} width="20px" height="20px" color="inherit" />,
 		component: PositionManagement,
 		requirePermission: FeatureModule.ROLE_MANAGEMENT,
 		action: PermistionAction.VIEW,
@@ -157,7 +170,7 @@ const routes: Route[] = [
 		name: 'Quản lý phân khu',
 		layout: '/admin',
 		path: `/subdivision`,
-		icon: <Icon as={FaMicrosoft} width="20px" height="20px" color="inherit" />,
+		icon: <Icon as={MdWindow} width="20px" height="20px" color="inherit" />,
 		component: SubdivisionManagement,
 		requirePermission: FeatureModule.AREA_MANAGEMENT,
 		action: PermistionAction.VIEW,
@@ -263,7 +276,7 @@ const routes: Route[] = [
 		name: 'Quản lý loại tiện ích',
 		layout: '/admin',
 		path: `/type-utilities`,
-		icon: <Icon as={FaClipboardList} width="20px" height="20px" color="inherit" />,
+		icon: <Icon as={MdFactCheck} width="20px" height="20px" color="inherit" />,
 		component: TypeUtilitiesManagement,
 		action: PermistionAction.VIEW,
 		requirePermission: FeatureModule.FACILITY_GROUP_MANAGEMENT,
@@ -298,7 +311,7 @@ const routes: Route[] = [
 		name: 'Quản lý tiện ích',
 		layout: '/admin',
 		path: `/utilities`,
-		icon: <Icon as={FaTh} width="20px" height="20px" color="inherit" />,
+		icon: <Icon as={MdDeck} width="20px" height="20px" color="inherit" />,
 		component: UtilitiesManagement,
 		action: PermistionAction.VIEW,
 		requirePermission: FeatureModule.FACILITY_MANAGEMENT,

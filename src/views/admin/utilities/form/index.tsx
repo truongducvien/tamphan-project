@@ -1,15 +1,16 @@
 import { useRef, useState } from 'react';
 
-import { Box, Button, FormControl, FormLabel, HStack, Stack } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, HStack, SimpleGrid } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
 import { Loading } from 'components/form/Loading';
-import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { BaseOption, Option, PullDowndHookForm } from 'components/form/PullDown';
 import { SwichHookForm } from 'components/form/SwichHookForm';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
+import { PullDown } from 'components/pulldown';
 import { useToastInstance } from 'components/toast';
 import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
@@ -28,12 +29,17 @@ import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên tiện ích'),
+	operatingTime: Yup.string().required('Vui lòng nhập tên tiện ích'),
+	timeSlots: Yup.string().required('Vui lòng nhập khung giờ'),
 	areaId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn phân khu') }),
-	timeSlotType: Yup.object({ label: Yup.string(), value: Yup.string() }).nullable(),
 	capacity: Yup.number().typeError('Vui lòng nhập số').required('Vui lòng nhập sức chứa'),
 	facilityGroupId: Yup.object({
 		label: Yup.string(),
 		value: Yup.string().required('Vui lòng chọn loại tiện ích'),
+	}),
+	state: Yup.object({
+		label: Yup.string(),
+		value: Yup.string().required('Vui lòng trạng thái'),
 	}),
 });
 
@@ -67,7 +73,7 @@ const UtilitiesForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const imageRef = useRef<UploadImageRef>(null);
 	const [keywordGroup, setKeywordGroup] = useState('');
 	const [keywordArea, setKeywordArea] = useState('');
-
+	const [timeSlotType, setTimeSlotType] = useState(timeSlotTypeOption[0]);
 	const keywordGroupDebound = useDebounce(keywordGroup, 500);
 	const keywordAreaDebound = useDebounce(keywordArea, 500);
 
@@ -123,27 +129,26 @@ const UtilitiesForm: React.FC<BaseComponentProps> = ({ request }) => {
 	});
 
 	const onSubmit = (data: IUtilsForm, reset: () => void) => {
-		const operatingTime = data.operatingTime ? data.operatingTime?.split('-') : '';
-		const timeSlots = data.timeSlots ? data.timeSlots?.split(',') : '';
+		const operatingTime = data.operatingTime.split('-');
+		const timeSlots = timeSlotType.value === 'HOUR' ? data.timeSlots.split(',') : [data.operatingTime];
 		const imageLink = imageRef.current?.onSubmit();
 		const prepareData = {
 			...data,
 			state: data.state?.value as string,
 			areaId: (data.areaId?.value as string) || detailData?.data?.areaId || '',
 			facilityGroupId: (data.facilityGroupId?.value as string) || detailData?.data?.facilityGroupId || '',
-			capacity: Number(data.capacity),
-			maxOrderNumber: Number(data.maxOrderNumber),
-			depositAmount: Number(data.depositAmount),
+			capacity: Number(data.capacity || 0),
+			maxOrderNumber: Number(data.maxOrderNumber || 0),
+			depositAmount: Number(data.depositAmount || 0),
+			depositInDuration: Number(data.depositInDuration || 0),
 			operatingTime: operatingTime ? { start: operatingTime[0], end: operatingTime[1] } : operatingTime,
-			timeSlots: timeSlots
-				? timeSlots.map(i => {
-						const items = i?.split('-');
-						return { start: items[0], end: items[1] };
-				  })
-				: timeSlots,
+			timeSlots: timeSlots.map(i => {
+				const items = i?.split('-');
+				return { start: items[0], end: items[1] };
+			}),
 			dateOffs: data.dateOffs?.split(','),
 			imageLink: imageLink?.files || [],
-			timeSlotType: (data?.timeSlotType?.value as TimeSlotType) || detailData?.data?.timeSlotType,
+			timeSlotType: timeSlotType.value,
 		};
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
@@ -159,12 +164,11 @@ const UtilitiesForm: React.FC<BaseComponentProps> = ({ request }) => {
 			value: detailData?.data?.facilityGroupId,
 		},
 		operatingTime: detailData?.data?.operatingTime
-			? `${detailData?.data?.operatingTime.start || ''} - ${detailData?.data?.operatingTime.end || ''}`
+			? `${detailData?.data?.operatingTime.start || ''}-${detailData?.data?.operatingTime.end || ''}`
 			: '',
-		timeSlots: detailData?.data?.timeSlots.map(i => `${i.start} - ${i.end}`).join(', '),
+		timeSlots: detailData?.data?.timeSlots.map(i => `${i.start}-${i.end}`).join(', '),
 		dateOffs: detailData?.data?.dateOffs.join(','),
 		state: statusOption2.find(i => i.value === detailData?.data?.state),
-		timeSlotType: timeSlotTypeOption.find(i => i.value === detailData?.data?.timeSlotType),
 	};
 
 	return (
@@ -175,12 +179,7 @@ const UtilitiesForm: React.FC<BaseComponentProps> = ({ request }) => {
 					validationSchema={validationSchema}
 					defaultValues={dataDefault as unknown as { [x: string]: string }}
 				>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
+					<SimpleGrid spacing={3} columns={{ base: 1, md: 2 }}>
 						<TextFieldHookForm
 							isDisabled={action === 'detail'}
 							isRequired
@@ -198,13 +197,7 @@ const UtilitiesForm: React.FC<BaseComponentProps> = ({ request }) => {
 							onLoadMore={fetchMoreArea}
 							isLoading={isLoadingArea}
 						/>
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
+
 						<PullDowndHookForm
 							label="Loại tiện ích"
 							isDisabled={action === 'detail'}
@@ -216,18 +209,11 @@ const UtilitiesForm: React.FC<BaseComponentProps> = ({ request }) => {
 							isLoading={isLoadingGroup}
 						/>
 						<TextFieldHookForm isDisabled={action === 'detail'} label="Địa chỉ" name="address" variant="admin" />
-					</Stack>
-
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
 						<TextFieldHookForm
 							isDisabled={action === 'detail'}
 							placeholder="10:00-11:00"
 							label="Giờ hoạt động"
+							isRequired
 							name="operatingTime"
 							variant="admin"
 						/>
@@ -239,19 +225,23 @@ const UtilitiesForm: React.FC<BaseComponentProps> = ({ request }) => {
 							isRequired
 							type="number"
 						/>
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						align="end"
-						spacing={3}
-						pb={3}
-					>
-						<PullDowndHookForm
-							isDisabled={action === 'detail'}
-							label="Loại khung giờ sử dụng"
-							name="timeSlotType"
-							options={timeSlotTypeOption}
+						<FormControl>
+							<FormLabel>Loại khung giờ</FormLabel>
+							<PullDown
+								value={timeSlotType}
+								isDisabled={action === 'detail'}
+								name="timeSlotType"
+								onChange={newValue => setTimeSlotType(newValue as BaseOption<TimeSlotType>)}
+								options={timeSlotTypeOption}
+							/>
+						</FormControl>
+						<TextFieldHookForm
+							hidden={timeSlotType.value === 'DATE'}
+							placeholder="10:00-11: 00, 12:00-1:00"
+							label="Khung giờ"
+							name="timeSlots"
+							variant="admin"
+							isDisabled={action === 'detail' || timeSlotType.value === 'DATE'}
 						/>
 						<TextFieldHookForm
 							isDisabled={action === 'detail'}
@@ -259,20 +249,7 @@ const UtilitiesForm: React.FC<BaseComponentProps> = ({ request }) => {
 							name="depositAmount"
 							variant="admin"
 						/>
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
-						<TextFieldHookForm
-							placeholder="10:00-11: 00, 12:00-1:00"
-							label="Khung giờ"
-							name="timeSlots"
-							variant="admin"
-							isDisabled={action === 'detail'}
-						/>
+
 						<TextFieldHookForm
 							label="Số lượng tối đa cho phép đặt"
 							name="maxOrderNumber"
@@ -280,13 +257,6 @@ const UtilitiesForm: React.FC<BaseComponentProps> = ({ request }) => {
 							variant="admin"
 							isDisabled={action === 'detail'}
 						/>
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
 						<TextFieldHookForm
 							isDisabled={action === 'detail'}
 							placeholder="2021-03-20,2021-03-20"
@@ -301,18 +271,13 @@ const UtilitiesForm: React.FC<BaseComponentProps> = ({ request }) => {
 							type="number"
 							variant="admin"
 						/>
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
-						<SwichHookForm
+						<TextFieldHookForm
 							isDisabled={action === 'detail'}
-							label="Cho phép đặt chỗ qua App"
+							label="Thời hạn huỷ cọc(h)"
+							min={1}
+							name="depositInDuration"
+							type="number"
 							variant="admin"
-							name="isAllowBookViaApp"
 						/>
 						<PullDowndHookForm
 							label="Trạng thái"
@@ -321,13 +286,9 @@ const UtilitiesForm: React.FC<BaseComponentProps> = ({ request }) => {
 							options={statusOption2}
 							isSearchable={false}
 						/>
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
+
+						<TextAreaFieldHookForm label="Mô tả" variant="admin" name="description" />
+						<TextAreaFieldHookForm label="Ghi chú đặc cọc" variant="admin" name="depositNote" />
 						<FormControl>
 							<FormLabel>Hình ảnh</FormLabel>
 							<UploadImage
@@ -338,9 +299,13 @@ const UtilitiesForm: React.FC<BaseComponentProps> = ({ request }) => {
 								defaultValue={detailData?.data?.imageLink ? detailData?.data?.imageLink : []}
 							/>
 						</FormControl>
-						<TextAreaFieldHookForm label="Mô tả" variant="admin" name="description" />
-					</Stack>
-
+						<SwichHookForm
+							isDisabled={action === 'detail'}
+							label="Cho phép đặt chỗ qua App"
+							variant="admin"
+							name="isAllowBookViaApp"
+						/>
+					</SimpleGrid>
 					<HStack pt={3} justify="end">
 						<Button
 							hidden={!permistionAction.UPDATE || action !== 'detail'}

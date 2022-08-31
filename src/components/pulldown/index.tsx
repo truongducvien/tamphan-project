@@ -34,6 +34,8 @@ export interface PullDownHookFormProps extends OptionBase {
 	onLoadMore?: () => Promise<void>;
 	isLoading?: boolean;
 	menuPortalTarget?: boolean;
+	isClearable?: boolean;
+	value?: Array<Option> | Option;
 }
 
 export const PullDown: React.FC<PullDownHookFormProps> = ({

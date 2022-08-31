@@ -1,12 +1,13 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { alert } from 'components/alertDialog/hook';
 import Card from 'components/card/Card';
-import { Option } from 'components/form/PullDown';
-import { PullDown } from 'components/pulldown';
+import { FormContainer } from 'components/form';
+import { BaseOption, PullDowndHookForm } from 'components/form/PullDown';
+import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { useToastInstance } from 'components/toast';
 import { BaseComponentProps } from 'hocs/withPermission';
@@ -21,7 +22,6 @@ import { deleteUtils, getUtils } from 'services/utils';
 import { getUtilsGroup } from 'services/utils/group';
 import { IUtilsGroup, IUtilsGroupParams } from 'services/utils/group/type';
 import { IUtils } from 'services/utils/type';
-import { PermistionAction } from 'variables/permission';
 import { statusOption2 } from 'variables/status';
 
 const COLUMNS: Array<IColumn<IUtils>> = [
@@ -45,12 +45,17 @@ const COLUMNS: Array<IColumn<IUtils>> = [
 	{ key: 'state', label: 'Trạng thái', tag: ({ state }) => statusOption2.find(i => i.value === state) },
 ];
 
+interface DataForm {
+	areaId: BaseOption<string>;
+	name?: string;
+	facilityGroupId?: BaseOption<string>;
+}
+
 const UtilitiesManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction, actions } = useActionPermission(request);
 	const { toast } = useToastInstance();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
-	const keywordRef = useRef<HTMLInputElement>(null);
 	const [param, setParams] = useState<{
 		name?: string;
 		facilityGroupId?: string;
@@ -58,11 +63,9 @@ const UtilitiesManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	}>({});
 	const [keywordGroup, setKeywordGroup] = useState('');
 	const [keywordArea, setKeywordArea] = useState('');
-	const [selectedGroup, setGroup] = useState<Option>();
 
 	const keywordGroupDebound = useDebounce(keywordGroup, 500);
 	const keywordAreaDebound = useDebounce(keywordArea, 500);
-	const [selectedArea, setArea] = useState<Option>();
 
 	const { data, isLoading, refetch } = useQuery(['listUtils', param, currentPage, currentPageSize], () =>
 		getUtils({ ...param, page: currentPage - 1, size: currentPageSize }),
@@ -90,13 +93,12 @@ const UtilitiesManagement: React.FC<BaseComponentProps> = ({ request }) => {
 
 	const mutationDelete = useMutation(deleteUtils);
 
-	const handleApllyFilter = () => {
-		setParams(prev => ({
-			...prev,
-			name: keywordRef.current?.value || '',
-			...(selectedGroup ? { facilityGroupId: selectedGroup.value as string } : {}),
-			...(selectedArea ? { areaId: selectedArea.value as string } : {}),
-		}));
+	const handleApllyFilter = (payload: DataForm) => {
+		setParams({
+			...payload,
+			areaId: payload.areaId?.value,
+			facilityGroupId: payload.facilityGroupId?.value,
+		});
 	};
 
 	const handleDelete = async (row: { id: string; name: string }) => {
@@ -125,70 +127,52 @@ const UtilitiesManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
-				<Box px={{ sm: 2, md: 5 }}>
-					<Stack
-						spacing={5}
-						align="end"
-						justify={{ base: 'center', md: 'left', xl: 'left' }}
-						direction={{ base: 'column', md: 'row' }}
-					>
-						<FormControl>
-							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-								Loại tiện ích
-							</FormLabel>
-							<PullDown
-								name="type"
+				<FormContainer onSubmit={handleApllyFilter}>
+					<Box px={{ sm: 2, md: 5 }}>
+						<Stack
+							spacing={5}
+							align="end"
+							justify={{ base: 'center', md: 'left', xl: 'left' }}
+							direction={{ base: 'column', md: 'row' }}
+						>
+							<PullDowndHookForm
+								label="Loại tiện ích"
+								name="facilityGroupId"
 								options={dataGroup.map(i => ({ label: i.name, value: i.id })) || []}
-								onChange={value => setGroup(value)}
 								onInputChange={setKeywordGroup}
 								isLoading={isLoadingGroup}
 								onLoadMore={fetchMoreGroup}
+								isClearable
 							/>
-						</FormControl>
-						<FormControl>
-							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-								<Text>Tên tiện ích</Text>
-							</FormLabel>
-							<Input
-								ref={keywordRef}
-								variant="admin"
-								fontSize="sm"
-								ms={{ base: '0px', md: '0px' }}
-								type="text"
-								placeholder="Nhập ..."
-								size="md"
-							/>
-						</FormControl>
-						<FormControl>
-							<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-								<Text>Phân khu</Text>
-							</FormLabel>
-							<PullDown
-								name="subdivision"
+
+							<TextFieldHookForm variant="admin" label="Tên tiện ích" name="name" />
+							<PullDowndHookForm
+								label="Phân khu"
+								name="areaId"
 								options={dataArea.map(i => ({ label: i.name, value: i.id })) || []}
-								onChange={setArea}
 								isSearchable={false}
 								isLoading={isLoadingArea}
 								onInputChange={setKeywordArea}
 								onLoadMore={fetchMoreArea}
+								isClearable
 							/>
-						</FormControl>
-					</Stack>
-					<Flex mt={3} justify="end">
-						<Button variant="lightBrand" onClick={handleApllyFilter} leftIcon={<SearchIcon />}>
-							Tìm kiếm
-						</Button>
-						<Button
-							hidden={!permistionAction.ADD}
-							marginLeft={1}
-							variant="brand"
-							onClick={() => changeAction('create')}
-							leftIcon={<MdLibraryAdd />}
-						>
-							Thêm mới
-						</Button>
-					</Flex>
-				</Box>
+						</Stack>
+						<Flex mt={3} justify="end">
+							<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
+								Tìm kiếm
+							</Button>
+							<Button
+								hidden={!permistionAction.ADD}
+								marginLeft={1}
+								variant="brand"
+								onClick={() => changeAction('create')}
+								leftIcon={<MdLibraryAdd />}
+							>
+								Thêm mới
+							</Button>
+						</Flex>
+					</Box>
+				</FormContainer>
 			</Card>
 			<Card flexDirection="column" w="100%" px="10px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>

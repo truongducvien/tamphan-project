@@ -53,7 +53,7 @@ const UserManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	};
 
 	const handleFillter = (payload: { fullName: string; organizationId: Option; username: string }) => {
-		setParams({ ...payload, organizationId: payload.organizationId.value as string });
+		setParams({ ...payload, organizationId: payload.organizationId?.value as string });
 	};
 
 	const { changeAction } = useActionPage();

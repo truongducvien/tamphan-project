@@ -17,8 +17,10 @@ export interface IUtils {
 	capacity: number;
 	dateOffs: Array<string>;
 	depositAmount: number;
+	depositNote: string;
 	description: string;
 	imageLink: string[];
+	depositInDuration: number;
 	isAllowBookViaApp: true;
 	maxOrderNumber: number;
 	name: string;
@@ -29,16 +31,10 @@ export interface IUtils {
 	phoneNumber: string;
 	state: string;
 	timeSlotType: TimeSlotType;
-	timeSlots: [
-		{
-			end: string;
-			start: string;
-		},
-		{
-			end: string;
-			start: string;
-		},
-	];
+	timeSlots: {
+		end: string;
+		start: string;
+	}[];
 }
 
 export type IUtilsGroupResponse = BaseResponeList<IUtils>;
@@ -63,7 +59,9 @@ export interface IUtilsCreatePayload {
 	imageLink: string[];
 	isAllowBookViaApp: boolean;
 	maxOrderNumber: number;
+	depositNote: string;
 	name: string;
+	depositInDuration: number;
 	operatingTime:
 		| {
 				end: string;
