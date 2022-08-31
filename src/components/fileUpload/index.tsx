@@ -139,7 +139,7 @@ const PreviewModal: React.FC<{ isOpen: boolean; onClose: () => void; files: stri
 			size="xl"
 			src={src || ''}
 			onNext={() => (current < files.length - 1 ? setCurrent(prev => prev + 1) : undefined)}
-			onPrev={() => (current < 0 ? setCurrent(prev => prev - 1) : undefined)}
+			onPrev={() => (current > 0 ? setCurrent(prev => prev - 1) : undefined)}
 		/>
 	);
 };
