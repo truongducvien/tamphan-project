@@ -1,13 +1,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import * as React from 'react';
 
+import 'react-quill/dist/quill.snow.css';
+
 import { Box, useColorModeValue, createStandaloneToast } from '@chakra-ui/react';
+import ImageResize from 'quill-image-resize-module-react';
 import Dropzone, { DropzoneRef } from 'react-dropzone';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 
 import { uploadFile } from './utils';
 
-import 'react-quill/dist/quill.snow.css';
+Quill.register('modules/imageResize', ImageResize);
 
 const { ToastContainer, toast } = createStandaloneToast();
 
@@ -144,6 +147,11 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 				handlers: {
 					image: this.imageHandler,
 				},
+			},
+			imageResize: {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				parchment: Quill.import('parchment'),
+				modules: ['Resize', 'DisplaySize', 'Toolbar'],
 			},
 			clipboard: { matchVisual: false },
 		};
