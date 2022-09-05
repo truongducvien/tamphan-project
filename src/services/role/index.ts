@@ -1,5 +1,5 @@
 import http from 'services/http';
-import { BaseResponeAction } from 'services/type';
+import { BaseResponseAction } from 'services/type';
 
 import { IRoleDetail, IRoleParams, IRolePayload, IRoleResponse } from './type';
 
@@ -13,14 +13,14 @@ export const getRole = async (params: IRoleParams) => {
 };
 
 export const createRole = async (payload: Omit<IRolePayload, 'id'>) => {
-	const { data } = await http.post<BaseResponeAction>('/v1/roles', {
+	const { data } = await http.post<BaseResponseAction>('/v1/roles', {
 		...payload,
 	});
 	return data || null;
 };
 
 export const deleteRole = async (id: string) => {
-	const { data } = await http.delete<BaseResponeAction>(`/v1/roles/${id}`);
+	const { data } = await http.delete<BaseResponseAction>(`/v1/roles/${id}`);
 	return data || null;
 };
 
@@ -30,6 +30,6 @@ export const getRoleById = async (id: string) => {
 };
 
 export const updateRole = async (payload: IRolePayload) => {
-	const { data } = await http.put<BaseResponeAction>(`/v1/roles/${payload.id || ''}`, payload);
+	const { data } = await http.put<BaseResponseAction>(`/v1/roles/${payload.id || ''}`, payload);
 	return data || null;
 };

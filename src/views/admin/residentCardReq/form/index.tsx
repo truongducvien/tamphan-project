@@ -36,7 +36,7 @@ import { useForceUpdate } from 'hooks/useForceUpdate';
 import { useHistory } from 'react-router-dom';
 import { getResidentCardAcept, getResidentCardReject, getResidentCardReqById } from 'services/residentCardReq';
 import { statusCardReq, typeCardReq } from 'services/residentCardReq/type';
-import { BaseResponeAction } from 'services/type';
+import { BaseResponseAction } from 'services/type';
 
 const ResdidentCardReqDetail: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction } = useActionPermission(request);
@@ -75,7 +75,7 @@ const ResdidentCardReqDetail: React.FC<BaseComponentProps> = ({ request }) => {
 			refetch();
 			onClose();
 		} catch (err) {
-			const error = err as AxiosError<BaseResponeAction>;
+			const error = err as AxiosError<BaseResponseAction>;
 			toast({
 				title: 'Phê duyệt thất bại',
 				status: 'error',

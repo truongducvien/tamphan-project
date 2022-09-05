@@ -1,5 +1,5 @@
 import http from 'services/http';
-import { BaseResponeAction, BaseResponeDetail } from 'services/type';
+import { BaseResponseAction, BaseResponseDetail } from 'services/type';
 
 import { IUser, IUserParams, IUserPayload, IUserResponse } from './type';
 
@@ -10,7 +10,7 @@ export interface LoginResponse {
 }
 
 export const login = async (payload: { username: string; password: string }) => {
-	const { data } = await http.post<BaseResponeDetail<LoginResponse>>(
+	const { data } = await http.post<BaseResponseDetail<LoginResponse>>(
 		'/v1/operators/login',
 		{ ...payload },
 		{ headers: { authorization: false } },
@@ -33,33 +33,33 @@ export const getAllUser = async () => {
 };
 
 export const createUser = async (payload: IUserPayload) => {
-	const { data } = await http.post<BaseResponeAction>('/v1/operators', {
+	const { data } = await http.post<BaseResponseAction>('/v1/operators', {
 		...payload,
 	});
 	return data || null;
 };
 
 export const deleteUser = async (id: string) => {
-	const { data } = await http.delete<BaseResponeAction>(`/v1/operators/${id}`);
+	const { data } = await http.delete<BaseResponseAction>(`/v1/operators/${id}`);
 	return data || null;
 };
 
 export const getUserById = async (id: string) => {
-	const { data } = await http.get<BaseResponeDetail<IUser>>(`/v1/operators/${id}`);
+	const { data } = await http.get<BaseResponseDetail<IUser>>(`/v1/operators/${id}`);
 	return data || null;
 };
 
 export const updateUser = async (payload: IUserPayload) => {
-	const { data } = await http.put<BaseResponeAction>(`/v1/operators/${payload.id || ''}`, payload);
+	const { data } = await http.put<BaseResponseAction>(`/v1/operators/${payload.id || ''}`, payload);
 	return data || null;
 };
 
 export const getByAccessToken = async () => {
-	const { data } = await http.get<BaseResponeDetail<IUser>>('	/v1/operators/access-token');
+	const { data } = await http.get<BaseResponseDetail<IUser>>('	/v1/operators/access-token');
 	return data || null;
 };
 
 export const userRefreshToken = async (refreshToken: string) => {
-	const { data } = await http.post<BaseResponeDetail<IUser>>('/v1/operators/refresh-token', { refreshToken });
+	const { data } = await http.post<BaseResponseDetail<IUser>>('/v1/operators/refresh-token', { refreshToken });
 	return data || null;
 };

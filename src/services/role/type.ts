@@ -1,4 +1,4 @@
-import { BaseParams, BaseResponeDetail, BaseResponeList } from 'services/type';
+import { BaseParams, BaseResponseDetail, BaseResponseList } from 'services/type';
 import { PermistionAction } from 'variables/permission';
 import { Status } from 'variables/status';
 
@@ -39,7 +39,7 @@ export interface IRole {
 	};
 }
 
-export type IRoleResponse = BaseResponeList<IRole>;
+export type IRoleResponse = BaseResponseList<IRole>;
 
 export interface IRoleParams extends BaseParams {
 	name?: string;
@@ -57,4 +57,4 @@ export interface IRolePayload {
 	state?: Status;
 }
 
-export type IRoleDetail = BaseResponeDetail<IRole>;
+export type IRoleDetail = BaseResponseDetail<IRole>;

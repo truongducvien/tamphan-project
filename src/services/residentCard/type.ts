@@ -1,6 +1,6 @@
-import { IApartment } from 'services/apartment/type';
+import { IProperty } from 'services/properties/type';
 import { IResident } from 'services/resident/type';
-import { BaseParams, BaseResponeList } from 'services/type';
+import { BaseParams, BaseResponseList } from 'services/type';
 import { Status } from 'variables/status';
 
 export interface IResidentCard {
@@ -8,7 +8,7 @@ export interface IResidentCard {
 	fee: number;
 	id: string;
 	modifyBy: string;
-	property: IApartment;
+	property: IProperty;
 	resident: IResident;
 	state: Status;
 	updatedDate: string;
@@ -20,4 +20,4 @@ export interface IResidentCardParams extends BaseParams {
 	state?: Status;
 }
 
-export type IResidentCardResponse = BaseResponeList<IResidentCard>;
+export type IResidentCardResponse = BaseResponseList<IResidentCard>;

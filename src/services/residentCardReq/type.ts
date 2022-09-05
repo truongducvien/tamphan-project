@@ -1,5 +1,5 @@
 import { BaseOption } from 'components/form/PullDown';
-import { BaseParams, BaseResponeDetail, BaseResponeList } from 'services/type';
+import { BaseParams, BaseResponseDetail, BaseResponseList } from 'services/type';
 
 enum StatusCardReq {
 	WAITING = 'WAITING',
@@ -92,5 +92,5 @@ export interface IResidentCardReqParams extends BaseParams {
 	type?: keyof typeof TypeCardReq;
 }
 
-export type IResidentCardReqResponse = BaseResponeList<IResidentCardReq>;
-export type IResidentCardReqDetail = BaseResponeDetail<IResidentCardReq>;
+export type IResidentCardReqResponse = BaseResponseList<IResidentCardReq>;
+export type IResidentCardReqDetail = BaseResponseDetail<IResidentCardReq>;

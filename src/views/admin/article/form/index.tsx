@@ -70,7 +70,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 
 	const {
 		data: dataArea,
-		isLoading: isLoadingApartment,
+		isLoading: isLoadingProperty,
 		fetchMore,
 	} = useLoadMore<IArea, IAreaParams>({
 		id: ['listArea', keywordDebounce],
@@ -189,7 +189,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 							isMulti
 							onInputChange={setKeyword}
 							isClearable
-							isLoading={isLoadingApartment}
+							isLoading={isLoadingProperty}
 							onLoadMore={fetchMore}
 						/>
 					</Stack>

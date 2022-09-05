@@ -10,8 +10,8 @@ import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
-import { getApartment } from 'services/apartment';
-import { IApartment, IApartmentParams } from 'services/apartment/type';
+import { getProperty } from 'services/properties';
+import { IProperty, IPropertyParams } from 'services/properties/type';
 import { getResidentCard } from 'services/residentCard';
 import { IResidentCard, IResidentCardParams } from 'services/residentCard/type';
 import { Status, statusOption2 } from 'variables/status';
@@ -42,12 +42,12 @@ const ResdidentCardManagement: React.FC = () => {
 	const [params, setParams] = useState<Omit<IResidentCardParams, 'page' | 'size'>>();
 
 	const {
-		data: dataApartment,
-		isLoading: isLoadingApartment,
+		data: dataProperty,
+		isLoading: isLoadingProperty,
 		fetchMore,
-	} = useLoadMore<IApartment, IApartmentParams>({
-		id: ['listApartment', keywordDebounce],
-		func: getApartment,
+	} = useLoadMore<IProperty, IPropertyParams>({
+		id: ['listProperty', keywordDebounce],
+		func: getProperty,
 		payload: { code: keywordDebounce },
 	});
 
@@ -100,8 +100,8 @@ const ResdidentCardManagement: React.FC = () => {
 								onInputChange={setKeyword}
 								isClearable
 								onLoadMore={fetchMore}
-								isLoading={isLoadingApartment}
-								options={dataApartment?.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id })) || []}
+								isLoading={isLoadingProperty}
+								options={dataProperty?.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id })) || []}
 							/>
 							<PullDowndHookForm isClearable label="Trạng thái thẻ" name="state" options={statusOption2} />
 							<Flex align="center">

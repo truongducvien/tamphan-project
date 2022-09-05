@@ -9,7 +9,7 @@ import {
 	saveSessionRefreshToken,
 } from 'helpers/storage';
 import { put, call, takeEvery, all, fork, StrictEffect, cancel } from 'redux-saga/effects';
-import { BaseResponeDetail } from 'services/type';
+import { BaseResponseDetail } from 'services/type';
 import { getByAccessToken, login, LoginResponse } from 'services/user';
 import { IUser } from 'services/user/type';
 
@@ -41,7 +41,7 @@ function* watchOnRequesstLogin() {
 	yield takeEvery(actionTypes.LOGIN_REQUEST, requestLogin);
 }
 
-export function* requestGetUserInfo(): Generator<StrictEffect, void, BaseResponeDetail<IUser>> {
+export function* requestGetUserInfo(): Generator<StrictEffect, void, BaseResponseDetail<IUser>> {
 	try {
 		const ascessToken = loadAccessToken() || loadSessionAccessToken();
 		if (!ascessToken) throw new Error("don't have ascessToken");

@@ -1,6 +1,6 @@
 import { Option } from 'components/form/PullDown';
 import { TypeArea } from 'services/area/type';
-import { BaseParams, BaseResponeList } from 'services/type';
+import { BaseParams, BaseResponseList } from 'services/type';
 
 export enum NotificationWays {
 	EMAIL = 'EMAIL',
@@ -48,7 +48,7 @@ export interface IArticle {
 	type: TypeArticle;
 }
 
-export type IArticleResponse = BaseResponeList<IArticle>;
+export type IArticleResponse = BaseResponseList<IArticle>;
 
 export enum StatusArticle {
 	DRAFT = 'DRAFT',

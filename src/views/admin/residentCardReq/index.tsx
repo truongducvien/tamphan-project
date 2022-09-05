@@ -5,7 +5,7 @@ import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react
 import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
-import { DatePickerdHookForm } from 'components/form/DatePicker';
+import { DatePickerHookForm } from 'components/form/DatePicker';
 import { BaseOption, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
@@ -13,8 +13,8 @@ import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { MdResetTv } from 'react-icons/md';
-import { getApartment } from 'services/apartment';
-import { IApartment, IApartmentParams } from 'services/apartment/type';
+import { getProperty } from 'services/properties';
+import { IProperty, IPropertyParams } from 'services/properties/type';
 import { getResidentCardReq } from 'services/residentCardReq';
 import { IResidentCardReq, IResidentCardReqParams, statusCardReq, typeCardReq } from 'services/residentCardReq/type';
 import { PermistionAction } from 'variables/permission';
@@ -48,12 +48,12 @@ const ResdidentCardReqManagement: React.FC = () => {
 	const [params, setParams] = useState<Omit<IResidentCardReqParams, 'page' | 'size'>>();
 
 	const {
-		data: dataApartment,
-		isLoading: isLoadingApartment,
+		data: dataProperty,
+		isLoading: isLoadingProperty,
 		fetchMore,
-	} = useLoadMore<IApartment, IApartmentParams>({
-		id: ['listApartment', keywordDebounce],
-		func: getApartment,
+	} = useLoadMore<IProperty, IPropertyParams>({
+		id: ['listProperty', keywordDebounce],
+		func: getProperty,
 		payload: { code: keywordDebounce },
 	});
 
@@ -109,13 +109,13 @@ const ResdidentCardReqManagement: React.FC = () => {
 								isClearable
 								label="Căn hộ"
 								name="propertyId"
-								options={dataApartment?.map(i => ({ label: i.code, value: i.id })) || []}
+								options={dataProperty?.map(i => ({ label: i.code, value: i.id })) || []}
 								onInputChange={setKeyword}
 								onLoadMore={fetchMore}
-								isLoading={isLoadingApartment}
+								isLoading={isLoadingProperty}
 							/>
-							<DatePickerdHookForm label="Từ ngày" name="from" />
-							<DatePickerdHookForm label="Đến ngày" name="to" />
+							<DatePickerHookForm label="Từ ngày" name="from" />
+							<DatePickerHookForm label="Đến ngày" name="to" />
 						</SimpleGrid>
 						<Flex align="end" justify="end" mt={3}>
 							<Button variant="lightBrand" mr={3} type="reset" leftIcon={<MdResetTv />}>

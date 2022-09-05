@@ -12,7 +12,7 @@ import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
 import { useActionPermission } from 'hooks/useActionPermission';
 import { MdLibraryAdd } from 'react-icons/md';
-import { getAllOffice } from 'services/office';
+import { getAllOrganization } from 'services/organizations';
 import { getUser } from 'services/user';
 import { IUser, IUserParams } from 'services/user/type';
 import { PermistionAction } from 'variables/permission';
@@ -31,9 +31,9 @@ const UserManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 	const [params, setParams] = useState<Omit<IUserParams, 'page' | 'size'>>();
 
-	const { data: dataOffice } = useQuery(['listOffice'], getAllOffice);
+	const { data: dataOrganization } = useQuery(['listOrganization'], getAllOrganization);
 
-	const { data, isLoading, isError } = useQuery(['users', currentPage, currentPageSize, params], () =>
+	const { data, isLoading } = useQuery(['users', currentPage, currentPageSize, params], () =>
 		getUser({ page: currentPage - 1, size: currentPageSize, ...params }),
 	);
 
@@ -58,8 +58,6 @@ const UserManagement: React.FC<BaseComponentProps> = ({ request }) => {
 
 	const { changeAction } = useActionPage();
 
-	if (isError) return null;
-
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
@@ -71,7 +69,7 @@ const UserManagement: React.FC<BaseComponentProps> = ({ request }) => {
 								isClearable
 								isSearchable
 								name="organizationId"
-								options={dataOffice?.items.map(i => ({ label: i.name, value: i.id })) || []}
+								options={dataOrganization?.items.map(i => ({ label: i.name, value: i.id })) || []}
 							/>
 							<TextFieldHookForm label="Họ tên" name="fullName" />
 							<TextFieldHookForm label="Tài khoản" name="username" />

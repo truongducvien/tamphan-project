@@ -4,12 +4,12 @@ import { FormControl, FormErrorMessage, FormLabel, Input, InputProps } from '@ch
 import { DatePicker, IDatePickerProps } from 'components/date';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
 
-export interface DatePickerdHookFormProps extends InputProps, Omit<IDatePickerProps, 'onChange'> {
+export interface DatePickerHookFormProps extends InputProps, Omit<IDatePickerProps, 'onChange'> {
 	name: string;
 	label: string;
 }
 
-export const DatePickerdHookForm: React.FC<DatePickerdHookFormProps> = ({
+export const DatePickerHookForm: React.FC<DatePickerHookFormProps> = ({
 	name,
 	label,
 	placeholder = 'Chọn ngày ...',

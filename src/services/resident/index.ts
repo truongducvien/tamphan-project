@@ -1,5 +1,5 @@
 import http from 'services/http';
-import { BaseResponeAction, BaseResponeDetail } from 'services/type';
+import { BaseResponseAction, BaseResponseDetail } from 'services/type';
 
 import { IResident, IResidentParams, IResidentPayload, IResidentResponse } from './type';
 
@@ -16,24 +16,24 @@ export const getAllResident = async () => {
 };
 
 export const getResidentOwner = async (flatId: string) => {
-	const { data } = await http.get<BaseResponeDetail<IResident>>(`/v1/residents/owner/${flatId}`);
+	const { data } = await http.get<BaseResponseDetail<IResident>>(`/v1/residents/owner/${flatId}`);
 	return data?.data || null;
 };
 
 export const createResident = async (payload: Omit<IResidentPayload, 'id'>) => {
-	const { data } = await http.post<BaseResponeAction>('/v1/residents', {
+	const { data } = await http.post<BaseResponseAction>('/v1/residents', {
 		...payload,
 	});
 	return data || null;
 };
 
 export const deleteResident = async (id: string) => {
-	const { data } = await http.delete<BaseResponeAction>(`/v1/residents/${id}`);
+	const { data } = await http.delete<BaseResponseAction>(`/v1/residents/${id}`);
 	return data || null;
 };
 
 export const getResidentById = async (id: string) => {
-	const { data } = await http.get<BaseResponeDetail<IResident>>(`/v1/residents/${id}`);
+	const { data } = await http.get<BaseResponseDetail<IResident>>(`/v1/residents/${id}`);
 	return data || null;
 };
 export const getResidentByProperty = async (id: string) => {
@@ -42,12 +42,12 @@ export const getResidentByProperty = async (id: string) => {
 };
 
 export const updateResident = async (payload: IResidentPayload) => {
-	const { data } = await http.put<BaseResponeAction>(`/v1/residents/${payload.id || ''}`, payload);
+	const { data } = await http.put<BaseResponseAction>(`/v1/residents/${payload.id || ''}`, payload);
 	return data || null;
 };
 
 export const getResidentOfProperty = async (payload: { id: string; propertyId: string }) => {
-	const { data } = await http.get<BaseResponeDetail<IResident>>(
+	const { data } = await http.get<BaseResponseDetail<IResident>>(
 		`/v1/residents/${payload.id}/property/${payload.propertyId}`,
 	);
 	return data || null;

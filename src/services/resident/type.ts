@@ -1,5 +1,5 @@
 import { Option } from 'components/form/PullDown';
-import { BaseParams, BaseResponeList } from 'services/type';
+import { BaseParams, BaseResponseList } from 'services/type';
 import { Status } from 'variables/status';
 
 export enum ResidentType {
@@ -91,7 +91,7 @@ export interface IResidentParams extends BaseParams {
 	fullName?: string;
 }
 
-export type IResidentResponse = BaseResponeList<IResident>;
+export type IResidentResponse = BaseResponseList<IResident>;
 
 export interface IResidentPayload extends Omit<IResident, 'property'> {
 	propertyId: string;

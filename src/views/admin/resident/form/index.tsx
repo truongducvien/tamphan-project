@@ -4,7 +4,7 @@ import { Box, Button, Flex, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
-import { DatePickerdHookForm } from 'components/form/DatePicker';
+import { DatePickerHookForm } from 'components/form/DatePicker';
 import { Loading } from 'components/form/Loading';
 import { BaseOption, Option, PullDowndHookForm } from 'components/form/PullDown';
 import { SwichHookForm } from 'components/form/SwichHookForm';
@@ -16,8 +16,8 @@ import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
-import { getApartment } from 'services/apartment';
-import { IApartment, IApartmentParams } from 'services/apartment/type';
+import { getProperty } from 'services/properties';
+import { IProperty, IPropertyParams } from 'services/properties/type';
 import { createResident, getResidentOfProperty, updateResident } from 'services/resident';
 import {
 	Gender,
@@ -77,12 +77,12 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const keywordDebounce = useDebounce(keyword);
 
 	const {
-		data: dataApartment,
-		isLoading: isLoadingApartment,
+		data: dataProperty,
+		isLoading: isLoadingProperty,
 		fetchMore,
-	} = useLoadMore<IApartment, IApartmentParams>({
-		id: ['listApartment', keywordDebounce],
-		func: getApartment,
+	} = useLoadMore<IProperty, IPropertyParams>({
+		id: ['listProperty', keywordDebounce],
+		func: getProperty,
 		payload: { code: keywordDebounce },
 	});
 
@@ -194,7 +194,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<DatePickerdHookForm
+						<DatePickerHookForm
 							isDisabled={isDisabled}
 							label="Ngày sinh"
 							isRequired
@@ -230,10 +230,10 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 							name="propertyId"
 							isRequired
 							isDisabled={action !== 'create'}
-							isLoading={isLoadingApartment}
+							isLoading={isLoadingProperty}
 							onLoadMore={fetchMore}
 							onInputChange={setKeyword}
-							options={dataApartment.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id }))}
+							options={dataProperty.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id }))}
 						/>
 						<TextFieldHookForm isDisabled={isDisabled} label="Số điện thoại" name="phoneNumber" variant="admin" />
 					</Stack>

@@ -18,29 +18,29 @@ import {
 } from 'react-icons/md';
 import { FeatureModule } from 'services/role/type';
 import { PermistionAction } from 'variables/permission';
-import ApartMentManagement from 'views/admin/apartment';
-import AparmentForm from 'views/admin/apartment/form';
+import AreaManagement from 'views/admin/area';
+import DetailArea from 'views/admin/area/form';
 import ArticleManagement from 'views/admin/article';
 import DetailArticle from 'views/admin/article/form';
-import OfficeManagement from 'views/admin/office';
-import OfficeForm from 'views/admin/office/form';
-import PositionManagement from 'views/admin/position';
-import PositionForm from 'views/admin/position/form';
+import FacilityManagement from 'views/admin/facility';
+import FacilityForm from 'views/admin/facility/form';
+import FacilityGroupManagement from 'views/admin/facilityGroup';
+import FacilityGroupForm from 'views/admin/facilityGroup/form';
+import FacilityReManagement from 'views/admin/facilityRegisteration';
+import FacilityReForm from 'views/admin/facilityRegisteration/form';
+import OrganizationManagement from 'views/admin/organization';
+import OrganizationForm from 'views/admin/organization/form';
+import PropertyManagement from 'views/admin/property';
+import AparmentForm from 'views/admin/property/form';
 import ResidentManagement from 'views/admin/resident';
 import ResidentForm from 'views/admin/resident/form';
 import ResdidentCardManagement from 'views/admin/residentCard';
 import ResdidentCardReqManagement from 'views/admin/residentCardReq';
 import ResdidentCardReqDetail from 'views/admin/residentCardReq/form';
-import SubdivisionManagement from 'views/admin/subdivision';
-import DetailSubdivision from 'views/admin/subdivision/form';
+import RoleManagement from 'views/admin/role';
+import PositionForm from 'views/admin/role/form';
 import UserManagement from 'views/admin/userManangement';
 import UserManagementForm from 'views/admin/userManangement/form';
-import UtilitiesManagement from 'views/admin/utilities';
-import UtilitiesForm from 'views/admin/utilities/form';
-import TypeUtilitiesForm from 'views/admin/utilities/typeUti/form';
-import TypeUtilitiesManagement from 'views/admin/utilities/typeUti/typeUtilities';
-import UtilsReManagement from 'views/admin/utisRegisteration';
-import UtilsReForm from 'views/admin/utisRegisteration/form';
 import SignInCentered from 'views/auth/signIn';
 
 export interface Route {
@@ -99,51 +99,51 @@ const routes: Route[] = [
 	{
 		name: 'Quản lý đơn vị',
 		layout: '/admin',
-		path: `/office`,
+		path: `/organization`,
 		icon: <Icon as={MdOutlineMarkunreadMailbox} width="20px" height="20px" color="inherit" />,
-		component: OfficeManagement,
+		component: OrganizationManagement,
 		requirePermission: FeatureModule.ORGANIZATIONS_MANAGEMENT,
 		action: PermistionAction.VIEW,
 		items: [
 			{
 				name: 'Quản lí đơn vị',
 				layout: '/admin',
-				path: `/office/form`,
+				path: `/organization/form`,
 				requirePermission: FeatureModule.ORGANIZATIONS_MANAGEMENT,
 				action: PermistionAction.ADD,
-				component: OfficeForm,
+				component: OrganizationForm,
 			},
 			{
 				name: 'Chi tiết đơn vị',
 				layout: '/admin',
-				path: `/office/detail`,
+				path: `/organization/detail`,
 				requirePermission: FeatureModule.ORGANIZATIONS_MANAGEMENT,
 				action: PermistionAction.VIEW,
-				component: OfficeForm,
+				component: OrganizationForm,
 			},
 			{
 				name: 'Cập nhật đơn vị',
 				layout: '/admin',
-				path: `/office/edit`,
+				path: `/organization/edit`,
 				requirePermission: FeatureModule.ORGANIZATIONS_MANAGEMENT,
 				action: PermistionAction.UPDATE,
-				component: OfficeForm,
+				component: OrganizationForm,
 			},
 		],
 	},
 	{
 		name: 'Quản lý chức vụ',
 		layout: '/admin',
-		path: `/position`,
+		path: `/role`,
 		icon: <Icon as={MdDomain} width="20px" height="20px" color="inherit" />,
-		component: PositionManagement,
+		component: RoleManagement,
 		requirePermission: FeatureModule.ROLE_MANAGEMENT,
 		action: PermistionAction.VIEW,
 		items: [
 			{
 				name: 'Thêm mới chức vụ',
 				layout: '/admin',
-				path: `/position/form`,
+				path: `/role/form`,
 				requirePermission: FeatureModule.ROLE_MANAGEMENT,
 				action: PermistionAction.ADD,
 				component: PositionForm,
@@ -151,7 +151,7 @@ const routes: Route[] = [
 			{
 				name: 'Cập nhật chức vụ',
 				layout: '/admin',
-				path: `/position/edit`,
+				path: `/role/edit`,
 				requirePermission: FeatureModule.ROLE_MANAGEMENT,
 				action: PermistionAction.UPDATE,
 				component: PositionForm,
@@ -159,7 +159,7 @@ const routes: Route[] = [
 			{
 				name: 'Chi tiết chức vụ',
 				layout: '/admin',
-				path: `/position/detail`,
+				path: `/role/detail`,
 				requirePermission: FeatureModule.ROLE_MANAGEMENT,
 				action: PermistionAction.VIEW,
 				component: PositionForm,
@@ -169,51 +169,51 @@ const routes: Route[] = [
 	{
 		name: 'Quản lý phân khu',
 		layout: '/admin',
-		path: `/subdivision`,
+		path: `/area`,
 		icon: <Icon as={MdWindow} width="20px" height="20px" color="inherit" />,
-		component: SubdivisionManagement,
+		component: AreaManagement,
 		requirePermission: FeatureModule.AREA_MANAGEMENT,
 		action: PermistionAction.VIEW,
 		items: [
 			{
 				name: 'Thêm mới phân khu',
 				layout: '/admin',
-				path: `/subdivision/form`,
+				path: `/area/form`,
 				action: PermistionAction.ADD,
 				requirePermission: FeatureModule.AREA_MANAGEMENT,
-				component: DetailSubdivision,
+				component: DetailArea,
 			},
 			{
 				name: 'Chi tiết phân khu',
 				layout: '/admin',
-				path: `/subdivision/detail`,
+				path: `/area/detail`,
 				action: PermistionAction.VIEW,
 				requirePermission: FeatureModule.AREA_MANAGEMENT,
-				component: DetailSubdivision,
+				component: DetailArea,
 			},
 			{
 				name: 'Cập nhật phân khu',
 				layout: '/admin',
-				path: `/subdivision/edit`,
+				path: `/area/edit`,
 				action: PermistionAction.UPDATE,
 				requirePermission: FeatureModule.AREA_MANAGEMENT,
-				component: DetailSubdivision,
+				component: DetailArea,
 			},
 		],
 	},
 	{
 		name: 'Quản lý căn hộ',
 		layout: '/admin',
-		path: `/apartment`,
+		path: `/property`,
 		icon: <Icon as={MdHouse} width="20px" height="20px" color="inherit" />,
-		component: ApartMentManagement,
+		component: PropertyManagement,
 		action: PermistionAction.VIEW,
 		requirePermission: FeatureModule.PROPERTIES_MANAGEMENT,
 		items: [
 			{
 				name: 'Thêm mới căn hộ',
 				layout: '/admin',
-				path: `/apartment/form`,
+				path: `/property/form`,
 				action: PermistionAction.UPDATE,
 				requirePermission: FeatureModule.PROPERTIES_MANAGEMENT,
 				component: AparmentForm,
@@ -221,7 +221,7 @@ const routes: Route[] = [
 			{
 				name: 'Chi tiết căn hộ',
 				layout: '/admin',
-				path: `/apartment/detail`,
+				path: `/property/detail`,
 				action: PermistionAction.VIEW,
 				requirePermission: FeatureModule.PROPERTIES_MANAGEMENT,
 				component: AparmentForm,
@@ -229,7 +229,7 @@ const routes: Route[] = [
 			{
 				name: 'Cập nhật căn hộ',
 				layout: '/admin',
-				path: `/apartment/edit`,
+				path: `/property/edit`,
 				action: PermistionAction.UPDATE,
 				requirePermission: FeatureModule.PROPERTIES_MANAGEMENT,
 				component: AparmentForm,
@@ -275,33 +275,33 @@ const routes: Route[] = [
 	{
 		name: 'Quản lý loại tiện ích',
 		layout: '/admin',
-		path: `/type-utilities`,
+		path: `/facility-group`,
 		icon: <Icon as={MdFactCheck} width="20px" height="20px" color="inherit" />,
-		component: TypeUtilitiesManagement,
+		component: FacilityGroupManagement,
 		action: PermistionAction.VIEW,
 		requirePermission: FeatureModule.FACILITY_GROUP_MANAGEMENT,
 		items: [
 			{
 				name: 'Thêm mới loại tiện ích',
 				layout: '/admin',
-				path: `/type-utilities/form`,
-				component: TypeUtilitiesForm,
+				path: `/facility-group/form`,
+				component: FacilityGroupForm,
 				action: PermistionAction.ADD,
 				requirePermission: FeatureModule.FACILITY_GROUP_MANAGEMENT,
 			},
 			{
 				name: 'Chi tiết loại tiện ích',
 				layout: '/admin',
-				path: `/type-utilities/detail`,
-				component: TypeUtilitiesForm,
+				path: `/facility-group/detail`,
+				component: FacilityGroupForm,
 				action: PermistionAction.VIEW,
 				requirePermission: FeatureModule.FACILITY_GROUP_MANAGEMENT,
 			},
 			{
 				name: 'Cập nhật loại tiện ích',
 				layout: '/admin',
-				path: `/type-utilities/edit`,
-				component: TypeUtilitiesForm,
+				path: `/facility-group/edit`,
+				component: FacilityGroupForm,
 				action: PermistionAction.UPDATE,
 				requirePermission: FeatureModule.FACILITY_GROUP_MANAGEMENT,
 			},
@@ -310,33 +310,33 @@ const routes: Route[] = [
 	{
 		name: 'Quản lý tiện ích',
 		layout: '/admin',
-		path: `/utilities`,
+		path: `/facility`,
 		icon: <Icon as={MdDeck} width="20px" height="20px" color="inherit" />,
-		component: UtilitiesManagement,
+		component: FacilityManagement,
 		action: PermistionAction.VIEW,
 		requirePermission: FeatureModule.FACILITY_MANAGEMENT,
 		items: [
 			{
 				name: 'Thêm mới tiện ích',
 				layout: '/admin',
-				path: `/utilities/form`,
-				component: UtilitiesForm,
+				path: `/facility/form`,
+				component: FacilityForm,
 				action: PermistionAction.ADD,
 				requirePermission: FeatureModule.FACILITY_MANAGEMENT,
 			},
 			{
 				name: 'Chi tiết tiện ích',
 				layout: '/admin',
-				path: `/utilities/detail`,
-				component: UtilitiesForm,
+				path: `/facility/detail`,
+				component: FacilityForm,
 				action: PermistionAction.VIEW,
 				requirePermission: FeatureModule.FACILITY_MANAGEMENT,
 			},
 			{
 				name: 'Cập nhật tiện ích',
 				layout: '/admin',
-				path: `/utilities/edit`,
-				component: UtilitiesForm,
+				path: `/facility/edit`,
+				component: FacilityForm,
 				action: PermistionAction.UPDATE,
 				requirePermission: FeatureModule.FACILITY_MANAGEMENT,
 			},
@@ -345,17 +345,17 @@ const routes: Route[] = [
 	{
 		name: 'Quản lý đăng ký tiện ích',
 		layout: '/admin',
-		path: `/utils-registeration`,
+		path: `/facility-registeration`,
 		icon: <Icon as={FaRegistered} width="20px" height="20px" color="inherit" />,
-		component: UtilsReManagement,
+		component: FacilityReManagement,
 		action: PermistionAction.VIEW,
 		requirePermission: FeatureModule.FACILITY_BOOKING_MANAGEMENT,
 		items: [
 			{
 				name: 'Chi tiết đăng ký tiện ích',
 				layout: '/admin',
-				path: '/utils-registeration/detail',
-				component: UtilsReForm,
+				path: '/facility-registeration/detail',
+				component: FacilityReForm,
 				action: PermistionAction.VIEW,
 				requirePermission: FeatureModule.FACILITY_BOOKING_MANAGEMENT,
 			},

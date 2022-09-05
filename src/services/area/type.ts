@@ -1,5 +1,5 @@
 import { Option } from 'components/form/PullDown';
-import { BaseParams, BaseResponeList } from 'services/type';
+import { BaseParams, BaseResponseList } from 'services/type';
 
 export interface IArea {
 	name: string;
@@ -17,7 +17,7 @@ export interface IArea {
 	residentCardTemplateLink: string;
 }
 
-export type IAreaResponse = BaseResponeList<IArea>;
+export type IAreaResponse = BaseResponseList<IArea>;
 
 export enum TypeArea {
 	VILLA = 'VILLA',

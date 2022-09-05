@@ -4,7 +4,7 @@ import { Box, Button, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
-import { DatePickerdHookForm } from 'components/form/DatePicker';
+import { DatePickerHookForm } from 'components/form/DatePicker';
 import { Loading } from 'components/form/Loading';
 import { Option, PullDowndHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
@@ -14,7 +14,7 @@ import useActionPage from 'hooks/useActionPage';
 import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import { useHistory } from 'react-router-dom';
-import { getAllOffice } from 'services/office';
+import { getAllOrganization } from 'services/organizations';
 import { Gender, gender } from 'services/resident/type';
 import { getRole } from 'services/role';
 import { createUser, getUserById, updateUser } from 'services/user';
@@ -45,7 +45,10 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const [keywordRole, setKeywordRole] = useState('');
 	const keywordRoleDebound = useDebounce(keywordRole);
 
-	const { data: dataOffice, isFetched: isFecthedOffice } = useQuery(['listOffice'], getAllOffice);
+	const { data: dataOrganization, isFetched: isFecthedOrganization } = useQuery(
+		['listOrganization'],
+		getAllOrganization,
+	);
 
 	const { data: dataRole, isFetched: isFecthedRole } = useQuery(['listRole', keywordRoleDebound], () =>
 		getRole({ name: keywordRoleDebound }),
@@ -57,7 +60,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 		isError,
 		isLoading,
 	} = useQuery(['detail', id], () => getUserById(id || ''), {
-		enabled: !!id && (isFecthedOffice || isFecthedRole),
+		enabled: !!id && (isFecthedOrganization || isFecthedRole),
 	});
 
 	const history = useHistory();
@@ -101,7 +104,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 
 	const defaultData = {
 		...detailData?.data,
-		organizationId: dataOffice?.items
+		organizationId: dataOrganization?.items
 			.map(i => ({ label: i.name, value: i.id }))
 			.find(i => i.value === detailData?.data?.organizationId),
 		roleId: dataRole?.items.map(i => ({ label: i.name, value: i.id })).find(i => i.value === detailData?.data?.roleId),
@@ -134,7 +137,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<DatePickerdHookForm isDisabled={isDisabled} label="Ngày sinh" name="dateOfBirth" variant="admin" />
+						<DatePickerHookForm isDisabled={isDisabled} label="Ngày sinh" name="dateOfBirth" variant="admin" />
 						<PullDowndHookForm isDisabled={isDisabled} label="Giới tính" options={gender} name="gender" />
 					</Stack>
 					<Stack
@@ -163,7 +166,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 							name="organizationId"
 							isRequired
 							isDisabled={isDisabled}
-							options={dataOffice?.items.map(i => ({ label: i.name, value: i.id })) || []}
+							options={dataOrganization?.items.map(i => ({ label: i.name, value: i.id })) || []}
 						/>
 						<PullDowndHookForm
 							isRequired

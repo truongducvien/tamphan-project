@@ -1,5 +1,5 @@
 import http from 'services/http';
-import { BaseResponeAction, BaseResponeDetail } from 'services/type';
+import { BaseResponseAction, BaseResponseDetail } from 'services/type';
 
 import { IArticle, IArticleParams, IArticlePayload, IArticleResponse } from './type';
 
@@ -13,23 +13,23 @@ export const getArticle = async (params: IArticleParams) => {
 };
 
 export const createArticle = async (payload: IArticlePayload) => {
-	const { data } = await http.post<BaseResponeAction>('/v1/articles', {
+	const { data } = await http.post<BaseResponseAction>('/v1/articles', {
 		...payload,
 	});
 	return data || null;
 };
 
 export const deleteArticle = async (id: string) => {
-	const { data } = await http.delete<BaseResponeAction>(`/v1/articles/${id}`);
+	const { data } = await http.delete<BaseResponseAction>(`/v1/articles/${id}`);
 	return data || null;
 };
 
 export const getArticleById = async (id: string) => {
-	const { data } = await http.get<BaseResponeDetail<IArticle>>(`/v1/articles/${id}`);
+	const { data } = await http.get<BaseResponseDetail<IArticle>>(`/v1/articles/${id}`);
 	return data || null;
 };
 
 export const updateArticle = async (payload: IArticlePayload) => {
-	const { data } = await http.put<BaseResponeAction>(`/v1/articles/${payload.id || ''}`, payload);
+	const { data } = await http.put<BaseResponseAction>(`/v1/articles/${payload.id || ''}`, payload);
 	return data || null;
 };
