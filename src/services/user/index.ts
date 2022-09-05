@@ -6,6 +6,7 @@ import { IUser, IUserParams, IUserPayload, IUserResponse } from './type';
 export interface LoginResponse {
 	operatorResponse: IUser;
 	accessToken: string;
+	refreshToken: string;
 }
 
 export const login = async (payload: { username: string; password: string }) => {
@@ -55,5 +56,10 @@ export const updateUser = async (payload: IUserPayload) => {
 
 export const getByAccessToken = async () => {
 	const { data } = await http.get<BaseResponeDetail<IUser>>('	/v1/operators/access-token');
+	return data || null;
+};
+
+export const userRefreshToken = async (refreshToken: string) => {
+	const { data } = await http.post<BaseResponeDetail<IUser>>('/v1/operators/refresh-token', { refreshToken });
 	return data || null;
 };

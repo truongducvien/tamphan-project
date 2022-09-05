@@ -34,7 +34,7 @@ export const withPermission =
 		const { info } = useAppSelector(state => state.user);
 		const permission = info?.role?.privileges;
 		if (permission && request && action) {
-			const hasPermission = permission?.[request].includes(action);
+			const hasPermission = permission?.[request]?.includes(action);
 			return hasPermission ? <Component {...(props as P)} request={request} action={action} /> : <NotFound />;
 		}
 		return <NotFound />;

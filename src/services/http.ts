@@ -1,7 +1,18 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { loadAccessToken, loadSessionAccessToken } from 'helpers/storage';
+import {
+	loadAccessToken,
+	loadRefreshToken,
+	loadSessionAccessToken,
+	saveAccessToken,
+	saveRefreshToken,
+} from 'helpers/storage';
 import { store } from 'store';
 import { logout } from 'store/actionCreators';
+
+import { userRefreshToken } from './user';
+
+let isRetry = false;
+let pendingRequests: Array<() => void> = [];
 
 const createHTTP = (httpConfig: AxiosRequestConfig) => {
 	const httpInstance = axios.create({
@@ -40,10 +51,35 @@ const createHTTP = (httpConfig: AxiosRequestConfig) => {
 			return response;
 		},
 		(error: AxiosError) => {
-			if (error.response?.status === 401) {
-				store.dispatch(logout());
+			if (error.response && error.response.status === 401) {
+				if (!isRetry) {
+					isRetry = true;
+					const refreshingToken = loadRefreshToken();
+					if (!refreshingToken) throw Error('dont have refresh token');
+					return userRefreshToken(refreshingToken)
+						.then(({ data }) => {
+							const { accessToken, refreshToken } = data || {};
+							if (!accessToken || !refreshToken) throw Error('request fail');
+							saveAccessToken(accessToken);
+							saveRefreshToken(refreshToken);
+							pendingRequests.forEach(cb => cb());
+							pendingRequests = [];
+							return Promise.resolve(httpInstance(error.config));
+						})
+						.catch(err => {
+							store.dispatch(logout());
+							return Promise.reject(err);
+						})
+						.finally(() => {
+							isRetry = false;
+						});
+				}
+				return new Promise(resolve => {
+					pendingRequests.push(() => {
+						resolve(httpInstance(error.config));
+					});
+				});
 			}
-
 			return Promise.reject(error);
 		},
 	);

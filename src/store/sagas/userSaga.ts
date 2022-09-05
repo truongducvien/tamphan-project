@@ -4,7 +4,9 @@ import {
 	loadAccessToken,
 	loadSessionAccessToken,
 	saveAccessToken,
+	saveRefreshToken,
 	saveSessionAccessToken,
+	saveSessionRefreshToken,
 } from 'helpers/storage';
 import { put, call, takeEvery, all, fork, StrictEffect, cancel } from 'redux-saga/effects';
 import { BaseResponeDetail } from 'services/type';
@@ -24,7 +26,9 @@ export function* requestLogin({
 		yield put(actionCreators.userLoginSuccess(response.data.operatorResponse));
 		if (remember) {
 			yield call(saveAccessToken, response.data.accessToken);
+			yield call(saveRefreshToken, response.data.refreshToken);
 		} else {
+			yield call(saveSessionRefreshToken, response.data.refreshToken);
 			yield call(saveSessionAccessToken, response.data.accessToken);
 		}
 	} catch (error) {

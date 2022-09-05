@@ -413,7 +413,7 @@ const routes: Route[] = [
 		component: ResdidentCardReqManagement,
 		action: PermistionAction.VIEW,
 		// TODO: replace this permission
-		requirePermission: FeatureModule.RESIDENT_CARD_MANAGEMENT,
+		requirePermission: FeatureModule.RESIDENT_CARD_REQUEST_MANAGEMENT,
 		items: [
 			{
 				name: 'Chi tiết yêu cầu thẻ cư dân',
@@ -421,7 +421,7 @@ const routes: Route[] = [
 				path: '/resident-card-request/detail',
 				component: ResdidentCardReqDetail,
 				action: PermistionAction.VIEW,
-				requirePermission: FeatureModule.RESIDENT_CARD_MANAGEMENT,
+				requirePermission: FeatureModule.RESIDENT_CARD_REQUEST_MANAGEMENT,
 			},
 		],
 	},

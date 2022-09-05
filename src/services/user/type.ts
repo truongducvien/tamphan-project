@@ -4,6 +4,8 @@ import { BaseParams, BaseResponeList } from 'services/type';
 import { Status } from 'variables/status';
 
 export interface IUser {
+	accessToken: string;
+	refreshToken: string;
 	areaName: string;
 	createdAt: Date;
 	dateOfBirth: string;
