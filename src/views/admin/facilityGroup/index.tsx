@@ -72,7 +72,7 @@ const FacilityGroupManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	];
 
 	const pageInfo = {
-		total: data?.totalItems,
+		total: data?.totalPages,
 		hasNextPage: data ? currentPage < data?.totalPages : false,
 		hasPreviousPage: data ? currentPage > 0 : false,
 	};
