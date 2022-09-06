@@ -19,6 +19,7 @@ import { PaymentMethod, paymentMethods, statusFacilityRe } from 'services/facili
 
 const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction } = useActionPermission(request);
+
 	const history = useHistory();
 	const { toast } = useToastInstance();
 	const { id } = useActionPage();
@@ -124,7 +125,7 @@ const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 						<TextAreaFieldHookForm isDisabled label="Ghi chú" name="note" variant="admin" />
 					</Box>
 					<HStack pt={3} justify="end">
-						<Button type="submit" variant="brand" hidden={!permistionAction.APPROVE}>
+						<Button type="submit" variant="brand" hidden={!permistionAction.UPDATE}>
 							Xác nhận thanh toán cọc
 						</Button>
 						<Button type="button" variant="gray" onClick={() => history.goBack()}>

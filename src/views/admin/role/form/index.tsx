@@ -166,7 +166,7 @@ const permissions: Array<PermissionProps> = [
 		id: '12',
 		value: 'FACILITY_BOOKING_MANAGEMENT',
 		title: 'Quản lý đăng kí tiện ích',
-		permistion: ['VIEW', 'APPROVE'],
+		permistion: ['VIEW', 'UPDATE'],
 	},
 	{
 		id: '13',
