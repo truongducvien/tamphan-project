@@ -88,6 +88,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 		isFetched,
 		isError,
 		isLoading,
+		isRefetching,
 		refetch,
 	} = useQuery(['detail', id], () => getArticleById(id || ''), {
 		enabled: !!id,
@@ -115,11 +116,12 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 		}
 	};
 
-	const handelUpdate = async (data: Omit<IArticlePayload, 'id'>) => {
+	const handleUpdate = async (data: Omit<IArticlePayload, 'id'>) => {
 		const prepareData = { ...data, id: id || '' };
 		try {
 			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
+			refetch();
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
 		}
@@ -140,15 +142,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 		};
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
-	};
-
-	const defaultValue = {
-		...detailData?.data,
-		areaIds: detailData?.data?.areas.map(i => ({ label: i.name, value: i.id })),
-		notificationWays: notificationWays.filter(i => detailData?.data?.notificationWays.some(ii => ii === i.value)),
-		type: typeArticles.find(i => i.value === detailData?.data?.type),
-		status: statusArticle.find(i => i.value === detailData?.data?.status) || statusArticle[0],
+		action === 'create' ? handelCreate(prepareData, reset) : handleUpdate(prepareData);
 	};
 
 	const handleAddPdf = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,7 +185,14 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 		}
 	};
 
-	if (!!id && (!isFetched || isError || isLoading)) return <Loading />;
+	if (!!id && (!isFetched || isError || isLoading || isRefetching)) return <Loading />;
+	const defaultValue = {
+		...detailData?.data,
+		areaIds: detailData?.data?.areas.map(i => ({ label: i.name, value: i.id })),
+		notificationWays: notificationWays.filter(i => detailData?.data?.notificationWays.some(ii => ii === i.value)),
+		type: typeArticles.find(i => i.value === detailData?.data?.type),
+		status: statusArticle.find(i => i.value === detailData?.data?.status) || statusArticle[0],
+	};
 
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
