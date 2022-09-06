@@ -53,7 +53,7 @@ export interface IFacilityCreatePayload {
 	facilityGroupId: string;
 	areaId: string;
 	capacity: number;
-	dateOffs: Array<string>;
+	dateOffs?: Array<string>;
 	depositAmount: number;
 	description: string;
 	imageLink: string[];

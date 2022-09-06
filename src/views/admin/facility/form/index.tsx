@@ -146,7 +146,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 				const items = i?.split('-');
 				return { start: items[0], end: items[1] };
 			}),
-			dateOffs: data.dateOffs?.split(','),
+			dateOffs: data.dateOffs ? data.dateOffs?.split(',') : undefined,
 			imageLink: imageLink?.files || [],
 			timeSlotType: timeSlotType.value,
 		};
@@ -169,6 +169,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 		timeSlots: detailData?.data?.timeSlots.map(i => `${i.start}-${i.end}`).join(', '),
 		dateOffs: detailData?.data?.dateOffs.join(','),
 		state: statusOption2.find(i => i.value === detailData?.data?.state),
+		depositAmount: detailData?.data?.depositAmount.replace(' VND', ''),
 	};
 
 	return (
