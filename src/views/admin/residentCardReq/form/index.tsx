@@ -23,7 +23,7 @@ import { AxiosError } from 'axios';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { Loading } from 'components/form/Loading';
-import { PullDowndHookForm } from 'components/form/PullDown';
+import { PullDownHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
@@ -118,7 +118,7 @@ const ResdidentCardReqDetail: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<PullDowndHookForm options={[]} label="Loại yêu cầu" name="type" isDisabled variant="admin" />
+						<PullDownHookForm options={[]} label="Loại yêu cầu" name="type" isDisabled variant="admin" />
 						<TextFieldHookForm label="Mã số thẻ cấp mới" name="newCardNumber" isDisabled variant="admin" />
 					</Stack>
 					<Stack
@@ -128,7 +128,7 @@ const ResdidentCardReqDetail: React.FC<BaseComponentProps> = ({ request }) => {
 						pb={3}
 					>
 						<TextFieldHookForm label="Mã căn hộ" isDisabled name="propertyCode" variant="admin" />
-						<PullDowndHookForm options={[]} label="Trạng thái yêu cầu" isDisabled name="status" />
+						<PullDownHookForm options={[]} label="Trạng thái yêu cầu" isDisabled name="status" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}

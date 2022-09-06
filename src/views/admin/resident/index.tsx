@@ -5,7 +5,7 @@ import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
-import { BaseOption, PullDowndHookForm } from 'components/form/PullDown';
+import { BaseOption, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { BaseComponentProps } from 'hocs/withPermission';
@@ -101,7 +101,7 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 							direction={{ base: 'column', md: 'row' }}
 						>
 							<TextFieldHookForm label="Mã căn hộ" name="propertyId" />
-							<PullDowndHookForm
+							<PullDownHookForm
 								name="areaId"
 								label="Phân khu"
 								options={dataArea.map(i => ({

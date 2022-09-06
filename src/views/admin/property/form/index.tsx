@@ -28,7 +28,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { Loading } from 'components/form/Loading';
-import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { Option, PullDownHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { PullDown } from 'components/pulldown';
@@ -260,7 +260,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									pb={3}
 								>
 									<TextFieldHookForm isDisabled={isDisabled} label="Loại căn hộ" name="type" />
-									<PullDowndHookForm
+									<PullDownHookForm
 										isDisabled={isDisabled}
 										label="Tình trạng xây dựng"
 										name="status"
@@ -289,7 +289,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									spacing={3}
 									pb={3}
 								>
-									<PullDowndHookForm
+									<PullDownHookForm
 										label="Phân khu"
 										name="areaId"
 										isDisabled={isDisabled}
@@ -424,7 +424,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 										name="fullName"
 										variant="admin"
 									/>
-									<PullDowndHookForm
+									<PullDownHookForm
 										isDisabled
 										label="Giới tính"
 										isRequired
@@ -462,7 +462,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									spacing={3}
 									pb={3}
 								>
-									<PullDowndHookForm
+									<PullDownHookForm
 										label="Loại giấy tờ tuỳ thân"
 										name="identityCardType"
 										variant="admin"

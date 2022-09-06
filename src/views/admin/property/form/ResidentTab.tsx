@@ -23,7 +23,7 @@ import {
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { alert } from 'components/alertDialog/hook';
 import { FormContainer } from 'components/form';
-import { BaseOption, PullDowndHookForm } from 'components/form/PullDown';
+import { BaseOption, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { useToastInstance } from 'components/toast';
@@ -168,7 +168,7 @@ const ResidentModal: React.FC<{
 									direction={{ base: 'column', md: 'row' }}
 								>
 									<TextFieldHookForm label="Mã căn hộ" name="propertyId" />
-									<PullDowndHookForm
+									<PullDownHookForm
 										name="areaId"
 										label="Phân khu"
 										options={dataArea.map(i => ({

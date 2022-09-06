@@ -6,7 +6,7 @@ import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { DatePickerHookForm } from 'components/form/DatePicker';
 import { Loading } from 'components/form/Loading';
-import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { Option, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
 import { BaseComponentProps } from 'hocs/withPermission';
@@ -138,7 +138,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 						pb={3}
 					>
 						<DatePickerHookForm isDisabled={isDisabled} label="Ngày sinh" name="dateOfBirth" variant="admin" />
-						<PullDowndHookForm isDisabled={isDisabled} label="Giới tính" options={gender} name="gender" />
+						<PullDownHookForm isDisabled={isDisabled} label="Giới tính" options={gender} name="gender" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -161,14 +161,14 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<PullDowndHookForm
+						<PullDownHookForm
 							label="Đơn vị"
 							name="organizationId"
 							isRequired
 							isDisabled={isDisabled}
 							options={dataOrganization?.items.map(i => ({ label: i.name, value: i.id })) || []}
 						/>
-						<PullDowndHookForm
+						<PullDownHookForm
 							isRequired
 							label="Vai trò người dùng"
 							name="roleId"
@@ -178,7 +178,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 						/>
 					</Stack>
 					<Box pb={3} pr={2} w={{ base: '100%', md: '50%' }}>
-						<PullDowndHookForm
+						<PullDownHookForm
 							isRequired
 							label="Trạng thái"
 							name="state"

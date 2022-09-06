@@ -5,7 +5,7 @@ import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
-import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { Option, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { BaseComponentProps } from 'hocs/withPermission';
@@ -90,7 +90,7 @@ const PropertyManagement: React.FC<BaseComponentProps> = ({ request }) => {
 							direction={{ base: 'column', md: 'row' }}
 						>
 							<TextFieldHookForm name="code" label="Mã căn hộ" />
-							<PullDowndHookForm
+							<PullDownHookForm
 								name="areaId"
 								label="Phân khu"
 								isClearable

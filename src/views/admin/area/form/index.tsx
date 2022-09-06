@@ -6,7 +6,7 @@ import Card from 'components/card/Card';
 import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
 import { Loading } from 'components/form/Loading';
-import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { Option, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
 import { BaseComponentProps } from 'hocs/withPermission';
@@ -115,7 +115,7 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<PullDowndHookForm
+						<PullDownHookForm
 							isDisabled={isDisabled}
 							label="Loại hình BDS"
 							name="type"

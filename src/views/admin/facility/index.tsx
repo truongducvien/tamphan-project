@@ -6,7 +6,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { alert } from 'components/alertDialog/hook';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
-import { BaseOption, PullDowndHookForm } from 'components/form/PullDown';
+import { BaseOption, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { useToastInstance } from 'components/toast';
@@ -30,8 +30,16 @@ const COLUMNS: Array<IColumn<IFacility>> = [
 	{ key: 'areaName', label: 'Phân khu' },
 	{ key: 'address', label: 'Địa chỉ' },
 	{ key: 'maxOrderNumber', label: 'Sức chứa' },
-	{ key: 'depositAmount', label: 'Yêu cầu đặt cọc', cell: ({ depositAmount }) => (depositAmount ? 'Có' : 'Không') },
-	{ key: 'depositAmount', label: 'Số tiền đặt cọc' },
+	{
+		key: 'depositAmount',
+		label: 'Yêu cầu đặt cọc',
+		cell: ({ depositAmount }) => (depositAmount !== '0 VND' ? 'Có' : 'Không'),
+	},
+	{
+		key: 'depositAmount',
+		label: 'Số tiền đặt cọc',
+		cell: ({ depositAmount }) => (depositAmount !== '0 VND' ? depositAmount : '-'),
+	},
 	{
 		key: 'timeSlots',
 		label: 'Giờ hoạt động',
@@ -135,7 +143,7 @@ const FacilityManagement: React.FC<BaseComponentProps> = ({ request }) => {
 							justify={{ base: 'center', md: 'left', xl: 'left' }}
 							direction={{ base: 'column', md: 'row' }}
 						>
-							<PullDowndHookForm
+							<PullDownHookForm
 								label="Loại tiện ích"
 								name="facilityGroupId"
 								options={dataGroup.map(i => ({ label: i.name, value: i.id })) || []}
@@ -146,7 +154,7 @@ const FacilityManagement: React.FC<BaseComponentProps> = ({ request }) => {
 							/>
 
 							<TextFieldHookForm variant="admin" label="Tên tiện ích" name="name" />
-							<PullDowndHookForm
+							<PullDownHookForm
 								label="Phân khu"
 								name="areaId"
 								options={dataArea.map(i => ({ label: i.name, value: i.id })) || []}

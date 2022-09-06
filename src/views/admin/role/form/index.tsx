@@ -5,7 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { Loading } from 'components/form/Loading';
-import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { Option, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
 import { BaseComponentProps } from 'hocs/withPermission';
@@ -266,7 +266,7 @@ const DetailPosition: React.FC<BaseComponentProps> = ({ request }) => {
 					</Stack>
 					{action !== 'create' && (
 						<Stack pb={3} align="start" w={{ sm: '100%', md: '50%' }}>
-							<PullDowndHookForm
+							<PullDownHookForm
 								isDisabled={isDisable}
 								label="Trạng thái"
 								name="state"

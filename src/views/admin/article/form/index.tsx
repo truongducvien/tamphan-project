@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useRef, useState } from 'react';
 
-import { Box, Button, FormControl, FormLabel, HStack, Stack } from '@chakra-ui/react';
+import { Box, Button, Flex, FormControl, FormLabel, HStack, Input, Link, SimpleGrid, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { alert } from 'components/alertDialog/hook';
 import Card from 'components/card/Card';
@@ -9,9 +9,10 @@ import { EditorRef, EditorWithRef } from 'components/editor';
 import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
 import { Loading } from 'components/form/Loading';
-import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { Option, PullDownHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
+import { PullDown } from 'components/pulldown';
 import { useToastInstance } from 'components/toast';
 import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
@@ -31,6 +32,7 @@ import {
 	TypeArticle,
 	typeArticles,
 } from 'services/article/type';
+import { loadImage, uploadFile } from 'services/file';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
@@ -52,7 +54,6 @@ interface DataForm
 	> {
 	areaIds: Array<Option>;
 	notificationWays: Array<Option>;
-	type: Option;
 	status: Option;
 }
 
@@ -61,6 +62,10 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 	const imageRef = useRef<UploadImageRef>(null);
 	const thumbnailRef = useRef<UploadImageRef>(null);
 	const editorRef = useRef<EditorRef>(null);
+
+	const [pdf, setPdf] = useState({ link: '', fileId: '' });
+
+	const [type, setType] = useState<Option | undefined>(typeArticles[0]);
 
 	const { changeAction, id, action } = useActionPage();
 	const { toast } = useToastInstance();
@@ -86,6 +91,14 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 		refetch,
 	} = useQuery(['detail', id], () => getArticleById(id || ''), {
 		enabled: !!id,
+		onSuccess: ({ data }) => {
+			if (data?.type && typeArticles.find(i => i.value === data.type)) {
+				setType(typeArticles.find(i => i.value === data.type));
+			}
+			if (data?.contentLink) {
+				setPdf({ fileId: 'Tải xuống', link: data.contentLink });
+			}
+		},
 	});
 
 	const history = useHistory();
@@ -118,11 +131,12 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 			id,
 			areaIds: data.areaIds?.map(i => i?.value) as Array<string>,
 			notificationWays: data.notificationWays?.map(i => i?.value) as Array<NotificationWays>,
-			type: data.type?.value as TypeArticle,
+			type: type?.value as TypeArticle,
 			status: data.status?.value as StatusArticle,
 			avatarLink: imageRef.current?.onSubmit().files[0],
 			thumbnailLink: thumbnailRef.current?.onSubmit().files[0],
 			content: editorRef.current?.submit() || '',
+			contentLink: pdf.link,
 		};
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -135,6 +149,25 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 		notificationWays: notificationWays.filter(i => detailData?.data?.notificationWays.some(ii => ii === i.value)),
 		type: typeArticles.find(i => i.value === detailData?.data?.type),
 		status: statusArticle.find(i => i.value === detailData?.data?.status) || statusArticle[0],
+	};
+
+	const handleAddPdf = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files;
+		if (file) {
+			const { data } = await uploadFile(file, 'ARTICLES');
+			setPdf(data.items?.[0]);
+		}
+	};
+
+	const handleDownload = async () => {
+		const url = `${process.env.REACT_APP_API_BASE_URL || 'https://aquacity.staging.novaid.vn/web/api/'}${pdf.link}`;
+		const urlLocal = await loadImage(url);
+		const link = document.createElement('a');
+		link.href = urlLocal;
+		link.setAttribute('download', `${pdf.fileId}.pdf`);
+		document.body.appendChild(link);
+		link.click();
+		link.parentNode?.removeChild(link);
 	};
 
 	const handleAction = async (status: StatusArticle, title?: string) => {
@@ -168,12 +201,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 					defaultValues={defaultValue as unknown as { [x: string]: string }}
 					validationSchema={validationSchema}
 				>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
+					<SimpleGrid spacing={3} columns={{ base: 1, md: 2 }} mb={3}>
 						<TextFieldHookForm
 							isDisabled={action === 'detail'}
 							isRequired
@@ -181,7 +209,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 							name="title"
 							variant="admin"
 						/>
-						<PullDowndHookForm
+						<PullDownHookForm
 							label="Thuộc phân khu"
 							name="areaIds"
 							isDisabled={action === 'detail'}
@@ -192,30 +220,33 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 							isLoading={isLoadingProperty}
 							onLoadMore={fetchMore}
 						/>
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
-						<TextFieldHookForm label="Đường dẫn" name="contentLink" isDisabled={action === 'detail'} variant="admin" />
-						<TextFieldHookForm label="Ngày tạo" name="createdAt" isDisabled variant="admin" />
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
-						<PullDowndHookForm
-							label="Loại bài viết"
-							name="type"
-							isDisabled={action === 'detail'}
-							options={typeArticles}
-							isClearable={false}
-						/>
-						<PullDowndHookForm
+
+						<FormControl>
+							<FormLabel>Loại bài viết</FormLabel>
+							<PullDown
+								name="type"
+								value={type}
+								onChange={newValue => setType(newValue)}
+								isDisabled={action === 'detail'}
+								options={typeArticles}
+								isClearable={false}
+							/>
+						</FormControl>
+						<FormControl hidden={type?.value !== TypeArticle.RESIDENT_HANDBOOK}>
+							<FormLabel>Tệp đính kèm</FormLabel>
+							<Input
+								name="contentLink"
+								hidden={action === 'detail'}
+								onChange={handleAddPdf}
+								type="file"
+								variant="flushed"
+								accept=".pdf"
+							/>
+							<Button size="xs" variant="link" onClick={handleDownload}>
+								{pdf.fileId}
+							</Button>
+						</FormControl>
+						<PullDownHookForm
 							label="Hình thức thông báo"
 							name="notificationWays"
 							isDisabled={action === 'detail'}
@@ -223,27 +254,21 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 							isMulti
 							isClearable
 						/>
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
-						<TextAreaFieldHookForm
-							label="Mô tả ngắn"
-							isDisabled={action === 'detail'}
-							name="shortContent"
-							variant="admin"
-						/>
-						<PullDowndHookForm
+						<TextFieldHookForm label="Ngày tạo" name="createdAt" isDisabled variant="admin" />
+						<PullDownHookForm
 							label="Trạng thái"
 							name="status"
 							defaultValue={defaultValue.status}
 							isDisabled
 							options={statusArticle}
 						/>
-					</Stack>
+						<TextAreaFieldHookForm
+							label="Mô tả ngắn"
+							isDisabled={action === 'detail'}
+							name="shortContent"
+							variant="admin"
+						/>
+					</SimpleGrid>
 					<Box pb={3}>
 						<FormControl>
 							<FormLabel>Nội dung</FormLabel>
@@ -289,51 +314,53 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 						<Button hidden={action === 'detail'} type="submit" variant="brand" isLoading={isUpdatting || isCreating}>
 							Lưu bản nháp
 						</Button>
-						<Button
-							hidden={detailData?.data?.status !== StatusArticle.DRAFT || !permistionAction.UPDATE}
-							type="button"
-							variant="brand"
-							onClick={() => handleAction(StatusArticle.WAITING_APPROVE, 'Chuyển duyệt')}
-							isLoading={isUpdatting}
-						>
-							Chuyển duyệt
-						</Button>
-						<Button
-							hidden={detailData?.data?.status !== StatusArticle.WAITING_APPROVE || !permistionAction.PUBLISH}
-							type="button"
-							variant="brand"
-							onClick={() => handleAction(StatusArticle.PUBLISH)}
-							isLoading={isUpdatting}
-						>
-							Xuât bản
-						</Button>
-						<Button
-							hidden={detailData?.data?.status !== StatusArticle.WAITING_APPROVE || !permistionAction.PUBLISH}
-							type="button"
-							variant="delete"
-							onClick={() => handleAction(StatusArticle.REJECT)}
-							isLoading={isUpdatting}
-						>
-							Từ chối
-						</Button>
-						<Button
-							hidden={detailData?.data?.status !== StatusArticle.CANCEL || !permistionAction.DELETE}
-							type="button"
-							variant="lightBrand"
-							onClick={() => handleAction(StatusArticle.DRAFT, 'Mở')}
-							isLoading={isUpdatting}
-						>
-							Mở bài viết
-						</Button>
-						<Button
-							hidden={detailData?.data?.status === StatusArticle.CANCEL || !permistionAction.DELETE}
-							type="button"
-							variant="delete"
-							onClick={() => handleAction(StatusArticle.CANCEL)}
-							isLoading={isUpdatting}
-						>
-							Vô hiệu
-						</Button>
+						<HStack justifyContent="flex-end" hidden={action === 'create'}>
+							<Button
+								hidden={detailData?.data?.status !== StatusArticle.DRAFT || !permistionAction.UPDATE}
+								type="button"
+								variant="brand"
+								onClick={() => handleAction(StatusArticle.WAITING_APPROVE, 'Chuyển duyệt')}
+								isLoading={isUpdatting}
+							>
+								Chuyển duyệt
+							</Button>
+							<Button
+								hidden={detailData?.data?.status !== StatusArticle.WAITING_APPROVE || !permistionAction.PUBLISH}
+								type="button"
+								variant="brand"
+								onClick={() => handleAction(StatusArticle.PUBLISH)}
+								isLoading={isUpdatting}
+							>
+								Xuất bản
+							</Button>
+							<Button
+								hidden={detailData?.data?.status !== StatusArticle.WAITING_APPROVE || !permistionAction.PUBLISH}
+								type="button"
+								variant="delete"
+								onClick={() => handleAction(StatusArticle.REJECT)}
+								isLoading={isUpdatting}
+							>
+								Từ chối
+							</Button>
+							<Button
+								hidden={detailData?.data?.status !== StatusArticle.CANCEL || !permistionAction.DELETE}
+								type="button"
+								variant="lightBrand"
+								onClick={() => handleAction(StatusArticle.DRAFT, 'Mở')}
+								isLoading={isUpdatting}
+							>
+								Mở bài viết
+							</Button>
+							<Button
+								hidden={detailData?.data?.status === StatusArticle.CANCEL || !permistionAction.DELETE}
+								type="button"
+								variant="delete"
+								onClick={() => handleAction(StatusArticle.CANCEL)}
+								isLoading={isUpdatting}
+							>
+								Vô hiệu
+							</Button>
+						</HStack>
 						<Button onClick={() => history.goBack()} type="button" variant="gray">
 							Quay lại
 						</Button>

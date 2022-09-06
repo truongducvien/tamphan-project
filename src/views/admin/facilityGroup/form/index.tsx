@@ -7,7 +7,7 @@ import Card from 'components/card/Card';
 import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
 import { Loading } from 'components/form/Loading';
-import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { Option, PullDownHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
@@ -110,7 +110,7 @@ const FacilityGroupForm: React.FC<BaseComponentProps> = ({ request }) => {
 							name="name"
 							variant="admin"
 						/>
-						<PullDowndHookForm
+						<PullDownHookForm
 							label="Trạng thái"
 							name="state"
 							options={statusOption2}

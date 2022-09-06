@@ -5,7 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { Loading } from 'components/form/Loading';
-import { BaseOption, Option, PullDowndHookForm } from 'components/form/PullDown';
+import { BaseOption, Option, PullDownHookForm } from 'components/form/PullDown';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
@@ -134,7 +134,7 @@ const DetailOrganization: React.FC<BaseComponentProps> = ({ request }) => {
 							name="name"
 							variant="admin"
 						/>
-						<PullDowndHookForm
+						<PullDownHookForm
 							label="Đơn vị trực thuộc"
 							name="parentId"
 							isDisabled={action === 'detail'}
@@ -150,7 +150,7 @@ const DetailOrganization: React.FC<BaseComponentProps> = ({ request }) => {
 						pb={3}
 					>
 						<TextAreaFieldHookForm label="Mô tả" isDisabled={action === 'detail'} name="description" variant="admin" />
-						<PullDowndHookForm
+						<PullDownHookForm
 							label="Phân khu quản lý"
 							isRequired
 							isDisabled={action === 'detail'}

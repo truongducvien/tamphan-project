@@ -6,7 +6,7 @@ import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { DatePickerHookForm } from 'components/form/DatePicker';
 import { Loading } from 'components/form/Loading';
-import { BaseOption, Option, PullDowndHookForm } from 'components/form/PullDown';
+import { BaseOption, Option, PullDownHookForm } from 'components/form/PullDown';
 import { SwichHookForm } from 'components/form/SwichHookForm';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
@@ -170,7 +170,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 						<TextFieldHookForm isDisabled={isDisabled} isRequired label="Họ và tên" name="fullName" variant="admin" />
 						<Flex minW={{ base: '100%', md: '50%' }}>
 							<Box width={300} mr={2}>
-								<PullDowndHookForm
+								<PullDownHookForm
 									label="Loại giấy tờ tuỳ thân"
 									name="identityCardType"
 									variant="admin"
@@ -209,7 +209,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<PullDowndHookForm
+						<PullDownHookForm
 							isDisabled={isDisabled}
 							label="Giới tính"
 							name="gender"
@@ -225,7 +225,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<PullDowndHookForm
+						<PullDownHookForm
 							label="Căn hộ"
 							name="propertyId"
 							isRequired
@@ -243,7 +243,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<PullDowndHookForm
+						<PullDownHookForm
 							isDisabled={action !== 'create'}
 							label="Vai trò"
 							name="type"
@@ -281,7 +281,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<PullDowndHookForm
+						<PullDownHookForm
 							label="Trạng thái hoạt động"
 							name="state"
 							isRequired

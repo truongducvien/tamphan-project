@@ -4,6 +4,7 @@ import * as React from 'react';
 import 'react-quill/dist/quill.snow.css';
 
 import { Box, useColorModeValue, createStandaloneToast } from '@chakra-ui/react';
+import dayjs from 'dayjs';
 import ImageResize from 'quill-image-resize-module-react';
 import Dropzone, { DropzoneRef } from 'react-dropzone';
 import ReactQuill, { Quill } from 'react-quill';
@@ -94,6 +95,9 @@ const CustomToolbar: React.FC<{ isDisable?: boolean }> = () => {
 			<span className="ql-formats">
 				<button type="button" className="ql-clean" />
 			</span>
+			<button type="button" className="ql-insertStar">
+				<span className="octicon octicon-star">d</span>
+			</button>
 		</Box>
 	);
 };
@@ -146,6 +150,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 				container: '#toolbar',
 				handlers: {
 					image: this.imageHandler,
+					insertStar: this.insertStar,
 				},
 			},
 			imageResize: {
@@ -157,6 +162,16 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
 		};
 		this.onChangeContents = this.onChangeContents.bind(this);
 	}
+
+	insertStar = () => {
+		const quill = this.quillRef?.getEditor();
+		if (!quill) return;
+		const cursorPosition = quill?.getSelection()?.index;
+		if (cursorPosition === undefined) return;
+		quill.insertText(cursorPosition, dayjs().format('DD/MM/YYYY'));
+		quill.setSelection((cursorPosition + 1) as unknown as RangeStatic);
+		quill.focus();
+	};
 
 	saveFile = (file: File) => {
 		const { workings, fileIds } = this.state;

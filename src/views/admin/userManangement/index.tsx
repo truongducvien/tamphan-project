@@ -5,7 +5,7 @@ import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react
 import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
-import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { Option, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { BaseComponentProps } from 'hocs/withPermission';
@@ -64,7 +64,7 @@ const UserManagement: React.FC<BaseComponentProps> = ({ request }) => {
 				<Box px={{ sm: 2, md: 5 }}>
 					<FormContainer onSubmit={handleFillter} validationSchema={validationSchema}>
 						<SimpleGrid columns={{ sm: 1, md: 3 }} spacing={5}>
-							<PullDowndHookForm
+							<PullDownHookForm
 								label="Đơn vị"
 								isClearable
 								isSearchable

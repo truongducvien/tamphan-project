@@ -16,7 +16,7 @@ export interface IFacility {
 	areaName: string;
 	capacity: number;
 	dateOffs: Array<string>;
-	depositAmount: number;
+	depositAmount: string;
 	depositNote: string;
 	description: string;
 	imageLink: string[];

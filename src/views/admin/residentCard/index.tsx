@@ -5,7 +5,7 @@ import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
-import { Option, PullDowndHookForm } from 'components/form/PullDown';
+import { Option, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { useDebounce } from 'hooks/useDebounce';
@@ -94,7 +94,7 @@ const ResdidentCardManagement: React.FC = () => {
 							direction={{ base: 'column', md: 'row' }}
 						>
 							<TextFieldHookForm name="cardNumber" label="Mã số thẻ" />
-							<PullDowndHookForm
+							<PullDownHookForm
 								label="Căn hộ"
 								name="propertyId"
 								onInputChange={setKeyword}
@@ -103,7 +103,7 @@ const ResdidentCardManagement: React.FC = () => {
 								isLoading={isLoadingProperty}
 								options={dataProperty?.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id })) || []}
 							/>
-							<PullDowndHookForm isClearable label="Trạng thái thẻ" name="state" options={statusOption2} />
+							<PullDownHookForm isClearable label="Trạng thái thẻ" name="state" options={statusOption2} />
 							<Flex align="center">
 								<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
 									Tìm kiếm

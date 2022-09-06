@@ -52,7 +52,7 @@ export interface PullDownHookFormProps extends OptionBase {
 	menuPortalTarget?: boolean;
 }
 
-export const PullDowndHookForm: React.FC<PullDownHookFormProps> = ({
+export const PullDownHookForm: React.FC<PullDownHookFormProps> = ({
 	name,
 	defaultValue,
 	isRequired,

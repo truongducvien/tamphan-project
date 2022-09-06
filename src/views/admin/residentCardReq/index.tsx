@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { DatePickerHookForm } from 'components/form/DatePicker';
-import { BaseOption, PullDowndHookForm } from 'components/form/PullDown';
+import { BaseOption, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import useActionPage from 'hooks/useActionPage';
@@ -102,10 +102,10 @@ const ResdidentCardReqManagement: React.FC = () => {
 				<Box px={{ sm: 2, md: 5 }}>
 					<FormContainer onSubmit={onSearch} validationSchema={validationSchema}>
 						<SimpleGrid spacing={5} templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(3, 2fr)' }} gap={6}>
-							<PullDowndHookForm label="Loại yêu cầu" name="type" colorScheme="red" isClearable options={typeCardReq} />
+							<PullDownHookForm label="Loại yêu cầu" name="type" colorScheme="red" isClearable options={typeCardReq} />
 							<TextFieldHookForm name="fullName" label="Họ và tên" />
-							<PullDowndHookForm isClearable label="Trạng thái yêu cầu" name="status" options={statusCardReq} />
-							<PullDowndHookForm
+							<PullDownHookForm isClearable label="Trạng thái yêu cầu" name="status" options={statusCardReq} />
+							<PullDownHookForm
 								isClearable
 								label="Căn hộ"
 								name="propertyId"

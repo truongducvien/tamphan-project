@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { DatePickerHookForm } from 'components/form/DatePicker';
-import { PullDowndHookForm } from 'components/form/PullDown';
+import { PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import useActionPage from 'hooks/useActionPage';
@@ -113,7 +113,7 @@ const FacilityReManagement: React.FC = () => {
 							<DatePickerHookForm label="Từ ngày" name="bookingFromTime" />
 							<DatePickerHookForm label="Đến ngày" name="bookingToTime" />
 							<TextFieldHookForm label="Tên tiện ích" name="facilityName" />
-							<PullDowndHookForm
+							<PullDownHookForm
 								label="Loại tiện ích"
 								name="facilityGroupId"
 								isLoading={isLoadingGroup}
@@ -122,7 +122,7 @@ const FacilityReManagement: React.FC = () => {
 								onInputChange={setKeywordGroup}
 								isClearable
 							/>
-							<PullDowndHookForm
+							<PullDownHookForm
 								label="Phân khu"
 								name="areaId"
 								isLoading={isLoadingArea}
