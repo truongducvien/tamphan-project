@@ -38,8 +38,8 @@ import { getResidentCardAcept, getResidentCardReject, getResidentCardReqById } f
 import { statusCardReq, typeCardReq } from 'services/residentCardReq/type';
 import { BaseResponseAction } from 'services/type';
 
-const ResdidentCardReqDetail: React.FC<BaseComponentProps> = ({ request }) => {
-	const { permistionAction } = useActionPermission(request);
+const ResdidentCardReqDetail: React.FC<BaseComponentProps> = () => {
+	const { permistionAction } = useActionPermission('RESIDENT_CARD_PROCESS_MANAGEMENT');
 	const { id } = useActionPage();
 	const { toast } = useToastInstance();
 	const { isOpen, onOpen, onClose } = useDisclosure();
