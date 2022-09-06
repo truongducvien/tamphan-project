@@ -154,8 +154,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 	};
 
 	const handleDownload = async () => {
-		const url = `${process.env.REACT_APP_API_BASE_URL || 'https://aquacity.staging.novaid.vn/web/api/'}${pdf.link}`;
-		const urlLocal = await loadImage(url);
+		const urlLocal = await loadImage(pdf.link);
 		const link = document.createElement('a');
 		link.href = urlLocal;
 		link.setAttribute('download', `${pdf.fileId}.pdf`);
