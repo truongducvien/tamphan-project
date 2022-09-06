@@ -15,18 +15,17 @@ import useActionPage from 'hooks/useActionPage';
 import { useActionPermission } from 'hooks/useActionPermission';
 import { useHistory } from 'react-router-dom';
 import { confirmFacilityReById, getFacilityReById } from 'services/facilityRegisteration';
-import { PaymentMethod, paymentMethods, statusFacilityRe } from 'services/facilityRegisteration/type';
+import { PaymentMethod, paymentMethods, statusFacilityRe, StatusFacilityRe } from 'services/facilityRegisteration/type';
 
 const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction } = useActionPermission(request);
-
 	const history = useHistory();
 	const { toast } = useToastInstance();
 	const { id } = useActionPage();
 	const [paymentMethod, setPay] = useState<PaymentMethod>();
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { data, isLoading, refetch } = useQuery(['detail', id], () => getFacilityReById(id || ''));
+	const { data, isLoading, refetch, isFetching } = useQuery(['detail', id], () => getFacilityReById(id || ''));
 	const mutationDelete = useMutation(confirmFacilityReById);
 
 	const onSubmit = () => {
@@ -45,6 +44,8 @@ const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 		}
 	};
 
+	if (isLoading || isFetching) return <Loading />;
+
 	const defaultData = {
 		...data?.data,
 		bookingTimeSlot: `${data?.data?.bookingTimeSlot.start || ''}-${data?.data?.bookingTimeSlot.end || ''}`,
@@ -52,7 +53,6 @@ const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 		status: statusFacilityRe.find(i => i.value === data?.data?.status)?.label,
 	};
 
-	if (isLoading) return <Loading />;
 	// bookingCode
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
@@ -125,7 +125,11 @@ const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 						<TextAreaFieldHookForm isDisabled label="Ghi chú" name="note" variant="admin" />
 					</Box>
 					<HStack pt={3} justify="end">
-						<Button type="submit" variant="brand" hidden={!permistionAction.UPDATE}>
+						<Button
+							type="submit"
+							variant="brand"
+							hidden={!permistionAction.UPDATE || data?.data?.status !== StatusFacilityRe.PAYMENT_WAITING}
+						>
 							Xác nhận thanh toán cọc
 						</Button>
 						<Button type="button" variant="gray" onClick={() => history.goBack()}>
