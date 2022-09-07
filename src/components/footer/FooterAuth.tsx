@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import React from 'react';
-import { Flex, Link, List, ListItem, Text, useColorModeValue } from '@chakra-ui/react';
+import { Flex, Text, useColorModeValue } from '@chakra-ui/react';
 
 const Footer: React.FC = () => {
 	const textColor = useColorModeValue('gray.400', 'white');
@@ -10,67 +10,29 @@ const Footer: React.FC = () => {
 			zIndex="3"
 			flexDirection={{
 				base: 'column',
+				md: 'row',
 			}}
 			alignItems={{
 				base: 'center',
+				md: 'end',
 			}}
-			justifyContent="space-between"
-			px={{ base: '30px', md: '0px' }}
+			justifyContent="flex-end"
+			px={{ base: '30px', md: '50px' }}
 			pb="30px"
 		>
 			<Text
 				color={textColor}
 				textAlign={{
 					base: 'center',
-					xl: 'start',
+					md: 'start',
 				}}
 				mb={{ base: '20px', lg: '0px' }}
 			>
-				&copy; {1900 + new Date().getFullYear()}
+				&copy; 2022
 				<Text as="span" fontWeight="500" ms="4px">
-					NOVAID. All Rights Reserved. Made with love by
-					<Link mx="3px" color={textColor} target="_blank" fontWeight="700">
-						Simmmple!
-					</Link>
+					NOVAID
 				</Text>
 			</Text>
-			<List display="flex">
-				<ListItem
-					me={{
-						base: '20px',
-						md: '44px',
-					}}
-				>
-					<Link fontWeight="500" color={linkColor} href="mailto:hello@simmmple.com">
-						Support
-					</Link>
-				</ListItem>
-				<ListItem
-					me={{
-						base: '20px',
-						md: '44px',
-					}}
-				>
-					<Link fontWeight="500" color={linkColor}>
-						License
-					</Link>
-				</ListItem>
-				<ListItem
-					me={{
-						base: '20px',
-						md: '44px',
-					}}
-				>
-					<Link fontWeight="500" color={linkColor}>
-						Terms of Use
-					</Link>
-				</ListItem>
-				<ListItem>
-					<Link fontWeight="500" color={linkColor}>
-						Blog
-					</Link>
-				</ListItem>
-			</List>
 		</Flex>
 	);
 };

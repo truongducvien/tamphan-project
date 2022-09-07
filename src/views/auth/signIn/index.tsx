@@ -47,12 +47,12 @@ const SignIn: React.FC = () => {
 
 	const handleLogin = () => {
 		if (!usernameRef.current?.value.length || usernameRef.current?.value.length < 0) {
-			setError(prev => ({ ...prev, username: 'Username is incorrect' }));
+			setError(prev => ({ ...prev, username: 'Vui lòng nhập tài khoản' }));
 			return;
 		}
 
 		if (!passRef.current?.value.length || passRef.current?.value.length < 0) {
-			setError(prev => ({ ...prev, password: 'Password is incorrect' }));
+			setError(prev => ({ ...prev, password: 'Vui lòng nhập mật khẩu' }));
 			return;
 		}
 		setError({ username: '', password: '' });
@@ -80,11 +80,8 @@ const SignIn: React.FC = () => {
 			>
 				<Box me="auto">
 					<Heading color={textColor} fontSize="36px" mb="10px">
-						Sign In
+						Đăng nhập
 					</Heading>
-					<Text mb="36px" ms="4px" color={textColorSecondary} fontWeight="400" fontSize="md">
-						Enter your email and password to sign in!
-					</Text>
 				</Box>
 				<Flex
 					zIndex="2"
@@ -97,29 +94,12 @@ const SignIn: React.FC = () => {
 					me="auto"
 					mb={{ base: '20px', md: 'auto' }}
 				>
-					{/* <Button
-						fontSize="sm"
-						me="0px"
-						mb="26px"
-						py="15px"
-						h="50px"
-						borderRadius="16px"
-						bg={googleBg}
-						color={googleText}
-						fontWeight="500"
-						_hover={googleHover}
-						_active={googleActive}
-						_focus={googleActive}
-					>
-						<Icon as={FcGoogle} w="20px" h="20px" me="10px" />
-						Sign in with Google
-					</Button> */}
 					<Flex align="center" mb="25px">
 						<HSeparator />
 					</Flex>
 					<FormControl>
 						<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" color={textColor} mb="8px">
-							Username<Text color={brandStars}>*</Text>
+							Tên đăng nhập<Text color={brandStars}>*</Text>
 						</FormLabel>
 						<Input
 							ref={usernameRef}
@@ -135,7 +115,7 @@ const SignIn: React.FC = () => {
 							size="lg"
 						/>
 						<FormLabel ms="4px" fontSize="sm" fontWeight="500" color={textColor} display="flex">
-							Password<Text color={brandStars}>*</Text>
+							Mật khẩu<Text color={brandStars}>*</Text>
 						</FormLabel>
 						<InputGroup size="md">
 							<Input
@@ -165,16 +145,10 @@ const SignIn: React.FC = () => {
 							<FormControl display="flex" alignItems="center">
 								<Checkbox ref={checkboxRef} id="remember-login" colorScheme="brandScheme" me="10px" />
 								<FormLabel htmlFor="remember-login" mb="0" fontWeight="normal" color={textColor} fontSize="sm">
-									Keep me logged in
+									Duy trì đăng nhập
 								</FormLabel>
 							</FormControl>
-							{/* <NavLink to="/auth/forgot-password">
-								<Text color={textColorBrand} fontSize="sm" w="124px" fontWeight="500">
-									Forgot password?
-								</Text>
-							</NavLink> */}
 						</Flex>
-
 						<Button
 							onClick={handleLogin}
 							isLoading={loading['users/LOGIN']}
@@ -186,7 +160,7 @@ const SignIn: React.FC = () => {
 							h="50"
 							mb="24px"
 						>
-							Sign In
+							Đăng nhập
 						</Button>
 					</FormControl>
 					{/* <Flex flexDirection="column" justifyContent="center" alignItems="start" maxW="100%" mt="0px">

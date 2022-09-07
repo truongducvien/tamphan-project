@@ -107,7 +107,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 		organizationId: dataOrganization?.items
 			.map(i => ({ label: i.name, value: i.id }))
 			.find(i => i.value === detailData?.data?.organizationId),
-		roleId: dataRole?.items.map(i => ({ label: i.name, value: i.id })).find(i => i.value === detailData?.data?.roleId),
+		roleId: { label: detailData?.data?.role?.name, value: detailData?.data?.role?.id },
 		gender: gender.find(i => i.value === detailData?.data?.gender),
 		state: statusOption2.find(i => i.value === detailData?.data?.state),
 	};
@@ -128,7 +128,13 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isDisabled={isDisabled} isRequired label="Tài khoản" name="username" variant="admin" />
+						<TextFieldHookForm
+							isDisabled={action !== 'create'}
+							isRequired
+							label="Tài khoản"
+							name="username"
+							variant="admin"
+						/>
 						<TextFieldHookForm isDisabled={isDisabled} isRequired label="Họ tên" name="fullName" variant="admin" />
 					</Stack>
 					<Stack

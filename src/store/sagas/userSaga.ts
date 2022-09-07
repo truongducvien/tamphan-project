@@ -32,8 +32,12 @@ export function* requestLogin({
 			yield call(saveSessionAccessToken, response.data.accessToken);
 		}
 	} catch (error) {
-		const err = error as AxiosError<{ message: string }>;
-		yield put(actionCreators.userLoginFail(err.response?.data?.message || err.message));
+		const err = error as AxiosError<{ message: string; code: string }>;
+		const meg =
+			err?.response?.data?.code === 'INVALID_USERNAME_OR_PASSWORD'
+				? 'Sai tên đăng nhập hoặc mật khẩu'
+				: 'Lỗi không xác định, vui lòng thử lại';
+		yield put(actionCreators.userLoginFail(meg));
 	}
 }
 

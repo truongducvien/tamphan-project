@@ -9,13 +9,13 @@ const Footer: React.FC = () => {
 			zIndex="3"
 			flexDirection={{
 				base: 'column',
-				xl: 'row',
+				md: 'row',
 			}}
 			alignItems={{
 				base: 'center',
-				xl: 'start',
+				md: 'end',
 			}}
-			justifyContent="space-between"
+			justifyContent="flex-end"
 			px={{ base: '30px', md: '50px' }}
 			pb="30px"
 		>
@@ -27,51 +27,11 @@ const Footer: React.FC = () => {
 				}}
 				mb={{ base: '20px', xl: '0px' }}
 			>
-				&copy; {1900 + new Date().getFullYear()}
+				&copy; 2022
 				<Text fontSize="sm" as="span" fontWeight="500" ms="4px">
-					NovaID. All Rights Reserved. Made with love by
-					<Link mx="3px" color={textColor} target="_blank" fontWeight="700">
-						Simmmple!
-					</Link>
+					NovaID
 				</Text>
 			</Text>
-			<List display="flex">
-				<ListItem
-					me={{
-						base: '20px',
-						md: '44px',
-					}}
-				>
-					<Link fontWeight="500" fontSize="sm" color={textColor} href="mailto:hello@simmmple.com">
-						Support
-					</Link>
-				</ListItem>
-				<ListItem
-					me={{
-						base: '20px',
-						md: '44px',
-					}}
-				>
-					<Link fontWeight="500" fontSize="sm" color={textColor} href="https://www.simmmple.com/licenses">
-						License
-					</Link>
-				</ListItem>
-				<ListItem
-					me={{
-						base: '20px',
-						md: '44px',
-					}}
-				>
-					<Link fontWeight="500" fontSize="sm" color={textColor} href="https://simmmple.com/terms-of-service">
-						Terms of Use
-					</Link>
-				</ListItem>
-				<ListItem>
-					<Link fontWeight="500" fontSize="sm" color={textColor} href="https://www.blog.simmmple.com/">
-						Blog
-					</Link>
-				</ListItem>
-			</List>
 		</Flex>
 	);
 };
