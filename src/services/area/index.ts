@@ -3,10 +3,10 @@ import { BaseResponseAction, BaseResponseDetail } from 'services/type';
 
 import { IArea, IAreaParams, IAreaPayload, IAreaResponse } from './type';
 
-export const getArea = async ({ name = '', page = 0, size = 10 }: IAreaParams) => {
+export const getArea = async ({ code = '', page = 0, size = 10 }: IAreaParams) => {
 	const { data } = await http.get<IAreaParams, { data: IAreaResponse }>('/v1/areas/search', {
 		params: {
-			name,
+			code,
 			page,
 			size,
 		},

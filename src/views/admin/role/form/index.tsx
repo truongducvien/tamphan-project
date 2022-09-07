@@ -105,7 +105,7 @@ const permissions: Array<PermissionProps> = [
 	{
 		id: '2',
 		value: 'ORGANIZATIONS_MANAGEMENT',
-		title: 'Quản lý đơn vj',
+		title: 'Quản lý đơn vị',
 		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
 	},
 	{

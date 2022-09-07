@@ -10,6 +10,7 @@ import { BaseOption, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { useToastInstance } from 'components/toast';
+import { currency } from 'helpers/currency';
 import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
 import { useActionPermission } from 'hooks/useActionPermission';
@@ -33,12 +34,12 @@ const COLUMNS: Array<IColumn<IFacility>> = [
 	{
 		key: 'depositAmount',
 		label: 'Yêu cầu đặt cọc',
-		cell: ({ depositAmount }) => (depositAmount !== '0 VND' ? 'Có' : 'Không'),
+		cell: ({ depositAmount }) => (depositAmount.amount ? 'Có' : 'Không'),
 	},
 	{
 		key: 'depositAmount',
 		label: 'Số tiền đặt cọc',
-		cell: ({ depositAmount }) => (depositAmount !== '0 VND' ? depositAmount : '-'),
+		cell: ({ depositAmount }) => (depositAmount.amount ? currency(depositAmount.amount, depositAmount.currency) : '-'),
 	},
 	{
 		key: 'timeSlots',
@@ -86,7 +87,7 @@ const FacilityManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	} = useLoadMore<IArea, IAreaParams>({
 		id: ['listArea', keywordAreaDebound],
 		func: getArea,
-		payload: { name: keywordAreaDebound },
+		payload: { code: keywordAreaDebound },
 	});
 
 	const {

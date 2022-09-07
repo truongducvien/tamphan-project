@@ -10,6 +10,7 @@ import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { PullDown } from 'components/pulldown';
 import { useToastInstance } from 'components/toast';
+import { currency } from 'helpers/currency';
 import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
 import { useActionPermission } from 'hooks/useActionPermission';
@@ -51,6 +52,7 @@ const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 		bookingTimeSlot: `${data?.data?.bookingTimeSlot.start || ''}-${data?.data?.bookingTimeSlot.end || ''}`,
 		paymentMethod: paymentMethods.find(i => i.value === data?.data?.paymentMethod)?.label,
 		status: statusFacilityRe.find(i => i.value === data?.data?.status)?.label,
+		depositAmount: currency(data?.data?.depositAmount.amount || 0, data?.data?.depositAmount.currency),
 	};
 
 	// bookingCode
@@ -74,7 +76,7 @@ const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 						pb={3}
 					>
 						<TextFieldHookForm isDisabled label="Tên người đặt" name="userName" variant="admin" />
-						<TextFieldHookForm isDisabled label="Ngày dặt chỗ" name="reservationDate" variant="admin" />
+						<TextFieldHookForm isDisabled label="Ngày sử dụng" name="reservationDate" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -83,7 +85,7 @@ const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 						pb={3}
 					>
 						<TextFieldHookForm isDisabled label="Số điện thoại" name="phoneNumber" variant="admin" />
-						<TextFieldHookForm isDisabled label="Giờ đặt chỗ" name="bookingTimeSlot" variant="admin" />
+						<TextFieldHookForm isDisabled label="Giờ sử dụng" name="bookingTimeSlot" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}

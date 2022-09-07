@@ -84,7 +84,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 	} = useLoadMore<IArea, IAreaParams>({
 		id: ['listArea', keywordAreaDebound],
 		func: getArea,
-		payload: { name: keywordAreaDebound },
+		payload: { code: keywordAreaDebound },
 	});
 
 	const {
@@ -169,7 +169,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 		timeSlots: detailData?.data?.timeSlots.map(i => `${i.start}-${i.end}`).join(', '),
 		dateOffs: detailData?.data?.dateOffs.join(','),
 		state: statusOption2.find(i => i.value === detailData?.data?.state),
-		depositAmount: detailData?.data?.depositAmount.replace(' VND', ''),
+		depositAmount: detailData?.data?.depositAmount.amount,
 	};
 
 	return (

@@ -63,7 +63,10 @@ export interface IFacilityRe {
 	reservationDate: string;
 	cancelDate: string;
 	status: string;
-	depositAmount: number;
+	depositAmount: {
+		amount: number;
+		currency: string;
+	};
 	paymentMethod: PaymentMethod;
 	id: string;
 }
@@ -81,7 +84,8 @@ export interface IFacilityReSearchPayload {
 }
 
 export interface IFacilityReSearchForm
-	extends Omit<IFacilityReSearchPayload, 'page' | 'size' | 'areaId' | 'facilityGroupId'> {
+	extends Omit<IFacilityReSearchPayload, 'page' | 'size' | 'areaId' | 'facilityGroupId' | 'depositAmount'> {
 	areaId: Option;
 	facilityGroupId: Option;
+	depositAmount: number;
 }

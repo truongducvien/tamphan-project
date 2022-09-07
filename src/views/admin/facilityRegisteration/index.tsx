@@ -9,6 +9,7 @@ import { DatePickerHookForm } from 'components/form/DatePicker';
 import { PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
+import { currency } from 'helpers/currency';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
@@ -48,7 +49,7 @@ const FacilityReManagement: React.FC = () => {
 	} = useLoadMore<IArea, IAreaParams>({
 		id: ['listArea', keywordAreaDebound],
 		func: getArea,
-		payload: { name: keywordAreaDebound },
+		payload: { code: keywordAreaDebound },
 	});
 
 	const {
@@ -66,14 +67,18 @@ const FacilityReManagement: React.FC = () => {
 		{ key: 'userName', label: 'Tên người đặt' },
 		{ key: 'phoneNumber', label: 'Số điện thoại' },
 		{ key: 'bookingCode', label: 'Mã đặt chỗ' },
-		{ key: 'reservationDate', label: 'Ngày đặt chỗ' },
+		{ key: 'reservationDate', label: 'Ngày sử dụng' },
 		{
 			key: 'bookingTimeSlot',
-			label: 'Giờ đặt chỗ',
+			label: 'Giờ sử dụng',
 			cell: ({ bookingTimeSlot }) => `${bookingTimeSlot?.start} - ${bookingTimeSlot?.end}`,
 		},
 		{ key: 'quantityOfPerson', label: 'Số lượng' },
-		{ key: 'depositAmount', label: 'Số tiền đặt cọc' },
+		{
+			key: 'depositAmount',
+			label: 'Số tiền đặt cọc',
+			cell: ({ depositAmount }) => currency(depositAmount.amount, depositAmount.currency),
+		},
 		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => statusFacilityRe.find(i => i.value === status) },
 		{ key: 'note', label: 'Mô tả' },
 		{

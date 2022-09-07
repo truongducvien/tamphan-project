@@ -80,7 +80,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 	} = useLoadMore<IArea, IAreaParams>({
 		id: ['listArea', keywordDebounce],
 		func: getArea,
-		payload: { name: keywordDebounce },
+		payload: { code: keywordDebounce },
 	});
 
 	const {

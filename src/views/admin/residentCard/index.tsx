@@ -7,6 +7,7 @@ import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { Option, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
+import { ImportButton } from 'components/importButton';
 import Table, { IColumn } from 'components/table';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
@@ -105,6 +106,7 @@ const ResdidentCardManagement: React.FC = () => {
 							/>
 							<PullDownHookForm isClearable label="Trạng thái thẻ" name="state" options={statusOption2} />
 							<Flex align="center">
+								<ImportButton />
 								<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
 									Tìm kiếm
 								</Button>

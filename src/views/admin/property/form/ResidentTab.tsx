@@ -129,7 +129,9 @@ const ResidentModal: React.FC<{
 	} = useLoadMore<IArea, IAreaParams>({
 		id: ['listArea', keywordDebounce],
 		func: getArea,
-		payload: { name: keywordDebounce },
+		payload: {
+			code: keywordDebounce,
+		},
 	});
 
 	const { data, isLoading } = useQuery(['listResident', params, currentPage, currentPageSize], () =>

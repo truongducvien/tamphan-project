@@ -23,7 +23,7 @@ const AreaManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		getArea({
 			page: currentPage - 1,
 			size: currentPageSize,
-			name: keyword,
+			code: keyword,
 		}),
 	);
 	const { changeAction } = useActionPage();
@@ -50,7 +50,7 @@ const AreaManagement: React.FC<BaseComponentProps> = ({ request }) => {
 				<HStack px={{ sm: 2, md: 5 }} spacing={5} align="end">
 					<FormControl>
 						<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" mb="8px">
-							<Text>Tên phân khu</Text>
+							<Text>Mã phân khu</Text>
 						</FormLabel>
 						<Input
 							ref={keywordRef}

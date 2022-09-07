@@ -45,7 +45,7 @@ const PropertyManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	} = useLoadMore<IArea, IAreaParams>({
 		id: ['listArea', keywordAreaDebound],
 		func: getArea,
-		payload: { name: keywordAreaDebound },
+		payload: { code: keywordAreaDebound },
 	});
 
 	const { data, isLoading } = useQuery(['listProperty', param, currentPage, currentPageSize], () =>
@@ -54,7 +54,7 @@ const PropertyManagement: React.FC<BaseComponentProps> = ({ request }) => {
 
 	const COLUMNS: Array<IColumn<IProperty>> = [
 		{ key: 'code', label: 'Mã căn hộ' },
-		{ key: 'name', label: 'Tên căn vị' },
+		{ key: 'name', label: 'Tên căn hộ' },
 		{ key: 'type', label: 'Loại căn hộ' },
 		{ key: 'floorNumber', label: 'Tầng' },
 		{ key: 'block', label: 'Khối' },

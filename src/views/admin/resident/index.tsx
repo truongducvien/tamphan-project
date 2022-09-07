@@ -45,7 +45,7 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		{ key: 'identityCardNumber', label: 'CMND/ CCCD/ HC' },
 		{ key: 'identityCreateDate', label: 'Ngày cấp' },
 		{ key: 'identityLocationIssued', label: 'Nới cấp' },
-		{ key: 'property', label: 'Căn hộ', cell: ({ property }) => property?.name },
+		{ key: 'property', label: 'Mã căn hộ', cell: ({ property }) => property?.code },
 		{ key: 'type', label: 'Vai trò', tag: ({ type }) => residentType.find(i => i.value === type) },
 		{ key: 'email', label: 'Email' },
 		{ key: 'phoneNumber', label: 'Số điện thoại' },
@@ -65,7 +65,7 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	} = useLoadMore<IArea, IAreaParams>({
 		id: ['listArea', keywordDebounce],
 		func: getArea,
-		payload: { name: keywordDebounce },
+		payload: { code: keywordDebounce },
 	});
 
 	const { data, isLoading } = useQuery(['listResident', params, currentPage, currentPageSize], () =>

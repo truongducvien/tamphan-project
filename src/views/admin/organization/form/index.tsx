@@ -56,7 +56,7 @@ const DetailOrganization: React.FC<BaseComponentProps> = ({ request }) => {
 	} = useLoadMore<IArea, IAreaParams>({
 		id: ['listArea', keywordAreaDebound],
 		func: getArea,
-		payload: { name: keywordAreaDebound },
+		payload: { code: keywordAreaDebound },
 	});
 
 	const {

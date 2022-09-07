@@ -59,5 +59,5 @@ export interface IAreaPayload {
 }
 
 export interface IAreaParams extends BaseParams {
-	name?: string;
+	code?: string;
 }
