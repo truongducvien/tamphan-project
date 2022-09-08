@@ -47,10 +47,6 @@ definitions:
 
     - step: &deploy_service
         name: Deploy Service on Server
-        runs-on:
-          - self.hosted
-          - linux.shell
-          - aquacity
         script:
           - *setenv
           - cd /home/ubuntu/aquacity/frontend
@@ -91,13 +87,14 @@ pipelines:
           caches:
             - docker
           size: 2x
+
       - step:
           name: STG - Deploy Service
+          runs-on:
+            - self.hosted
+            - linux.shell
+            - aquacity
           <<: *deploy_service
-      # - step:
-      #     name: STG - Deploy Service
-      #     deployment: stg
-      #     <<: *deploy_service
 
     ####################################
     ############ CI For UAT ############
@@ -117,10 +114,14 @@ pipelines:
           caches:
             - docker
           size: 2x
-      # - step:
-      #     name: UAT - Deploy Service
-      #     deployment: uat
-      #     <<: *deploy_service
+
+      - step:
+          name: UAT - Deploy Service
+          runs-on:
+            - self.hosted
+            - linux.shell
+            - aquacity.uat
+          <<: *deploy_service
 
       # - step:
       #     name: READY FOR PRD - Update image tag
