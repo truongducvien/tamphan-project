@@ -57,7 +57,7 @@ const HeaderLinks: React.FC<Props> = props => {
 			alignItems="center"
 			flexDirection="row"
 			flexWrap={secondary ? { base: 'wrap', md: 'nowrap' } : 'unset'}
-			p="10px"
+			p="5px"
 		>
 			{/* <SearchBar mb={secondary ? { base: '10px', md: 'unset' } : 'unset'} me="10px" /> */}
 			<Flex

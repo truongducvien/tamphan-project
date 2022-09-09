@@ -59,7 +59,7 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, fixed, logoText, onO
 			borderStyle="solid"
 			alignItems={{ xl: 'center' }}
 			display={secondary ? 'block' : 'flex'}
-			minH="75px"
+			minH="10px"
 			justifyContent={{ xl: 'center' }}
 			lineHeight="25.6px"
 			mx="auto"
@@ -75,7 +75,6 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, fixed, logoText, onO
 		>
 			<Flex pl="10px" w="100%" align="center" justify="center" mb={gap}>
 				<SidebarResponsive routes={routes} display="none" />
-				<SidebarBrand />
 				<Box ms="auto">
 					<AdminNavbarLinks
 						onOpen={onOpen}
