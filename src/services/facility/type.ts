@@ -4,8 +4,8 @@ import { BaseResponseList } from 'services/type';
 export type TimeSlotType = 'HOUR' | 'DATE';
 
 export const timeSlotTypeOption: BaseOption<TimeSlotType>[] = [
-	{ label: 'HOUR', value: 'HOUR' },
-	{ label: 'DATE', value: 'DATE' },
+	{ label: 'Giờ', value: 'HOUR' },
+	{ label: 'Ngày', value: 'DATE' },
 ];
 export interface IFacility {
 	id: string;

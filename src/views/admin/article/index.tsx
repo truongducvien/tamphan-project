@@ -50,7 +50,7 @@ const ArticleManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		},
 		{ key: 'type', label: 'Chuyên mục', tag: ({ type }) => typeArticles.find(i => i.value === type) },
 		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => statusArticle.find(i => i.value === status) },
-		{ key: 'createdAt', label: 'Ngày tạo', dateFormat: 'YYYY-MM-DD' },
+		{ key: 'createdAt', label: 'Ngày tạo', dateFormat: 'DD/MM/YYYY' },
 	];
 
 	const handleDelete = async (row: { id: string; title: string }) => {

@@ -77,6 +77,9 @@ export const SidebarLinks: React.FC<Props> = props => {
 						<Box
 							bg={activeRoute(route.path.toLowerCase()) ? bgActive : 'transparent'}
 							transition={activeRoute(route.path.toLowerCase()) ? 'background-color .3s linear' : undefined}
+							_hover={{
+								bg: activeRoute(route.path.toLowerCase()) ? '' : 'blue.50',
+							}}
 						>
 							<HStack spacing={activeRoute(route.path.toLowerCase()) ? '22px' : '26px'} py="8px" ps="10px">
 								<Flex w="100%" alignItems="center" justifyContent="center">

@@ -25,7 +25,7 @@ const OrganizationManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		{ key: 'name', label: 'Tên đơn vị' },
 		{ key: 'parentId', label: 'Đơn vị trực thuộc' },
 		{ key: 'description', label: 'Mô tả' },
-		{ key: 'createdDate', label: 'Ngày tạo', dateFormat: 'YYYY-MM-DD' },
+		{ key: 'createdDate', label: 'Ngày tạo', dateFormat: 'DD/MM/YYYY' },
 	];
 
 	const { changeAction } = useActionPage();

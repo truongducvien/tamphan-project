@@ -32,8 +32,8 @@ const RoleManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const COLUMNS: Array<IColumn<IRole>> = [
 		{ key: 'name', label: 'Tên chức vụ' },
 		{ key: 'code', label: 'Mã chức vụ' },
-		{ key: 'createdDate', label: 'Ngày tạo', dateFormat: 'YYYY-MM-DD' },
-		{ key: 'updatedDate', label: 'Ngày cập nhật', dateFormat: 'YYYY-MM-DD' },
+		{ key: 'createdDate', label: 'Ngày tạo', dateFormat: 'DD/MM/YYYY' },
+		{ key: 'updatedDate', label: 'Ngày cập nhật', dateFormat: 'DD/MM/YYYY' },
 		{ key: 'state', label: 'Trạng thái', tag: ({ state }) => statusOption2.find(i => i.value === state) },
 	];
 

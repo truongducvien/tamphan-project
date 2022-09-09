@@ -12,12 +12,12 @@ import {
 import useEffectWithoutMounted from 'hooks/useEffectWithoutMounted';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
 
-export interface SwichHookFormProp extends SwitchProps {
+export interface SwitchHookFormProp extends SwitchProps {
 	name: string;
 	label: string;
 }
 
-export const SwichHookForm: React.FC<SwichHookFormProp> = ({ name, label, ...innerProps }) => {
+export const SwitchHookForm: React.FC<SwitchHookFormProp> = ({ name, label, ...innerProps }) => {
 	const {
 		control,
 		formState: { errors, isSubmitted, isDirty },

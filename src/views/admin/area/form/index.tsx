@@ -137,7 +137,7 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isDisabled={isDisabled} label="Diện tích" type="number" name="acreage" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} label="Diện tích" name="acreage" variant="admin" />
 						<TextFieldHookForm isDisabled={isDisabled} label="Email" name="contactEmail" variant="admin" />
 					</Stack>
 					<Box pr={2} mb={3} w={{ base: '100%', md: '50%' }}>

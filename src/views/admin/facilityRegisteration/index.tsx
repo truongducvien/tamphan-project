@@ -10,6 +10,7 @@ import { PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
 import { currency } from 'helpers/currency';
+import { formatDate } from 'helpers/dayjs';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
@@ -97,6 +98,8 @@ const FacilityReManagement: React.FC = () => {
 	const onSearch = (dt: IFacilityReSearchForm) => {
 		const prepareData = {
 			...dt,
+			bookingFromTime: formatDate(dt.bookingFromTime, { type: 'BE' }),
+			bookingToTime: formatDate(dt.bookingToTime, { type: 'BE' }),
 			areaId: dt.areaId?.value as string,
 			facilityGroupId: dt.facilityGroupId?.value as string,
 		};

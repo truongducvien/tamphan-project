@@ -1,22 +1,41 @@
 import { useRef, useState } from 'react';
 
-import { Box, Button, FormControl, FormLabel, HStack, SimpleGrid } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
+import {
+	Box,
+	Button,
+	FormControl,
+	FormLabel,
+	HStack,
+	SimpleGrid,
+	Flex,
+	Switch,
+	Input,
+	IconButton,
+	InputGroup,
+	InputRightElement,
+	Icon,
+} from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import Card from 'components/card/Card';
+import { DatePicker } from 'components/date';
 import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
 import { Loading } from 'components/form/Loading';
 import { BaseOption, Option, PullDownHookForm } from 'components/form/PullDown';
-import { SwichHookForm } from 'components/form/SwichHookForm';
+import { SwitchHookForm } from 'components/form/SwitchHookForm';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { PullDown } from 'components/pulldown';
 import { useToastInstance } from 'components/toast';
+import { formatDate } from 'helpers/dayjs';
 import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
 import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
+import { MdClear } from 'react-icons/md';
 import { useHistory } from 'react-router-dom';
 import { getArea } from 'services/area';
 import { IArea, IAreaParams } from 'services/area/type';
@@ -24,12 +43,13 @@ import { createFacility, getFacilityById, updateFacility } from 'services/facili
 import { getFacilityGroup } from 'services/facility/group';
 import { IFacilityGroup, IFacilityGroupParams } from 'services/facility/group/type';
 import { IFacilityCreatePayload, TimeSlotType, timeSlotTypeOption } from 'services/facility/type';
+import { BaseResponseAction } from 'services/type';
 import { statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên tiện ích'),
-	operatingTime: Yup.string().required('Vui lòng nhập tên tiện ích'),
+	operatingTime: Yup.string().required('Vui lòng nhập giờ hoạt động'),
 	timeSlots: Yup.string().required('Vui lòng nhập khung giờ'),
 	areaId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn phân khu') }),
 	capacity: Yup.number().typeError('Vui lòng nhập số').required('Vui lòng nhập sức chứa'),
@@ -39,7 +59,7 @@ const validationSchema = Yup.object({
 	}),
 	state: Yup.object({
 		label: Yup.string(),
-		value: Yup.string().required('Vui lòng trạng thái'),
+		value: Yup.string().required('Vui lòng chọn trạng thái'),
 	}),
 });
 
@@ -66,10 +86,12 @@ interface IFacilityForm
 	timeSlotType: Option;
 }
 const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
+	const [dateOffs, setDayOffs] = useState<Array<string>>([]);
 	const { permistionAction } = useActionPermission(request);
 	const { toast } = useToastInstance();
 	const history = useHistory();
 	const { changeAction, id, action } = useActionPage();
+	const [requirePay, setPay] = useState(false);
 	const imageRef = useRef<UploadImageRef>(null);
 	const [keywordGroup, setKeywordGroup] = useState('');
 	const [keywordArea, setKeywordArea] = useState('');
@@ -105,7 +127,12 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
-		} catch {
+		} catch (error) {
+			const err = error as AxiosError<BaseResponseAction>;
+			if (err.response?.data.code === 'DUPLICATE_FACILITY_NAME') {
+				toast({ title: 'Tên tiện ích đã tồn tại', status: 'error' });
+				return;
+			}
 			toast({ title: 'Tạo mới thất bại', status: 'error' });
 		}
 	};
@@ -115,7 +142,12 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 		try {
 			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
-		} catch {
+		} catch (error) {
+			const err = error as AxiosError<BaseResponseAction>;
+			if (err.response?.data.code === 'DUPLICATE_FACILITY_NAME') {
+				toast({ title: 'Tên tiện ích đã tồn tại', status: 'error' });
+				return;
+			}
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
 		}
 	};
@@ -126,6 +158,10 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 		isLoading,
 	} = useQuery(['detail', id], () => getFacilityById(id || ''), {
 		enabled: !!id,
+		onSuccess: ({ data }) => {
+			setPay(!!data?.depositAmount.amount);
+			setDayOffs(data?.dateOffs.map(i => formatDate(i)) || []);
+		},
 	});
 
 	const onSubmit = (data: IFacilityForm, reset: () => void) => {
@@ -139,14 +175,14 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 			facilityGroupId: (data.facilityGroupId?.value as string) || detailData?.data?.facilityGroupId || '',
 			capacity: Number(data.capacity || 0),
 			maxOrderNumber: Number(data.maxOrderNumber || 0),
-			depositAmount: Number(data.depositAmount || 0),
+			depositAmount: requirePay ? Number(data.depositAmount || 0) : 0,
 			depositInDuration: Number(data.depositInDuration || 0),
 			operatingTime: operatingTime ? { start: operatingTime[0], end: operatingTime[1] } : operatingTime,
 			timeSlots: timeSlots.map(i => {
 				const items = i?.split('-');
 				return { start: items[0], end: items[1] };
 			}),
-			dateOffs: data.dateOffs ? data.dateOffs?.split(',') : undefined,
+			dateOffs: dateOffs.map(i => formatDate(i, { type: 'BE' })),
 			imageLink: imageLink?.files || [],
 			timeSlotType: timeSlotType.value,
 		};
@@ -244,13 +280,27 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 							variant="admin"
 							isDisabled={action === 'detail' || timeSlotType.value === 'DATE'}
 						/>
-						<TextFieldHookForm
-							isDisabled={action === 'detail'}
-							label="Số tiền đặt cọc"
-							name="depositAmount"
-							variant="admin"
-						/>
-
+						<Flex>
+							<Flex flex={0.5}>
+								<FormControl>
+									<FormLabel>Yêu cầu đặt cọc</FormLabel>
+									<Switch
+										isDisabled={action === 'detail'}
+										name=""
+										isChecked={requirePay}
+										onChange={e => setPay(e.target.checked)}
+									/>
+								</FormControl>
+							</Flex>
+							<Flex flex={1} hidden={!requirePay}>
+								<TextFieldHookForm
+									isDisabled={action === 'detail'}
+									label="Số tiền đặt cọc"
+									name="depositAmount"
+									variant="admin"
+								/>
+							</Flex>
+						</Flex>
 						<TextFieldHookForm
 							label="Số lượng tối đa cho phép đặt"
 							name="maxOrderNumber"
@@ -258,13 +308,48 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 							variant="admin"
 							isDisabled={action === 'detail'}
 						/>
-						<TextFieldHookForm
-							isDisabled={action === 'detail'}
-							placeholder="2021-03-20,2021-03-20"
-							label="Ngày nghỉ"
-							name="dateOffs"
-							variant="admin"
-						/>
+						<Flex justify="center" align="end">
+							<FormControl>
+								<FormLabel>Ngày nghỉ</FormLabel>
+								<InputGroup>
+									<Input
+										isDisabled
+										value={dateOffs.join(', ')}
+										placeholder="Chọn ngày"
+										name="dateOffs"
+										variant="admin"
+										pr="2.5rem"
+									/>
+									<InputRightElement p={0}>
+										<Icon
+											as={MdClear}
+											w={5}
+											h={5}
+											right={3}
+											onClick={() => setDayOffs([])}
+											position="absolute"
+											cursor="pointer"
+											display={dateOffs?.[0] && action !== 'detail' ? 'block' : 'none'}
+										/>
+									</InputRightElement>
+								</InputGroup>
+							</FormControl>
+							<DatePicker
+								replaceInput={
+									<IconButton
+										colorScheme="blue"
+										isDisabled={action === 'detail'}
+										marginLeft={3}
+										aria-label="Add to friends"
+										icon={<AddIcon />}
+									/>
+								}
+								defaultDays={dateOffs.map(i => formatDate(i, { type: 'BE' }))}
+								onChange={date =>
+									setDayOffs(prev => (prev.includes(date) ? prev.filter(i => i !== date) : [...prev, date]))
+								}
+							/>
+						</Flex>
 						<TextFieldHookForm
 							isDisabled={action === 'detail'}
 							label="Số điện thoại liên hệ"
@@ -274,7 +359,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 						/>
 						<TextFieldHookForm
 							isDisabled={action === 'detail'}
-							label="Thời hạn huỷ cọc(h)"
+							label="Thời hạn quá hạn cọc (h)"
 							min={1}
 							name="depositInDuration"
 							type="number"
@@ -300,7 +385,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 								defaultValue={detailData?.data?.imageLink ? detailData?.data?.imageLink : []}
 							/>
 						</FormControl>
-						<SwichHookForm
+						<SwitchHookForm
 							isDisabled={action === 'detail'}
 							label="Cho phép đặt chỗ qua App"
 							variant="admin"

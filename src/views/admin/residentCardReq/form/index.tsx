@@ -105,7 +105,8 @@ const ResdidentCardReqDetail: React.FC<BaseComponentProps> = () => {
 		...detailData,
 		type: typeCardReq.find(i => i.value === detailData?.type),
 		status: statusCardReq.find(i => i.value === detailData?.status),
-		requestedDate: formatDate(detailData?.requestedDate, { type: 'export' }),
+		requestedDate: formatDate(detailData?.requestedDate),
+		approvalDate: formatDate(detailData?.approvalDate),
 	};
 
 	return (

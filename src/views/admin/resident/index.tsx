@@ -40,10 +40,10 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 
 	const COLUMNS: Array<IColumn<IResident>> = [
 		{ key: 'fullName', label: 'Tên cư dân' },
-		{ key: 'dateOfBirth', label: 'Ngày sinh' },
+		{ key: 'dateOfBirth', label: 'Ngày sinh', dateFormat: 'DD/MM/YYYY' },
 		{ key: 'gender', label: 'Giới tính', cell: ({ gender }) => genderOptions.find(i => i.value === gender)?.label },
 		{ key: 'identityCardNumber', label: 'CMND/ CCCD/ HC' },
-		{ key: 'identityCreateDate', label: 'Ngày cấp' },
+		{ key: 'identityCreateDate', label: 'Ngày cấp', dateFormat: 'DD/MM/YYYY' },
 		{ key: 'identityLocationIssued', label: 'Nới cấp' },
 		{ key: 'property', label: 'Mã căn hộ', cell: ({ property }) => property?.code },
 		{ key: 'type', label: 'Vai trò', tag: ({ type }) => residentType.find(i => i.value === type) },

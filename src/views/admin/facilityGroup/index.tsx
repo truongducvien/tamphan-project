@@ -68,7 +68,7 @@ const FacilityGroupManagement: React.FC<BaseComponentProps> = ({ request }) => {
 			},
 		},
 		{ key: 'state', label: 'Trạng thái hoạt động', tag: ({ state }) => statusOption2.find(i => i.value === state) },
-		{ key: 'updatedDate', label: 'Ngày cập nhật', dateFormat: 'YYYY-MM-DD' },
+		{ key: 'updatedDate', label: 'Ngày cập nhật', dateFormat: 'DD/MM/YYYY' },
 	];
 
 	const pageInfo = {

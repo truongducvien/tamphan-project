@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 
 import {
 	ArrowLeftIcon,
@@ -40,15 +40,19 @@ const todayTimestamp = Date.now() - (Date.now() % oneDay) + new Date().getTimezo
 
 export interface IDatePickerProps extends Omit<ChakraInputProps, 'onChange'> {
 	defaultDay?: string;
+	defaultDays?: string[];
 	dateFormat?: string;
+	replaceInput?: React.ReactNode;
 	onChange?: (date: string) => void;
 }
 
 export const DatePicker = ({
 	defaultDay,
 	onChange,
-	dateFormat = 'YYYY-MM-DD',
+	dateFormat = 'DD/MM/YYYY',
 	isDisabled,
+	replaceInput,
+	defaultDays,
 	...rest
 }: IDatePickerProps) => {
 	const date = new Date();
@@ -61,13 +65,20 @@ export const DatePicker = ({
 	const [selectedDay, setSelectedDay] = useState<number | undefined>(
 		defaultDay ? new Date(defaultDay).setHours(0, 0, 0, 0) : undefined,
 	);
+
 	const inputRef = useRef<HTMLInputElement>(null);
 	const isCurrentDay = (day: { timestamp: number; dayString: string }) => {
 		const tooday = new Date().toLocaleTimeString('vi-VI', { weekday: 'short' });
 		return day.timestamp === todayTimestamp && tooday.includes(day.dayString);
 	};
+
+	const selectedDays = useMemo(
+		() => (defaultDays ? defaultDays.map(i => new Date(i).setHours(0, 0, 0, 0)) : undefined),
+		[defaultDays],
+	);
+
 	const isSelectedDay = (day: { timestamp: number }) => {
-		return day.timestamp === selectedDay;
+		return !selectedDays ? day.timestamp === selectedDay : selectedDays?.includes(day.timestamp);
 	};
 
 	const getDateStringFromTimestamp = (timestamp: number) => {
@@ -81,6 +92,8 @@ export const DatePicker = ({
 		if (inputRef.current) {
 			inputRef.current.value = getDateStringFromTimestamp(day.timestamp);
 			onChange?.(inputRef.current.value);
+		} else {
+			onChange?.(getDateStringFromTimestamp(day.timestamp));
 		}
 		onClose();
 	};
@@ -127,51 +140,53 @@ export const DatePicker = ({
 			{...rest}
 		>
 			<PopoverTrigger>
-				<InputGroup>
-					<Input
-						defaultValue={
-							defaultDay ? getDateStringFromTimestamp(new Date(defaultDay).setHours(0, 0, 0, 0)) : undefined
-						}
-						color={color}
-						ref={inputRef}
-						isDisabled={isDisabled}
-						{...rest}
-						borderWidth={1}
-						borderColor={isOpen ? forcusBorder : borderColor}
-						position="relative"
-					/>
-
-					<InputRightElement p={0} zIndex="inherit">
-						<Icon
-							as={MdClear}
-							onClick={e => {
-								e.stopPropagation();
-								if (inputRef?.current?.value) inputRef.current.value = '';
-								setSelectedDay(undefined);
-							}}
-							w={5}
-							h={5}
-							// m={0.5}
-							position="absolute"
-							right={63}
-							cursor="pointer"
-							display={isDisabled || !selectedDay ? 'none' : 'block'}
+				{replaceInput || (
+					<InputGroup>
+						<Input
+							defaultValue={
+								defaultDay ? getDateStringFromTimestamp(new Date(defaultDay).setHours(0, 0, 0, 0)) : undefined
+							}
+							color={color}
+							ref={inputRef}
+							isDisabled={isDisabled}
+							{...rest}
+							borderWidth={1}
+							borderColor={isOpen ? forcusBorder : borderColor}
+							position="relative"
 						/>
-						<Flex
-							justifyContent="center"
-							position="absolute"
-							alignItems="center"
-							backgroundColor={bg}
-							w={53}
-							h="100%"
-							borderBottomEndRadius="16px"
-							borderTopEndRadius="16px"
-							right={0}
-						>
-							<ChevronDownIcon w={5} h={5} m={0.5} />
-						</Flex>
-					</InputRightElement>
-				</InputGroup>
+
+						<InputRightElement p={0} zIndex="inherit">
+							<Icon
+								as={MdClear}
+								onClick={e => {
+									e.stopPropagation();
+									if (inputRef?.current?.value) inputRef.current.value = '';
+									setSelectedDay(undefined);
+								}}
+								w={5}
+								h={5}
+								// m={0.5}
+								position="absolute"
+								right={63}
+								cursor="pointer"
+								display={isDisabled || !selectedDay ? 'none' : 'block'}
+							/>
+							<Flex
+								justifyContent="center"
+								position="absolute"
+								alignItems="center"
+								backgroundColor={bg}
+								w={53}
+								h="100%"
+								borderBottomEndRadius="16px"
+								borderTopEndRadius="16px"
+								right={0}
+							>
+								<ChevronDownIcon w={5} h={5} m={0.5} />
+							</Flex>
+						</InputRightElement>
+					</InputGroup>
+				)}
 			</PopoverTrigger>
 			<Portal>
 				<PopoverContent>

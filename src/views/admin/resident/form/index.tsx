@@ -7,9 +7,10 @@ import { FormContainer } from 'components/form';
 import { DatePickerHookForm } from 'components/form/DatePicker';
 import { Loading } from 'components/form/Loading';
 import { BaseOption, Option, PullDownHookForm } from 'components/form/PullDown';
-import { SwichHookForm } from 'components/form/SwichHookForm';
+import { SwitchHookForm } from 'components/form/SwitchHookForm';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
+import { formatDate } from 'helpers/dayjs';
 import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
 import { useActionPermission } from 'hooks/useActionPermission';
@@ -131,6 +132,8 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 			identityCardType: data.identityCardType?.value as IdentityCardType,
 			gender: data.gender?.value as Gender,
 			propertyId: data.propertyId?.value,
+			dateOfBirth: formatDate(data?.dateOfBirth, { type: 'BE' }),
+			identityCreateDate: formatDate(data?.identityCreateDate, { type: 'BE' }),
 		};
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -149,6 +152,8 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 			label: detailData?.data?.property?.name,
 			value: detailData?.data?.property?.id,
 		},
+		dateOfBirth: formatDate(detailData?.data?.dateOfBirth),
+		identityCreateDate: formatDate(detailData?.data?.identityCreateDate),
 	};
 
 	const isDisabled = action === 'detail';
@@ -201,7 +206,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 							name="dateOfBirth"
 							variant="admin"
 						/>
-						<TextFieldHookForm isDisabled={isDisabled} label="Ngày cấp" name="identityCreateDate" variant="admin" />
+						<DatePickerHookForm isDisabled={isDisabled} label="Ngày cấp" name="identityCreateDate" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -314,7 +319,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 					</Stack>
 					<Box>
 						{/* <Swich label="Cho phép sử dụng NOVAID" id="useNovaId" /> */}
-						<SwichHookForm label="Cho phép sử dụng NOVAID" name="useNovaId" variant="admin" />
+						<SwitchHookForm label="Cho phép sử dụng NOVAID" isDisabled={isDisabled} name="useNovaId" variant="admin" />
 					</Box>
 					<HStack pb={3} justifyContent="flex-end">
 						<Button

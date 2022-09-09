@@ -1,9 +1,10 @@
 import * as dayjsModule from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import toObject from 'dayjs/plugin/toObject';
 
 type DateFormatOptions = {
-	type: 'export' | 'dateTime' | 'dateTimeFormat' | 'time' | 'birthDay' | 'timeToTime';
+	type: 'export' | 'dateTime' | 'dateTimeFormat' | 'time' | 'birthDay' | 'timeToTime' | 'BE';
 	emptySymbol?: string;
 	use24h?: boolean;
 };
@@ -11,6 +12,7 @@ type DateFormatOptions = {
 const dayjs = dayjsModule.default;
 dayjs.extend(toObject);
 dayjs.extend(isSameOrAfter);
+dayjs.extend(customParseFormat);
 
 export const isDifferenceDateTimes = (one: Date, two: Date) => !!dayjs(one).diff(two);
 
@@ -19,13 +21,15 @@ export const createDateWithoutTime = (date: Date) => new Date(date).setHours(0, 
 export const formatDate = (firstDate?: Date | string, options?: DateFormatOptions, secondDate?: Date | string) => {
 	const { type, emptySymbol, use24h } = options || {};
 
-	if (!firstDate) return emptySymbol;
+	if (!firstDate) return emptySymbol || '';
 
 	const timeFormat = use24h ? 'HH:mm' : 'hh:mm';
 
 	switch (type) {
 		case 'export':
-			return dayjs(firstDate).format('YYYY-MM-DD');
+			return dayjs(firstDate).format('DD/MM/YYYY');
+		case 'BE':
+			return dayjs(firstDate, 'DD/MM/YYYY').format(`YYYY-MM-DD`);
 		case 'dateTimeFormat':
 			return dayjs(firstDate).format(`DD/MM/YYYY | ${timeFormat}`);
 		case 'dateTime':

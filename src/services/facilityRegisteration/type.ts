@@ -88,4 +88,6 @@ export interface IFacilityReSearchForm
 	areaId: Option;
 	facilityGroupId: Option;
 	depositAmount: number;
+	bookingFromTime: string;
+	bookingToTime: string;
 }

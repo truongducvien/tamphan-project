@@ -9,6 +9,7 @@ import { DatePickerHookForm } from 'components/form/DatePicker';
 import { BaseOption, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import Table, { IColumn } from 'components/table';
+import { formatDate } from 'helpers/dayjs';
 import useActionPage from 'hooks/useActionPage';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
@@ -72,7 +73,7 @@ const ResdidentCardReqManagement: React.FC = () => {
 		{ key: 'requesterName', label: 'Người yêu cầu' },
 		{ key: 'requesterPhoneNumber', label: 'Số điện thoại' },
 		{ key: 'note', label: 'Ghi chú' },
-		{ key: 'requestedDate', label: 'Ngày yêu cầu', dateFormat: 'YYYY-MM-DD' },
+		{ key: 'requestedDate', label: 'Ngày yêu cầu', dateFormat: 'DD/MM/YYYY' },
 		{ key: 'fee', label: 'Phí cấp thẻ' },
 		{ key: 'newCardNumber', label: 'Mã số thẻ cấp mới' },
 		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => statusCardReq.find(i => i.value === status) },
@@ -87,6 +88,8 @@ const ResdidentCardReqManagement: React.FC = () => {
 	const onSearch = (payload: FormData) => {
 		const preData = {
 			...payload,
+			from: formatDate(payload.from, { type: 'BE' }),
+			to: formatDate(payload.to, { type: 'BE' }),
 			propertyId: payload.propertyId?.value,
 			status: payload.status?.value,
 			type: payload.type?.value,
@@ -100,7 +103,7 @@ const ResdidentCardReqManagement: React.FC = () => {
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
 				<Box px={{ sm: 2, md: 5 }}>
-					<FormContainer onSubmit={onSearch} validationSchema={validationSchema}>
+					<FormContainer onSubmit={onSearch} onReset={() => setParams({})} validationSchema={validationSchema}>
 						<SimpleGrid spacing={5} templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(3, 2fr)' }} gap={6}>
 							<PullDownHookForm label="Loại yêu cầu" name="type" colorScheme="red" isClearable options={typeCardReq} />
 							<TextFieldHookForm name="fullName" label="Họ và tên" />

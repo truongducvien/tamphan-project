@@ -184,7 +184,7 @@ const Table = <T,>({
 												) : (
 													<Text color={textColor} fontSize="sm" fontWeight="700" maxH={100} maxW={500} overflowY="auto">
 														{column.key
-															? column.dateFormat
+															? column.dateFormat && row[column.key]
 																? dayjs(row[column.key] as unknown as string).format(column.dateFormat)
 																: (row[column.key] as unknown as string)
 															: ''}

@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { Box, Button, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { DatePickerHookForm } from 'components/form/DatePicker';
@@ -9,6 +10,7 @@ import { Loading } from 'components/form/Loading';
 import { Option, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { useToastInstance } from 'components/toast';
+import { formatDate } from 'helpers/dayjs';
 import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
 import { useActionPermission } from 'hooks/useActionPermission';
@@ -17,16 +19,17 @@ import { useHistory } from 'react-router-dom';
 import { getAllOrganization } from 'services/organizations';
 import { Gender, gender } from 'services/resident/type';
 import { getRole } from 'services/role';
+import { BaseResponseAction } from 'services/type';
 import { createUser, getUserById, updateUser } from 'services/user';
 import { IUserPayload } from 'services/user/type';
 import { Status, statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
-	username: Yup.string().email('Định dạng là email').required('Vui lòng nhập tên tài khoản'),
-	fullName: Yup.string().required('Vui lòng nhập tên họ tên'),
+	username: Yup.string().email('Định dạng là email').required('Vui lòng nhập tài khoản'),
+	fullName: Yup.string().required('Vui lòng nhập họ tên'),
 	organizationId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn đơn vị') }),
-	roleId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn vai trò') }),
+	roleId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn vai trò người dùng') }),
 	state: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn trạng thái') }),
 });
 
@@ -72,7 +75,12 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
-		} catch {
+		} catch (error) {
+			const err = error as AxiosError<BaseResponseAction>;
+			if (err.response?.data.code === 'DUPLICATE_USER_ID') {
+				toast({ title: 'Tên tài khoản đã tồn tại', status: 'error' });
+				return;
+			}
 			toast({ title: 'Tạo mới thất bại', status: 'error' });
 		}
 	};
@@ -94,6 +102,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 			roleId: data.roleId?.value as string,
 			gender: data.gender?.value as Gender,
 			state: data.state?.value as Status,
+			dateOfBirth: formatDate(data.dateOfBirth, { type: 'BE' }),
 		};
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -110,6 +119,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 		roleId: { label: detailData?.data?.role?.name, value: detailData?.data?.role?.id },
 		gender: gender.find(i => i.value === detailData?.data?.gender),
 		state: statusOption2.find(i => i.value === detailData?.data?.state),
+		dateOfBirth: formatDate(detailData?.data?.dateOfBirth),
 	};
 
 	const isDisabled = action === 'detail';
@@ -159,7 +169,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 							name="phoneNumber"
 							variant="admin"
 						/>
-						<TextFieldHookForm isDisabled={isDisabled} label="Địa chỉ" name="addrress" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} label="Địa chỉ" name="address" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}

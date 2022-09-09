@@ -14,6 +14,7 @@ import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { PullDown } from 'components/pulldown';
 import { useToastInstance } from 'components/toast';
+import { formatDate } from 'helpers/dayjs';
 import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
 import { useActionPermission } from 'hooks/useActionPermission';
@@ -191,6 +192,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 		notificationWays: notificationWays.filter(i => detailData?.data?.notificationWays.some(ii => ii === i.value)),
 		type: typeArticles.find(i => i.value === detailData?.data?.type),
 		status: statusArticle.find(i => i.value === detailData?.data?.status) || statusArticle[0],
+		createdAt: formatDate(detailData?.data?.createdAt),
 	};
 
 	return (

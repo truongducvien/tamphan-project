@@ -33,6 +33,7 @@ import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { PullDown } from 'components/pulldown';
 import { useToastInstance } from 'components/toast';
+import { formatDate } from 'helpers/dayjs';
 import { BaseComponentProps } from 'hocs/withPermission';
 import useActionPage from 'hooks/useActionPage';
 import { useActionPermission } from 'hooks/useActionPermission';
@@ -197,6 +198,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 		...detailData?.data,
 		status: statusProperty.find(i => i.value === detailData?.data?.status),
 		areaId: { label: detailData?.data?.areaName, value: detailData?.data?.areaId },
+		block: detailData?.data?.block ? Number(detailData?.data?.block) : 0,
 	};
 
 	const defaultOwner = {
@@ -204,6 +206,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 		identityCardType:
 			identityCardType.find(i => i.value === dataOwnner?.identityCardType) || dataOwnner?.identityCardType,
 		gender: gender.find(i => i.value === dataOwnner?.gender),
+		dateOfBirth: formatDate(dataOwnner?.dateOfBirth),
 	};
 
 	const isDisabled = action === 'detail';
@@ -281,7 +284,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 										name="floorNumber"
 										variant="admin"
 									/>
-									<TextFieldHookForm isDisabled={isDisabled} type="number" label="Block" name="block" variant="admin" />
+									<TextFieldHookForm isDisabled={isDisabled} type="number" label="Khối" name="block" variant="admin" />
 								</Stack>
 								<Stack
 									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -378,7 +381,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									<TextFieldHookForm
 										isDisabled={isDisabled}
 										type="number"
-										label="Số lượng cư dân tối đa"
+										label="Số lượng thẻ cư dân tối đa"
 										name="maxResident"
 										variant="admin"
 									/>
