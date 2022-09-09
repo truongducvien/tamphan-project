@@ -47,10 +47,6 @@ definitions:
 
     - step: &deploy_service
         name: Deploy Service on Server
-        runs-on:
-          - self.hosted
-          - linux.shell
-          - aquacity
         script:
           - *setenv
           - cd /home/ubuntu/aquacity/frontend
@@ -84,20 +80,21 @@ pipelines:
             - export NEW_IMAGE_TAG=${DOCKER_REPO}:${BITBUCKET_TAG}
             - >-
               docker build . --file ${DOCKERFILE_PATH} --tag ${IMAGE_TAG}
-              --build-arg REACT_APP_API_BASE_URL=https://aquacity.staging.novaid.vn//web/api
+              --build-arg REACT_APP_API_BASE_URL=https://aquacity.staging.novaid.vn/web/api
             - *retag_and_push_images
           services:
             - docker
           caches:
             - docker
           size: 2x
+
       - step:
           name: STG - Deploy Service
+          runs-on:
+            - self.hosted
+            - linux.shell
+            - aquacity
           <<: *deploy_service
-      # - step:
-      #     name: STG - Deploy Service
-      #     deployment: stg
-      #     <<: *deploy_service
 
     ####################################
     ############ CI For UAT ############
@@ -110,17 +107,21 @@ pipelines:
             - export NEW_IMAGE_TAG=${DOCKER_REPO}:${BITBUCKET_TAG}
             - >-
               docker build . --file ${DOCKERFILE_PATH} --tag ${IMAGE_TAG}
-              --build-arg REACT_APP_API_BASE_URL=https://aquacity.uat.novaid.vn//web/api
+              --build-arg REACT_APP_API_BASE_URL=https://aquacity.uat.novaid.vn/web/api
             - *retag_and_push_images
           services:
             - docker
           caches:
             - docker
           size: 2x
-      # - step:
-      #     name: UAT - Deploy Service
-      #     deployment: uat
-      #     <<: *deploy_service
+
+      - step:
+          name: UAT - Deploy Service
+          runs-on:
+            - self.hosted
+            - linux.shell
+            - aquacity.uat
+          <<: *deploy_service
 
       # - step:
       #     name: READY FOR PRD - Update image tag
@@ -153,7 +154,7 @@ pipelines:
             - export NEW_IMAGE_TAG=${DOCKER_REPO}:${BITBUCKET_TAG}
             - >-
               docker build . --file ${DOCKERFILE_PATH} --tag ${IMAGE_TAG}
-              --build-arg REACT_APP_API_BASE_URL=https://aquacity.novaid.vn//web/api
+              --build-arg REACT_APP_API_BASE_URL=https://aquacity.novaid.vn/web/api
             - *retag_and_push_images
           services:
             - docker
