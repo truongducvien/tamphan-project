@@ -9,12 +9,11 @@ export const SidebarBrand: React.FC = () => {
 	const logoColor = useColorModeValue('navy.700', 'white');
 
 	return (
-		<Flex pl="35px" direction="column">
+		<Flex pl="35px" align="center" justify="center" display={{ base: 'none', xl: 'block' }}>
 			{/* <HorizonLogo h='26px' w='175px' my='32px' color={logoColor} /> */}
-			<Text color={logoColor} fontWeight={700} h="70px" fontSize={45}>
+			<Text color={logoColor} fontWeight={700} fontSize={45}>
 				Aqua City
 			</Text>
-			<HSeparator mb="20px" />
 		</Flex>
 	);
 };

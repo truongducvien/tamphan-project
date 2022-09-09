@@ -248,7 +248,7 @@ const DetailPosition: React.FC<BaseComponentProps> = ({ request }) => {
 	const isDisable = action === 'detail';
 
 	return (
-		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
+		<Box pt="10px">
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<FormContainer
 					onSubmit={onSubmit}

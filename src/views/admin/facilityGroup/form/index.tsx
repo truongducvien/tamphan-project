@@ -89,7 +89,7 @@ const FacilityGroupForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const defaultValue = { ...detailData?.data, state: statusOption2.find(i => i.value === detailData?.data?.state) };
 
 	return (
-		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
+		<Box pt="10px">
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<FormContainer
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Flex, Link, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
+import SidebarBrand from 'components/sidebar/components/Brand';
 import { SidebarResponsive } from 'components/sidebar/Sidebar';
 import routes from 'routes';
 
@@ -15,12 +16,8 @@ export interface Props {
 	onOpen?(): void;
 }
 
-const AdminNavbar: React.FC<Props> = ({ secondary, message, brandText, fixed, logoText, onOpen }) => {
+const AdminNavbar: React.FC<Props> = ({ secondary, message, fixed, logoText, onOpen }) => {
 	const [scrolled, setScrolled] = useState(false);
-
-	// Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
-	const mainText = useColorModeValue('navy.700', 'white');
-	const secondaryText = useColorModeValue('gray.700', 'white');
 	const navbarPosition = 'fixed';
 	const navbarFilter = 'none';
 	const navbarBackdrop = 'blur(20px)';
@@ -48,8 +45,6 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, brandText, fixed, lo
 		};
 	});
 
-	const breadcrumb = brandText?.split('/');
-
 	return (
 		<Box
 			position={navbarPosition}
@@ -62,10 +57,6 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, brandText, fixed, lo
 			backgroundSize="cover"
 			borderWidth="1.5px"
 			borderStyle="solid"
-			transitionDelay="0s, 0s, 0s, 0s"
-			transitionDuration=" 0.25s, 0.25s, 0.25s, 0s"
-			transition-property="box-shadow, background-color, filter, border"
-			transitionTimingFunction="linear, linear, linear, linear"
 			alignItems={{ xl: 'center' }}
 			display={secondary ? 'block' : 'flex'}
 			minH="75px"
@@ -74,70 +65,18 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, brandText, fixed, lo
 			mx="auto"
 			mt={secondaryMargin}
 			pb="8px"
-			right={0}
 			px={{
 				sm: paddingX,
 				md: '10px',
 			}}
 			pt="8px"
 			top="0px"
-			w={{
-				base: '100vw',
-				xl: 'calc(100vw - 300px)',
-				'2xl': 'calc(100vw - 300px)',
-			}}
+			w="100vw"
 		>
-			<Flex
-				pl="10px"
-				w="100%"
-				flexDirection={{
-					sm: 'column',
-					md: 'row',
-				}}
-				alignItems="start"
-				mb={gap}
-			>
+			<Flex pl="10px" w="100%" align="center" justify="center" mb={gap}>
 				<SidebarResponsive routes={routes} display="none" />
-				<Box mb={{ sm: '8px', md: '0px' }}>
-					{/* Here we create navbar brand, based on route name */}
-					<Flex mb={{ sm: '8px', md: '0px' }}>
-						{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-						<Link
-							color={mainText}
-							href="#"
-							bg="inherit"
-							borderRadius="inherit"
-							fontWeight="bold"
-							fontSize="25px"
-							_hover={{ color: { mainText } }}
-							_active={{
-								bg: 'inherit',
-								transform: 'none',
-								borderColor: 'transparent',
-							}}
-							_focus={{
-								boxShadow: 'none',
-							}}
-						>
-							{breadcrumb?.length ? breadcrumb?.[breadcrumb.length - 1] : brandText}
-						</Link>
-					</Flex>
-					<Breadcrumb ml="5px">
-						<BreadcrumbItem color={secondaryText} fontSize="sm">
-							<BreadcrumbLink href="#" color={secondaryText}>
-								Pages
-							</BreadcrumbLink>
-						</BreadcrumbItem>
-						{breadcrumb &&
-							breadcrumb.map((i, idx) => (
-								<BreadcrumbItem key={idx} color={secondaryText} fontSize="sm">
-									<BreadcrumbLink color={secondaryText}>{i}</BreadcrumbLink>
-								</BreadcrumbItem>
-							))}
-					</Breadcrumb>
-				</Box>
-
-				<Box ms="auto" w={{ sm: '100%', md: 'unset' }}>
+				<SidebarBrand />
+				<Box ms="auto">
 					<AdminNavbarLinks
 						onOpen={onOpen}
 						logoText={logoText}
