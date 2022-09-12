@@ -172,7 +172,7 @@ const permissions: Array<PermissionProps> = [
 		id: '13',
 		value: 'ARTICLE_MANAGEMENT',
 		title: 'Quản lý bài viết',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE', 'APPROVE', 'REJECT'],
+		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE', 'APPROVE', 'REJECT', 'PUBLISH'],
 	},
 ];
 
@@ -182,7 +182,7 @@ const DetailPosition: React.FC<BaseComponentProps> = ({ request }) => {
 	const [defaultPermission, setPermission] = useState<Array<PermissionProps>>(permissions);
 
 	const { toast } = useToastInstance();
-	const { changeAction, action, id } = useActionPage();
+	const { changeAction, action, id, goback } = useActionPage();
 	const [loading, setLoading] = useState(true);
 	const { mutateAsync: mutationCreate, isLoading: isCreating } = useMutation(createRole);
 	const { mutateAsync: mutationUpdate, isLoading: isUpdating } = useMutation(updateRole);
@@ -190,7 +190,6 @@ const DetailPosition: React.FC<BaseComponentProps> = ({ request }) => {
 		data: detailData,
 		isFetched,
 		isError,
-		refetch,
 		isLoading,
 	} = useQuery(['detail', id], () => getRoleById(id || ''), {
 		enabled: !!id,
@@ -205,8 +204,7 @@ const DetailPosition: React.FC<BaseComponentProps> = ({ request }) => {
 		try {
 			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
-			checkBoxRef.current.forEach(i => i?.reset());
-			reset();
+			goback();
 		} catch {
 			toast({ title: 'Tạo mới thất bại', status: 'error' });
 		}
@@ -217,7 +215,7 @@ const DetailPosition: React.FC<BaseComponentProps> = ({ request }) => {
 		try {
 			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
-			refetch();
+			goback();
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
 		}

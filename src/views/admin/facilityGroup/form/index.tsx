@@ -33,7 +33,7 @@ interface IFacilityGroupForm extends Omit<IFacilityGroupPayload, 'state' | 'id'>
 const FacilityGroupForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction } = useActionPermission(request);
 	const imageRef = useRef<UploadImageRef>(null);
-	const { changeAction, id, action } = useActionPage();
+	const { changeAction, id, action, goback } = useActionPage();
 	const {
 		data: detailData,
 		isFetching,
@@ -55,6 +55,7 @@ const FacilityGroupForm: React.FC<BaseComponentProps> = ({ request }) => {
 			await mutationCreate(prepareData);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
+			goback();
 			imageRef.current?.onReset();
 		} catch (error) {
 			const err = error as AxiosError<BaseResponseAction>;
@@ -74,6 +75,7 @@ const FacilityGroupForm: React.FC<BaseComponentProps> = ({ request }) => {
 		try {
 			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
+			goback();
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
 		}

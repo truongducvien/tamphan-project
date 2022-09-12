@@ -66,6 +66,7 @@ const useActionPage = () => {
 		changeAction,
 		id,
 		action,
+		goback: () => history.goBack(),
 	};
 };
 

@@ -37,7 +37,7 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 	const avatarImageRef = useRef<UploadImageRef>(null);
 	const cardImageRef = useRef<UploadImageRef>(null);
 
-	const { changeAction, id, action } = useActionPage();
+	const { changeAction, id, action, goback } = useActionPage();
 	const {
 		data: detailData,
 		isFetching,
@@ -60,6 +60,7 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 			avatarImageRef.current?.onReset();
 			cardImageRef.current?.onReset();
 			reset();
+			goback();
 		} catch {
 			toast({ title: 'Tạo mới thất bại', status: 'error' });
 		}
@@ -70,6 +71,7 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 		try {
 			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
+			goback();
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
 		}

@@ -91,7 +91,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction } = useActionPermission(request);
 	const { toast } = useToastInstance();
 	const history = useHistory();
-	const { changeAction, id, action } = useActionPage();
+	const { changeAction, id, action, goback } = useActionPage();
 	const [requirePay, setPay] = useState(false);
 	const imageRef = useRef<UploadImageRef>(null);
 	const [keywordGroup, setKeywordGroup] = useState('');
@@ -128,6 +128,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
+			goback();
 		} catch (error) {
 			const err = error as AxiosError<BaseResponseAction>;
 			if (err.response?.data?.code === 'DUPLICATE_FACILITY_NAME') {
@@ -143,6 +144,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 		try {
 			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
+			goback();
 		} catch (error) {
 			const err = error as AxiosError<BaseResponseAction>;
 			if (err.response?.data?.code === 'DUPLICATE_FACILITY_NAME') {

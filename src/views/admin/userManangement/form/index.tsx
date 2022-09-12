@@ -42,7 +42,7 @@ interface DataForm extends Omit<IUserPayload, 'gender' | 'organizationId' | 'rol
 
 const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction } = useActionPermission(request);
-	const { changeAction, id, action } = useActionPage();
+	const { changeAction, id, action, goback } = useActionPage();
 	const { toast } = useToastInstance();
 
 	const [keywordRole, setKeywordRole] = useState('');
@@ -75,6 +75,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
+			goback();
 		} catch (error) {
 			const err = error as AxiosError<BaseResponseAction>;
 			if (err.response?.data?.code === 'DUPLICATE_USER_ID') {
@@ -90,6 +91,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 		try {
 			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
+			goback();
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
 		}

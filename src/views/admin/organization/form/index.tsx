@@ -41,7 +41,7 @@ interface DataForm extends Omit<IOrganizationPayload, 'parentId' | 'areaIds'> {
 
 const DetailOrganization: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction } = useActionPermission(request);
-	const { changeAction, id, action } = useActionPage();
+	const { changeAction, id, action, goback } = useActionPage();
 	const { toast } = useToastInstance();
 	const [keywordArea, setKeywordArea] = useState('');
 
@@ -77,6 +77,7 @@ const DetailOrganization: React.FC<BaseComponentProps> = ({ request }) => {
 		try {
 			await mutationCreate(prepareData);
 			toast({ title: 'Tạo mới thành công' });
+			goback();
 			reset();
 		} catch {
 			toast({ title: 'Tạo mới thất bại', status: 'error' });
@@ -93,6 +94,7 @@ const DetailOrganization: React.FC<BaseComponentProps> = ({ request }) => {
 		try {
 			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
+			goback();
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
 		}

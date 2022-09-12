@@ -69,7 +69,7 @@ interface DataForm {
 
 const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction } = useActionPermission(request);
-	const { changeAction, id: ids, action } = useActionPage();
+	const { changeAction, id: ids, action, goback } = useActionPage();
 	const arrayIds = ids?.split(',');
 	const id = arrayIds?.[0];
 	const propertyId = arrayIds?.[1];
@@ -108,6 +108,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 		try {
 			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
+			goback();
 			reset();
 		} catch {
 			toast({ title: 'Tạo mới thất bại', status: 'error' });
@@ -119,6 +120,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 		try {
 			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
+			goback();
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
 		}

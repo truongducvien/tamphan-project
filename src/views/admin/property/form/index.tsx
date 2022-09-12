@@ -95,7 +95,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 
 	const { mutateAsync: mutationUpdateOwner, isLoading: isUpdatetingOwner } = useMutation(updateOwner);
 
-	const { changeAction, id, action } = useActionPage();
+	const { changeAction, id, action, goback } = useActionPage();
 	const { toast } = useToastInstance();
 
 	const {
@@ -142,6 +142,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 			const response = await mutationCreate(data);
 			setIdProperty(response?.data?.id);
 			toast({ title: 'Tạo mới thành công' });
+			goback();
 		} catch {
 			toast({ title: 'Tạo mới thất bại', status: 'error' });
 		}
@@ -151,6 +152,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 		try {
 			await mutationUpdate(data);
 			toast({ title: 'Cập nhật thành công' });
+			goback();
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
 		}

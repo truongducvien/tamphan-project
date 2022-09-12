@@ -96,7 +96,7 @@ const Table = <T,>({
 				}}
 			>
 				{(loading || !data?.[0]) && (
-					<Box width="100%" height={280} position="absolute" zIndex="sticky">
+					<Box width="100%" height={280} position="absolute" zIndex="auto">
 						<Center position="absolute" left="50%" top="40%" transform="translate(-50%, 0px)">
 							{loading ? <Spinner color="blue.500" emptyColor="gray.200" speed="0.65s" /> : 'Không có dữ liệu'}
 						</Center>

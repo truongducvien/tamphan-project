@@ -68,7 +68,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 
 	const [type, setType] = useState<Option | undefined>(typeArticles[0]);
 
-	const { changeAction, id, action } = useActionPage();
+	const { changeAction, id, action, goback } = useActionPage();
 	const { toast } = useToastInstance();
 
 	const [keyword, setKeyword] = useState('');
@@ -112,6 +112,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 			await mutationCreate(data);
 			toast({ title: 'Tạo mới thành công' });
 			reset();
+			goback();
 		} catch {
 			toast({ title: 'Tạo mới thất bại', status: 'error' });
 		}
@@ -123,6 +124,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 			await mutationUpdate(prepareData);
 			toast({ title: 'Cập nhật thành công' });
 			refetch();
+			goback();
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
 		}
