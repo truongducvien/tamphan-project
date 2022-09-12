@@ -79,7 +79,7 @@ const ResdidentCardReqDetail: React.FC<BaseComponentProps> = () => {
 			toast({
 				title: 'Phê duyệt thất bại',
 				status: 'error',
-				description: error?.response?.data.code === 'RESIDENT_CARD_REQUEST_PROCESS' ? 'Mã thẻ đã tồn tại' : undefined,
+				description: error?.response?.data?.code === 'RESIDENT_CARD_REQUEST_PROCESS' ? 'Mã thẻ đã tồn tại' : undefined,
 			});
 		}
 	};

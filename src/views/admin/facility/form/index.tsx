@@ -22,12 +22,14 @@ import Card from 'components/card/Card';
 import { DatePicker } from 'components/date';
 import UploadImage, { UploadImageRef } from 'components/fileUpload';
 import { FormContainer } from 'components/form';
+import { TimePickerHookForm } from 'components/form/DatePicker';
 import { Loading } from 'components/form/Loading';
 import { BaseOption, Option, PullDownHookForm } from 'components/form/PullDown';
 import { SwitchHookForm } from 'components/form/SwitchHookForm';
 import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
 import { TextFieldHookForm } from 'components/form/TextField';
 import { PullDown } from 'components/pulldown';
+import { RangTimePicker, TimePicker } from 'components/timepicker';
 import { useToastInstance } from 'components/toast';
 import { formatDate } from 'helpers/dayjs';
 import { BaseComponentProps } from 'hocs/withPermission';
@@ -35,7 +37,7 @@ import useActionPage from 'hooks/useActionPage';
 import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
-import { MdClear } from 'react-icons/md';
+import { MdAdd, MdClear } from 'react-icons/md';
 import { useHistory } from 'react-router-dom';
 import { getArea } from 'services/area';
 import { IArea, IAreaParams } from 'services/area/type';
@@ -49,10 +51,10 @@ import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên tiện ích'),
-	operatingTime: Yup.string().required('Vui lòng nhập giờ hoạt động'),
-	timeSlots: Yup.string().required('Vui lòng nhập khung giờ'),
+	operatingTime: Yup.string().required('Vui lòng chọn giờ hoạt động'),
 	areaId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn phân khu') }),
 	capacity: Yup.number().typeError('Vui lòng nhập số').required('Vui lòng nhập sức chứa'),
+	phoneNumber: Yup.number().required('Vui lòng nhập số điện thoại'),
 	facilityGroupId: Yup.object({
 		label: Yup.string(),
 		value: Yup.string().required('Vui lòng chọn loại tiện ích'),
@@ -62,7 +64,6 @@ const validationSchema = Yup.object({
 		value: Yup.string().required('Vui lòng chọn trạng thái'),
 	}),
 });
-
 interface IFacilityForm
 	extends Omit<
 		IFacilityCreatePayload,
@@ -80,12 +81,12 @@ interface IFacilityForm
 	state: Option;
 	facilityGroupId: Option;
 	operatingTime: string;
-	timeSlots: string;
 	capacity: string;
 	dateOffs: string;
 	timeSlotType: Option;
 }
 const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
+	const [timeSlots, setTimeSlots] = useState<Array<string>>([]);
 	const [dateOffs, setDayOffs] = useState<Array<string>>([]);
 	const { permistionAction } = useActionPermission(request);
 	const { toast } = useToastInstance();
@@ -129,7 +130,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 			reset();
 		} catch (error) {
 			const err = error as AxiosError<BaseResponseAction>;
-			if (err.response?.data.code === 'DUPLICATE_FACILITY_NAME') {
+			if (err.response?.data?.code === 'DUPLICATE_FACILITY_NAME') {
 				toast({ title: 'Tên tiện ích đã tồn tại', status: 'error' });
 				return;
 			}
@@ -144,7 +145,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 			toast({ title: 'Cập nhật thành công' });
 		} catch (error) {
 			const err = error as AxiosError<BaseResponseAction>;
-			if (err.response?.data.code === 'DUPLICATE_FACILITY_NAME') {
+			if (err.response?.data?.code === 'DUPLICATE_FACILITY_NAME') {
 				toast({ title: 'Tên tiện ích đã tồn tại', status: 'error' });
 				return;
 			}
@@ -161,12 +162,13 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 		onSuccess: ({ data }) => {
 			setPay(!!data?.depositAmount.amount);
 			setDayOffs(data?.dateOffs.map(i => formatDate(i)) || []);
+			setTimeSlots(data?.timeSlots?.map(i => `${i.start}-${i.end}`) || []);
 		},
 	});
 
 	const onSubmit = (data: IFacilityForm, reset: () => void) => {
 		const operatingTime = data.operatingTime.split('-');
-		const timeSlots = timeSlotType.value === 'HOUR' ? data.timeSlots.split(',') : [data.operatingTime];
+		// const timeSlots = timeSlotType.value === 'HOUR' ? data.timeSlots.split(',') : [data.operatingTime];
 		const imageLink = imageRef.current?.onSubmit();
 		const prepareData = {
 			...data,
@@ -178,11 +180,12 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 			depositAmount: requirePay ? Number(data.depositAmount || 0) : 0,
 			depositInDuration: Number(data.depositInDuration || 0),
 			operatingTime: operatingTime ? { start: operatingTime[0], end: operatingTime[1] } : operatingTime,
-			timeSlots: timeSlots.map(i => {
-				const items = i?.split('-');
-				return { start: items[0], end: items[1] };
-			}),
+			// timeSlots: timeSlots.map(i => {
+			// 	const items = i?.split('-');
+			// 	return { start: items[0], end: items[1] };
+			// }),
 			dateOffs: dateOffs.map(i => formatDate(i, { type: 'BE' })),
+			timeSlots: timeSlots.map(i => ({ start: i.split('-')?.[0], end: i.split('-')?.[1] })),
 			imageLink: imageLink?.files || [],
 			timeSlotType: timeSlotType.value,
 		};
@@ -202,7 +205,6 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 		operatingTime: detailData?.data?.operatingTime
 			? `${detailData?.data?.operatingTime.start || ''}-${detailData?.data?.operatingTime.end || ''}`
 			: '',
-		timeSlots: detailData?.data?.timeSlots.map(i => `${i.start}-${i.end}`).join(', '),
 		dateOffs: detailData?.data?.dateOffs.join(','),
 		state: statusOption2.find(i => i.value === detailData?.data?.state),
 		depositAmount: detailData?.data?.depositAmount.amount,
@@ -246,7 +248,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 							isLoading={isLoadingGroup}
 						/>
 						<TextFieldHookForm isDisabled={action === 'detail'} label="Địa chỉ" name="address" variant="admin" />
-						<TextFieldHookForm
+						<TimePickerHookForm
 							isDisabled={action === 'detail'}
 							placeholder="10:00-11:00"
 							label="Giờ hoạt động"
@@ -272,14 +274,45 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 								options={timeSlotTypeOption}
 							/>
 						</FormControl>
-						<TextFieldHookForm
-							hidden={timeSlotType.value === 'DATE'}
-							placeholder="10:00-11: 00, 12:00-1:00"
-							label="Khung giờ"
-							name="timeSlots"
-							variant="admin"
-							isDisabled={action === 'detail' || timeSlotType.value === 'DATE'}
-						/>
+						<Flex justify="center" align="end" hidden={timeSlotType.value === 'DATE'}>
+							<FormControl>
+								<FormLabel>Khung giờ</FormLabel>
+								<InputGroup>
+									<Input
+										isDisabled
+										value={timeSlots.join(', ')}
+										placeholder="Chọn khung giờ"
+										name="timeSlots"
+										variant="admin"
+										pr="2.5rem"
+									/>
+									<InputRightElement p={0} hidden={action === 'detail' || timeSlotType.value === 'DATE'}>
+										<Icon
+											as={MdClear}
+											w={5}
+											h={5}
+											right={3}
+											onClick={() => setTimeSlots([])}
+											position="absolute"
+											cursor="pointer"
+										/>
+									</InputRightElement>
+								</InputGroup>
+							</FormControl>
+							<RangTimePicker
+								onChange={value => setTimeSlots(prev => [...prev, value])}
+								rePlaceInput={
+									<IconButton
+										colorScheme="blue"
+										isDisabled={action === 'detail'}
+										marginLeft={3}
+										aria-label="Add to friends"
+										icon={<AddIcon />}
+									/>
+								}
+								add
+							/>
+						</Flex>
 						<Flex>
 							<Flex flex={0.5}>
 								<FormControl>
@@ -351,6 +384,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 							/>
 						</Flex>
 						<TextFieldHookForm
+							isRequired
 							isDisabled={action === 'detail'}
 							label="Số điện thoại liên hệ"
 							name="phoneNumber"

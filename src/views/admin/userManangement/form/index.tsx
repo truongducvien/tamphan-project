@@ -77,7 +77,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 			reset();
 		} catch (error) {
 			const err = error as AxiosError<BaseResponseAction>;
-			if (err.response?.data.code === 'DUPLICATE_USER_ID') {
+			if (err.response?.data?.code === 'DUPLICATE_USER_ID') {
 				toast({ title: 'Tên tài khoản đã tồn tại', status: 'error' });
 				return;
 			}
