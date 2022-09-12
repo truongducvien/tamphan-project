@@ -1,7 +1,15 @@
 // Chakra imports
 import React, { useState } from 'react';
 
-import { Portal, Box, useDisclosure } from '@chakra-ui/react';
+import {
+	Portal,
+	Box,
+	useDisclosure,
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	useColorModeValue,
+} from '@chakra-ui/react';
 import Footer from 'components/footer/FooterAdmin';
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin';
@@ -132,6 +140,9 @@ const Dashboard: React.FC = props => {
 		});
 	};
 	const { onOpen } = useDisclosure();
+	const secondaryText = useColorModeValue('gray.700', 'white');
+	const breadcrumb = getActiveRoute(routes)?.split('/');
+
 	return (
 		<Box>
 			<SidebarContext.Provider
@@ -161,7 +172,6 @@ const Dashboard: React.FC = props => {
 						<Box>
 							<Navbar
 								onOpen={onOpen}
-								brandText={getActiveRoute(routes)}
 								secondary={getActiveNavbar(routes)}
 								message={getActiveNavbarText(routes)}
 								fixed={fixed}
@@ -171,7 +181,23 @@ const Dashboard: React.FC = props => {
 					</Portal>
 
 					{getRoute() ? (
-						<Box p={{ base: '20px', md: '30px' }} pe="20px" pt="50px">
+						<Box p={{ base: '20px', md: '30px' }}>
+							<Box mb={{ sm: '8px', xl: '0px' }} pt="70px">
+								{/* Here we create navbar brand, based on route name */}
+								<Breadcrumb>
+									<BreadcrumbItem color={secondaryText} fontSize="sm">
+										<BreadcrumbLink href="#" color={secondaryText}>
+											Pages
+										</BreadcrumbLink>
+									</BreadcrumbItem>
+									{breadcrumb &&
+										breadcrumb.map((i, idx) => (
+											<BreadcrumbItem key={idx} color={secondaryText} fontSize="sm">
+												<BreadcrumbLink color={secondaryText}>{i}</BreadcrumbLink>
+											</BreadcrumbItem>
+										))}
+								</Breadcrumb>
+							</Box>
 							<Switch>
 								{getRoutes(routes)}
 								<Redirect from="/*" to="/admin" />

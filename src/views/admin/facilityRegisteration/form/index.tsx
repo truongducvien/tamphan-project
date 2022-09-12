@@ -57,7 +57,7 @@ const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 
 	// bookingCode
 	return (
-		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
+		<Box pt="10px">
 			<Card flexDirection="column" w="100%" px={5} overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<FormContainer onSubmit={onSubmit} defaultValues={defaultData as unknown as { [x: string]: string }}>
 					<Stack

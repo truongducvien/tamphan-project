@@ -25,7 +25,7 @@ export const SidebarLinks: React.FC<Props> = props => {
 	const inactiveColor = useColorModeValue('secondaryGray.600', 'secondaryGray.600');
 	const activeIcon = useColorModeValue('white', 'white');
 	const textColor = useColorModeValue('secondaryGray.500', 'white');
-	const brandColor = useColorModeValue('brand.500', 'brand.400');
+	const hoverColor = useColorModeValue('blue.100', 'blue.900');
 	const bgActive = useColorModeValue('blue.500', 'blue.800');
 
 	const { routes } = props;
@@ -78,7 +78,7 @@ export const SidebarLinks: React.FC<Props> = props => {
 							bg={activeRoute(route.path.toLowerCase()) ? bgActive : 'transparent'}
 							transition={activeRoute(route.path.toLowerCase()) ? 'background-color .3s linear' : undefined}
 							_hover={{
-								bg: activeRoute(route.path.toLowerCase()) ? '' : 'blue.50',
+								bg: activeRoute(route.path.toLowerCase()) ? '' : hoverColor,
 							}}
 						>
 							<HStack spacing={activeRoute(route.path.toLowerCase()) ? '22px' : '26px'} py="8px" ps="10px">

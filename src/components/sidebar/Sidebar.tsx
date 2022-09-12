@@ -29,14 +29,13 @@ const Sidebar: React.FC<Props> = props => {
 	const { routes } = props;
 
 	const variantChange = '0.2s linear';
-	const shadow = useColorModeValue('14px 17px 40px 4px rgba(112, 144, 176, 0.08)', 'unset');
 	// Chakra Color Mode
 	const sidebarBg = useColorModeValue('white', 'navy.800');
 	const sidebarMargins = '0px';
 
 	// SIDEBAR
 	return (
-		<Box display={{ sm: 'none', xl: 'block' }} position="fixed" minH="100%">
+		<Box display={{ sm: 'none', xl: 'block' }} position="fixed" minH="100%" zIndex="docked">
 			<Box
 				bg={sidebarBg}
 				transition={variantChange}
@@ -45,7 +44,6 @@ const Sidebar: React.FC<Props> = props => {
 				m={sidebarMargins}
 				minH="100%"
 				overflowX="hidden"
-				boxShadow={shadow}
 			>
 				<Scrollbars
 					autoHide
@@ -69,8 +67,6 @@ export const SidebarResponsive: React.FC<Props> = props => {
 	const btnRef = React.useRef<HTMLDivElement>(null);
 
 	const { routes } = props;
-	// let isWindows = navigator.platform.startsWith("Win");
-	//  BRAND
 
 	return (
 		<Flex display={{ sm: 'flex', xl: 'none' }} alignItems="center">
@@ -95,14 +91,7 @@ export const SidebarResponsive: React.FC<Props> = props => {
 				<DrawerContent w="285px" maxW="285px" bg={sidebarBackgroundColor}>
 					<DrawerCloseButton zIndex="3" _focus={{ boxShadow: 'none' }} _hover={{ boxShadow: 'none' }} />
 					<DrawerBody maxW="285px" px="0rem" pb="0">
-						<Scrollbars
-							autoHide
-							renderTrackVertical={renderTrack}
-							renderThumbVertical={renderThumb}
-							renderView={renderView}
-						>
-							<Content routes={routes} />
-						</Scrollbars>
+						<Content routes={routes} />
 					</DrawerBody>
 				</DrawerContent>
 			</Drawer>

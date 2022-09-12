@@ -78,7 +78,7 @@ const FacilityGroupManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	};
 
 	return (
-		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
+		<Box pt="10px">
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
 				<Box px={{ sm: 2, md: 5 }}>
 					<Stack
