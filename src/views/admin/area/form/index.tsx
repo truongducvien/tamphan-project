@@ -20,7 +20,7 @@ import * as Yup from 'yup';
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên phân khu'),
 	code: Yup.string().required('Vui lòng nhập mã phân khu'),
-	contactPhone: Yup.number().required('Vui lòng nhập SDT'),
+	contactPhone: Yup.number().required('Vui lòng nhập SDT').typeError('Vui lòng nhập số điện thoại'),
 	contactEmail: Yup.string().email('Sai định dạng email').nullable(),
 	type: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn loại BDS') }).required(
 		'Vui lòng chọn loại BDS',

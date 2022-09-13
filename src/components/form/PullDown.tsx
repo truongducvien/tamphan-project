@@ -50,6 +50,7 @@ export interface PullDownHookFormProps extends OptionBase {
 	onLoadMore?: () => Promise<unknown>;
 	isLoading?: boolean;
 	menuPortalTarget?: boolean;
+	hidden?: boolean;
 }
 
 export const PullDownHookForm: React.FC<PullDownHookFormProps> = ({
@@ -63,6 +64,7 @@ export const PullDownHookForm: React.FC<PullDownHookFormProps> = ({
 	menuPortalTarget = true,
 	tagVariant = 'solid',
 	colorScheme = 'teal',
+	hidden,
 	...innerProps
 }) => {
 	const refs = useRef<SelectInstance<Option | undefined, boolean, GroupBase<Option>>>(null);
@@ -146,7 +148,7 @@ export const PullDownHookForm: React.FC<PullDownHookFormProps> = ({
 			control={control}
 			render={({ field: { ref, ...innerField } }) => {
 				return (
-					<FormControl minH="70px" isRequired={isRequired} isInvalid={!!errors?.[name]}>
+					<FormControl minH="70px" isRequired={isRequired} isInvalid={!!errors?.[name]} hidden={hidden}>
 						<FormLabel htmlFor={name}>{label}</FormLabel>
 						<Select<Option | undefined, boolean, GroupBase<Option>>
 							{...innerProps}

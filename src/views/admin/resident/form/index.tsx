@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Box, Button, Flex, HStack, Stack } from '@chakra-ui/react';
+import { Box, Button, Flex, FormControl, FormLabel, HStack, SimpleGrid, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
@@ -9,6 +9,7 @@ import { Loading } from 'components/form/Loading';
 import { BaseOption, Option, PullDownHookForm } from 'components/form/PullDown';
 import { SwitchHookForm } from 'components/form/SwitchHookForm';
 import { TextFieldHookForm } from 'components/form/TextField';
+import { PullDown } from 'components/pulldown';
 import { useToastInstance } from 'components/toast';
 import { formatDate } from 'helpers/dayjs';
 import { BaseComponentProps } from 'hocs/withPermission';
@@ -18,7 +19,7 @@ import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
 import { getProperty } from 'services/properties';
-import { IProperty, IPropertyParams } from 'services/properties/type';
+import { IProperty, IPropertyParams, Relationship, relationshipWithOwner } from 'services/properties/type';
 import { createResident, getResidentOfProperty, updateResident } from 'services/resident';
 import {
 	Gender,
@@ -62,9 +63,9 @@ interface DataForm {
 	permanentAddress: string;
 	phoneNumber: string;
 	temporaryAddress: string;
-	type: Option;
 	useNovaId?: boolean;
 	state?: Option;
+	relationship?: Option;
 }
 
 const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
@@ -76,6 +77,8 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const { toast } = useToastInstance();
 	const [keyword, setKeyword] = useState('');
 	const keywordDebounce = useDebounce(keyword);
+
+	const [type, setType] = useState<Option>(residentType[1]);
 
 	const {
 		data: dataProperty,
@@ -97,6 +100,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 		() => getResidentOfProperty({ id: id || '', propertyId: propertyId || '' }),
 		{
 			enabled: !!id && !!propertyId,
+			onSuccess: ({ data }) => setType(residentType.find(i => i.value === data?.type) || residentType[1]),
 		},
 	);
 
@@ -130,12 +134,13 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 		const prepareData = {
 			...data,
 			state: data.state?.value as Status,
-			type: data.type?.value as ResidentType,
+			type: type?.value as ResidentType,
 			identityCardType: data.identityCardType?.value as IdentityCardType,
 			gender: data.gender?.value as Gender,
 			propertyId: data.propertyId?.value,
 			dateOfBirth: formatDate(data?.dateOfBirth, { type: 'BE' }),
 			identityCreateDate: formatDate(data?.identityCreateDate, { type: 'BE' }),
+			relationship: data?.relationship?.value as Relationship,
 		};
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -147,7 +152,6 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const defaultValue = {
 		...detailData?.data,
 		state: statusOption2.find(i => i.value === detailData?.data?.state),
-		type: residentType.find(i => i.value === detailData?.data?.type),
 		identityCardType: identityCardType.find(i => i.value === detailData?.data?.identityCardType),
 		gender: gender.find(i => i.value === detailData?.data?.gender),
 		propertyId: {
@@ -156,6 +160,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 		},
 		dateOfBirth: formatDate(detailData?.data?.dateOfBirth),
 		identityCreateDate: formatDate(detailData?.data?.identityCreateDate),
+		relationship: relationshipWithOwner.find(i => i.value === detailData?.data?.relationship),
 	};
 
 	const isDisabled = action === 'detail';
@@ -168,12 +173,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 					validationSchema={validationSchema}
 					defaultValues={defaultValue as unknown as { [x: string]: string }}
 				>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
+					<SimpleGrid spacing={3} columns={{ base: 1, md: 2 }}>
 						<TextFieldHookForm isDisabled={isDisabled} isRequired label="Họ và tên" name="fullName" variant="admin" />
 						<Flex minW={{ base: '100%', md: '50%' }}>
 							<Box width={300} mr={2}>
@@ -194,13 +194,6 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 								variant="admin"
 							/>
 						</Flex>
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
 						<DatePickerHookForm
 							isDisabled={isDisabled}
 							label="Ngày sinh"
@@ -209,13 +202,6 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 							variant="admin"
 						/>
 						<DatePickerHookForm isDisabled={isDisabled} label="Ngày cấp" name="identityCreateDate" variant="admin" />
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
 						<PullDownHookForm
 							isDisabled={isDisabled}
 							label="Giới tính"
@@ -225,13 +211,6 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 							isSearchable={false}
 						/>
 						<TextFieldHookForm isDisabled={isDisabled} label="Nơi cấp" name="identityLocationIssued" variant="admin" />
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
 						<PullDownHookForm
 							label="Căn hộ"
 							name="propertyId"
@@ -243,21 +222,17 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 							options={dataProperty.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id }))}
 						/>
 						<TextFieldHookForm isDisabled={isDisabled} label="Số điện thoại" name="phoneNumber" variant="admin" />
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
-						<PullDownHookForm
-							isDisabled={action !== 'create'}
-							label="Vai trò"
-							name="type"
-							isRequired
-							options={residentType}
-							isSearchable={false}
-						/>
+						<FormControl isRequired>
+							<FormLabel>Vai trò</FormLabel>
+							<PullDown
+								isDisabled={action !== 'create'}
+								name="type"
+								value={type}
+								onChange={value => setType(value)}
+								options={residentType}
+								isSearchable={false}
+							/>
+						</FormControl>
 						<TextFieldHookForm
 							isDisabled={isDisabled}
 							isRequired
@@ -266,14 +241,13 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 							name="email"
 							variant="admin"
 						/>
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
-						<TextFieldHookForm isDisabled={isDisabled} label="Mối quan hệ chủ sở hữu" name="role" />
+						<PullDownHookForm
+							isDisabled={isDisabled}
+							options={relationshipWithOwner}
+							hidden={type.value === ResidentType.OWNER}
+							label="Mối quan hệ chủ sở hữu"
+							name="relationship"
+						/>
 						<TextFieldHookForm
 							isDisabled={isDisabled}
 							isRequired
@@ -281,13 +255,6 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 							name="permanentAddress"
 							variant="admin"
 						/>
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
 						<PullDownHookForm
 							label="Trạng thái hoạt động"
 							name="state"
@@ -303,13 +270,6 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 							name="temporaryAddress"
 							variant="admin"
 						/>
-					</Stack>
-					<Stack
-						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
-						direction={{ base: 'column', md: 'row' }}
-						spacing={3}
-						pb={3}
-					>
 						<TextFieldHookForm
 							isDisabled={isDisabled}
 							isRequired
@@ -318,8 +278,8 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 							variant="admin"
 						/>
 						<TextFieldHookForm label="Ngày cập nhật" isDisabled name="createAt" variant="admin" />
-					</Stack>
-					<Box>
+					</SimpleGrid>
+					<Box mt={3}>
 						{/* <Swich label="Cho phép sử dụng NOVAID" id="useNovaId" /> */}
 						<SwitchHookForm label="Cho phép sử dụng NOVAID" isDisabled={isDisabled} name="useNovaId" variant="admin" />
 					</Box>
