@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 
 import { ButtonProps, Button, Input } from '@chakra-ui/react';
 import { useToastInstance } from 'components/toast';
+import { MdDownload, MdImportExport } from 'react-icons/md';
 
 export interface Props extends Omit<ButtonProps, 'onClick' | 'iconName'> {
 	onChangeFile?: (file: File) => void;
@@ -37,14 +38,29 @@ export const ImportButton: React.FC<Props> = ({ onChangeFile, isLoading, limitSi
 		<>
 			<Input hidden type="file" ref={inputRef} onChange={handleChangeFile} accept=".xlsx,.xls,.csv" />
 			<Button
-				iconName={isLoading ? 'white-loading-rotation' : 'plus-circle'}
+				variant="lightBrand"
+				leftIcon={<MdImportExport />}
 				onClick={() => inputRef.current?.click()}
-				colorScheme="cyan"
-				textColor="white"
 				{...innerProps}
 			>
 				Import
 			</Button>
 		</>
+	);
+};
+
+export const DownloadTemplate: React.FC<{ url: string } & ButtonProps> = ({ url, ...innerProps }) => {
+	const handleDownload = () => {
+		const link = document.createElement('a');
+		link.download = 'template.xlsx';
+		link.href = url;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	};
+	return (
+		<Button variant="lightBrand" leftIcon={<MdDownload />} {...innerProps} onClick={handleDownload}>
+			Tải mẫu import
+		</Button>
 	);
 };

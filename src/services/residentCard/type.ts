@@ -20,4 +20,9 @@ export interface IResidentCardParams extends BaseParams {
 	state?: Status;
 }
 
+export interface IResidentCardImportpayload {
+	file: File;
+	type: string;
+}
+
 export type IResidentCardResponse = BaseResponseList<IResidentCard>;

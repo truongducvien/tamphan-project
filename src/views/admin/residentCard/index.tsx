@@ -2,18 +2,20 @@ import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import importTemplate from 'assets/templates/residentCard.xlsx';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { Option, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
-import { ImportButton } from 'components/importButton';
+import { DownloadTemplate, ImportButton } from 'components/importButton';
 import Table, { IColumn } from 'components/table';
+import { useToastInstance } from 'components/toast';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { getProperty } from 'services/properties';
 import { IProperty, IPropertyParams } from 'services/properties/type';
-import { getResidentCard } from 'services/residentCard';
+import { getResidentCard, importResidentCard } from 'services/residentCard';
 import { IResidentCard, IResidentCardParams } from 'services/residentCard/type';
 import { Status, statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
@@ -36,7 +38,7 @@ const validationSchema = Yup.object({
 const ResdidentCardManagement: React.FC = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
-
+	const { toast } = useToastInstance();
 	const [keyword, setKeyword] = useState('');
 	const keywordDebounce = useDebounce(keyword);
 
@@ -52,13 +54,15 @@ const ResdidentCardManagement: React.FC = () => {
 		payload: { code: keywordDebounce },
 	});
 
-	const { data, isLoading } = useQuery(['listResidentCard', params, currentPage, currentPageSize], () =>
+	const { data, isLoading, refetch } = useQuery(['listResidentCard', params, currentPage, currentPageSize], () =>
 		getResidentCard({
 			page: currentPage - 1,
 			size: currentPageSize,
 			...params,
 		}),
 	);
+
+	const mutationImport = useMutation(importResidentCard);
 
 	const COLUMNS: Array<IColumn<IResidentCard>> = [
 		{ key: 'cardNumber', label: 'Mã số thẻ' },
@@ -83,6 +87,19 @@ const ResdidentCardManagement: React.FC = () => {
 		setParams(preData);
 	};
 
+	const handleImport = async (file: File) => {
+		const payload = new FormData();
+		payload.append('file', file);
+		payload.append('type', file.type);
+		try {
+			await mutationImport.mutateAsync(payload);
+			toast({ title: 'Import thành công' });
+			refetch();
+		} catch {
+			toast({ title: 'Import thất bại', status: 'error' });
+		}
+	};
+
 	return (
 		<Box pt="10px">
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
@@ -105,13 +122,15 @@ const ResdidentCardManagement: React.FC = () => {
 								options={dataProperty?.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id })) || []}
 							/>
 							<PullDownHookForm isClearable label="Trạng thái thẻ" name="state" options={statusOption2} />
-							<Flex align="center">
-								<ImportButton />
-								<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
-									Tìm kiếm
-								</Button>
-							</Flex>
 						</Stack>
+						<Flex justifyContent="end" mt={3}>
+							<DownloadTemplate url={importTemplate} mr={3} />
+							{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+							<ImportButton onChangeFile={handleImport} />
+							<Button ml={3} variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
+								Tìm kiếm
+							</Button>
+						</Flex>
 					</FormContainer>
 				</Box>
 			</Card>

@@ -119,9 +119,6 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 							<Button type="submit" variant="lightBrand" leftIcon={<SearchIcon />}>
 								Tìm kiếm
 							</Button>
-							<Button marginLeft={1} variant="light" leftIcon={<MdImportExport />}>
-								Import
-							</Button>
 							<Button
 								hidden={!permistionAction.ADD}
 								marginLeft={1}
