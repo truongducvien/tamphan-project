@@ -1,7 +1,14 @@
 import http from 'services/http';
 import { BaseResponseAction, BaseResponseDetail } from 'services/type';
 
-import { IProperty, IPropertyPayload, IPropertyResponse, IPropertyParams, UpdateOwnerPayload } from './type';
+import {
+	IProperty,
+	IPropertyPayload,
+	IPropertyResponse,
+	IPropertyParams,
+	UpdateOwnerPayload,
+	RelationshipWithOwner,
+} from './type';
 
 export const getProperty = async (payload: IPropertyParams) => {
 	const { data } = await http.get<IPropertyResponse>('/v1/properties/search', {
@@ -33,9 +40,12 @@ export const updateOwner = async (payload: UpdateOwnerPayload) => {
 	return data || null;
 };
 
-export const addResident = async (payload: { id: string; residentIds: string[] }) => {
+export const addResident = async (payload: {
+	id: string;
+	requests: { residentId: string; relationshipWithOwner: RelationshipWithOwner }[];
+}) => {
 	const { id, ...params } = payload;
-	const { data } = await http.put<BaseResponseAction>(`/v1/properties/${id}/resident`, params);
+	const { data } = await http.put<BaseResponseAction>(`/v1/properties/${id}/resident`, { ...params, propertyUuid: id });
 	return data || null;
 };
 

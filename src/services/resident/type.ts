@@ -1,4 +1,5 @@
 import { Option } from 'components/form/PullDown';
+import { RelationshipWithOwner } from 'services/properties/type';
 import { BaseParams, BaseResponseList } from 'services/type';
 import { Status } from 'variables/status';
 
@@ -83,6 +84,7 @@ export interface IResident {
 	useNovaId?: boolean;
 	state?: Status;
 	id: string;
+	relationship?: RelationshipWithOwner;
 }
 
 export interface IResidentParams extends BaseParams {

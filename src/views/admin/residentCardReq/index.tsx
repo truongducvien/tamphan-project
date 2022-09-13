@@ -60,7 +60,7 @@ const ResdidentCardReqManagement: React.FC = () => {
 
 	const { data, isLoading } = useQuery(['listResidentCard', params, currentPage, currentPageSize], () =>
 		getResidentCardReq({
-			page: currentPage - 10,
+			page: currentPage - 1,
 			size: currentPageSize,
 			...params,
 		}),

@@ -19,12 +19,14 @@ import {
 	ModalCloseButton,
 	Stack,
 	useDisclosure,
+	Select,
 } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { alert } from 'components/alertDialog/hook';
 import { FormContainer } from 'components/form';
 import { BaseOption, PullDownHookForm } from 'components/form/PullDown';
 import { TextFieldHookForm } from 'components/form/TextField';
+import { PullDown } from 'components/pulldown';
 import Table, { IColumn } from 'components/table';
 import { useToastInstance } from 'components/toast';
 import { useActionPermission } from 'hooks/useActionPermission';
@@ -34,6 +36,7 @@ import { MdDelete, MdLibraryAdd } from 'react-icons/md';
 import { getArea } from 'services/area';
 import { IArea, IAreaParams } from 'services/area/type';
 import { addResident, removeResident } from 'services/properties';
+import { RelationshipWithOwner, relationshipWithOwner } from 'services/properties/type';
 import { getResidentByProperty, getResident } from 'services/resident';
 import {
 	gender as genderOptions,
@@ -52,8 +55,8 @@ const ResidentModal: React.FC<{
 	onClose: () => void;
 	onSubmit: () => void;
 }> = ({ isOpen, onClose, onSubmit, defaultArr, id }) => {
-	const [ids, setIds] = useState<string[]>([]);
-
+	const [ids, setIds] = useState<Array<IResident>>([]);
+	const { isOpen: isOpenSelected, onOpen: onOpenSelected, onClose: onCloseSelected } = useDisclosure();
 	interface Form {
 		areaId: BaseOption<string>;
 		code: string;
@@ -64,7 +67,10 @@ const ResidentModal: React.FC<{
 
 	const handleAdd = async () => {
 		try {
-			await mmutationAdd({ id, residentIds: ids });
+			await mmutationAdd({
+				id,
+				requests: ids.map(i => ({ residentId: i.id, relationshipWithOwner: i.relationship || 'OTHER' })),
+			});
 			toast({
 				title: 'Thêm cư dân thành công!',
 			});
@@ -90,20 +96,23 @@ const ResidentModal: React.FC<{
 			key: 'id',
 			label: '',
 			isCenter: true,
-			cell: ({ id: idResident }) => (
-				<HStack align="center" justify="center" w={10}>
-					<Checkbox
-						variant="admin"
-						isChecked={ids.includes(idResident) || defaultArr.includes(idResident)}
-						isDisabled={defaultArr.includes(idResident)}
-						onChange={() =>
-							setIds(prev =>
-								ids.includes(idResident) ? [...prev.filter(i => i !== idResident)] : [...prev, idResident],
-							)
-						}
-					/>
-				</HStack>
-			),
+			cell: row => {
+				const { id: idResident } = row;
+				return (
+					<HStack align="center" justify="center" w={10}>
+						<Checkbox
+							variant="admin"
+							isChecked={!!ids.find(i => i.id === idResident) || defaultArr.includes(idResident)}
+							isDisabled={defaultArr.includes(idResident)}
+							onChange={() =>
+								setIds(prev =>
+									ids.find(i => i.id === idResident) ? [...prev.filter(i => i.id !== idResident)] : [...prev, row],
+								)
+							}
+						/>
+					</HStack>
+				);
+			},
 		},
 		{ key: 'fullName', label: 'Tên cư dân' },
 		{ key: 'dateOfBirth', label: 'Ngày sinh' },
@@ -116,6 +125,36 @@ const ResidentModal: React.FC<{
 		{ key: 'permanentAddress', label: 'Địa chỉ thường trú' },
 		{ key: 'temporaryAddress', label: 'Địa chỉ tạm trú' },
 		{ key: 'state', label: 'Trạng thái', tag: ({ state }) => statusOption2.find(i => i.value === state) },
+	];
+
+	const COLUMNS2: Array<IColumn<IResident>> = [
+		{ key: 'fullName', label: 'Tên cư dân' },
+		{
+			key: 'relationship',
+			label: 'Quan hệ CSH',
+			cell: row => {
+				return (
+					<Select
+						name="relationship"
+						variant="admin"
+						onChange={e =>
+							setIds(prev => {
+								const currentIdx = [...prev].findIndex(ii => row.id === ii.id);
+								const newData = [...prev];
+								newData[currentIdx] = { ...newData[currentIdx], relationship: e.target.value as RelationshipWithOwner };
+								return newData;
+							})
+						}
+					>
+						{relationshipWithOwner.map(i => (
+							<option value={i.value}>{i.label}</option>
+						))}
+					</Select>
+				);
+			},
+		},
+		{ key: 'dateOfBirth', label: 'Ngày sinh' },
+		{ key: 'gender', label: 'Giới tính', cell: ({ gender }) => genderOptions.find(i => i.value === gender)?.label },
 	];
 
 	const [params, setParams] = useState<IResidentParams>();
@@ -154,85 +193,122 @@ const ResidentModal: React.FC<{
 	};
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} isCentered size="6xl">
-			<ModalOverlay />
-			<ModalContent>
-				<ModalHeader textAlign="center">Chọn cư dân</ModalHeader>
-				<ModalCloseButton />
-				<ModalBody>
-					<Box px={{ sm: 2, md: 5 }}>
-						<Box mb={5} display={{ base: 'none', md: 'block' }}>
-							<FormContainer onSubmit={onSearch} validationSchema={validation}>
-								<Stack
-									spacing={5}
-									align="end"
-									justify={{ base: 'center', md: 'space-around', xl: 'space-around' }}
-									direction={{ base: 'column', md: 'row' }}
-								>
-									<TextFieldHookForm label="Mã căn hộ" name="propertyId" />
-									<PullDownHookForm
-										name="areaId"
-										label="Phân khu"
-										options={dataArea.map(i => ({
-											label: i.name,
-											value: i.id,
-										}))}
-										onInputChange={setKeyword}
-										isClearable
-										isLoading={isLoadingArea}
-										onLoadMore={fetchMoreArea}
-										menuPortalTarget={false}
-									/>
-									<TextFieldHookForm label="Tên cư dân" name="fullName" />
-									<Flex mt="3" justifyContent="end">
-										<Button type="submit" variant="lightBrand" leftIcon={<SearchIcon />}>
-											Tìm kiếm
-										</Button>
-									</Flex>
-								</Stack>
-							</FormContainer>
+		<>
+			<Modal isOpen={isOpen} onClose={onClose} isCentered size="6xl">
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader textAlign="center">Chọn cư dân</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody>
+						<Box px={{ sm: 2, md: 5 }}>
+							<Box mb={5} display={{ base: 'none', md: 'block' }}>
+								<FormContainer onSubmit={onSearch} validationSchema={validation}>
+									<Stack
+										spacing={5}
+										align="end"
+										justify={{ base: 'center', md: 'space-around', xl: 'space-around' }}
+										direction={{ base: 'column', md: 'row' }}
+									>
+										<TextFieldHookForm label="Mã căn hộ" name="propertyId" />
+										<PullDownHookForm
+											name="areaId"
+											label="Phân khu"
+											options={dataArea.map(i => ({
+												label: i.name,
+												value: i.id,
+											}))}
+											onInputChange={setKeyword}
+											isClearable
+											isLoading={isLoadingArea}
+											onLoadMore={fetchMoreArea}
+											menuPortalTarget={false}
+										/>
+										<TextFieldHookForm label="Tên cư dân" name="fullName" />
+										<Flex mt="3" justifyContent="end">
+											<Button type="submit" variant="lightBrand" leftIcon={<SearchIcon />}>
+												Tìm kiếm
+											</Button>
+										</Flex>
+									</Stack>
+								</FormContainer>
+							</Box>
+							<Table
+								className="table-tiny"
+								maxH="calc(100vh - 500px)"
+								overflow="scroll"
+								minWith="1500px"
+								testId="consignments-dashboard"
+								columns={COLUMNS}
+								data={data?.items || []}
+								loading={isLoading}
+								pagination={{
+									total: Number(pageInfo?.total || 0),
+									pageSize: currentPageSize,
+									value: currentPage,
+									hasNextPage: pageInfo?.hasNextPage,
+									hasPreviousPage: pageInfo?.hasPreviousPage,
+									onPageChange: page => setCurrentPage(page),
+									onPageSizeChange: pageSize => {
+										setCurrentPage(1);
+										setCurrentPageSize(pageSize);
+									},
+								}}
+							/>
 						</Box>
-						<Table
-							className="table-tiny"
-							maxH="calc(100vh - 500px)"
-							overflow="scroll"
-							minWith="1500px"
-							testId="consignments-dashboard"
-							columns={COLUMNS}
-							data={data?.items || []}
-							loading={isLoading}
-							pagination={{
-								total: Number(pageInfo?.total || 0),
-								pageSize: currentPageSize,
-								value: currentPage,
-								hasNextPage: pageInfo?.hasNextPage,
-								hasPreviousPage: pageInfo?.hasPreviousPage,
-								onPageChange: page => setCurrentPage(page),
-								onPageSizeChange: pageSize => {
-									setCurrentPage(1);
-									setCurrentPageSize(pageSize);
-								},
+					</ModalBody>
+					<ModalFooter>
+						<Button
+							colorScheme="blue"
+							isDisabled={!ids?.[0]}
+							mr={3}
+							// eslint-disable-next-line @typescript-eslint/no-misused-promises
+							onClick={() => {
+								onClose();
+								onOpenSelected();
 							}}
+							isLoading={isAdding}
+						>
+							Tiếp theo
+						</Button>
+						<Button w={20} variant="gray" onClick={onClose}>
+							Huỷ
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+			<Modal isOpen={isOpenSelected} onClose={onCloseSelected} isCentered size="6xl">
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader textAlign="center">Chọn mối quan hệ</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody>
+						<Table
+							maxH="calc(100vh - 500px)"
+							className="table-tiny"
+							overflow="scroll"
+							testId="consignments-dashboard"
+							columns={COLUMNS2}
+							data={ids}
 						/>
-					</Box>
-				</ModalBody>
-				<ModalFooter>
-					<Button
-						colorScheme="blue"
-						isDisabled={!ids[0]}
-						mr={3}
-						// eslint-disable-next-line @typescript-eslint/no-misused-promises
-						onClick={handleAdd}
-						isLoading={isAdding}
-					>
-						Xác nhận
-					</Button>
-					<Button w={20} variant="gray" onClick={onClose}>
-						Huỷ
-					</Button>
-				</ModalFooter>
-			</ModalContent>
-		</Modal>
+					</ModalBody>
+					<ModalFooter>
+						<Button
+							colorScheme="blue"
+							isDisabled={!ids[0]}
+							mr={3}
+							// eslint-disable-next-line @typescript-eslint/no-misused-promises
+							onClick={handleAdd}
+							isLoading={isAdding}
+						>
+							Xác nhận
+						</Button>
+						<Button w={20} variant="gray" onClick={onCloseSelected}>
+							Huỷ
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+		</>
 	);
 };
 
@@ -281,6 +357,11 @@ export const ResidentTab: React.FC<{ id: string }> = ({ id: idProperty }) => {
 			),
 		},
 		{ key: 'fullName', label: 'Tên cư dân' },
+		{
+			key: 'relationship',
+			label: 'Quan hệ CSH',
+			cell: ({ relationship: relationShip }) => relationshipWithOwner.find(i => i.value === relationShip)?.label,
+		},
 		{ key: 'dateOfBirth', label: 'Ngày sinh', dateFormat: 'DD/MM/YYYY' },
 		{ key: 'gender', label: 'Giới tính', cell: ({ gender }) => genderOptions.find(i => i.value === gender)?.label },
 		{ key: 'identityCardNumber', label: 'CMND/ CCCD/ HC' },

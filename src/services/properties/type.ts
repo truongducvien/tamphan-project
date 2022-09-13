@@ -1,4 +1,4 @@
-import { Option } from 'components/form/PullDown';
+import { BaseOption, Option } from 'components/form/PullDown';
 import { BaseParams, BaseResponseList } from 'services/type';
 
 export enum StatusProperty {
@@ -8,6 +8,64 @@ export enum StatusProperty {
 	WAITING_HANDOVER = 'WAITING_HANDOVER',
 	IN_USE = 'IN_USE',
 }
+
+export enum Relationship {
+	WIFEHUSBAND = 'WIFEHUSBAND',
+	PARENTS = 'PARENTS',
+	SIBLINGS = 'SIBLINGS',
+	COUSIN = 'COUSIN',
+	CHILDREN = 'CHILDREN',
+	NEPHEWNIECE = 'NEPHEWNIECE',
+	GRANDPARENTS = 'GRANDPARENTS',
+	AUNTUNCLE = 'AUNTUNCLE',
+	TENANT = 'TENANT',
+	OTHER = 'OTHER',
+}
+
+export type RelationshipWithOwner = keyof typeof Relationship;
+
+export const relationshipWithOwner: Array<BaseOption<RelationshipWithOwner>> = [
+	{
+		label: 'Vợ',
+		value: 'WIFEHUSBAND',
+	},
+	{
+		label: 'Cha',
+		value: 'PARENTS',
+	},
+	{
+		label: 'Anh/chị ruột',
+		value: 'SIBLINGS',
+	},
+	{
+		label: 'Anh/chị họ',
+		value: 'COUSIN',
+	},
+	{
+		label: 'Con',
+		value: 'CHILDREN',
+	},
+	{
+		label: 'Cháu',
+		value: 'NEPHEWNIECE',
+	},
+	{
+		label: 'Ông/bà',
+		value: 'GRANDPARENTS',
+	},
+	{
+		label: 'Chú/bác',
+		value: 'AUNTUNCLE',
+	},
+	{
+		label: 'Người thuê',
+		value: 'TENANT',
+	},
+	{
+		label: 'Khác',
+		value: 'OTHER',
+	},
+];
 
 export const statusProperty: Array<Option> = [
 	{
