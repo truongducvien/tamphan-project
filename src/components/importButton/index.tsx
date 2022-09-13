@@ -36,7 +36,7 @@ export const ImportButton: React.FC<Props> = ({ onChangeFile, isLoading, limitSi
 	};
 	return (
 		<>
-			<Input hidden type="file" ref={inputRef} onChange={handleChangeFile} accept=".xlsx,.xls,.csv" />
+			<Input hidden type="file" ref={inputRef} onChange={handleChangeFile} accept=".csv" />
 			<Button
 				variant="lightBrand"
 				leftIcon={<MdImportExport />}
@@ -52,7 +52,7 @@ export const ImportButton: React.FC<Props> = ({ onChangeFile, isLoading, limitSi
 export const DownloadTemplate: React.FC<{ url: string } & ButtonProps> = ({ url, ...innerProps }) => {
 	const handleDownload = () => {
 		const link = document.createElement('a');
-		link.download = 'template.xlsx';
+		link.download = 'template.csv';
 		link.href = url;
 		document.body.appendChild(link);
 		link.click();

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Box, useColorModeValue } from '@chakra-ui/react';
 import { SidebarContext } from 'contexts/SidebarContext';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import routes, { Route as RootRoute } from 'routes';
 
 // Chakra imports
@@ -59,6 +59,7 @@ const Auth: React.FC = () => {
 					{getRoute() ? (
 						<Box mx="auto" minH="100vh">
 							<Switch>{getRoutes(routes)}</Switch>
+							<Redirect from="auth/*" to="/auth/sign-in" />
 						</Box>
 					) : null}
 				</Box>

@@ -41,6 +41,7 @@ import RoleManagement from 'views/admin/role';
 import PositionForm from 'views/admin/role/form';
 import UserManagement from 'views/admin/userManangement';
 import UserManagementForm from 'views/admin/userManangement/form';
+import { ResetPassword } from 'views/auth/resetPass';
 import SignInCentered from 'views/auth/signIn';
 
 export interface Route {
@@ -431,6 +432,14 @@ const routes: Route[] = [
 		path: '/sign-in',
 		icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
 		component: SignInCentered,
+		isShow: false,
+	},
+	{
+		name: 'Forgot-pass',
+		layout: '/auth',
+		path: '/forgot-password',
+		icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
+		component: ResetPassword,
 		isShow: false,
 	},
 ];

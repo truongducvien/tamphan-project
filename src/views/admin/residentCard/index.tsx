@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import importTemplate from 'assets/templates/residentCard.xlsx';
+import importTemplate from 'assets/templates/residentCard.csv';
 import Card from 'components/card/Card';
 import { FormContainer } from 'components/form';
 import { Option, PullDownHookForm } from 'components/form/PullDown';
@@ -90,7 +90,8 @@ const ResdidentCardManagement: React.FC = () => {
 	const handleImport = async (file: File) => {
 		const payload = new FormData();
 		payload.append('file', file);
-		payload.append('type', file.type);
+		const type = file.name.split('.') || [];
+		payload.append('type', type[type.length - 1]);
 		try {
 			await mutationImport.mutateAsync(payload);
 			toast({ title: 'Import thành công' });

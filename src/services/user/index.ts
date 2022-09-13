@@ -63,3 +63,18 @@ export const userRefreshToken = async (refreshToken: string) => {
 	const { data } = await http.post<BaseResponseDetail<IUser>>('/v1/operators/refresh-token', { refreshToken });
 	return data || null;
 };
+
+export const userForgotPass = async (email: string) => {
+	const { data } = await http.put<BaseResponseDetail<{ durationInSeconds: number }>>('/v1/operators/forget-password', {
+		email,
+	});
+	return data || null;
+};
+
+export const userResetPass = async (payload: { otpToken: string; newPassword: string }) => {
+	const { data } = await http.put<BaseResponseDetail<{ durationInSeconds: number }>>(
+		'/v1/operators/reset-password',
+		payload,
+	);
+	return data || null;
+};

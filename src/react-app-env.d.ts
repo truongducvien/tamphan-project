@@ -1,7 +1,7 @@
 /// <reference types="react-scripts" />
 declare module 'quill-image-resize-module-react';
 
-declare module '*.xlsx' {
+declare module '*.csv' {
 	const src: string;
 	export default src;
 }
