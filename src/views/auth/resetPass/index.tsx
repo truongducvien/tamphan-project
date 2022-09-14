@@ -78,15 +78,15 @@ export const ResetPassword: React.FC = () => {
 		if (!token || token?.length < 4) {
 			setError({
 				username: '',
-				password: 'Sai mã xác thực',
-				otp: '',
+				otp: 'Sai mã xác thực',
+				password: '',
 			});
 			return;
 		}
 		try {
 			const { data } = await mutationVerify(token);
 			setStep(2);
-			setOtp(data?.otpToken || '');
+			setOtp(data?.confirmToken || '');
 		} catch (err) {
 			const errResponse = err as AxiosError<BaseResponseAction>;
 			if (errResponse?.response?.data?.code === 'NOT_FOUND_OTP_TOKEN')
@@ -118,7 +118,7 @@ export const ResetPassword: React.FC = () => {
 
 		setError({ username: '', password: '', otp: '' });
 		try {
-			await mutationResetPass({ newPassword: password || '', otpToken });
+			await mutationResetPass({ newPassword: password || '', confirmToken: otpToken });
 			await alert({ title: 'Đổi mật khẩu thành công!', type: 'message' });
 			history.replace('/auth/sign-in');
 		} catch (err) {
@@ -184,6 +184,7 @@ export const ResetPassword: React.FC = () => {
 									<Input
 										ref={usernameRef}
 										isRequired
+										name="email"
 										variant="auth"
 										borderColor={errorMessage.username ? '#FC8181' : undefined}
 										fontSize="sm"

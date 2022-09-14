@@ -49,7 +49,7 @@ const Data: React.FC<{
 				});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data]);
+	}, []);
 	return (
 		<Box
 			px={3}
@@ -124,7 +124,7 @@ export const TimePicker: React.FC<Props> = ({
 				onOpen();
 			}}
 			onClose={onClose}
-			placement="bottom"
+			placement="bottom-start"
 			closeOnBlur
 			closeOnEsc
 			{...innerProps}
@@ -240,6 +240,8 @@ export const RangTimePicker: React.FC<Props> = ({
 									e.stopPropagation();
 									setH('');
 									setM('');
+									setHTo('');
+									setMTo('');
 								}}
 							/>
 						</InputRightElement>

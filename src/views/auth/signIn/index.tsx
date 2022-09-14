@@ -148,11 +148,11 @@ const SignIn: React.FC = () => {
 									Duy trì đăng nhập
 								</FormLabel>
 							</FormControl>
-							{/* <NavLink to="/auth/forgot-password">
+							<NavLink to="/auth/forgot-password">
 								<Text color={textColorBrand} fontSize="sm" w="124px" fontWeight="500">
 									Quên mật khẩu?
 								</Text>
-							</NavLink> */}
+							</NavLink>
 						</Flex>
 						<Button
 							onClick={handleLogin}

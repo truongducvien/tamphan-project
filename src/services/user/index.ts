@@ -71,14 +71,14 @@ export const userForgotPass = async (email: string) => {
 	return data || null;
 };
 
-export const userVerifyToken = async (token: string) => {
-	const { data } = await http.put<BaseResponseDetail<{ otpToken: string }>>('/v1/operators/otp-token/verify', {
-		token,
+export const userVerifyToken = async (otp: string) => {
+	const { data } = await http.put<BaseResponseDetail<{ confirmToken: string }>>('/v1/operators/otp-token/verify', {
+		otp,
 	});
 	return data || null;
 };
 
-export const userResetPass = async (payload: { otpToken: string; newPassword: string }) => {
+export const userResetPass = async (payload: { confirmToken: string; newPassword: string }) => {
 	const { data } = await http.put<BaseResponseDetail<{ durationInSeconds: number }>>(
 		'/v1/operators/reset-password',
 		payload,

@@ -66,7 +66,7 @@ export const ChangePass: React.FC = () => {
 		try {
 			const { data } = await mutationVerify(token);
 			setStep(1);
-			setOtp(data?.otpToken || '');
+			setOtp(data?.confirmToken || '');
 		} catch (err) {
 			const errResponse = err as AxiosError<BaseResponseAction>;
 			if (errResponse?.response?.data?.code === 'NOT_FOUND_OTP_TOKEN')
@@ -98,7 +98,7 @@ export const ChangePass: React.FC = () => {
 
 		setError({ username: '', password: '', otp: '' });
 		try {
-			await mutationResetPass({ newPassword: password || '', otpToken });
+			await mutationResetPass({ newPassword: password || '', confirmToken: otpToken });
 			await alert({ title: 'Đổi mật khẩu thành công!', type: 'message' });
 			history.replace('/auth/sign-in');
 		} catch (err) {
