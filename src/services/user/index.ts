@@ -72,7 +72,7 @@ export const userForgotPass = async (email: string) => {
 };
 
 export const userVerifyToken = async (otp: string) => {
-	const { data } = await http.put<BaseResponseDetail<{ confirmToken: string }>>('/v1/operators/otp-token/verify', {
+	const { data } = await http.post<BaseResponseDetail<{ confirmToken: string }>>('/v1/operators/otp/verify', {
 		otp,
 	});
 	return data || null;

@@ -83,6 +83,11 @@ export const ResetPassword: React.FC = () => {
 			});
 			return;
 		}
+		setError({
+			username: '',
+			otp: '',
+			password: '',
+		});
 		try {
 			const { data } = await mutationVerify(token);
 			setStep(2);
@@ -90,8 +95,8 @@ export const ResetPassword: React.FC = () => {
 		} catch (err) {
 			const errResponse = err as AxiosError<BaseResponseAction>;
 			if (errResponse?.response?.data?.code === 'NOT_FOUND_OTP_TOKEN')
-				setError({ password: 'Sai mã xác nhận, thử lại sau', username: '', otp: '' });
-			else setError({ password: 'Có lỗi xảy ra, thử lại sau', username: '', otp: '' });
+				setError({ password: '', username: '', otp: 'Sai mã xác nhận, thử lại sau' });
+			else setError({ password: '', username: '', otp: 'Có lỗi xảy ra, thử lại sau' });
 		}
 	};
 
@@ -115,7 +120,6 @@ export const ResetPassword: React.FC = () => {
 			});
 			return;
 		}
-
 		setError({ username: '', password: '', otp: '' });
 		try {
 			await mutationResetPass({ newPassword: password || '', confirmToken: otpToken });
@@ -258,7 +262,7 @@ export const ResetPassword: React.FC = () => {
 									<Button
 										// eslint-disable-next-line @typescript-eslint/no-misused-promises
 										onClick={handleVerifyToken}
-										isLoading={reseting}
+										isLoading={sendingToken}
 										loadingText="Loading"
 										fontSize="sm"
 										variant="brand"
@@ -330,16 +334,6 @@ export const ResetPassword: React.FC = () => {
 										mb="24px"
 										size="lg"
 										type="password"
-										variant="auth"
-									/>
-									<Input
-										ref={otpRef}
-										isRequired
-										fontSize="sm"
-										placeholder="Nhập mã xác thực"
-										mb="24px"
-										size="lg"
-										type="text"
 										variant="auth"
 									/>
 									<Text pb={3} textAlign="center" fontWeight="bold" fontSize="sm" color="red.600">
