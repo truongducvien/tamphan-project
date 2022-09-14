@@ -21,7 +21,18 @@ const Auth: React.FC = () => {
 	const getRoutes = (r: RootRoute[]): React.ReactNode => {
 		return r.map((prop, key) => {
 			if (prop.layout === '/auth') {
-				return <Route path={prop.layout + prop.path} component={prop.component} key={key} />;
+				return (
+					<Route
+						path={prop.layout + prop.path}
+						render={({ match: { path } }) => (
+							<Switch>
+								<Route exact path={`${path}/`} component={prop.component} key={key} />
+								<Redirect from={`${path}/*`} to={path} />
+							</Switch>
+						)}
+						key={key}
+					/>
+				);
 			}
 			if (prop.collapse) {
 				return getRoutes(prop?.items || []);
@@ -58,8 +69,10 @@ const Auth: React.FC = () => {
 				>
 					{getRoute() ? (
 						<Box mx="auto" minH="100vh">
-							<Switch>{getRoutes(routes)}</Switch>
-							<Redirect from="auth/*" to="/auth/sign-in" />
+							<Switch>
+								{getRoutes(routes)}
+								<Redirect from="/*" to="/auth/sign-in" />
+							</Switch>
 						</Box>
 					) : null}
 				</Box>

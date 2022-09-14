@@ -1,4 +1,5 @@
 import { AxiosError, AxiosResponse } from 'axios';
+import { alert } from 'components/alertDialog/hook';
 import {
 	clearAccessToken,
 	loadAccessToken,
@@ -23,6 +24,13 @@ export function* requestLogin({
 }: actionTypes.LoginAction): Generator<StrictEffect, void, AxiosResponse<LoginResponse>> {
 	try {
 		const response = yield call(login, { username, password });
+		if (response.data.operatorResponse?.isFirstTimeLogin) {
+			yield call(alert, {
+				title: 'Cành báo',
+				description: 'Bạn cần đổi mật khẩu trong lần đầu đăng nhập',
+				type: 'error',
+			});
+		}
 		yield put(actionCreators.userLoginSuccess(response.data.operatorResponse));
 		if (remember) {
 			yield call(saveAccessToken, response.data.accessToken);

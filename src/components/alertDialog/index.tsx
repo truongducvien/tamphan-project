@@ -50,12 +50,12 @@ const AlertDialog: React.FC<Props> = ({
 					{title}
 				</AlertDialogHeader>
 				<AlertDialogCloseButton top={0} right={0} />
-				{body && <AlertDialogBody>{body}</AlertDialogBody>}
+				{body && <AlertDialogBody textAlign="center">{body}</AlertDialogBody>}
 				<AlertDialogFooter justifyContent="center">
-					<Button ref={cancelRef} onClick={onClose}>
+					<Button ref={cancelRef} onClick={onClose} hidden={type === 'message'}>
 						Huỷ
 					</Button>
-					<Button hidden={type === 'message'} colorScheme="red" ml={3} onClick={onConfirm}>
+					<Button colorScheme="telegram" ml={3} onClick={onConfirm}>
 						Đồng ý
 					</Button>
 				</AlertDialogFooter>

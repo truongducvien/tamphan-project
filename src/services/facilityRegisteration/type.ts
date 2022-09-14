@@ -24,6 +24,7 @@ export enum StatusFacilityRe {
 	WAITING = 'WAITING',
 	PAYMENT_WAITING = 'PAYMENT_WAITING',
 	CANCEL = 'CANCEL',
+	OVERDUE_DEPOSIT = 'OVERDUE_DEPOSIT',
 }
 
 export const statusFacilityRe: Array<Option> = [
@@ -41,6 +42,11 @@ export const statusFacilityRe: Array<Option> = [
 		label: 'Đợi thanh toán',
 		value: StatusFacilityRe.PAYMENT_WAITING,
 		colorScheme: 'orange',
+	},
+	{
+		label: 'Quá hạn cọc',
+		value: StatusFacilityRe.OVERDUE_DEPOSIT,
+		colorScheme: 'red',
 	},
 	{
 		label: 'Đã hủy',

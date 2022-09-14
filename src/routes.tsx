@@ -41,6 +41,7 @@ import RoleManagement from 'views/admin/role';
 import PositionForm from 'views/admin/role/form';
 import UserManagement from 'views/admin/userManangement';
 import UserManagementForm from 'views/admin/userManangement/form';
+import { ChangePass } from 'views/auth/changePass';
 import { ResetPassword } from 'views/auth/resetPass';
 import SignInCentered from 'views/auth/signIn';
 
@@ -427,7 +428,7 @@ const routes: Route[] = [
 		],
 	},
 	{
-		name: 'Sign In',
+		name: 'Đăng nhập',
 		layout: '/auth',
 		path: '/sign-in',
 		icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
@@ -435,11 +436,19 @@ const routes: Route[] = [
 		isShow: false,
 	},
 	{
-		name: 'Forgot-pass',
+		name: 'Quên mật khẩu',
 		layout: '/auth',
 		path: '/forgot-password',
 		icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
 		component: ResetPassword,
+		isShow: false,
+	},
+	{
+		name: 'Đổi mật khẩu',
+		layout: '/auth',
+		path: '/change-password',
+		icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
+		component: ChangePass,
 		isShow: false,
 	},
 ];

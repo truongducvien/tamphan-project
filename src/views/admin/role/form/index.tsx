@@ -148,7 +148,7 @@ const permissions: Array<PermissionProps> = [
 		id: '9',
 		value: 'RESIDENT_CARD_PROCESS_MANAGEMENT',
 		title: 'Phê duyệt yêu cầu cấp thẻ',
-		permistion: ['APPROVE'],
+		permistion: ['APPROVE', 'REJECT'],
 	},
 	{
 		id: '10',

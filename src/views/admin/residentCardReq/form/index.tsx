@@ -206,7 +206,7 @@ const ResdidentCardReqDetail: React.FC<BaseComponentProps> = () => {
 							w="20"
 							// eslint-disable-next-line @typescript-eslint/no-misused-promises
 							onClick={onOpenReject}
-							hidden={detailData?.status !== 'WAITING' || !permistionAction.APPROVE}
+							hidden={detailData?.status !== 'WAITING' || !permistionAction.REJECT}
 							type="button"
 							variant="delete"
 						>

@@ -265,6 +265,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 							variant="admin"
 							isRequired
 							type="number"
+							step={0}
 						/>
 						<FormControl>
 							<FormLabel>Loại khung giờ</FormLabel>
@@ -340,6 +341,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 							label="Số lượng tối đa cho phép đặt"
 							name="maxOrderNumber"
 							type="number"
+							step={0}
 							variant="admin"
 							isDisabled={action === 'detail'}
 						/>
@@ -391,6 +393,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 							label="Số điện thoại liên hệ"
 							name="phoneNumber"
 							type="number"
+							step={0}
 							variant="admin"
 						/>
 						<TextFieldHookForm
@@ -399,6 +402,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 							min={1}
 							name="depositInDuration"
 							type="number"
+							step={0}
 							variant="admin"
 						/>
 						<PullDownHookForm

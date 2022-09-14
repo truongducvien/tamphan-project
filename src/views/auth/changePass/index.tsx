@@ -34,7 +34,7 @@ import { useHistory } from 'react-router-dom';
 import { BaseResponseAction } from 'services/type';
 import { userForgotPass, userResetPass, userVerifyToken } from 'services/user';
 
-export const ResetPassword: React.FC = () => {
+export const ChangePass: React.FC = () => {
 	const [step, setStep] = useState(0);
 	const [otpToken, setOtp] = useState('');
 
@@ -50,28 +50,8 @@ export const ResetPassword: React.FC = () => {
 
 	const [errorMessage, setError] = useState({ username: '', password: '', otp: '' });
 
-	const { mutateAsync: mutationSentMail, isLoading: sendingMail } = useMutation(userForgotPass);
 	const { mutateAsync: mutationVerify, isLoading: sendingToken } = useMutation(userVerifyToken);
 	const { mutateAsync: mutationResetPass, isLoading: reseting } = useMutation(userResetPass);
-
-	const handleSendmail = async () => {
-		const email = usernameRef.current?.value;
-		const reg = /^\S+@\S+\.\S+$/;
-		if (!email || !reg.test(email)) {
-			setError({ username: 'Sai định dạng email!', password: '', otp: '' });
-			return;
-		}
-		setError({ username: '', password: '', otp: '' });
-		try {
-			await mutationSentMail(email);
-			setStep(1);
-		} catch (err) {
-			const errResponse = err as AxiosError<BaseResponseAction>;
-			if (errResponse?.response?.data?.code === 'INVALID_EMAIL')
-				setError({ username: 'Email không tồn tại, thử lại sau', password: '', otp: '' });
-			else setError({ username: 'Có lỗi xảy ra, thử lại sau', password: '', otp: '' });
-		}
-	};
 
 	const handleVerifyToken = async () => {
 		const token = otpRef.current?.value;
@@ -85,7 +65,7 @@ export const ResetPassword: React.FC = () => {
 		}
 		try {
 			const { data } = await mutationVerify(token);
-			setStep(2);
+			setStep(1);
 			setOtp(data?.otpToken || '');
 		} catch (err) {
 			const errResponse = err as AxiosError<BaseResponseAction>;
@@ -155,14 +135,6 @@ export const ResetPassword: React.FC = () => {
 					</TabList>
 					<TabPanels>
 						<TabPanel>
-							<Box me="auto">
-								<Heading color={textColor} fontSize="36px" mb="10px">
-									Quên mật khẩu
-								</Heading>
-								<Text mb="36px" ms="4px" color={textColorSecondary} fontWeight="400" fontSize="md">
-									Nhập Email của bạn để nhận mã xác thực!
-								</Text>
-							</Box>
 							<Flex
 								zIndex="2"
 								direction="column"
@@ -174,33 +146,84 @@ export const ResetPassword: React.FC = () => {
 								me="auto"
 								mb={{ base: '20px', md: 'auto' }}
 							>
+								<Box me="auto">
+									<Heading color={textColor} fontSize="36px" mb="10px">
+										Đổi mật khẩu
+									</Heading>
+									<Text mb="36px" ms="4px" color={textColorSecondary} fontWeight="400" fontSize="md">
+										Mật khẩu Tối thiểu 6 kí tự, bao gồm ít nhất 1 chữ in hoa, 1 chữ thường và 1 kí tự đặc biệt!
+									</Text>
+								</Box>
 								<Flex align="center" mb="25px">
 									<HSeparator />
 								</Flex>
 								<FormControl>
 									<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" color={textColor} mb="8px">
-										Email<Text color={brandStars}>*</Text>
+										Mật khẩu cũ<Text color={brandStars}>*</Text>
+									</FormLabel>
+									<InputGroup size="md">
+										<Input
+											ref={passRef}
+											isRequired
+											fontSize="sm"
+											placeholder="Nhập lại mật khẩu"
+											mb="24px"
+											size="lg"
+											type={show ? 'text' : 'password'}
+											variant="auth"
+										/>
+										<InputRightElement display="flex" alignItems="center" mt="4px">
+											<Icon
+												color={textColorSecondary}
+												_hover={{ cursor: 'pointer' }}
+												as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
+												onClick={handleClick}
+											/>
+										</InputRightElement>
+									</InputGroup>
+									<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" color={textColor} mb="8px">
+										Mật khẩu mới<Text color={brandStars}>*</Text>
+									</FormLabel>
+									<InputGroup size="md">
+										<Input
+											ref={passRef}
+											isRequired
+											fontSize="sm"
+											placeholder="Nhập lại mật khẩu"
+											mb="24px"
+											size="lg"
+											type={show ? 'text' : 'password'}
+											variant="auth"
+										/>
+										<InputRightElement display="flex" alignItems="center" mt="4px">
+											<Icon
+												color={textColorSecondary}
+												_hover={{ cursor: 'pointer' }}
+												as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
+												onClick={handleClick}
+											/>
+										</InputRightElement>
+									</InputGroup>
+									<FormLabel ms="4px" fontSize="sm" fontWeight="500" color={textColor} display="flex">
+										Nhập lại mật khẩu<Text color={brandStars}>*</Text>
 									</FormLabel>
 									<Input
-										ref={usernameRef}
+										ref={rePassRef}
 										isRequired
-										variant="auth"
-										borderColor={errorMessage.username ? '#FC8181' : undefined}
 										fontSize="sm"
-										ms={{ base: '0px', md: '0px' }}
-										type="text"
-										placeholder="mail@simmmple.com"
+										placeholder="Nhập lại mật khẩu"
 										mb="24px"
-										fontWeight="500"
 										size="lg"
+										type="password"
+										variant="auth"
 									/>
 									<Text pb={3} textAlign="center" fontWeight="bold" fontSize="sm" color="red.600">
-										{errorMessage.username}
+										{errorMessage.password}
 									</Text>
 									<Button
 										// eslint-disable-next-line @typescript-eslint/no-misused-promises
-										onClick={handleSendmail}
-										isLoading={sendingMail}
+										onClick={handleResetpass}
+										isLoading={reseting}
 										loadingText="Loading"
 										fontSize="sm"
 										variant="brand"
@@ -209,7 +232,7 @@ export const ResetPassword: React.FC = () => {
 										h="50"
 										mb="24px"
 									>
-										Tiếp tục
+										Đổi mật khẩu
 									</Button>
 								</FormControl>
 							</Flex>
@@ -266,97 +289,7 @@ export const ResetPassword: React.FC = () => {
 										h="50"
 										mb="24px"
 									>
-										Tiếp tục
-									</Button>
-								</FormControl>
-							</Flex>
-						</TabPanel>
-						<TabPanel>
-							<Box me="auto">
-								<Heading color={textColor} fontSize="36px" mb="10px">
-									Quên mật khẩu
-								</Heading>
-								<Text mb="36px" ms="4px" color={textColorSecondary} fontWeight="400" fontSize="md">
-									Nhập mật khẩu mới!
-								</Text>
-							</Box>
-							<Flex
-								zIndex="2"
-								direction="column"
-								w={{ base: '100%', md: '420px' }}
-								maxW="100%"
-								background="transparent"
-								borderRadius="15px"
-								mx={{ base: 'auto', lg: 'unset' }}
-								me="auto"
-								mb={{ base: '20px', md: 'auto' }}
-							>
-								<Flex align="center" mb="25px">
-									<HSeparator />
-								</Flex>
-								<FormControl>
-									<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" color={textColor} mb="8px">
-										Mật khẩu mới<Text color={brandStars}>*</Text>
-									</FormLabel>
-									<InputGroup size="md">
-										<Input
-											ref={passRef}
-											isRequired
-											fontSize="sm"
-											placeholder="Nhập lại mật khẩu"
-											mb="24px"
-											size="lg"
-											type={show ? 'text' : 'password'}
-											variant="auth"
-										/>
-										<InputRightElement display="flex" alignItems="center" mt="4px">
-											<Icon
-												color={textColorSecondary}
-												_hover={{ cursor: 'pointer' }}
-												as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
-												onClick={handleClick}
-											/>
-										</InputRightElement>
-									</InputGroup>
-									<FormLabel ms="4px" fontSize="sm" fontWeight="500" color={textColor} display="flex">
-										Nhập lại mật khẩu<Text color={brandStars}>*</Text>
-									</FormLabel>
-									<Input
-										ref={rePassRef}
-										isRequired
-										fontSize="sm"
-										placeholder="Nhập lại mật khẩu"
-										mb="24px"
-										size="lg"
-										type="password"
-										variant="auth"
-									/>
-									<Input
-										ref={otpRef}
-										isRequired
-										fontSize="sm"
-										placeholder="Nhập mã xác thực"
-										mb="24px"
-										size="lg"
-										type="text"
-										variant="auth"
-									/>
-									<Text pb={3} textAlign="center" fontWeight="bold" fontSize="sm" color="red.600">
-										{errorMessage.password}
-									</Text>
-									<Button
-										// eslint-disable-next-line @typescript-eslint/no-misused-promises
-										onClick={handleResetpass}
-										isLoading={reseting}
-										loadingText="Loading"
-										fontSize="sm"
-										variant="brand"
-										fontWeight="500"
-										w="100%"
-										h="50"
-										mb="24px"
-									>
-										Đỏi mật khẩu
+										Đổi mật khẩu
 									</Button>
 								</FormControl>
 							</Flex>

@@ -282,6 +282,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									<TextFieldHookForm
 										isDisabled={isDisabled}
 										type="number"
+										step={0}
 										label="Tầng"
 										name="floorNumber"
 										variant="admin"
@@ -306,6 +307,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									<TextFieldHookForm
 										isDisabled={isDisabled}
 										type="number"
+										step={0}
 										label="Diện tích đất"
 										name="acreage"
 										variant="admin"
@@ -320,6 +322,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									<TextFieldHookForm
 										isDisabled={isDisabled}
 										type="number"
+										step={0}
 										label="Số phòng ngủ"
 										name="numberOfBedRoom"
 										variant="admin"
@@ -327,6 +330,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									<TextFieldHookForm
 										isDisabled={isDisabled}
 										type="number"
+										step={0}
 										label="Diện tích sử dụng"
 										name="inUserAcreage"
 										variant="admin"
@@ -341,6 +345,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									<TextFieldHookForm
 										isDisabled={isDisabled}
 										type="number"
+										step={0}
 										label="Địa chỉ"
 										name="address"
 										variant="admin"
@@ -348,6 +353,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									<TextFieldHookForm
 										isDisabled={isDisabled}
 										type="number"
+										step={0}
 										label="Số phòng tắm"
 										name="numberOfBathRoom"
 										variant="admin"
@@ -362,6 +368,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									<TextFieldHookForm
 										isDisabled={isDisabled}
 										type="number"
+										step={0}
 										label="Số tầng"
 										name="numberOfFloor"
 										variant="admin"
@@ -383,6 +390,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									<TextFieldHookForm
 										isDisabled={isDisabled}
 										type="number"
+										step={0}
 										label="Số lượng thẻ cư dân tối đa"
 										name="maxResident"
 										variant="admin"
@@ -454,6 +462,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									/>
 									<TextFieldHookForm
 										type="number"
+										step={0}
 										isRequired
 										label="Số điện thoại"
 										name="phoneNumber"
@@ -477,6 +486,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									/>
 									<TextFieldHookForm
 										type="number"
+										step={0}
 										label="CMND/CCCD/Hộ chiếu"
 										name="identityCardNumber"
 										variant="admin"

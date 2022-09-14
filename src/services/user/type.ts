@@ -22,6 +22,7 @@ export interface IUser {
 	username: string;
 	role?: IRole;
 	state: Status;
+	isFirstTimeLogin: boolean;
 }
 
 export type IUserResponse = BaseResponseList<IUser>;

@@ -91,7 +91,7 @@ const ResdidentCardManagement: React.FC = () => {
 		const payload = new FormData();
 		payload.append('file', file);
 		const type = file.name.split('.') || [];
-		payload.append('type', type[type.length - 1]);
+		payload.append('type', type[type.length - 1]?.toUpperCase());
 		try {
 			await mutationImport.mutateAsync(payload);
 			toast({ title: 'Import thành công' });

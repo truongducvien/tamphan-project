@@ -129,6 +129,7 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 							isRequired
 							label="Điện thoại liên hệ"
 							type="number"
+							step={0}
 							name="contactPhone"
 							variant="admin"
 						/>
