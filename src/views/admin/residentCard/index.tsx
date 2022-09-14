@@ -11,6 +11,8 @@ import { TextFieldHookForm } from 'components/form/TextField';
 import { DownloadTemplate, ImportButton } from 'components/importButton';
 import Table, { IColumn } from 'components/table';
 import { useToastInstance } from 'components/toast';
+import { BaseComponentProps } from 'hocs/withPermission';
+import { useActionPermission } from 'hooks/useActionPermission';
 import { useDebounce } from 'hooks/useDebounce';
 import { useLoadMore } from 'hooks/useLoadMore';
 import { getProperty } from 'services/properties';
@@ -35,7 +37,8 @@ const validationSchema = Yup.object({
 	}).nullable(),
 });
 
-const ResdidentCardManagement: React.FC = () => {
+const ResdidentCardManagement: React.FC<BaseComponentProps> = ({ request }) => {
+	const { permistionAction } = useActionPermission(request);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 	const { toast } = useToastInstance();
@@ -125,9 +128,11 @@ const ResdidentCardManagement: React.FC = () => {
 							<PullDownHookForm isClearable label="Trạng thái thẻ" name="state" options={statusOption2} />
 						</Stack>
 						<Flex justifyContent="end" mt={3}>
-							<DownloadTemplate url={importTemplate} mr={3} />
-							{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-							<ImportButton onChangeFile={handleImport} />
+							<Box hidden={!permistionAction.IMPORT}>
+								<DownloadTemplate url={importTemplate} mr={3} />
+								{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+								<ImportButton onChangeFile={handleImport} />
+							</Box>
 							<Button ml={3} variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
 								Tìm kiếm
 							</Button>

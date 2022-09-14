@@ -351,7 +351,7 @@ export const ResetPassword: React.FC = () => {
 										h="50"
 										mb="24px"
 									>
-										Đỏi mật khẩu
+										Đổi mật khẩu
 									</Button>
 								</FormControl>
 							</Flex>

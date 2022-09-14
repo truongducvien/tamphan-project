@@ -106,7 +106,7 @@ const permissions: Array<PermissionProps> = [
 		id: '2',
 		value: 'ORGANIZATIONS_MANAGEMENT',
 		title: 'Quản lý đơn vị',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE'],
 	},
 	{
 		id: '3',
@@ -136,7 +136,7 @@ const permissions: Array<PermissionProps> = [
 		id: '7',
 		value: 'RESIDENT_CARD_MANAGEMENT',
 		title: 'Quản lý thẻ cư dân',
-		permistion: ['VIEW'],
+		permistion: ['VIEW', 'DELETE', 'IMPORT'],
 	},
 	{
 		id: '8',
