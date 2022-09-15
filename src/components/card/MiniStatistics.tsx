@@ -3,8 +3,9 @@
 import React from 'react';
 
 import { Flex, Stat, StatLabel, StatNumber, useColorModeValue, Text } from '@chakra-ui/react';
+
 // Custom components
-import Card, { Props as CardProps } from 'components/card/Card';
+import Card, { Props as CardProps } from '@/components/card/Card';
 // Custom icons
 
 export interface Props extends CardProps {

@@ -2,25 +2,27 @@ import { useState } from 'react';
 
 import { Box, Button, Flex, FormControl, FormLabel, HStack, SimpleGrid, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import Card from 'components/card/Card';
-import { FormContainer } from 'components/form';
-import { DatePickerHookForm } from 'components/form/DatePicker';
-import { Loading } from 'components/form/Loading';
-import { BaseOption, Option, PullDownHookForm } from 'components/form/PullDown';
-import { SwitchHookForm } from 'components/form/SwitchHookForm';
-import { TextFieldHookForm } from 'components/form/TextField';
-import { PullDown } from 'components/pulldown';
-import { useToastInstance } from 'components/toast';
-import { formatDate } from 'helpers/dayjs';
-import { BaseComponentProps } from 'hocs/withPermission';
-import useActionPage from 'hooks/useActionPage';
-import { useActionPermission } from 'hooks/useActionPermission';
-import { useDebounce } from 'hooks/useDebounce';
-import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
-import { getProperty } from 'services/properties';
-import { IProperty, IPropertyParams, Relationship, relationshipWithOwner } from 'services/properties/type';
-import { createResident, getResidentOfProperty, updateResident } from 'services/resident';
+import * as Yup from 'yup';
+
+import Card from '@/components/card/Card';
+import { FormContainer } from '@/components/form';
+import { DatePickerHookForm } from '@/components/form/DatePicker';
+import { Loading } from '@/components/form/Loading';
+import { BaseOption, Option, PullDownHookForm } from '@/components/form/PullDown';
+import { SwitchHookForm } from '@/components/form/SwitchHookForm';
+import { TextFieldHookForm } from '@/components/form/TextField';
+import { PullDown } from '@/components/pulldown';
+import { useToastInstance } from '@/components/toast';
+import { formatDate } from '@/helpers/dayjs';
+import { BaseComponentProps } from '@/hocs/withPermission';
+import useActionPage from '@/hooks/useActionPage';
+import { useActionPermission } from '@/hooks/useActionPermission';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useLoadMore } from '@/hooks/useLoadMore';
+import { getProperty } from '@/services/properties';
+import { IProperty, IPropertyParams, Relationship, relationshipWithOwner } from '@/services/properties/type';
+import { createResident, getResidentOfProperty, updateResident } from '@/services/resident';
 import {
 	Gender,
 	gender,
@@ -29,9 +31,8 @@ import {
 	IResidentPayload,
 	ResidentType,
 	residentType,
-} from 'services/resident/type';
-import { Status, statusOption2 } from 'variables/status';
-import * as Yup from 'yup';
+} from '@/services/resident/type';
+import { Status, statusOption2 } from '@/variables/status';
 
 const validationSchema = Yup.object({
 	fullName: Yup.string().required('Vui lòng nhập họ tên'),

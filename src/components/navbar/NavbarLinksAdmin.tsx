@@ -15,14 +15,13 @@ import {
 	useColorMode,
 	Center,
 } from '@chakra-ui/react';
-// Custom Components
-import SearchBar from 'components/navbar/searchBar/SearchBar';
-// Assets
 import { FaEthereum } from 'react-icons/fa';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { MdNotificationsNone } from 'react-icons/md';
-import { useAppDispatch, useAppSelector } from 'store';
-import { logout } from 'store/actionCreators';
+
+import SearchBar from '@/components/navbar/searchBar/SearchBar';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { logout } from '@/store/actionCreators';
 
 export interface Props {
 	variant?: string;

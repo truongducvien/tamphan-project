@@ -16,34 +16,35 @@ import {
 	MdOutlineMarkunreadMailbox,
 	MdWindow,
 } from 'react-icons/md';
-import { FeatureModule } from 'services/role/type';
-import { PermistionAction } from 'variables/permission';
-import AreaManagement from 'views/admin/area';
-import DetailArea from 'views/admin/area/form';
-import ArticleManagement from 'views/admin/article';
-import DetailArticle from 'views/admin/article/form';
-import FacilityManagement from 'views/admin/facility';
-import FacilityForm from 'views/admin/facility/form';
-import FacilityGroupManagement from 'views/admin/facilityGroup';
-import FacilityGroupForm from 'views/admin/facilityGroup/form';
-import FacilityReManagement from 'views/admin/facilityRegisteration';
-import FacilityReForm from 'views/admin/facilityRegisteration/form';
-import OrganizationManagement from 'views/admin/organization';
-import OrganizationForm from 'views/admin/organization/form';
-import PropertyManagement from 'views/admin/property';
-import AparmentForm from 'views/admin/property/form';
-import ResidentManagement from 'views/admin/resident';
-import ResidentForm from 'views/admin/resident/form';
-import ResdidentCardManagement from 'views/admin/residentCard';
-import ResdidentCardReqManagement from 'views/admin/residentCardReq';
-import ResdidentCardReqDetail from 'views/admin/residentCardReq/form';
-import RoleManagement from 'views/admin/role';
-import PositionForm from 'views/admin/role/form';
-import UserManagement from 'views/admin/userManangement';
-import UserManagementForm from 'views/admin/userManangement/form';
-import { ChangePass } from 'views/auth/changePass';
-import { ResetPassword } from 'views/auth/resetPass';
-import SignInCentered from 'views/auth/signIn';
+
+import { FeatureModule } from '@/services/role/type';
+import { PermistionAction } from '@/variables/permission';
+import AreaManagement from '@/views/admin/area';
+import DetailArea from '@/views/admin/area/form';
+import ArticleManagement from '@/views/admin/article';
+import DetailArticle from '@/views/admin/article/form';
+import FacilityManagement from '@/views/admin/facility';
+import FacilityForm from '@/views/admin/facility/form';
+import FacilityGroupManagement from '@/views/admin/facilityGroup';
+import FacilityGroupForm from '@/views/admin/facilityGroup/form';
+import FacilityReManagement from '@/views/admin/facilityRegisteration';
+import FacilityReForm from '@/views/admin/facilityRegisteration/form';
+import OrganizationManagement from '@/views/admin/organization';
+import OrganizationForm from '@/views/admin/organization/form';
+import PropertyManagement from '@/views/admin/property';
+import AparmentForm from '@/views/admin/property/form';
+import ResidentManagement from '@/views/admin/resident';
+import ResidentForm from '@/views/admin/resident/form';
+import ResdidentCardManagement from '@/views/admin/residentCard';
+import ResdidentCardReqManagement from '@/views/admin/residentCardReq';
+import ResdidentCardReqDetail from '@/views/admin/residentCardReq/form';
+import RoleManagement from '@/views/admin/role';
+import PositionForm from '@/views/admin/role/form';
+import UserManagement from '@/views/admin/userManangement';
+import UserManagementForm from '@/views/admin/userManangement/form';
+import { ChangePass } from '@/views/auth/changePass';
+import { ResetPassword } from '@/views/auth/resetPass';
+import SignInCentered from '@/views/auth/signIn';
 
 export interface Route {
 	name: string;
@@ -216,7 +217,7 @@ const routes: Route[] = [
 				name: 'Thêm mới căn hộ',
 				layout: '/admin',
 				path: `/property/form`,
-				action: PermistionAction.UPDATE,
+				action: PermistionAction.ADD,
 				requirePermission: FeatureModule.PROPERTIES_MANAGEMENT,
 				component: AparmentForm,
 			},

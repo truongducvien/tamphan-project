@@ -3,31 +3,32 @@ import { useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import Card from 'components/card/Card';
-import { FormContainer } from 'components/form';
-import { DatePickerHookForm } from 'components/form/DatePicker';
-import { PullDownHookForm } from 'components/form/PullDown';
-import { TextFieldHookForm } from 'components/form/TextField';
-import Table, { IColumn } from 'components/table';
-import { currency } from 'helpers/currency';
-import { formatDate } from 'helpers/dayjs';
-import useActionPage from 'hooks/useActionPage';
-import { useDebounce } from 'hooks/useDebounce';
-import { useLoadMore } from 'hooks/useLoadMore';
 import { MdResetTv } from 'react-icons/md';
-import { getArea } from 'services/area';
-import { IArea, IAreaParams } from 'services/area/type';
-import { getFacilityGroup } from 'services/facility/group';
-import { IFacilityGroup, IFacilityGroupParams } from 'services/facility/group/type';
-import { getFacilityRe } from 'services/facilityRegisteration';
+
+import Card from '@/components/card/Card';
+import { FormContainer } from '@/components/form';
+import { DatePickerHookForm } from '@/components/form/DatePicker';
+import { PullDownHookForm } from '@/components/form/PullDown';
+import { TextFieldHookForm } from '@/components/form/TextField';
+import Table, { IColumn } from '@/components/table';
+import { currency } from '@/helpers/currency';
+import { formatDate } from '@/helpers/dayjs';
+import useActionPage from '@/hooks/useActionPage';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useLoadMore } from '@/hooks/useLoadMore';
+import { getArea } from '@/services/area';
+import { IArea, IAreaParams } from '@/services/area/type';
+import { getFacilityGroup } from '@/services/facility/group';
+import { IFacilityGroup, IFacilityGroupParams } from '@/services/facility/group/type';
+import { getFacilityRe } from '@/services/facilityRegisteration';
 import {
 	IFacilityRe,
 	IFacilityReSearchForm,
 	IFacilityReSearchPayload,
 	paymentMethods,
 	statusFacilityRe,
-} from 'services/facilityRegisteration/type';
-import { PermistionAction } from 'variables/permission';
+} from '@/services/facilityRegisteration/type';
+import { PermistionAction } from '@/variables/permission';
 
 const FacilityReManagement: React.FC = () => {
 	const [currentPage, setCurrentPage] = useState(1);

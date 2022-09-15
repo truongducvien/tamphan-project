@@ -15,12 +15,13 @@ import {
 	Text,
 	useDisclosure,
 } from '@chakra-ui/react';
-import { ModalImage } from 'components/modalImage';
-import { useToastInstance } from 'components/toast';
 import { motion, useAnimation } from 'framer-motion';
-import useDidMount from 'hooks/useDidMount';
 import { FaCloudUploadAlt } from 'react-icons/fa';
-import { loadImage, uploadFile } from 'services/file';
+
+import { ModalImage } from '@/components/modalImage';
+import { useToastInstance } from '@/components/toast';
+import useDidMount from '@/hooks/useDidMount';
+import { loadImage, uploadFile } from '@/services/file';
 
 const first = {
 	rest: {

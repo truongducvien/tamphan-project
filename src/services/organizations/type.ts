@@ -1,4 +1,4 @@
-import { BaseResponseList } from 'services/type';
+import { BaseResponseList } from '@/services/type';
 
 export interface IOrganization {
 	createdDate: string;

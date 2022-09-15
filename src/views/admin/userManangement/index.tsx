@@ -3,21 +3,22 @@ import { useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import Card from 'components/card/Card';
-import { FormContainer } from 'components/form';
-import { Option, PullDownHookForm } from 'components/form/PullDown';
-import { TextFieldHookForm } from 'components/form/TextField';
-import Table, { IColumn } from 'components/table';
-import { BaseComponentProps } from 'hocs/withPermission';
-import useActionPage from 'hooks/useActionPage';
-import { useActionPermission } from 'hooks/useActionPermission';
 import { MdLibraryAdd } from 'react-icons/md';
-import { getAllOrganization } from 'services/organizations';
-import { getUser } from 'services/user';
-import { IUser, IUserParams } from 'services/user/type';
-import { PermistionAction } from 'variables/permission';
-import { statusOption2 } from 'variables/status';
 import * as Yup from 'yup';
+
+import Card from '@/components/card/Card';
+import { FormContainer } from '@/components/form';
+import { Option, PullDownHookForm } from '@/components/form/PullDown';
+import { TextFieldHookForm } from '@/components/form/TextField';
+import Table, { IColumn } from '@/components/table';
+import { BaseComponentProps } from '@/hocs/withPermission';
+import useActionPage from '@/hooks/useActionPage';
+import { useActionPermission } from '@/hooks/useActionPermission';
+import { getAllOrganization } from '@/services/organizations';
+import { getUser } from '@/services/user';
+import { IUser, IUserParams } from '@/services/user/type';
+import { PermistionAction } from '@/variables/permission';
+import { statusOption2 } from '@/variables/status';
 
 const validationSchema = Yup.object({
 	fullName: Yup.string(),

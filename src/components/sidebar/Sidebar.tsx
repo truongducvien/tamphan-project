@@ -13,10 +13,11 @@ import {
 	DrawerContent,
 	DrawerCloseButton,
 } from '@chakra-ui/react';
-import { renderThumb, renderTrack, renderView } from 'components/scrollbar/Scrollbar';
-import Content, { Props as ContentProps } from 'components/sidebar/components/Content';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { IoMenuOutline } from 'react-icons/io5';
+
+import { renderThumb, renderTrack, renderView } from '@/components/scrollbar/Scrollbar';
+import Content, { Props as ContentProps } from '@/components/sidebar/components/Content';
 
 export interface Props extends ContentProps {
 	logo?: React.ReactNode;

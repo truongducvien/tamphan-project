@@ -2,7 +2,8 @@ import React from 'react';
 
 import { Center, Portal, Spinner } from '@chakra-ui/react';
 import { Redirect } from 'react-router-dom';
-import { useAppSelector } from 'store';
+
+import { useAppSelector } from '@/store';
 
 export const withAuth =
 	<P extends object>(WrappedComponent: React.FC<P>): React.FC<P> =>

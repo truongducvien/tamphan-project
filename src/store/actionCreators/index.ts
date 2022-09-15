@@ -1,4 +1,4 @@
-import { IUser } from 'services/user/type';
+import { IUser } from '@/services/user/type';
 
 import * as actions from '../actions';
 

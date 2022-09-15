@@ -2,8 +2,9 @@ import React from 'react';
 
 import { Image, ImageProps, Spinner, useDisclosure } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import { ModalImage } from 'components/modalImage';
-import { loadImage } from 'services/file';
+
+import { ModalImage } from '@/components/modalImage';
+import { loadImage } from '@/services/file';
 
 export interface LazyImageProp extends ImageProps {
 	src: string;

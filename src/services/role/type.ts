@@ -1,6 +1,6 @@
-import { BaseParams, BaseResponseDetail, BaseResponseList } from 'services/type';
-import { PermistionAction } from 'variables/permission';
-import { Status } from 'variables/status';
+import { BaseParams, BaseResponseDetail, BaseResponseList } from '@/services/type';
+import { PermistionAction } from '@/variables/permission';
+import { Status } from '@/variables/status';
 
 export enum FeatureModule {
 	OPERATION_MANAGEMENT = 'OPERATION_MANAGEMENT',

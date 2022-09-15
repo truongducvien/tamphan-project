@@ -1,5 +1,5 @@
-import http from 'services/http';
-import { BaseResponseAction, BaseResponseDetail } from 'services/type';
+import http from '@/services/http';
+import { BaseResponseAction, BaseResponseDetail } from '@/services/type';
 
 import { IUser, IUserParams, IUserPayload, IUserResponse } from './type';
 

@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
 
 import { ButtonProps, Button, Input } from '@chakra-ui/react';
-import { useToastInstance } from 'components/toast';
 import { MdDownload, MdImportExport } from 'react-icons/md';
+
+import { useToastInstance } from '@/components/toast';
 
 export interface Props extends Omit<ButtonProps, 'onClick' | 'iconName'> {
 	onChangeFile?: (file: File) => void;

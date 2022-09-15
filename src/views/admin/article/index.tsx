@@ -3,16 +3,17 @@ import { useRef, useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, HStack, Input, Text } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { alert } from 'components/alertDialog/hook';
-import Card from 'components/card/Card';
-import Table, { IColumn } from 'components/table';
-import { useToastInstance } from 'components/toast';
-import { BaseComponentProps } from 'hocs/withPermission';
-import useActionPage from 'hooks/useActionPage';
-import { useActionPermission } from 'hooks/useActionPermission';
 import { MdLibraryAdd } from 'react-icons/md';
-import { deleteArticle, getArticle } from 'services/article';
-import { IArticle, StatusArticle, statusArticle, typeArticles } from 'services/article/type';
+
+import { alert } from '@/components/alertDialog/hook';
+import Card from '@/components/card/Card';
+import Table, { IColumn } from '@/components/table';
+import { useToastInstance } from '@/components/toast';
+import { BaseComponentProps } from '@/hocs/withPermission';
+import useActionPage from '@/hooks/useActionPage';
+import { useActionPermission } from '@/hooks/useActionPermission';
+import { deleteArticle, getArticle } from '@/services/article';
+import { IArticle, StatusArticle, statusArticle, typeArticles } from '@/services/article/type';
 
 const ArticleManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction, actions } = useActionPermission(request);

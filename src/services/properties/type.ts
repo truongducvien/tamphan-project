@@ -1,5 +1,5 @@
-import { BaseOption, Option } from 'components/form/PullDown';
-import { BaseParams, BaseResponseList } from 'services/type';
+import { BaseOption, Option } from '@/components/form/PullDown';
+import { BaseParams, BaseResponseList } from '@/services/type';
 
 export enum StatusProperty {
 	UNDER_CONSTRUCTION = 'UNDER_CONSTRUCTION',

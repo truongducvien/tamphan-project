@@ -1,11 +1,10 @@
 import React from 'react';
 
-// Chakra imports
 import { Flex, Box, Icon, Text, Spacer } from '@chakra-ui/react';
-// Custom components
-import bgMastercard from 'assets/img/dashboards/Debit.png';
-import Card, { Props as CardProps } from 'components/card/Card';
 import { RiMastercardFill } from 'react-icons/ri';
+
+import bgMastercard from '@/assets/img/dashboards/Debit.png';
+import Card, { Props as CardProps } from '@/components/card/Card';
 
 export interface Props extends CardProps {
 	exp: string;

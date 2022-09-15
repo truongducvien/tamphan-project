@@ -10,14 +10,15 @@ import {
 	BreadcrumbLink,
 	useColorModeValue,
 } from '@chakra-ui/react';
-import Footer from 'components/footer/FooterAdmin';
-// Layout components
-import Navbar from 'components/navbar/NavbarAdmin';
-import Sidebar from 'components/sidebar/Sidebar';
-import { SidebarContext } from 'contexts/SidebarContext';
-import { withPermission } from 'hocs/withPermission';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
-import routes, { Route as RootRoute } from 'routes';
+
+import Footer from '@/components/footer/FooterAdmin';
+// Layout components
+import Navbar from '@/components/navbar/NavbarAdmin';
+import Sidebar from '@/components/sidebar/Sidebar';
+import { SidebarContext } from '@/contexts/SidebarContext';
+import { withPermission } from '@/hocs/withPermission';
+import routes, { Route as RootRoute } from '@/routes';
 
 // Custom Chakra theme
 const Dashboard: React.FC = props => {
