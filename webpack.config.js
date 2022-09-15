@@ -150,7 +150,19 @@ module.exports = async (env, agrv) => {
 		},
 		plugins: isDev ? basePlugins : prodPlugins,
 		performance: {
-			maxEntrypointSize: 800000, //  Khi có 1 file build vượt quá giới hạn này (tính bằng byte) thì sẽ bị warning trên terminal.
+			maxEntrypointSize: 800000,
+		},
+		optimization: {
+			runtimeChunk: 'single',
+			splitChunks: {
+				cacheGroups: {
+					vendor: {
+						test: /[\\/]node_modules[\\/]/,
+						name: 'vendors',
+						chunks: 'all',
+					},
+				},
+			},
 		},
 	};
 };

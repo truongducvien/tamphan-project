@@ -7,6 +7,7 @@ export interface IOrganization {
 	name: string;
 	parentId: string;
 	updatedDate: string;
+	parentName: string;
 	areas: {
 		code: string;
 		id: string;

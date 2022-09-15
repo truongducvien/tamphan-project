@@ -34,7 +34,7 @@ import DefaultAuth from '@/layouts/auth/Default';
 import { BaseResponseAction } from '@/services/type';
 import { userResetPass, userVerifyToken } from '@/services/user';
 
-export const ChangePass: React.FC = () => {
+const ChangePass: React.FC = () => {
 	const [step, setStep] = useState(0);
 	const [otpToken, setOtp] = useState('');
 
@@ -300,3 +300,4 @@ export const ChangePass: React.FC = () => {
 		</DefaultAuth>
 	);
 };
+export default ChangePass;

@@ -45,7 +45,7 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		{ key: 'gender', label: 'Giới tính', cell: ({ gender }) => genderOptions.find(i => i.value === gender)?.label },
 		{ key: 'identityCardNumber', label: 'CMND/ CCCD/ HC' },
 		{ key: 'identityCreateDate', label: 'Ngày cấp', dateFormat: 'DD/MM/YYYY' },
-		{ key: 'identityLocationIssued', label: 'Nới cấp' },
+		{ key: 'identityLocationIssued', label: 'Nơi cấp' },
 		{ key: 'property', label: 'Mã căn hộ', cell: ({ property }) => property?.code },
 		{ key: 'type', label: 'Vai trò', tag: ({ type }) => residentType.find(i => i.value === type) },
 		{ key: 'email', label: 'Email' },
