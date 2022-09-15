@@ -3,18 +3,19 @@ import { useRef, useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, Input, Stack, Text } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { alert } from 'components/alertDialog/hook';
-import Card from 'components/card/Card';
-import { LazyImage } from 'components/image';
-import Table, { IColumn } from 'components/table';
-import { useToastInstance } from 'components/toast';
-import { BaseComponentProps } from 'hocs/withPermission';
-import useActionPage from 'hooks/useActionPage';
-import { useActionPermission } from 'hooks/useActionPermission';
 import { MdLibraryAdd } from 'react-icons/md';
-import { deleteFacilityGroup, getFacilityGroup } from 'services/facility/group';
-import { IFacilityGroup } from 'services/facility/group/type';
-import { statusOption2 } from 'variables/status';
+
+import { alert } from '@/components/alertDialog/hook';
+import Card from '@/components/card/Card';
+import { LazyImage } from '@/components/image';
+import Table, { IColumn } from '@/components/table';
+import { useToastInstance } from '@/components/toast';
+import { BaseComponentProps } from '@/hocs/withPermission';
+import useActionPage from '@/hooks/useActionPage';
+import { useActionPermission } from '@/hooks/useActionPermission';
+import { deleteFacilityGroup, getFacilityGroup } from '@/services/facility/group';
+import { IFacilityGroup } from '@/services/facility/group/type';
+import { statusOption2 } from '@/variables/status';
 
 const FacilityGroupManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction, actions } = useActionPermission(request);

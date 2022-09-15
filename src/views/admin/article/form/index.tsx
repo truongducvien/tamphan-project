@@ -3,27 +3,29 @@ import { useRef, useState } from 'react';
 
 import { Box, Button, Flex, FormControl, FormLabel, HStack, Input, Link, SimpleGrid, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { alert } from 'components/alertDialog/hook';
-import Card from 'components/card/Card';
-import { EditorRef, EditorWithRef } from 'components/editor';
-import UploadImage, { UploadImageRef } from 'components/fileUpload';
-import { FormContainer } from 'components/form';
-import { Loading } from 'components/form/Loading';
-import { Option, PullDownHookForm } from 'components/form/PullDown';
-import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
-import { TextFieldHookForm } from 'components/form/TextField';
-import { PullDown } from 'components/pulldown';
-import { useToastInstance } from 'components/toast';
-import { formatDate } from 'helpers/dayjs';
-import { BaseComponentProps } from 'hocs/withPermission';
-import useActionPage from 'hooks/useActionPage';
-import { useActionPermission } from 'hooks/useActionPermission';
-import { useDebounce } from 'hooks/useDebounce';
-import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
-import { getArea } from 'services/area';
-import { IArea, IAreaParams } from 'services/area/type';
-import { createArticle, getArticleById, updateArticle } from 'services/article';
+import * as Yup from 'yup';
+
+import { alert } from '@/components/alertDialog/hook';
+import Card from '@/components/card/Card';
+import { EditorRef, EditorWithRef } from '@/components/editor';
+import UploadImage, { UploadImageRef } from '@/components/fileUpload';
+import { FormContainer } from '@/components/form';
+import { Loading } from '@/components/form/Loading';
+import { Option, PullDownHookForm } from '@/components/form/PullDown';
+import { TextAreaFieldHookForm } from '@/components/form/TextAreaField';
+import { TextFieldHookForm } from '@/components/form/TextField';
+import { PullDown } from '@/components/pulldown';
+import { useToastInstance } from '@/components/toast';
+import { formatDate } from '@/helpers/dayjs';
+import { BaseComponentProps } from '@/hocs/withPermission';
+import useActionPage from '@/hooks/useActionPage';
+import { useActionPermission } from '@/hooks/useActionPermission';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useLoadMore } from '@/hooks/useLoadMore';
+import { getArea } from '@/services/area';
+import { IArea, IAreaParams } from '@/services/area/type';
+import { createArticle, getArticleById, updateArticle } from '@/services/article';
 import {
 	IArticlePayload,
 	NotificationWays,
@@ -32,9 +34,8 @@ import {
 	statusArticle,
 	TypeArticle,
 	typeArticles,
-} from 'services/article/type';
-import { loadImage, uploadFile } from 'services/file';
-import * as Yup from 'yup';
+} from '@/services/article/type';
+import { loadImage, uploadFile } from '@/services/file';
 
 const validationSchema = Yup.object({
 	title: Yup.string().required('Vui lòng nhập tiêu đề'),

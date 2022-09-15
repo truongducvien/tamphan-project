@@ -2,9 +2,10 @@
 import React from 'react';
 
 import { Box, Flex, Stack } from '@chakra-ui/react';
+
 //   Custom components
-import Brand from 'components/sidebar/components/Brand';
-import Links, { Props as LinkProps } from 'components/sidebar/components/Links';
+import Brand from '@/components/sidebar/components/Brand';
+import Links, { Props as LinkProps } from '@/components/sidebar/components/Links';
 
 // FUNCTIONS
 

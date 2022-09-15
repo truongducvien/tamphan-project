@@ -3,22 +3,23 @@ import { useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import Card from 'components/card/Card';
-import { FormContainer } from 'components/form';
-import { Option, PullDownHookForm } from 'components/form/PullDown';
-import { TextFieldHookForm } from 'components/form/TextField';
-import Table, { IColumn } from 'components/table';
-import { BaseComponentProps } from 'hocs/withPermission';
-import useActionPage from 'hooks/useActionPage';
-import { useActionPermission } from 'hooks/useActionPermission';
-import { useDebounce } from 'hooks/useDebounce';
-import { useLoadMore } from 'hooks/useLoadMore';
 import { MdImportExport, MdLibraryAdd } from 'react-icons/md';
-import { getArea } from 'services/area';
-import { IArea, IAreaParams } from 'services/area/type';
-import { getProperty } from 'services/properties';
-import { IProperty, IPropertyParams, statusProperty } from 'services/properties/type';
 import * as Yup from 'yup';
+
+import Card from '@/components/card/Card';
+import { FormContainer } from '@/components/form';
+import { Option, PullDownHookForm } from '@/components/form/PullDown';
+import { TextFieldHookForm } from '@/components/form/TextField';
+import Table, { IColumn } from '@/components/table';
+import { BaseComponentProps } from '@/hocs/withPermission';
+import useActionPage from '@/hooks/useActionPage';
+import { useActionPermission } from '@/hooks/useActionPermission';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useLoadMore } from '@/hooks/useLoadMore';
+import { getArea } from '@/services/area';
+import { IArea, IAreaParams } from '@/services/area/type';
+import { getProperty } from '@/services/properties';
+import { IProperty, IPropertyParams, statusProperty } from '@/services/properties/type';
 
 interface SearchForm {
 	code?: string;
@@ -60,7 +61,7 @@ const PropertyManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		{ key: 'block', label: 'Khối' },
 		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => statusProperty.find(i => i.value === status) },
 		{ key: 'acreage', label: 'Diện tích' },
-		{ key: 'numberOfBedRoom', label: 'Sô phòng ngủ' },
+		{ key: 'numberOfBedRoom', label: 'SỐ PHÒNG NGỦ' },
 		{ key: 'numberOfBathRoom', label: 'Số phòng tắm' },
 		{ key: 'numberOfFloor', label: 'Số Tầng' },
 		{ key: 'areaName', label: 'Phân khu' },

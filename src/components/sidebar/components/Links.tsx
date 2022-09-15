@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 
 import { Box, Flex, HStack, Text, useColorModeValue } from '@chakra-ui/react';
 import { NavLink, useLocation } from 'react-router-dom';
-// chakra imports
-import { Route as RootRoute } from 'routes';
-import { useAppSelector } from 'store';
+
+import { Route as RootRoute } from '@/routes';
+import { useAppSelector } from '@/store';
 
 export interface Route extends RootRoute {
 	category?: boolean;

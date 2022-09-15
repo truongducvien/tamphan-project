@@ -22,17 +22,17 @@ import {
 } from '@chakra-ui/react';
 // Custom components
 import { useMutation } from '@tanstack/react-query';
-import illustration from 'assets/img/auth/auth.png';
 import { AxiosError } from 'axios';
-import { alert } from 'components/alertDialog/hook';
-import { HSeparator } from 'components/separator/Separator';
-import DefaultAuth from 'layouts/auth/Default';
-// Assets
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { useHistory } from 'react-router-dom';
-import { BaseResponseAction } from 'services/type';
-import { userForgotPass, userResetPass, userVerifyToken } from 'services/user';
+
+import illustration from '@/assets/img/auth/auth.png';
+import { alert } from '@/components/alertDialog/hook';
+import { HSeparator } from '@/components/separator/Separator';
+import DefaultAuth from '@/layouts/auth/Default';
+import { BaseResponseAction } from '@/services/type';
+import { userResetPass, userVerifyToken } from '@/services/user';
 
 export const ChangePass: React.FC = () => {
 	const [step, setStep] = useState(0);

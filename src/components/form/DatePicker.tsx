@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 
 import { FormControl, FormErrorMessage, FormLabel, Input, InputProps } from '@chakra-ui/react';
-import { DatePicker, IDatePickerProps } from 'components/date';
-import { RangTimePicker, TimePicker } from 'components/timepicker';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
+
+import { DatePicker, IDatePickerProps } from '@/components/date';
+import { RangTimePicker, TimePicker } from '@/components/timepicker';
 
 export interface DatePickerHookFormProps extends InputProps, Omit<IDatePickerProps, 'onChange'> {
 	name: string;

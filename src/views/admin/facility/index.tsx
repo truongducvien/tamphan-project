@@ -3,27 +3,28 @@ import { useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { alert } from 'components/alertDialog/hook';
-import Card from 'components/card/Card';
-import { FormContainer } from 'components/form';
-import { BaseOption, PullDownHookForm } from 'components/form/PullDown';
-import { TextFieldHookForm } from 'components/form/TextField';
-import Table, { IColumn } from 'components/table';
-import { useToastInstance } from 'components/toast';
-import { currency } from 'helpers/currency';
-import { BaseComponentProps } from 'hocs/withPermission';
-import useActionPage from 'hooks/useActionPage';
-import { useActionPermission } from 'hooks/useActionPermission';
-import { useDebounce } from 'hooks/useDebounce';
-import { useLoadMore } from 'hooks/useLoadMore';
 import { MdLibraryAdd } from 'react-icons/md';
-import { getArea } from 'services/area';
-import { IArea, IAreaParams } from 'services/area/type';
-import { deleteFacility, getFacility } from 'services/facility';
-import { getFacilityGroup } from 'services/facility/group';
-import { IFacilityGroup, IFacilityGroupParams } from 'services/facility/group/type';
-import { IFacility } from 'services/facility/type';
-import { statusOption2 } from 'variables/status';
+
+import { alert } from '@/components/alertDialog/hook';
+import Card from '@/components/card/Card';
+import { FormContainer } from '@/components/form';
+import { BaseOption, PullDownHookForm } from '@/components/form/PullDown';
+import { TextFieldHookForm } from '@/components/form/TextField';
+import Table, { IColumn } from '@/components/table';
+import { useToastInstance } from '@/components/toast';
+import { currency } from '@/helpers/currency';
+import { BaseComponentProps } from '@/hocs/withPermission';
+import useActionPage from '@/hooks/useActionPage';
+import { useActionPermission } from '@/hooks/useActionPermission';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useLoadMore } from '@/hooks/useLoadMore';
+import { getArea } from '@/services/area';
+import { IArea, IAreaParams } from '@/services/area/type';
+import { deleteFacility, getFacility } from '@/services/facility';
+import { getFacilityGroup } from '@/services/facility/group';
+import { IFacilityGroup, IFacilityGroupParams } from '@/services/facility/group/type';
+import { IFacility } from '@/services/facility/type';
+import { statusOption2 } from '@/variables/status';
 
 const COLUMNS: Array<IColumn<IFacility>> = [
 	{ key: 'name', label: 'Tên tiện ích' },

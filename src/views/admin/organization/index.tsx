@@ -3,15 +3,16 @@ import { useRef, useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, HStack, Input, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import Card from 'components/card/Card';
-import Table, { IColumn } from 'components/table';
-import { BaseComponentProps } from 'hocs/withPermission';
-import useActionPage from 'hooks/useActionPage';
-import { useActionPermission } from 'hooks/useActionPermission';
 import { MdLibraryAdd } from 'react-icons/md';
-import { getOrganization } from 'services/organizations';
-import { IOrganization } from 'services/organizations/type';
-import { PermistionAction } from 'variables/permission';
+
+import Card from '@/components/card/Card';
+import Table, { IColumn } from '@/components/table';
+import { BaseComponentProps } from '@/hocs/withPermission';
+import useActionPage from '@/hooks/useActionPage';
+import { useActionPermission } from '@/hooks/useActionPermission';
+import { getOrganization } from '@/services/organizations';
+import { IOrganization } from '@/services/organizations/type';
+import { PermistionAction } from '@/variables/permission';
 
 const OrganizationManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction, actions } = useActionPermission(request);

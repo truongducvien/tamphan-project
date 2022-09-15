@@ -1,7 +1,7 @@
-import { Gender } from 'services/resident/type';
-import { IRole } from 'services/role/type';
-import { BaseParams, BaseResponseList } from 'services/type';
-import { Status } from 'variables/status';
+import { Gender } from '@/services/resident/type';
+import { IRole } from '@/services/role/type';
+import { BaseParams, BaseResponseList } from '@/services/type';
+import { Status } from '@/variables/status';
 
 export interface IUser {
 	accessToken: string;

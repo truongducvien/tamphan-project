@@ -137,6 +137,7 @@ export const DashboardLogo = createIcon({
 	displayName: 'DashboardLogo',
 	viewBox: '0 0 1000 257',
 	path: (
+		// eslint-disable-next-line react/no-unknown-property
 		<g width="998" height="257" viewBox="0 0 998 257" fill="none">
 			<g clipPath="url(#clip0)">
 				<path

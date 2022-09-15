@@ -25,29 +25,30 @@ import {
 	Flex,
 } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import Card from 'components/card/Card';
-import { FormContainer } from 'components/form';
-import { Loading } from 'components/form/Loading';
-import { Option, PullDownHookForm } from 'components/form/PullDown';
-import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
-import { TextFieldHookForm } from 'components/form/TextField';
-import { PullDown } from 'components/pulldown';
-import { useToastInstance } from 'components/toast';
-import { formatDate } from 'helpers/dayjs';
-import { BaseComponentProps } from 'hocs/withPermission';
-import useActionPage from 'hooks/useActionPage';
-import { useActionPermission } from 'hooks/useActionPermission';
-import { useDebounce } from 'hooks/useDebounce';
-import useDidMount from 'hooks/useDidMount';
-import { useLoadMore } from 'hooks/useLoadMore';
 import { useHistory } from 'react-router-dom';
-import { getArea } from 'services/area';
-import { IArea, IAreaParams } from 'services/area/type';
-import { createProperty, getPropertyById, updateProperty, updateOwner } from 'services/properties';
-import { IPropertyPayload, StatusProperty, statusProperty } from 'services/properties/type';
-import { getResident, getResidentOwner } from 'services/resident';
-import { gender, identityCardType, IResident, IResidentParams } from 'services/resident/type';
 import * as Yup from 'yup';
+
+import Card from '@/components/card/Card';
+import { FormContainer } from '@/components/form';
+import { Loading } from '@/components/form/Loading';
+import { Option, PullDownHookForm } from '@/components/form/PullDown';
+import { TextAreaFieldHookForm } from '@/components/form/TextAreaField';
+import { TextFieldHookForm } from '@/components/form/TextField';
+import { PullDown } from '@/components/pulldown';
+import { useToastInstance } from '@/components/toast';
+import { formatDate } from '@/helpers/dayjs';
+import { BaseComponentProps } from '@/hocs/withPermission';
+import useActionPage from '@/hooks/useActionPage';
+import { useActionPermission } from '@/hooks/useActionPermission';
+import { useDebounce } from '@/hooks/useDebounce';
+import useDidMount from '@/hooks/useDidMount';
+import { useLoadMore } from '@/hooks/useLoadMore';
+import { getArea } from '@/services/area';
+import { IArea, IAreaParams } from '@/services/area/type';
+import { createProperty, getPropertyById, updateProperty, updateOwner } from '@/services/properties';
+import { IPropertyPayload, StatusProperty, statusProperty } from '@/services/properties/type';
+import { getResident, getResidentOwner } from '@/services/resident';
+import { gender, identityCardType, IResident, IResidentParams } from '@/services/resident/type';
 
 import { ResidentTab } from './ResidentTab';
 

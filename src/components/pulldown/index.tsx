@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Text, useColorModeValue } from '@chakra-ui/react';
 import { Select, GroupBase, SelectInstance } from 'chakra-react-select';
-import { useForceUpdate } from 'hooks/useForceUpdate';
+
+import { useForceUpdate } from '@/hooks/useForceUpdate';
 
 export interface PullDownReference {
 	reset: () => void;

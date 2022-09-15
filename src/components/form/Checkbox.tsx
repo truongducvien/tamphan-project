@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
 
 import { Checkbox, CheckboxProps, FormControl, FormErrorMessage } from '@chakra-ui/react';
-import useEffectWithoutMounted from 'hooks/useEffectWithoutMounted';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
+
+import useEffectWithoutMounted from '@/hooks/useEffectWithoutMounted';
 
 export interface CheckboxHookFormProps extends CheckboxProps {
 	name: string;

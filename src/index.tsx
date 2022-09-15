@@ -1,19 +1,20 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { UseAlert } from 'components/alertDialog/hook';
-import DialogServiceProvider from 'components/alertDialog/provider';
-import { Toastify } from 'components/toast';
-import { withAuth } from 'hocs/withAuth';
-import { InitialApp } from 'layouts';
-import AdminLayout from 'layouts/admin';
-import AuthLayout from 'layouts/auth';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+
+import { UseAlert } from '@/components/alertDialog/hook';
+import DialogServiceProvider from '@/components/alertDialog/provider';
+import { Toastify } from '@/components/toast';
+import { withAuth } from '@/hocs/withAuth';
+import { InitialApp } from '@/layouts';
+import AdminLayout from '@/layouts/admin';
+import AuthLayout from '@/layouts/auth';
 import './index.scss';
-import queryClient from 'services/clientProvider';
-import { store } from 'store';
-import { NotFound } from 'views/NotFound';
+import queryClient from '@/services/clientProvider';
+import { store } from '@/store';
+import { NotFound } from '@/views/NotFound';
 
 import theme from './theme/theme';
 

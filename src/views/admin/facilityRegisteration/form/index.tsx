@@ -2,21 +2,27 @@ import { useState } from 'react';
 
 import { Box, Button, HStack, Stack, useDisclosure } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import AlertDialog from 'components/alertDialog';
-import Card from 'components/card/Card';
-import { FormContainer } from 'components/form';
-import { Loading } from 'components/form/Loading';
-import { TextAreaFieldHookForm } from 'components/form/TextAreaField';
-import { TextFieldHookForm } from 'components/form/TextField';
-import { PullDown } from 'components/pulldown';
-import { useToastInstance } from 'components/toast';
-import { currency } from 'helpers/currency';
-import { BaseComponentProps } from 'hocs/withPermission';
-import useActionPage from 'hooks/useActionPage';
-import { useActionPermission } from 'hooks/useActionPermission';
 import { useHistory } from 'react-router-dom';
-import { confirmFacilityReById, getFacilityReById } from 'services/facilityRegisteration';
-import { PaymentMethod, paymentMethods, statusFacilityRe, StatusFacilityRe } from 'services/facilityRegisteration/type';
+
+import AlertDialog from '@/components/alertDialog';
+import Card from '@/components/card/Card';
+import { FormContainer } from '@/components/form';
+import { Loading } from '@/components/form/Loading';
+import { TextAreaFieldHookForm } from '@/components/form/TextAreaField';
+import { TextFieldHookForm } from '@/components/form/TextField';
+import { PullDown } from '@/components/pulldown';
+import { useToastInstance } from '@/components/toast';
+import { currency } from '@/helpers/currency';
+import { BaseComponentProps } from '@/hocs/withPermission';
+import useActionPage from '@/hooks/useActionPage';
+import { useActionPermission } from '@/hooks/useActionPermission';
+import { confirmFacilityReById, getFacilityReById } from '@/services/facilityRegisteration';
+import {
+	PaymentMethod,
+	paymentMethods,
+	statusFacilityRe,
+	StatusFacilityRe,
+} from '@/services/facilityRegisteration/type';
 
 const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction } = useActionPermission(request);

@@ -1,9 +1,10 @@
 import React from 'react';
 
 import { Flex, Heading, Image } from '@chakra-ui/react';
-import { FeatureModule } from 'services/role/type';
-import { useAppSelector } from 'store';
-import { PermistionAction } from 'variables/permission';
+
+import { FeatureModule } from '@/services/role/type';
+import { useAppSelector } from '@/store';
+import { PermistionAction } from '@/variables/permission';
 
 import notFound from '../assets/img/layout/404.png';
 

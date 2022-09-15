@@ -17,15 +17,16 @@ import {
 	useColorModeValue,
 } from '@chakra-ui/react';
 // Custom components
-import illustration from 'assets/img/auth/auth.png';
-import { HSeparator } from 'components/separator/Separator';
-import DefaultAuth from 'layouts/auth/Default';
-// Assets
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { NavLink, Redirect } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from 'store';
-import { userLogin } from 'store/actionCreators';
+
+import illustration from '@/assets/img/auth/auth.png';
+import { HSeparator } from '@/components/separator/Separator';
+import DefaultAuth from '@/layouts/auth/Default';
+// Assets
+import { useAppDispatch, useAppSelector } from '@/store';
+import { userLogin } from '@/store/actionCreators';
 
 const SignIn: React.FC = () => {
 	const textColor = useColorModeValue('navy.700', 'white');

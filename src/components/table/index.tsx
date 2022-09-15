@@ -17,13 +17,14 @@ import {
 	TableProps as BaseProps,
 } from '@chakra-ui/react';
 import { CSSObject } from '@emotion/react';
-import { Option } from 'components/form/PullDown';
-import Pagination, { PaginationProps } from 'components/pagination';
-import { Tag } from 'components/tag';
 import dayjs from 'dayjs';
 import { FaTrashAlt } from 'react-icons/fa';
 import { MdBorderColor, MdPreview } from 'react-icons/md';
-import { PermistionAction } from 'variables/permission';
+
+import { Option } from '@/components/form/PullDown';
+import Pagination, { PaginationProps } from '@/components/pagination';
+import { Tag } from '@/components/tag';
+import { PermistionAction } from '@/variables/permission';
 
 export type DataTable = { [k: string]: boolean | number | string | undefined | DataTable };
 

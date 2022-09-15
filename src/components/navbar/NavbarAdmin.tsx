@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react';
-import AdminNavbarLinks from 'components/navbar/NavbarLinksAdmin';
-import SidebarBrand from 'components/sidebar/components/Brand';
-import { SidebarResponsive } from 'components/sidebar/Sidebar';
-import routes from 'routes';
+
+import AdminNavbarLinks from '@/components/navbar/NavbarLinksAdmin';
+import { SidebarResponsive } from '@/components/sidebar/Sidebar';
+import routes from '@/routes';
 
 export interface Props {
 	secondary?: boolean;

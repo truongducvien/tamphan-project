@@ -3,18 +3,19 @@ import { useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import Card from 'components/card/Card';
-import { FormContainer } from 'components/form';
-import { TextFieldHookForm } from 'components/form/TextField';
-import Table, { IColumn } from 'components/table';
-import { BaseComponentProps } from 'hocs/withPermission';
-import useActionPage from 'hooks/useActionPage';
-import { useActionPermission } from 'hooks/useActionPermission';
 import { MdLibraryAdd } from 'react-icons/md';
-import { getRole } from 'services/role';
-import { IRole, IRoleParams } from 'services/role/type';
-import { PermistionAction } from 'variables/permission';
-import { statusOption2 } from 'variables/status';
+
+import Card from '@/components/card/Card';
+import { FormContainer } from '@/components/form';
+import { TextFieldHookForm } from '@/components/form/TextField';
+import Table, { IColumn } from '@/components/table';
+import { BaseComponentProps } from '@/hocs/withPermission';
+import useActionPage from '@/hooks/useActionPage';
+import { useActionPermission } from '@/hooks/useActionPermission';
+import { getRole } from '@/services/role';
+import { IRole, IRoleParams } from '@/services/role/type';
+import { PermistionAction } from '@/variables/permission';
+import { statusOption2 } from '@/variables/status';
 
 type DaraForm = Omit<IRoleParams, 'page' | 'size'>;
 

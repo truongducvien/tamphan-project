@@ -1,5 +1,5 @@
-import http from 'services/http';
-import { BaseResponseAction } from 'services/type';
+import http from '@/services/http';
+import { BaseResponseAction } from '@/services/type';
 
 import { IRoleDetail, IRoleParams, IRolePayload, IRoleResponse } from './type';
 

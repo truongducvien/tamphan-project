@@ -18,13 +18,14 @@ import {
 	useDisclosure,
 	SimpleGrid,
 } from '@chakra-ui/react';
-import IconBox from 'components/icons/IconBox';
-import { HorizonLogo } from 'components/icons/Icons';
-import { SidebarResponsive, Props as SidebarResponsiveProps } from 'components/sidebar/Sidebar';
-import { SidebarContext } from 'contexts/SidebarContext';
 import { GoChevronDown, GoChevronRight } from 'react-icons/go';
 import { NavLink } from 'react-router-dom';
-import routes, { Route } from 'routes';
+
+import IconBox from '@/components/icons/IconBox';
+import { HorizonLogo } from '@/components/icons/Icons';
+import { SidebarResponsive, Props as SidebarResponsiveProps } from '@/components/sidebar/Sidebar';
+import { SidebarContext } from '@/contexts/SidebarContext';
+import routes, { Route } from '@/routes';
 
 export interface Props extends SidebarResponsiveProps {
 	logo: string;
