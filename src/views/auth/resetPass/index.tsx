@@ -34,7 +34,7 @@ import DefaultAuth from '@/layouts/auth/Default';
 import { BaseResponseAction } from '@/services/type';
 import { userForgotPass, userResetPass, userVerifyToken } from '@/services/user';
 
-export const ResetPassword: React.FC = () => {
+const ResetPassword: React.FC = () => {
 	const [step, setStep] = useState(0);
 	const [otpToken, setOtp] = useState('');
 
@@ -362,3 +362,5 @@ export const ResetPassword: React.FC = () => {
 		</DefaultAuth>
 	);
 };
+
+export default ResetPassword;

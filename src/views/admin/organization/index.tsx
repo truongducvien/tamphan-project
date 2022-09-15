@@ -24,7 +24,7 @@ const OrganizationManagement: React.FC<BaseComponentProps> = ({ request }) => {
 
 	const COLUMNS: Array<IColumn<IOrganization>> = [
 		{ key: 'name', label: 'Tên đơn vị' },
-		{ key: 'parentId', label: 'Đơn vị trực thuộc' },
+		{ key: 'parentName', label: 'Đơn vị trực thuộc' },
 		{ key: 'description', label: 'Mô tả' },
 		{ key: 'createdDate', label: 'Ngày tạo', dateFormat: 'DD/MM/YYYY' },
 	];
