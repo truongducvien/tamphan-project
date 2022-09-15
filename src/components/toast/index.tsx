@@ -23,5 +23,13 @@ export const useToastInstance = (options?: UseToastOptions) => {
 		toastId = toastInstance({ ...defaultToast, ...props });
 	};
 
-	return { toast: addToast, updateToast: update };
+	const toastAsync = async (props?: UseToastOptions) =>
+		new Promise<void>(rej => {
+			toastId = toastInstance({ ...defaultToast, ...props });
+			setTimeout(() => {
+				rej();
+			}, 1000);
+		});
+
+	return { toast: addToast, toastAsync, updateToast: update };
 };

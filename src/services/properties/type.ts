@@ -26,19 +26,19 @@ export type RelationshipWithOwner = keyof typeof Relationship;
 
 export const relationshipWithOwner: Array<BaseOption<RelationshipWithOwner>> = [
 	{
-		label: 'Vợ',
+		label: 'Vợ/Chồng',
 		value: 'WIFEHUSBAND',
 	},
 	{
-		label: 'Cha',
+		label: 'Cha/Mẹ',
 		value: 'PARENTS',
 	},
 	{
-		label: 'Anh/chị ruột',
+		label: 'Anh/Chị/Em ruột',
 		value: 'SIBLINGS',
 	},
 	{
-		label: 'Anh/chị họ',
+		label: 'Anh/Chị/Em họ',
 		value: 'COUSIN',
 	},
 	{
@@ -54,11 +54,11 @@ export const relationshipWithOwner: Array<BaseOption<RelationshipWithOwner>> = [
 		value: 'GRANDPARENTS',
 	},
 	{
-		label: 'Chú/bác',
+		label: 'Cô/Dì/Chú/Bác',
 		value: 'AUNTUNCLE',
 	},
 	{
-		label: 'Người thuê',
+		label: 'Khách thuê',
 		value: 'TENANT',
 	},
 	{

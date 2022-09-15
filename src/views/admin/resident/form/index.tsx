@@ -277,7 +277,6 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 							name="uyquyen"
 							variant="admin"
 						/>
-						<TextFieldHookForm label="Ngày cập nhật" isDisabled name="createAt" variant="admin" />
 					</SimpleGrid>
 					<Box mt={3}>
 						{/* <Swich label="Cho phép sử dụng NOVAID" id="useNovaId" /> */}

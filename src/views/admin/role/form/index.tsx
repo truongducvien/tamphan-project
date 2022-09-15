@@ -154,7 +154,7 @@ const permissions: Array<PermissionProps> = [
 		id: '10',
 		value: 'FACILITY_GROUP_MANAGEMENT',
 		title: 'Quản lý loại tiện ích',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE'],
 	},
 	{
 		id: '11',

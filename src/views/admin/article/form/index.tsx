@@ -69,7 +69,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 	const [type, setType] = useState<Option | undefined>(typeArticles[0]);
 
 	const { changeAction, id, action, goback } = useActionPage();
-	const { toast } = useToastInstance();
+	const { toast, toastAsync } = useToastInstance();
 
 	const [keyword, setKeyword] = useState('');
 	const keywordDebounce = useDebounce(keyword);
@@ -90,7 +90,6 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 		isError,
 		isLoading,
 		isRefetching,
-		refetch,
 	} = useQuery(['detail', id], () => getArticleById(id || ''), {
 		enabled: !!id,
 		onSuccess: ({ data }) => {
@@ -110,8 +109,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 	const handelCreate = async (data: Omit<IArticlePayload, 'id'>, reset: () => void) => {
 		try {
 			await mutationCreate(data);
-			toast({ title: 'Tạo mới thành công' });
-			reset();
+			await toastAsync({ title: 'Tạo mới thành công' });
 			goback();
 		} catch {
 			toast({ title: 'Tạo mới thất bại', status: 'error' });
@@ -122,8 +120,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 		const prepareData = { ...data, id: id || '' };
 		try {
 			await mutationUpdate(prepareData);
-			toast({ title: 'Cập nhật thành công' });
-			refetch();
+			await toastAsync({ title: 'Cập nhật thành công' });
 			goback();
 		} catch {
 			toast({ title: 'Cập nhật thất bại', status: 'error' });
@@ -180,8 +177,8 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 		});
 		try {
 			await mutationUpdate(prepareData);
-			toast({ title: `${text} bài viết thành công` });
-			refetch();
+			await toastAsync({ title: `${text} bài viết thành công` });
+			goback();
 		} catch {
 			toast({ title: `${text} thất bại', status: 'error` });
 		}

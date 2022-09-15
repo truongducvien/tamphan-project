@@ -36,7 +36,6 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 	const mapImageRef = useRef<UploadImageRef>(null);
 	const avatarImageRef = useRef<UploadImageRef>(null);
 	const cardImageRef = useRef<UploadImageRef>(null);
-
 	const { changeAction, id, action, goback } = useActionPage();
 	const {
 		data: detailData,
@@ -83,6 +82,14 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 			mapLink: mapImageRef.current?.onSubmit().files,
 			residentCardTemplateLink: cardImageRef.current?.onSubmit().files[0],
 		};
+
+		if (!dataImage.residentCardTemplateLink) {
+			toast({
+				title: 'Vui lòng chọn Ảnh thẻ cư dân',
+				status: 'error',
+			});
+			return;
+		}
 		const prepareData = { ...data, type: data.type.value as TypeArea, ...dataImage };
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -171,7 +178,7 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 								defaultValue={defaultData?.avatarLink ? [defaultData?.avatarLink] : []}
 							/>
 						</FormControl>
-						<FormControl>
+						<FormControl isRequired>
 							<FormLabel>Ảnh thẻ cư dân</FormLabel>
 							<UploadImage
 								ref={cardImageRef}
