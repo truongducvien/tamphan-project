@@ -305,7 +305,11 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 						<Button
 							type="button"
 							hidden={
-								!(action === 'detail' && detailData?.data?.status !== StatusArticle.PUBLISH) || !permistionAction.UPDATE
+								!(
+									action === 'detail' &&
+									detailData?.data?.status !== StatusArticle.PUBLISH &&
+									detailData?.data?.status !== StatusArticle.CANCEL
+								) || !permistionAction.UPDATE
 							}
 							onClick={() => changeAction('edit', id || '')}
 							variant="brand"
