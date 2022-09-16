@@ -56,6 +56,9 @@ const validationProperty = Yup.object({
 	code: Yup.string().required('Vui lòng nhập tên căn hộ'),
 	areaId: Yup.object().shape({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn phân khu') }),
 	status: Yup.object().shape({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn trạng thái') }),
+	acreage: Yup.string().required('Vui lòng nhập diện tích đất'),
+	inUserAcreage: Yup.string().required('Vui lòng nhập diện tích sử dụng'),
+	type: Yup.string().required('Vui lòng nhập loại căn hộ'),
 });
 
 interface DataForm {
@@ -264,9 +267,10 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm isDisabled={isDisabled} label="Loại căn hộ" name="type" />
+									<TextFieldHookForm isRequired isDisabled={isDisabled} label="Loại căn hộ" name="type" />
 									<PullDownHookForm
 										isDisabled={isDisabled}
+										isRequired
 										label="Tình trạng xây dựng"
 										name="status"
 										options={statusProperty}
@@ -308,7 +312,8 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 										isDisabled={isDisabled}
 										type="number"
 										step={0}
-										label="Diện tích đất"
+										isRequired
+										label="Diện tích đất (m2)"
 										name="acreage"
 										variant="admin"
 									/>
@@ -331,6 +336,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 										isDisabled={isDisabled}
 										type="number"
 										step={0}
+										isRequired
 										label="Diện tích sử dụng"
 										name="inUserAcreage"
 										variant="admin"
@@ -342,14 +348,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm
-										isDisabled={isDisabled}
-										type="number"
-										step={0}
-										label="Địa chỉ"
-										name="address"
-										variant="admin"
-									/>
+									<TextFieldHookForm isDisabled={isDisabled} label="Địa chỉ" name="address" variant="admin" />
 									<TextFieldHookForm
 										isDisabled={isDisabled}
 										type="number"
@@ -392,7 +391,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 										type="number"
 										step={0}
 										label="Số lượng thẻ cư dân tối đa"
-										name="maxResident"
+										name="maxResidentCard"
 										variant="admin"
 									/>
 									<TextAreaFieldHookForm isDisabled={isDisabled} label="Mô tả" name="description" variant="admin" />

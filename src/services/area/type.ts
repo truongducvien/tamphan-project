@@ -23,6 +23,7 @@ export enum TypeArea {
 	VILLA = 'VILLA',
 	SHOP_HOUSE = 'SHOP_HOUSE',
 	SINGLE_VILLA = 'SINGLE_VILLA',
+	DOUBLE_VILLA = 'DOUBLE_VILLA',
 	TOWN_HOUSE = 'TOWN_HOUSE',
 }
 
@@ -36,8 +37,12 @@ export const typeAreas: Array<Option> = [
 		value: TypeArea.SHOP_HOUSE,
 	},
 	{
-		label: 'Biệt thự Đơn lập',
+		label: 'Biệt thự đơn lập',
 		value: TypeArea.SINGLE_VILLA,
+	},
+	{
+		label: 'Biệt thự song lập',
+		value: TypeArea.DOUBLE_VILLA,
 	},
 	{
 		label: 'Nhà Phố',
