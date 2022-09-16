@@ -19,7 +19,7 @@ import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên phân khu'),
-	code: Yup.string().required('Vui lòng nhập mã phân khu'),
+	code: Yup.string().required('Vui lòng nhập mã phân khu').length(3, 'Mã phân khu ít nhất 3 kí tự'),
 	contactPhone: Yup.number().required('Vui lòng nhập SDT').typeError('Vui lòng nhập số điện thoại'),
 	contactEmail: Yup.string().email('Sai định dạng email').nullable(),
 	type: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn loại BDS') }).required(
@@ -85,7 +85,14 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 
 		if (!dataImage.residentCardTemplateLink) {
 			toast({
-				title: 'Vui lòng chọn Ảnh thẻ cư dân',
+				title: 'Vui lòng chọn ảnh thẻ cư dân',
+				status: 'error',
+			});
+			return;
+		}
+		if (!dataImage.avatarLink) {
+			toast({
+				title: 'Vui lòng chọn avatar',
 				status: 'error',
 			});
 			return;
@@ -98,7 +105,11 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 
 	if (!!id && (isFetching || isError || isLoading)) return <Loading />;
 
-	const defaultData = { ...detailData?.data, type: typeAreas.find(i => i.value === detailData?.data?.type) };
+	const defaultData = {
+		...detailData?.data,
+		contactEmail: detailData?.data?.contactEmail || '',
+		type: typeAreas.find(i => i.value === detailData?.data?.type),
+	};
 	const isDisabled = action === 'detail';
 
 	return (
@@ -116,7 +127,7 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 						pb={3}
 					>
 						<TextFieldHookForm isDisabled={isDisabled} isRequired label="Tên phân khu" name="name" variant="admin" />
-						<TextFieldHookForm isDisabled={isDisabled} label="Mã phân khu" name="code" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} isRequired label="Mã phân khu" name="code" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -147,7 +158,7 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isDisabled={isDisabled} label="Diện tích" name="acreage" variant="admin" />
+						<TextFieldHookForm isDisabled={isDisabled} label="Diện tích (ha)" name="acreage" variant="admin" />
 						<TextFieldHookForm isDisabled={isDisabled} label="Email" name="contactEmail" variant="admin" />
 					</Stack>
 					<Box pr={2} mb={3} w={{ base: '100%', md: '50%' }}>
@@ -169,7 +180,7 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 								defaultValue={defaultData?.mapLink ? defaultData?.mapLink : []}
 							/>
 						</FormControl>
-						<FormControl>
+						<FormControl isRequired>
 							<FormLabel>Avatar</FormLabel>
 							<UploadImage
 								ref={avatarImageRef}

@@ -161,6 +161,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 		dateOfBirth: formatDate(detailData?.data?.dateOfBirth),
 		identityCreateDate: formatDate(detailData?.data?.identityCreateDate),
 		relationship: relationshipWithOwner.find(i => i.value === detailData?.data?.relationship),
+		email: detailData?.data?.email || '',
 	};
 
 	const isDisabled = action === 'detail';
@@ -221,7 +222,13 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 							onInputChange={setKeyword}
 							options={dataProperty.map(i => ({ label: `${i.code} - ${i.name}`, value: i.id }))}
 						/>
-						<TextFieldHookForm isDisabled={isDisabled} label="Số điện thoại" name="phoneNumber" variant="admin" />
+						<TextFieldHookForm
+							isRequired
+							isDisabled={isDisabled}
+							label="Số điện thoại"
+							name="phoneNumber"
+							variant="admin"
+						/>
 						<FormControl isRequired>
 							<FormLabel>Vai trò</FormLabel>
 							<PullDown
@@ -233,14 +240,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 								isSearchable={false}
 							/>
 						</FormControl>
-						<TextFieldHookForm
-							isDisabled={isDisabled}
-							isRequired
-							label="Email"
-							type="email"
-							name="email"
-							variant="admin"
-						/>
+						<TextFieldHookForm isDisabled={isDisabled} label="Email" type="email" name="email" variant="admin" />
 						<PullDownHookForm
 							isDisabled={isDisabled}
 							options={relationshipWithOwner}
@@ -250,7 +250,6 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 						/>
 						<TextFieldHookForm
 							isDisabled={isDisabled}
-							isRequired
 							label="Địa chỉ thường trú"
 							name="permanentAddress"
 							variant="admin"
@@ -265,18 +264,11 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 						/>
 						<TextFieldHookForm
 							isDisabled={isDisabled}
-							isRequired
 							label="Địa chỉ tạm trú"
 							name="temporaryAddress"
 							variant="admin"
 						/>
-						<TextFieldHookForm
-							isDisabled={isDisabled}
-							isRequired
-							label="Thông tin uỷ quyền"
-							name="uyquyen"
-							variant="admin"
-						/>
+						<TextFieldHookForm isDisabled={isDisabled} label="Thông tin uỷ quyền" name="uyquyen" variant="admin" />
 					</SimpleGrid>
 					<Box mt={3}>
 						{/* <Swich label="Cho phép sử dụng NOVAID" id="useNovaId" /> */}

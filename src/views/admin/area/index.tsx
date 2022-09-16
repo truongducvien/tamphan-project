@@ -32,7 +32,7 @@ const AreaManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		{ key: 'name', label: 'Tên phân khu' },
 		{ key: 'code', label: 'Mã phân khu' },
 		{ key: 'type', label: 'Loại hình BDS', cell: ({ type }) => typeAreas.find(i => i.value === type)?.label },
-		{ key: 'acreage', label: 'Diện tích' },
+		{ key: 'acreage', label: 'Diện tích (ha)' },
 		{ key: 'location', label: 'Vị trí' },
 		{ key: 'contactPhone', label: 'Số điện thoại' },
 		{ key: 'contactEmail', label: 'email' },
