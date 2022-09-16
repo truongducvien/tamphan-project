@@ -1,5 +1,5 @@
 // Chakra imports
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 
 import {
 	Portal,
@@ -14,6 +14,7 @@ import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 
 import Footer from '@/components/footer/FooterAdmin';
 // Layout components
+import { Loading } from '@/components/form/Loading';
 import Navbar from '@/components/navbar/NavbarAdmin';
 import Sidebar from '@/components/sidebar/Sidebar';
 import { SidebarContext } from '@/contexts/SidebarContext';
@@ -110,9 +111,12 @@ const Dashboard: React.FC = props => {
 									<Route
 										exact
 										path={`${path}/`}
-										component={() =>
-											withPermission(prop.component)({ request: prop.requirePermission, action: prop.action })
-										}
+										// eslint-disable-next-line react/no-unstable-nested-components
+										component={() => (
+											<Suspense fallback={<Loading />}>
+												{withPermission(prop.component)({ request: prop.requirePermission, action: prop.action })}
+											</Suspense>
+										)}
 									/>
 									{routers}
 									<Redirect from={`${path}/*`} to={path} />
@@ -126,7 +130,12 @@ const Dashboard: React.FC = props => {
 					<Route
 						exact
 						path={prop.layout + prop.path}
-						component={() => withPermission(prop.component)({ request: prop.requirePermission, action: prop.action })}
+						// eslint-disable-next-line react/no-unstable-nested-components
+						component={() => (
+							<Suspense fallback={<Loading />}>
+								{withPermission(prop.component)({ request: prop.requirePermission, action: prop.action })}
+							</Suspense>
+						)}
 						key={key}
 					/>
 				);
