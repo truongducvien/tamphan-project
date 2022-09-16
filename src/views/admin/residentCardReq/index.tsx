@@ -4,23 +4,27 @@ import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { MdResetTv } from 'react-icons/md';
+import Card from 'src/components/card/Card';
+import { FormContainer } from 'src/components/form';
+import { DatePickerHookForm } from 'src/components/form/DatePicker';
+import { BaseOption, PullDownHookForm } from 'src/components/form/PullDown';
+import { TextFieldHookForm } from 'src/components/form/TextField';
+import Table, { IColumn } from 'src/components/table';
+import { formatDate } from 'src/helpers/dayjs';
+import useActionPage from 'src/hooks/useActionPage';
+import { useDebounce } from 'src/hooks/useDebounce';
+import { useLoadMore } from 'src/hooks/useLoadMore';
+import { getProperty } from 'src/services/properties';
+import { IProperty, IPropertyParams } from 'src/services/properties/type';
+import { getResidentCardReq } from 'src/services/residentCardReq';
+import {
+	IResidentCardReq,
+	IResidentCardReqParams,
+	statusCardReq,
+	typeCardReq,
+} from 'src/services/residentCardReq/type';
+import { PermistionAction } from 'src/variables/permission';
 import * as Yup from 'yup';
-
-import Card from '@/components/card/Card';
-import { FormContainer } from '@/components/form';
-import { DatePickerHookForm } from '@/components/form/DatePicker';
-import { BaseOption, PullDownHookForm } from '@/components/form/PullDown';
-import { TextFieldHookForm } from '@/components/form/TextField';
-import Table, { IColumn } from '@/components/table';
-import { formatDate } from '@/helpers/dayjs';
-import useActionPage from '@/hooks/useActionPage';
-import { useDebounce } from '@/hooks/useDebounce';
-import { useLoadMore } from '@/hooks/useLoadMore';
-import { getProperty } from '@/services/properties';
-import { IProperty, IPropertyParams } from '@/services/properties/type';
-import { getResidentCardReq } from '@/services/residentCardReq';
-import { IResidentCardReq, IResidentCardReqParams, statusCardReq, typeCardReq } from '@/services/residentCardReq/type';
-import { PermistionAction } from '@/variables/permission';
 
 interface FormData {
 	from?: string;

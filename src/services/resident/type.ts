@@ -1,7 +1,7 @@
-import { Option } from '@/components/form/PullDown';
-import { RelationshipWithOwner } from '@/services/properties/type';
-import { BaseParams, BaseResponseList } from '@/services/type';
-import { Status } from '@/variables/status';
+import { Option } from 'src/components/form/PullDown';
+import { RelationshipWithOwner } from 'src/services/properties/type';
+import { BaseParams, BaseResponseList } from 'src/services/type';
+import { Status } from 'src/variables/status';
 
 export enum ResidentType {
 	OWNER = 'OWNER',

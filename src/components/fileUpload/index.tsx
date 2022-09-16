@@ -17,11 +17,10 @@ import {
 } from '@chakra-ui/react';
 import { motion, useAnimation } from 'framer-motion';
 import { FaCloudUploadAlt } from 'react-icons/fa';
-
-import { ModalImage } from '@/components/modalImage';
-import { useToastInstance } from '@/components/toast';
-import useDidMount from '@/hooks/useDidMount';
-import { loadImage, uploadFile } from '@/services/file';
+import { ModalImage } from 'src/components/modalImage';
+import { useToastInstance } from 'src/components/toast';
+import useDidMount from 'src/hooks/useDidMount';
+import { loadImage, uploadFile } from 'src/services/file';
 
 const first = {
 	rest: {

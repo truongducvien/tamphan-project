@@ -21,23 +21,22 @@ import {
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useHistory } from 'react-router-dom';
-
-import Card from '@/components/card/Card';
-import { FormContainer } from '@/components/form';
-import { Loading } from '@/components/form/Loading';
-import { PullDownHookForm } from '@/components/form/PullDown';
-import { TextAreaFieldHookForm } from '@/components/form/TextAreaField';
-import { TextFieldHookForm } from '@/components/form/TextField';
-import { useToastInstance } from '@/components/toast';
-import { formatDate } from '@/helpers/dayjs';
-import { BaseComponentProps } from '@/hocs/withPermission';
-import useActionPage from '@/hooks/useActionPage';
-import { useActionPermission } from '@/hooks/useActionPermission';
-import useEffectWithoutMounted from '@/hooks/useEffectWithoutMounted';
-import { useForceUpdate } from '@/hooks/useForceUpdate';
-import { getResidentCardAcept, getResidentCardReject, getResidentCardReqById } from '@/services/residentCardReq';
-import { statusCardReq, typeCardReq } from '@/services/residentCardReq/type';
-import { BaseResponseAction } from '@/services/type';
+import Card from 'src/components/card/Card';
+import { FormContainer } from 'src/components/form';
+import { Loading } from 'src/components/form/Loading';
+import { PullDownHookForm } from 'src/components/form/PullDown';
+import { TextAreaFieldHookForm } from 'src/components/form/TextAreaField';
+import { TextFieldHookForm } from 'src/components/form/TextField';
+import { useToastInstance } from 'src/components/toast';
+import { formatDate } from 'src/helpers/dayjs';
+import { BaseComponentProps } from 'src/hocs/withPermission';
+import useActionPage from 'src/hooks/useActionPage';
+import { useActionPermission } from 'src/hooks/useActionPermission';
+import useEffectWithoutMounted from 'src/hooks/useEffectWithoutMounted';
+import { useForceUpdate } from 'src/hooks/useForceUpdate';
+import { getResidentCardAcept, getResidentCardReject, getResidentCardReqById } from 'src/services/residentCardReq';
+import { statusCardReq, typeCardReq } from 'src/services/residentCardReq/type';
+import { BaseResponseAction } from 'src/services/type';
 
 const ResdidentCardReqDetail: React.FC<BaseComponentProps> = () => {
 	const { permistionAction } = useActionPermission('RESIDENT_CARD_PROCESS_MANAGEMENT');

@@ -3,20 +3,19 @@ import { useRef } from 'react';
 import { Box, Button, FormControl, FormLabel, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useHistory } from 'react-router-dom';
+import Card from 'src/components/card/Card';
+import UploadImage, { UploadImageRef } from 'src/components/fileUpload';
+import { FormContainer } from 'src/components/form';
+import { Loading } from 'src/components/form/Loading';
+import { Option, PullDownHookForm } from 'src/components/form/PullDown';
+import { TextFieldHookForm } from 'src/components/form/TextField';
+import { useToastInstance } from 'src/components/toast';
+import { BaseComponentProps } from 'src/hocs/withPermission';
+import useActionPage from 'src/hooks/useActionPage';
+import { useActionPermission } from 'src/hooks/useActionPermission';
+import { createArea, getAreaById, updateArea } from 'src/services/area';
+import { IAreaPayload, TypeArea, typeAreas } from 'src/services/area/type';
 import * as Yup from 'yup';
-
-import Card from '@/components/card/Card';
-import UploadImage, { UploadImageRef } from '@/components/fileUpload';
-import { FormContainer } from '@/components/form';
-import { Loading } from '@/components/form/Loading';
-import { Option, PullDownHookForm } from '@/components/form/PullDown';
-import { TextFieldHookForm } from '@/components/form/TextField';
-import { useToastInstance } from '@/components/toast';
-import { BaseComponentProps } from '@/hocs/withPermission';
-import useActionPage from '@/hooks/useActionPage';
-import { useActionPermission } from '@/hooks/useActionPermission';
-import { createArea, getAreaById, updateArea } from '@/services/area';
-import { IAreaPayload, TypeArea, typeAreas } from '@/services/area/type';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên phân khu'),

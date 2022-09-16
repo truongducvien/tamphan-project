@@ -2,9 +2,8 @@
 import React from 'react';
 
 import { Flex, BackgroundProps } from '@chakra-ui/react';
-
-import FixedPlugin from '@/components/fixedPlugin/FixedPlugin';
-import Footer from '@/components/footer/FooterAuth';
+import FixedPlugin from 'src/components/fixedPlugin/FixedPlugin';
+import Footer from 'src/components/footer/FooterAuth';
 
 export interface Props {
 	illustrationBackground?: BackgroundProps['bg'];

@@ -4,23 +4,22 @@ import { Box, Button, FormControl, FormLabel, HStack, Stack } from '@chakra-ui/r
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useHistory } from 'react-router-dom';
+import Card from 'src/components/card/Card';
+import UploadImage, { UploadImageRef } from 'src/components/fileUpload';
+import { FormContainer } from 'src/components/form';
+import { Loading } from 'src/components/form/Loading';
+import { Option, PullDownHookForm } from 'src/components/form/PullDown';
+import { TextAreaFieldHookForm } from 'src/components/form/TextAreaField';
+import { TextFieldHookForm } from 'src/components/form/TextField';
+import { useToastInstance } from 'src/components/toast';
+import { BaseComponentProps } from 'src/hocs/withPermission';
+import useActionPage from 'src/hooks/useActionPage';
+import { useActionPermission } from 'src/hooks/useActionPermission';
+import { createFacilityGroup, getFacilityGroupById, updateFacilityGroup } from 'src/services/facility/group';
+import { IFacilityGroupPayload } from 'src/services/facility/group/type';
+import { BaseResponseAction } from 'src/services/type';
+import { statusOption2 } from 'src/variables/status';
 import * as Yup from 'yup';
-
-import Card from '@/components/card/Card';
-import UploadImage, { UploadImageRef } from '@/components/fileUpload';
-import { FormContainer } from '@/components/form';
-import { Loading } from '@/components/form/Loading';
-import { Option, PullDownHookForm } from '@/components/form/PullDown';
-import { TextAreaFieldHookForm } from '@/components/form/TextAreaField';
-import { TextFieldHookForm } from '@/components/form/TextField';
-import { useToastInstance } from '@/components/toast';
-import { BaseComponentProps } from '@/hocs/withPermission';
-import useActionPage from '@/hooks/useActionPage';
-import { useActionPermission } from '@/hooks/useActionPermission';
-import { createFacilityGroup, getFacilityGroupById, updateFacilityGroup } from '@/services/facility/group';
-import { IFacilityGroupPayload } from '@/services/facility/group/type';
-import { BaseResponseAction } from '@/services/type';
-import { statusOption2 } from '@/variables/status';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên nhóm'),

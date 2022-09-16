@@ -20,13 +20,12 @@ import {
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { NavLink, Redirect } from 'react-router-dom';
-
-import illustration from '@/assets/img/auth/auth.png';
-import { HSeparator } from '@/components/separator/Separator';
-import DefaultAuth from '@/layouts/auth/Default';
+import illustration from 'src/assets/img/auth/auth.png';
+import { HSeparator } from 'src/components/separator/Separator';
+import DefaultAuth from 'src/layouts/auth/Default';
 // Assets
-import { useAppDispatch, useAppSelector } from '@/store';
-import { userLogin } from '@/store/actionCreators';
+import { useAppDispatch, useAppSelector } from 'src/store';
+import { userLogin } from 'src/store/actionCreators';
 
 const SignIn: React.FC = () => {
 	const textColor = useColorModeValue('navy.700', 'white');

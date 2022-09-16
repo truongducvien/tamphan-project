@@ -1,5 +1,5 @@
-import { Option } from '@/components/form/PullDown';
-import { BaseParams, BaseResponseList } from '@/services/type';
+import { Option } from 'src/components/form/PullDown';
+import { BaseParams, BaseResponseList } from 'src/services/type';
 
 export interface IArea {
 	name: string;

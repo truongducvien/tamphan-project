@@ -1,5 +1,5 @@
-import { BaseOption } from '@/components/form/PullDown';
-import { BaseParams, BaseResponseDetail, BaseResponseList } from '@/services/type';
+import { BaseOption } from 'src/components/form/PullDown';
+import { BaseParams, BaseResponseDetail, BaseResponseList } from 'src/services/type';
 
 enum StatusCardReq {
 	WAITING = 'WAITING',

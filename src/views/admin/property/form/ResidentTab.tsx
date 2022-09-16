@@ -23,31 +23,30 @@ import {
 } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { MdDelete, MdLibraryAdd } from 'react-icons/md';
-import * as Yup from 'yup';
-
-import { alert } from '@/components/alertDialog/hook';
-import { FormContainer } from '@/components/form';
-import { BaseOption, PullDownHookForm } from '@/components/form/PullDown';
-import { TextFieldHookForm } from '@/components/form/TextField';
-import { PullDown } from '@/components/pulldown';
-import Table, { IColumn } from '@/components/table';
-import { useToastInstance } from '@/components/toast';
-import { useActionPermission } from '@/hooks/useActionPermission';
-import { useDebounce } from '@/hooks/useDebounce';
-import { useLoadMore } from '@/hooks/useLoadMore';
-import { getArea } from '@/services/area';
-import { IArea, IAreaParams } from '@/services/area/type';
-import { addResident, removeResident } from '@/services/properties';
-import { RelationshipWithOwner, relationshipWithOwner } from '@/services/properties/type';
-import { getResidentByProperty, getResident } from '@/services/resident';
+import { alert } from 'src/components/alertDialog/hook';
+import { FormContainer } from 'src/components/form';
+import { BaseOption, PullDownHookForm } from 'src/components/form/PullDown';
+import { TextFieldHookForm } from 'src/components/form/TextField';
+import { PullDown } from 'src/components/pulldown';
+import Table, { IColumn } from 'src/components/table';
+import { useToastInstance } from 'src/components/toast';
+import { useActionPermission } from 'src/hooks/useActionPermission';
+import { useDebounce } from 'src/hooks/useDebounce';
+import { useLoadMore } from 'src/hooks/useLoadMore';
+import { getArea } from 'src/services/area';
+import { IArea, IAreaParams } from 'src/services/area/type';
+import { addResident, removeResident } from 'src/services/properties';
+import { RelationshipWithOwner, relationshipWithOwner } from 'src/services/properties/type';
+import { getResidentByProperty, getResident } from 'src/services/resident';
 import {
 	gender as genderOptions,
 	IResident,
 	ResidentType,
 	residentType,
 	IResidentParams,
-} from '@/services/resident/type';
-import { statusOption2 } from '@/variables/status';
+} from 'src/services/resident/type';
+import { statusOption2 } from 'src/variables/status';
+import * as Yup from 'yup';
 
 const ResidentModal: React.FC<{
 	isOpen: boolean;

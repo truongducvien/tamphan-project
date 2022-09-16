@@ -16,36 +16,35 @@ import {
 	MdOutlineMarkunreadMailbox,
 	MdWindow,
 } from 'react-icons/md';
+import { FeatureModule } from 'src/services/role/type';
+import { PermistionAction } from 'src/variables/permission';
 
-import { FeatureModule } from '@/services/role/type';
-import { PermistionAction } from '@/variables/permission';
-
-const AreaManagement = React.lazy(() => import('@/views/admin/area'));
-const DetailArea = React.lazy(() => import('@/views/admin/area/form'));
-const ArticleManagement = React.lazy(() => import('@/views/admin/article'));
-const DetailArticle = React.lazy(() => import('@/views/admin/article/form'));
-const FacilityManagement = React.lazy(() => import('@/views/admin/facility'));
-const FacilityForm = React.lazy(() => import('@/views/admin/facility/form'));
-const FacilityGroupManagement = React.lazy(() => import('@/views/admin/facilityGroup'));
-const FacilityGroupForm = React.lazy(() => import('@/views/admin/facilityGroup/form'));
-const FacilityReManagement = React.lazy(() => import('@/views/admin/facilityRegisteration'));
-const FacilityReForm = React.lazy(() => import('@/views/admin/facilityRegisteration/form'));
-const OrganizationManagement = React.lazy(() => import('@/views/admin/organization'));
-const OrganizationForm = React.lazy(() => import('@/views/admin/organization/form'));
-const PropertyManagement = React.lazy(() => import('@/views/admin/property'));
-const AparmentForm = React.lazy(() => import('@/views/admin/property/form'));
-const ResidentManagement = React.lazy(() => import('@/views/admin/resident'));
-const ResidentForm = React.lazy(() => import('@/views/admin/resident/form'));
-const ResdidentCardManagement = React.lazy(() => import('@/views/admin/residentCard'));
-const ResdidentCardReqManagement = React.lazy(() => import('@/views/admin/residentCardReq'));
-const ResdidentCardReqDetail = React.lazy(() => import('@/views/admin/residentCardReq/form'));
-const RoleManagement = React.lazy(() => import('@/views/admin/role'));
-const PositionForm = React.lazy(() => import('@/views/admin/role/form'));
-const UserManagement = React.lazy(() => import('@/views/admin/userManangement'));
-const UserManagementForm = React.lazy(() => import('@/views/admin/userManangement/form'));
-const ChangePass = React.lazy(() => import('@/views/auth/changePass'));
-const ResetPassword = React.lazy(() => import('@/views/auth/resetPass'));
-const SignInCentered = React.lazy(() => import('@/views/auth/signIn'));
+const AreaManagement = React.lazy(() => import('src/views/admin/area'));
+const DetailArea = React.lazy(() => import('src/views/admin/area/form'));
+const ArticleManagement = React.lazy(() => import('src/views/admin/article'));
+const DetailArticle = React.lazy(() => import('src/views/admin/article/form'));
+const FacilityManagement = React.lazy(() => import('src/views/admin/facility'));
+const FacilityForm = React.lazy(() => import('src/views/admin/facility/form'));
+const FacilityGroupManagement = React.lazy(() => import('src/views/admin/facilityGroup'));
+const FacilityGroupForm = React.lazy(() => import('src/views/admin/facilityGroup/form'));
+const FacilityReManagement = React.lazy(() => import('src/views/admin/facilityRegisteration'));
+const FacilityReForm = React.lazy(() => import('src/views/admin/facilityRegisteration/form'));
+const OrganizationManagement = React.lazy(() => import('src/views/admin/organization'));
+const OrganizationForm = React.lazy(() => import('src/views/admin/organization/form'));
+const PropertyManagement = React.lazy(() => import('src/views/admin/property'));
+const AparmentForm = React.lazy(() => import('src/views/admin/property/form'));
+const ResidentManagement = React.lazy(() => import('src/views/admin/resident'));
+const ResidentForm = React.lazy(() => import('src/views/admin/resident/form'));
+const ResdidentCardManagement = React.lazy(() => import('src/views/admin/residentCard'));
+const ResdidentCardReqManagement = React.lazy(() => import('src/views/admin/residentCardReq'));
+const ResdidentCardReqDetail = React.lazy(() => import('src/views/admin/residentCardReq/form'));
+const RoleManagement = React.lazy(() => import('src/views/admin/role'));
+const PositionForm = React.lazy(() => import('src/views/admin/role/form'));
+const UserManagement = React.lazy(() => import('src/views/admin/userManangement'));
+const UserManagementForm = React.lazy(() => import('src/views/admin/userManangement/form'));
+const ChangePass = React.lazy(() => import('src/views/auth/changePass'));
+const ResetPassword = React.lazy(() => import('src/views/auth/resetPass'));
+const SignInCentered = React.lazy(() => import('src/views/auth/signIn'));
 
 export interface Route {
 	name: string;

@@ -26,13 +26,12 @@ import { AxiosError } from 'axios';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { useHistory } from 'react-router-dom';
-
-import illustration from '@/assets/img/auth/auth.png';
-import { alert } from '@/components/alertDialog/hook';
-import { HSeparator } from '@/components/separator/Separator';
-import DefaultAuth from '@/layouts/auth/Default';
-import { BaseResponseAction } from '@/services/type';
-import { userResetPass, userVerifyToken } from '@/services/user';
+import illustration from 'src/assets/img/auth/auth.png';
+import { alert } from 'src/components/alertDialog/hook';
+import { HSeparator } from 'src/components/separator/Separator';
+import DefaultAuth from 'src/layouts/auth/Default';
+import { BaseResponseAction } from 'src/services/type';
+import { userResetPass, userVerifyToken } from 'src/services/user';
 
 const ChangePass: React.FC = () => {
 	const [step, setStep] = useState(0);

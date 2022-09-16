@@ -4,15 +4,14 @@ import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, FormControl, FormLabel, Heading, HStack, Input, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { MdLibraryAdd } from 'react-icons/md';
-
-import Card from '@/components/card/Card';
-import Table, { IColumn } from '@/components/table';
-import { BaseComponentProps } from '@/hocs/withPermission';
-import useActionPage from '@/hooks/useActionPage';
-import { useActionPermission } from '@/hooks/useActionPermission';
-import { getArea } from '@/services/area';
-import { IArea, typeAreas } from '@/services/area/type';
-import { PermistionAction } from '@/variables/permission';
+import Card from 'src/components/card/Card';
+import Table, { IColumn } from 'src/components/table';
+import { BaseComponentProps } from 'src/hocs/withPermission';
+import useActionPage from 'src/hooks/useActionPage';
+import { useActionPermission } from 'src/hooks/useActionPermission';
+import { getArea } from 'src/services/area';
+import { IArea, typeAreas } from 'src/services/area/type';
+import { PermistionAction } from 'src/variables/permission';
 
 const AreaManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction, actions } = useActionPermission(request);

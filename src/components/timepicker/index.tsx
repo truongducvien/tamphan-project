@@ -20,8 +20,7 @@ import {
 	Button,
 } from '@chakra-ui/react';
 import { MdClear } from 'react-icons/md';
-
-import useEffectWithoutMounted from '@/hooks/useEffectWithoutMounted';
+import useEffectWithoutMounted from 'src/hooks/useEffectWithoutMounted';
 
 export interface Props extends Omit<InputProps, 'onChange' | 'defaultValue'> {
 	onChange?: (value: string) => void;

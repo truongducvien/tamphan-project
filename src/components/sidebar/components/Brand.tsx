@@ -2,8 +2,7 @@ import React from 'react';
 
 // Chakra imports
 import { Flex, Text, useColorModeValue } from '@chakra-ui/react';
-
-import { HSeparator } from '@/components/separator/Separator';
+import { HSeparator } from 'src/components/separator/Separator';
 
 export const SidebarBrand: React.FC = () => {
 	//   Chakra color mode

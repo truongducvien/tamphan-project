@@ -1,7 +1,7 @@
-import { IProperty } from '@/services/properties/type';
-import { IResident } from '@/services/resident/type';
-import { BaseParams, BaseResponseList } from '@/services/type';
-import { Status } from '@/variables/status';
+import { IProperty } from 'src/services/properties/type';
+import { IResident } from 'src/services/resident/type';
+import { BaseParams, BaseResponseList } from 'src/services/type';
+import { Status } from 'src/variables/status';
 
 export interface IResidentCard {
 	cardNumber: string;

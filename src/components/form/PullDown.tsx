@@ -3,10 +3,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormControl, FormErrorMessage, FormLabel, Text, useColorModeValue } from '@chakra-ui/react';
 import { Select, GroupBase, SelectInstance } from 'chakra-react-select';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
-
-import useDerivedProps from '@/hooks/useDerivedProps';
-import useEffectWithoutMounted from '@/hooks/useEffectWithoutMounted';
-import { useForceUpdate } from '@/hooks/useForceUpdate';
+import useDerivedProps from 'src/hooks/useDerivedProps';
+import useEffectWithoutMounted from 'src/hooks/useEffectWithoutMounted';
+import { useForceUpdate } from 'src/hooks/useForceUpdate';
 
 import { Props as TagProps } from '../tag';
 

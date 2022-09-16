@@ -1,5 +1,5 @@
-import http from '@/services/http';
-import { BaseResponseAction, BaseResponseDetail } from '@/services/type';
+import http from 'src/services/http';
+import { BaseResponseAction, BaseResponseDetail } from 'src/services/type';
 
 import { IResident, IResidentParams, IResidentPayload, IResidentResponse } from './type';
 

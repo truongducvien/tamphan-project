@@ -3,29 +3,28 @@ import { useState } from 'react';
 import { Box, Button, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useHistory } from 'react-router-dom';
-import * as Yup from 'yup';
-
-import Card from '@/components/card/Card';
-import { FormContainer } from '@/components/form';
-import { Loading } from '@/components/form/Loading';
-import { BaseOption, Option, PullDownHookForm } from '@/components/form/PullDown';
-import { TextAreaFieldHookForm } from '@/components/form/TextAreaField';
-import { TextFieldHookForm } from '@/components/form/TextField';
-import { useToastInstance } from '@/components/toast';
-import { BaseComponentProps } from '@/hocs/withPermission';
-import useActionPage from '@/hooks/useActionPage';
-import { useActionPermission } from '@/hooks/useActionPermission';
-import { useDebounce } from '@/hooks/useDebounce';
-import { useLoadMore } from '@/hooks/useLoadMore';
-import { getArea } from '@/services/area';
-import { IArea, IAreaParams } from '@/services/area/type';
+import Card from 'src/components/card/Card';
+import { FormContainer } from 'src/components/form';
+import { Loading } from 'src/components/form/Loading';
+import { BaseOption, Option, PullDownHookForm } from 'src/components/form/PullDown';
+import { TextAreaFieldHookForm } from 'src/components/form/TextAreaField';
+import { TextFieldHookForm } from 'src/components/form/TextField';
+import { useToastInstance } from 'src/components/toast';
+import { BaseComponentProps } from 'src/hocs/withPermission';
+import useActionPage from 'src/hooks/useActionPage';
+import { useActionPermission } from 'src/hooks/useActionPermission';
+import { useDebounce } from 'src/hooks/useDebounce';
+import { useLoadMore } from 'src/hooks/useLoadMore';
+import { getArea } from 'src/services/area';
+import { IArea, IAreaParams } from 'src/services/area/type';
 import {
 	createOrganization,
 	getAllOrganization,
 	getOrganizationById,
 	updateOrganization,
-} from '@/services/organizations';
-import { IOrganizationPayload } from '@/services/organizations/type';
+} from 'src/services/organizations';
+import { IOrganizationPayload } from 'src/services/organizations/type';
+import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập đơn vị'),

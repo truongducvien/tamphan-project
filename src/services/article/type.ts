@@ -1,6 +1,6 @@
-import { Option } from '@/components/form/PullDown';
-import { TypeArea } from '@/services/area/type';
-import { BaseParams, BaseResponseList } from '@/services/type';
+import { Option } from 'src/components/form/PullDown';
+import { TypeArea } from 'src/services/area/type';
+import { BaseParams, BaseResponseList } from 'src/services/type';
 
 export enum NotificationWays {
 	EMAIL = 'EMAIL',

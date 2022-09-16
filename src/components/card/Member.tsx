@@ -2,9 +2,8 @@ import React from 'react';
 
 import { Avatar, Flex, useColorModeValue, Icon, Text } from '@chakra-ui/react';
 import { IoEllipsisVertical } from 'react-icons/io5';
-
-import Card, { Props as CardProps } from '@/components/card/Card';
-import TransparentMenu from '@/components/menu/TransparentMenu';
+import Card, { Props as CardProps } from 'src/components/card/Card';
+import TransparentMenu from 'src/components/menu/TransparentMenu';
 
 interface Props extends CardProps {
 	avatar: string;

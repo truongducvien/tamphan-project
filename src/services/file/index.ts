@@ -1,4 +1,4 @@
-import http from '@/services/http';
+import http from 'src/services/http';
 
 export const uploadFile = async (files: File[] | FileList, service: string) => {
 	const payload = new FormData();
