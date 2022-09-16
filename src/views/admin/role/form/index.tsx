@@ -131,7 +131,7 @@ const permissions: Array<PermissionProps> = [
 		id: '6',
 		value: 'RESIDENT_MANAGEMENT',
 		title: 'Quản lý cư dân',
-		permistion: ['VIEW', 'ADD', 'UPDATE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
 	},
 	{
 		id: '7',
