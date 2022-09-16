@@ -8,32 +8,14 @@
 		"plugin:react/jsx-runtime",
 		"plugin:prettier/recommended"
 	],
-	"env": {
-		"es6": true,
-		"browser": false,
-		"node": true,
-		"commonjs": true
-	},
 	"plugins": [
 		"prettier",
 		"react",
 		"react-hooks",
-		"node",
 		"import" // eslint-plugin-import for custom configure
 	],
 	"parserOptions": {
-		"project": "tsconfig.eslint.json"
-	},
-	"settings": {
-		"import/resolver": {
-			"alias": {
-				"map": [
-					["babel-polyfill", "babel-polyfill/dist/polyfill.min.js"],
-					["@", "./src"]
-				],
-				"extensions": [".js", ".json", ".ts", ".tsx"]
-			}
-		}
+		"project": "./tsconfig.eslint.json"
 	},
 	// Limit TypeScript linting to TS/TSX
 	// https://github.com/typescript-eslint/typescript-eslint/issues/1928
@@ -49,8 +31,7 @@
 				"@typescript-eslint/no-unused-vars": [0],
 				"@typescript-eslint/explicit-module-boundary-types": 0,
 				"@typescript-eslint/no-floating-promises": 0,
-				"@typescript-eslint/no-loop-func": 0,
-				"import/no-cycle": 0
+				"@typescript-eslint/no-loop-func": 0
 			}
 		}
 	],
@@ -66,11 +47,6 @@
 		"no-nested-ternary": 0,
 		"react/require-default-props": 0,
 		"react/no-unused-prop-types": 0,
-		"import/no-unresolved": ["error", { "commonjs": true }],
-		// Turned off because conflicts with the ones above and does not support aliases
-		"node/no-missing-require": "off",
-		"node/no-extraneous-import": "off",
-		// place other rules here
 		"react/forbid-elements": [
 			2,
 			{

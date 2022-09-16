@@ -20,12 +20,11 @@ import {
 } from '@chakra-ui/react';
 import { GoChevronDown, GoChevronRight } from 'react-icons/go';
 import { NavLink } from 'react-router-dom';
-
-import IconBox from '@/components/icons/IconBox';
-import { HorizonLogo } from '@/components/icons/Icons';
-import { SidebarResponsive, Props as SidebarResponsiveProps } from '@/components/sidebar/Sidebar';
-import { SidebarContext } from '@/contexts/SidebarContext';
-import routes, { Route } from '@/routes';
+import IconBox from 'src/components/icons/IconBox';
+import { HorizonLogo } from 'src/components/icons/Icons';
+import { SidebarResponsive, Props as SidebarResponsiveProps } from 'src/components/sidebar/Sidebar';
+import { SidebarContext } from 'src/contexts/SidebarContext';
+import routes, { Route } from 'src/routes';
 
 export interface Props extends SidebarResponsiveProps {
 	logo: string;

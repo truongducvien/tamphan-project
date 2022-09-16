@@ -4,27 +4,26 @@ import { Box, Button, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useHistory } from 'react-router-dom';
+import Card from 'src/components/card/Card';
+import { FormContainer } from 'src/components/form';
+import { DatePickerHookForm } from 'src/components/form/DatePicker';
+import { Loading } from 'src/components/form/Loading';
+import { Option, PullDownHookForm } from 'src/components/form/PullDown';
+import { TextFieldHookForm } from 'src/components/form/TextField';
+import { useToastInstance } from 'src/components/toast';
+import { formatDate } from 'src/helpers/dayjs';
+import { BaseComponentProps } from 'src/hocs/withPermission';
+import useActionPage from 'src/hooks/useActionPage';
+import { useActionPermission } from 'src/hooks/useActionPermission';
+import { useDebounce } from 'src/hooks/useDebounce';
+import { getAllOrganization } from 'src/services/organizations';
+import { Gender, gender } from 'src/services/resident/type';
+import { getRole } from 'src/services/role';
+import { BaseResponseAction } from 'src/services/type';
+import { createUser, getUserById, updateUser } from 'src/services/user';
+import { IUserPayload } from 'src/services/user/type';
+import { Status, statusOption2 } from 'src/variables/status';
 import * as Yup from 'yup';
-
-import Card from '@/components/card/Card';
-import { FormContainer } from '@/components/form';
-import { DatePickerHookForm } from '@/components/form/DatePicker';
-import { Loading } from '@/components/form/Loading';
-import { Option, PullDownHookForm } from '@/components/form/PullDown';
-import { TextFieldHookForm } from '@/components/form/TextField';
-import { useToastInstance } from '@/components/toast';
-import { formatDate } from '@/helpers/dayjs';
-import { BaseComponentProps } from '@/hocs/withPermission';
-import useActionPage from '@/hooks/useActionPage';
-import { useActionPermission } from '@/hooks/useActionPermission';
-import { useDebounce } from '@/hooks/useDebounce';
-import { getAllOrganization } from '@/services/organizations';
-import { Gender, gender } from '@/services/resident/type';
-import { getRole } from '@/services/role';
-import { BaseResponseAction } from '@/services/type';
-import { createUser, getUserById, updateUser } from '@/services/user';
-import { IUserPayload } from '@/services/user/type';
-import { Status, statusOption2 } from '@/variables/status';
 
 const validationSchema = Yup.object({
 	username: Yup.string().email('Định dạng là email').required('Vui lòng nhập tài khoản'),

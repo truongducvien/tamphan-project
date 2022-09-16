@@ -1,5 +1,5 @@
-import { BaseOption } from '@/components/form/PullDown';
-import { BaseResponseList } from '@/services/type';
+import { BaseOption } from 'src/components/form/PullDown';
+import { BaseResponseList } from 'src/services/type';
 
 export type TimeSlotType = 'HOUR' | 'DATE';
 

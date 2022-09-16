@@ -1,4 +1,4 @@
-import { IUser } from '@/services/user/type';
+import { IUser } from 'src/services/user/type';
 
 export const LOGIN_REQUEST = 'users/LOGIN_REQUEST';
 

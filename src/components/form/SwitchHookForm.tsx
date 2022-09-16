@@ -10,8 +10,7 @@ import {
 	SwitchProps,
 } from '@chakra-ui/react';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
-
-import useEffectWithoutMounted from '@/hooks/useEffectWithoutMounted';
+import useEffectWithoutMounted from 'src/hooks/useEffectWithoutMounted';
 
 export interface SwitchHookFormProp extends SwitchProps {
 	name: string;

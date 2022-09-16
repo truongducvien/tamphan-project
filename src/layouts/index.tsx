@@ -1,6 +1,6 @@
-import useDidMount from '@/hooks/useDidMount';
-import { useAppDispatch } from '@/store';
-import { initialUser } from '@/store/actionCreators';
+import useDidMount from 'src/hooks/useDidMount';
+import { useAppDispatch } from 'src/store';
+import { initialUser } from 'src/store/actionCreators';
 
 export const InitialApp: React.FC = () => {
 	document.addEventListener('wheel', () => {

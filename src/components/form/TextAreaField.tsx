@@ -2,8 +2,7 @@ import { useRef } from 'react';
 
 import { FormControl, FormErrorMessage, FormLabel, Textarea, TextareaProps } from '@chakra-ui/react';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
-
-import useEffectWithoutMounted from '@/hooks/useEffectWithoutMounted';
+import useEffectWithoutMounted from 'src/hooks/useEffectWithoutMounted';
 
 interface TextAreaFieldHookFormProps extends TextareaProps {
 	name: string;

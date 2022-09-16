@@ -1,4 +1,4 @@
-import { BaseParams, BaseResponseList } from '@/services/type';
+import { BaseParams, BaseResponseList } from 'src/services/type';
 
 export interface IFacilityGroup {
 	description: string;

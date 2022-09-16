@@ -4,22 +4,21 @@ import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { MdImportExport, MdLibraryAdd } from 'react-icons/md';
+import Card from 'src/components/card/Card';
+import { FormContainer } from 'src/components/form';
+import { Option, PullDownHookForm } from 'src/components/form/PullDown';
+import { TextFieldHookForm } from 'src/components/form/TextField';
+import Table, { IColumn } from 'src/components/table';
+import { BaseComponentProps } from 'src/hocs/withPermission';
+import useActionPage from 'src/hooks/useActionPage';
+import { useActionPermission } from 'src/hooks/useActionPermission';
+import { useDebounce } from 'src/hooks/useDebounce';
+import { useLoadMore } from 'src/hooks/useLoadMore';
+import { getArea } from 'src/services/area';
+import { IArea, IAreaParams } from 'src/services/area/type';
+import { getProperty } from 'src/services/properties';
+import { IProperty, IPropertyParams, statusProperty } from 'src/services/properties/type';
 import * as Yup from 'yup';
-
-import Card from '@/components/card/Card';
-import { FormContainer } from '@/components/form';
-import { Option, PullDownHookForm } from '@/components/form/PullDown';
-import { TextFieldHookForm } from '@/components/form/TextField';
-import Table, { IColumn } from '@/components/table';
-import { BaseComponentProps } from '@/hocs/withPermission';
-import useActionPage from '@/hooks/useActionPage';
-import { useActionPermission } from '@/hooks/useActionPermission';
-import { useDebounce } from '@/hooks/useDebounce';
-import { useLoadMore } from '@/hooks/useLoadMore';
-import { getArea } from '@/services/area';
-import { IArea, IAreaParams } from '@/services/area/type';
-import { getProperty } from '@/services/properties';
-import { IProperty, IPropertyParams, statusProperty } from '@/services/properties/type';
 
 interface SearchForm {
 	code?: string;

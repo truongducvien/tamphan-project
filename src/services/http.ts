@@ -1,14 +1,13 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-
 import {
 	loadAccessToken,
 	loadRefreshToken,
 	loadSessionAccessToken,
 	saveAccessToken,
 	saveRefreshToken,
-} from '@/helpers/storage';
-import { store } from '@/store';
-import { logout } from '@/store/actionCreators';
+} from 'src/helpers/storage';
+import { store } from 'src/store';
+import { logout } from 'src/store/actionCreators';
 
 import { userRefreshToken } from './user';
 

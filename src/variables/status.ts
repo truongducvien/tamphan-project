@@ -1,4 +1,4 @@
-import { Option } from '@/components/form/PullDown';
+import { Option } from 'src/components/form/PullDown';
 
 export enum Status {
 	INIT = 'INIT',

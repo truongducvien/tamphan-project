@@ -2,26 +2,27 @@ import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
-import { MdImportExport, MdLibraryAdd } from 'react-icons/md';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { MdLibraryAdd } from 'react-icons/md';
+import { alert } from 'src/components/alertDialog/hook';
+import Card from 'src/components/card/Card';
+import { FormContainer } from 'src/components/form';
+import { BaseOption, PullDownHookForm } from 'src/components/form/PullDown';
+import { TextFieldHookForm } from 'src/components/form/TextField';
+import Table, { IColumn } from 'src/components/table';
+import { useToastInstance } from 'src/components/toast';
+import { BaseComponentProps } from 'src/hocs/withPermission';
+import useActionPage from 'src/hooks/useActionPage';
+import { useActionPermission } from 'src/hooks/useActionPermission';
+import { useDebounce } from 'src/hooks/useDebounce';
+import { useLoadMore } from 'src/hooks/useLoadMore';
+import { getArea } from 'src/services/area';
+import { IArea, IAreaParams } from 'src/services/area/type';
+import { deleteResident, getResident } from 'src/services/resident';
+import { gender as genderOptions, IResident, IResidentParams, residentType } from 'src/services/resident/type';
+import { PermistionAction } from 'src/variables/permission';
+import { statusOption2 } from 'src/variables/status';
 import * as Yup from 'yup';
-
-import Card from '@/components/card/Card';
-import { FormContainer } from '@/components/form';
-import { BaseOption, PullDownHookForm } from '@/components/form/PullDown';
-import { TextFieldHookForm } from '@/components/form/TextField';
-import Table, { IColumn } from '@/components/table';
-import { BaseComponentProps } from '@/hocs/withPermission';
-import useActionPage from '@/hooks/useActionPage';
-import { useActionPermission } from '@/hooks/useActionPermission';
-import { useDebounce } from '@/hooks/useDebounce';
-import { useLoadMore } from '@/hooks/useLoadMore';
-import { getArea } from '@/services/area';
-import { IArea, IAreaParams } from '@/services/area/type';
-import { getResident } from '@/services/resident';
-import { gender as genderOptions, IResident, IResidentParams, residentType } from '@/services/resident/type';
-import { PermistionAction } from '@/variables/permission';
-import { statusOption2 } from '@/variables/status';
 
 interface Form {
 	areaId: BaseOption<string>;
@@ -39,13 +40,17 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 
+	const { toast } = useToastInstance();
+
+	const mutationDelete = useMutation(deleteResident);
+
 	const COLUMNS: Array<IColumn<IResident>> = [
 		{ key: 'fullName', label: 'Tên cư dân' },
 		{ key: 'dateOfBirth', label: 'Ngày sinh', dateFormat: 'DD/MM/YYYY' },
 		{ key: 'gender', label: 'Giới tính', cell: ({ gender }) => genderOptions.find(i => i.value === gender)?.label },
 		{ key: 'identityCardNumber', label: 'CMND/ CCCD/ HC' },
 		{ key: 'identityCreateDate', label: 'Ngày cấp', dateFormat: 'DD/MM/YYYY' },
-		{ key: 'identityLocationIssued', label: 'Nơi cấp' },
+		{ key: 'identityLocationIssued', label: 'Nơi cấp' },
 		{ key: 'property', label: 'Mã căn hộ', cell: ({ property }) => property?.code },
 		{ key: 'type', label: 'Vai trò', tag: ({ type }) => residentType.find(i => i.value === type) },
 		{ key: 'email', label: 'Email' },
@@ -69,7 +74,7 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		payload: { code: keywordDebounce },
 	});
 
-	const { data, isLoading } = useQuery(['listResident', params, currentPage, currentPageSize], () =>
+	const { data, isLoading, refetch } = useQuery(['listResident', params, currentPage, currentPageSize], () =>
 		getResident({
 			page: currentPage - 1,
 			size: currentPageSize,
@@ -80,6 +85,21 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const onSearch = (payload: Form) => {
 		const prepareData = { ...payload, areaId: payload.areaId?.value };
 		setParams(prepareData);
+	};
+
+	const handleDelete = async (row: { id: string; name: string }) => {
+		try {
+			await alert({
+				type: 'error',
+				title: 'Bạn có muốn xoá ?',
+				description: row.name,
+			});
+			await mutationDelete.mutateAsync(row.id);
+			toast({ title: 'Xoá thành công' });
+			refetch();
+		} catch {
+			toast({ title: 'Xoá thất bại', status: 'error' });
+		}
 	};
 
 	const pageInfo = {
@@ -160,6 +180,8 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 					action={actions.filter(i => [PermistionAction.UPDATE, PermistionAction.VIEW].some(ii => ii === i))}
 					onClickDetail={({ id, property }) => changeAction('detail', `${id},${property?.id}`)}
 					onClickEdit={({ id, property }) => changeAction('edit', `${id},${property?.id}`)}
+					// eslint-disable-next-line @typescript-eslint/no-misused-promises
+					onClickDelete={({ id, fullName }) => handleDelete({ id, name: fullName })}
 				/>
 			</Card>
 		</Box>

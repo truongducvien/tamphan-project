@@ -1,5 +1,5 @@
-import http from '@/services/http';
-import { BaseResponseDetail } from '@/services/type';
+import http from 'src/services/http';
+import { BaseResponseDetail } from 'src/services/type';
 
 import { IFacilityRe, IFacilityReSearchPayload, IFacilityGroupResponse } from './type';
 

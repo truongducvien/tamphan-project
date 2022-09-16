@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 
 import { Box, useColorModeValue } from '@chakra-ui/react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-
-import { SidebarContext } from '@/contexts/SidebarContext';
-import routes, { Route as RootRoute } from '@/routes';
+import { SidebarContext } from 'src/contexts/SidebarContext';
+import routes, { Route as RootRoute } from 'src/routes';
 
 // Chakra imports
 

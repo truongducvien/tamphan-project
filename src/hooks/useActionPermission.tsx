@@ -1,6 +1,6 @@
-import { FeatureModuleKey, PermistionActionKey } from '@/services/role/type';
-import { useAppSelector } from '@/store';
-import { PermistionAction } from '@/variables/permission';
+import { FeatureModuleKey, PermistionActionKey } from 'src/services/role/type';
+import { useAppSelector } from 'src/store';
+import { PermistionAction } from 'src/variables/permission';
 
 export const useActionPermission = (request?: FeatureModuleKey) => {
 	const permistionAction: Record<PermistionActionKey, boolean> = {

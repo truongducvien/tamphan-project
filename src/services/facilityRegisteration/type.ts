@@ -1,5 +1,5 @@
-import { Option } from '@/components/form/PullDown';
-import { BaseResponseList } from '@/services/type';
+import { Option } from 'src/components/form/PullDown';
+import { BaseResponseList } from 'src/services/type';
 
 export enum PaymentMethod {
 	CASH = 'CASH',

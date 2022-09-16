@@ -1,4 +1,4 @@
-import http from '@/services/http';
+import http from 'src/services/http';
 
 import { IResidentCardParams, IResidentCardResponse, IResidentCardImportpayload } from './type';
 

@@ -18,10 +18,8 @@ import {
 import { FaEthereum } from 'react-icons/fa';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { MdNotificationsNone } from 'react-icons/md';
-
-import SearchBar from '@/components/navbar/searchBar/SearchBar';
-import { useAppDispatch, useAppSelector } from '@/store';
-import { logout } from '@/store/actionCreators';
+import { useAppDispatch, useAppSelector } from 'src/store';
+import { logout } from 'src/store/actionCreators';
 
 export interface Props {
 	variant?: string;

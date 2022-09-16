@@ -1,4 +1,4 @@
-import http from '@/services/http';
+import http from 'src/services/http';
 
 export interface IFile {
 	data: { items: { fileId: string; link: string }[] };

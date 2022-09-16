@@ -3,26 +3,25 @@ import { useState } from 'react';
 import { Box, Button, HStack, Stack, useDisclosure } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useHistory } from 'react-router-dom';
-
-import AlertDialog from '@/components/alertDialog';
-import Card from '@/components/card/Card';
-import { FormContainer } from '@/components/form';
-import { Loading } from '@/components/form/Loading';
-import { TextAreaFieldHookForm } from '@/components/form/TextAreaField';
-import { TextFieldHookForm } from '@/components/form/TextField';
-import { PullDown } from '@/components/pulldown';
-import { useToastInstance } from '@/components/toast';
-import { currency } from '@/helpers/currency';
-import { BaseComponentProps } from '@/hocs/withPermission';
-import useActionPage from '@/hooks/useActionPage';
-import { useActionPermission } from '@/hooks/useActionPermission';
-import { confirmFacilityReById, getFacilityReById } from '@/services/facilityRegisteration';
+import AlertDialog from 'src/components/alertDialog';
+import Card from 'src/components/card/Card';
+import { FormContainer } from 'src/components/form';
+import { Loading } from 'src/components/form/Loading';
+import { TextAreaFieldHookForm } from 'src/components/form/TextAreaField';
+import { TextFieldHookForm } from 'src/components/form/TextField';
+import { PullDown } from 'src/components/pulldown';
+import { useToastInstance } from 'src/components/toast';
+import { currency } from 'src/helpers/currency';
+import { BaseComponentProps } from 'src/hocs/withPermission';
+import useActionPage from 'src/hooks/useActionPage';
+import { useActionPermission } from 'src/hooks/useActionPermission';
+import { confirmFacilityReById, getFacilityReById } from 'src/services/facilityRegisteration';
 import {
 	PaymentMethod,
 	paymentMethods,
 	statusFacilityRe,
 	StatusFacilityRe,
-} from '@/services/facilityRegisteration/type';
+} from 'src/services/facilityRegisteration/type';
 
 const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction } = useActionPermission(request);

@@ -3,20 +3,19 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 're
 import { Box, Button, Checkbox, FormControl, FormLabel, Heading, HStack, SimpleGrid, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useHistory } from 'react-router-dom';
+import Card from 'src/components/card/Card';
+import { FormContainer } from 'src/components/form';
+import { Loading } from 'src/components/form/Loading';
+import { Option, PullDownHookForm } from 'src/components/form/PullDown';
+import { TextFieldHookForm } from 'src/components/form/TextField';
+import { useToastInstance } from 'src/components/toast';
+import { BaseComponentProps } from 'src/hocs/withPermission';
+import useActionPage from 'src/hooks/useActionPage';
+import { useActionPermission } from 'src/hooks/useActionPermission';
+import { createRole, getRoleById, updateRole } from 'src/services/role';
+import { FeatureModuleKey, IRolePayload, PermistionActionKey } from 'src/services/role/type';
+import { Status, statusOption2 } from 'src/variables/status';
 import * as Yup from 'yup';
-
-import Card from '@/components/card/Card';
-import { FormContainer } from '@/components/form';
-import { Loading } from '@/components/form/Loading';
-import { Option, PullDownHookForm } from '@/components/form/PullDown';
-import { TextFieldHookForm } from '@/components/form/TextField';
-import { useToastInstance } from '@/components/toast';
-import { BaseComponentProps } from '@/hocs/withPermission';
-import useActionPage from '@/hooks/useActionPage';
-import { useActionPermission } from '@/hooks/useActionPermission';
-import { createRole, getRoleById, updateRole } from '@/services/role';
-import { FeatureModuleKey, IRolePayload, PermistionActionKey } from '@/services/role/type';
-import { Status, statusOption2 } from '@/variables/status';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên nhóm'),
@@ -131,7 +130,7 @@ const permissions: Array<PermissionProps> = [
 		id: '6',
 		value: 'RESIDENT_MANAGEMENT',
 		title: 'Quản lý cư dân',
-		permistion: ['VIEW', 'ADD', 'UPDATE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
 	},
 	{
 		id: '7',

@@ -20,11 +20,10 @@ import { CSSObject } from '@emotion/react';
 import dayjs from 'dayjs';
 import { FaTrashAlt } from 'react-icons/fa';
 import { MdBorderColor, MdPreview } from 'react-icons/md';
-
-import { Option } from '@/components/form/PullDown';
-import Pagination, { PaginationProps } from '@/components/pagination';
-import { Tag } from '@/components/tag';
-import { PermistionAction } from '@/variables/permission';
+import { Option } from 'src/components/form/PullDown';
+import Pagination, { PaginationProps } from 'src/components/pagination';
+import { Tag } from 'src/components/tag';
+import { PermistionAction } from 'src/variables/permission';
 
 export type DataTable = { [k: string]: boolean | number | string | undefined | DataTable };
 
