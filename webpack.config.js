@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -48,9 +47,6 @@ module.exports = async (env, agrv) => {
 		new CopyPlugin({
 			patterns: copyPluginPatterns,
 		}),
-		new MiniCssExtractPlugin({
-			filename: isDev ? '[name].css' : 'static/css/[name].[contenthash:6].css',
-		}),
 		new webpack.ProgressPlugin(),
 	];
 	let prodPlugins = [
@@ -80,7 +76,6 @@ module.exports = async (env, agrv) => {
 				{
 					test: /\.(s[ac]ss|css)$/,
 					use: [
-						MiniCssExtractPlugin.loader,
 						{
 							loader: 'css-loader',
 							options: { sourceMap: isDev ? true : false },
