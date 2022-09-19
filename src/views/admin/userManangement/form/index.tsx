@@ -30,6 +30,9 @@ const validationSchema = Yup.object({
 	fullName: Yup.string().required('Vui lòng nhập họ tên'),
 	organizationId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn đơn vị') }),
 	roleId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn vai trò người dùng') }),
+	phoneNumber: Yup.string()
+		.required('Vui lòng nhập SDT')
+		.matches(/^[0-9]\d{9}$/, { message: 'Số điện thoại không hợp lệ' }),
 	state: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn trạng thái') }),
 });
 

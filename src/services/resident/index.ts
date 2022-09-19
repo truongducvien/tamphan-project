@@ -52,3 +52,8 @@ export const getResidentOfProperty = async (payload: { id: string; propertyId: s
 	);
 	return data || null;
 };
+
+export const importResident = async (params: FormData) => {
+	const { data } = await http.post<IResidentResponse>('/v1/residents/import', params);
+	return data?.data || null;
+};

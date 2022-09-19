@@ -124,13 +124,13 @@ const permissions: Array<PermissionProps> = [
 		id: '5',
 		value: 'PROPERTIES_MANAGEMENT',
 		title: 'Quản lý căn hộ',
-		permistion: ['VIEW', 'ADD', 'UPDATE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE', 'IMPORT'],
 	},
 	{
 		id: '6',
 		value: 'RESIDENT_MANAGEMENT',
 		title: 'Quản lý cư dân',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE', 'IMPORT'],
 	},
 	{
 		id: '7',

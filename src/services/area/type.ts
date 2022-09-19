@@ -29,7 +29,7 @@ export enum TypeArea {
 
 export const typeAreas: Array<Option> = [
 	{
-		label: 'Biệt thự',
+		label: 'Dinh thự',
 		value: TypeArea.VILLA,
 	},
 	{

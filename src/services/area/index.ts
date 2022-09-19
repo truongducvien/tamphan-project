@@ -11,7 +11,7 @@ export const getArea = async ({ code = '', page = 0, size = 10 }: IAreaParams) =
 			size,
 		},
 	});
-	return data?.data || null;
+	return data?.data ? { ...data?.data, nextPage: (data?.data?.pageNum || 0) + 1 } : null;
 };
 
 export const createArea = async (payload: IAreaPayload) => {
