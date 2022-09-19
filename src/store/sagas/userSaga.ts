@@ -26,7 +26,7 @@ export function* requestLogin({
 		const response = yield call(login, { username, password });
 		if (response.data.operatorResponse?.isFirstTimeLogin) {
 			yield call(alert, {
-				title: 'Cành báo',
+				title: 'Cảnh báo',
 				description: 'Bạn cần đổi mật khẩu trong lần đầu đăng nhập',
 				type: 'error',
 			});

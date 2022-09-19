@@ -171,10 +171,11 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 			status,
 		};
 		const text = title || statusArticle.find(i => i.value === status)?.label || '';
-		await alert({
+		const next = await alert({
 			title: `Bạn muốn ${text} bài viết?`,
 			type: 'error',
 		});
+		if (!next) return;
 		try {
 			await mutationUpdate(prepareData);
 			await toastAsync({ title: `${text} bài viết thành công` });

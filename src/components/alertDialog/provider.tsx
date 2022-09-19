@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import AlertDialog from '.';
 
 interface PromiseRef {
-	resolve: () => void;
+	resolve: (value: boolean) => void;
 	reject: () => void;
 }
 
@@ -17,8 +17,10 @@ export interface DialogServiceState extends DialogServiceOption {
 	open: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
-export const DialogContext = React.createContext<(options: DialogServiceOption) => Promise<void>>(Promise.reject);
+export const DialogContext = React.createContext<(options: DialogServiceOption) => Promise<boolean | void>>(
+	// eslint-disable-next-line @typescript-eslint/unbound-method
+	Promise.reject,
+);
 
 const DialogServiceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [dialogService, setDialogService] = useState<DialogServiceState>({
@@ -31,7 +33,7 @@ const DialogServiceProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 	const handleOpenDialog = useCallback((options: DialogServiceOption) => {
 		setDialogService({ open: true, ...options });
 
-		return new Promise<void>((resolve, reject) => {
+		return new Promise<boolean>((resolve, reject) => {
 			promiseRef.current = { resolve, reject };
 		});
 	}, []);
@@ -42,14 +44,14 @@ const DialogServiceProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
 	const handleOk = useCallback(() => {
 		if (promiseRef.current) {
-			promiseRef.current.resolve();
+			promiseRef.current.resolve(true);
 		}
 		handleCloseDialog();
 	}, [handleCloseDialog]);
 
 	const handleCancel = useCallback(() => {
 		if (promiseRef.current) {
-			promiseRef.current.reject();
+			promiseRef.current.resolve(false);
 		}
 		handleCloseDialog();
 	}, [handleCloseDialog]);

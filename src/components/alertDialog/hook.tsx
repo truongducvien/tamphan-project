@@ -2,8 +2,8 @@ import { useContext, useEffect } from 'react';
 
 import { DialogServiceOption, DialogContext } from './provider';
 
-let confirmContext: (options: DialogServiceOption) => Promise<void>;
-let alertContext: (options: Omit<DialogServiceOption, 'cancelLabel'>) => Promise<void>;
+let confirmContext: (options: DialogServiceOption) => Promise<boolean | void>;
+let alertContext: (options: Omit<DialogServiceOption, 'cancelLabel'>) => Promise<boolean | void>;
 
 export const UseConfirm: React.FC = () => {
 	const useDialog = useContext(DialogContext);
