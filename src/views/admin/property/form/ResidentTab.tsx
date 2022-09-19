@@ -323,10 +323,11 @@ export const ResidentTab: React.FC<{ id: string }> = ({ id: idProperty }) => {
 	const { mutateAsync: mutationRemove, isLoading: isRemoving } = useMutation(removeResident);
 	const { toast } = useToastInstance();
 	const handelRemove = async () => {
-		await alert({
+		const next = await alert({
 			title: 'Bạn có muốn xoá cư dân ra khỏi căn hộ ?',
 			type: 'error',
 		});
+		if (!next) return;
 		try {
 			await mutationRemove({ id: idProperty, residentIds: ids });
 			toast({

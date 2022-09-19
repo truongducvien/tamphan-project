@@ -31,11 +31,12 @@ const FacilityGroupManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const mutationDelete = useMutation(deleteFacilityGroup);
 	const onDelete = async (row: IFacilityGroup) => {
 		try {
-			await alert({
+			const next = await alert({
 				type: 'error',
 				title: 'Bạn có muốn xoá ?',
 				description: row.name,
 			});
+			if (!next) return;
 			await mutationDelete.mutateAsync(row.id);
 			toast({ title: 'Xoá thành công' });
 			refetch();

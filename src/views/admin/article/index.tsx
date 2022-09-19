@@ -55,11 +55,12 @@ const ArticleManagement: React.FC<BaseComponentProps> = ({ request }) => {
 
 	const handleDelete = async (row: { id: string; title: string }) => {
 		try {
-			await alert({
+			const next = await alert({
 				type: 'error',
 				title: 'Bạn có muốn xoá ?',
 				description: row.title,
 			});
+			if (!next) return;
 			await mutationDelete.mutateAsync(row.id);
 			toast({ title: 'Xoá thành công' });
 			refetch();

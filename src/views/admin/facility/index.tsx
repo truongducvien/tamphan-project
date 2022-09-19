@@ -112,11 +112,12 @@ const FacilityManagement: React.FC<BaseComponentProps> = ({ request }) => {
 
 	const handleDelete = async (row: { id: string; name: string }) => {
 		try {
-			await alert({
+			const next = await alert({
 				type: 'error',
 				title: 'Bạn có muốn xoá ?',
 				description: row.name,
 			});
+			if (!next) return;
 			await mutationDelete.mutateAsync(row.id);
 			toast({ title: 'Xoá thành công' });
 			refetch();
