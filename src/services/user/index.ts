@@ -85,3 +85,8 @@ export const userResetPass = async (payload: { confirmToken: string; newPassword
 	);
 	return data || null;
 };
+
+export const userChangePass = async (payload: { oldPassword: string; newPassword: string; username: string }) => {
+	const { data } = await http.put<BaseResponseAction>('/v1/operators/change-password', payload);
+	return data || null;
+};

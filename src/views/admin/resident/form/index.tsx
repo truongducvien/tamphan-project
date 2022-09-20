@@ -151,7 +151,7 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 
 	const defaultValue = {
 		...detailData?.data,
-		state: statusOption2.find(i => i.value === detailData?.data?.state),
+		state: statusOption2.find(i => i.value === detailData?.data?.state) || statusOption2[0],
 		identityCardType: identityCardType.find(i => i.value === detailData?.data?.identityCardType),
 		gender: gender.find(i => i.value === detailData?.data?.gender),
 		propertyId: {

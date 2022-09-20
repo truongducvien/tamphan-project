@@ -1,20 +1,24 @@
 // Chakra imports
 import React from 'react';
 
-import { Flex, BackgroundProps } from '@chakra-ui/react';
+import { Flex, BackgroundProps, Icon, Text } from '@chakra-ui/react';
 import FixedPlugin from 'src/components/fixedPlugin/FixedPlugin';
 import Footer from 'src/components/footer/FooterAuth';
 
 export interface Props {
 	illustrationBackground?: BackgroundProps['bg'];
 	children: React.ReactNode;
+	header?: React.ReactNode;
 }
 
 const AuthIllustration: React.FC<Props> = props => {
-	const { children } = props;
+	const { children, header } = props;
 	// Chakra color mode
 	return (
-		<Flex position="relative" h="max-content">
+		<Flex position="relative" h="max-content" flexDirection="column">
+			<Flex ps={{ base: '25px', lg: '0px' }} pt={{ lg: '0px', xl: '0px' }}>
+				{header}
+			</Flex>
 			<Flex
 				h={{
 					sm: 'initial',
@@ -31,20 +35,6 @@ const AuthIllustration: React.FC<Props> = props => {
 				direction="column"
 				align="center"
 			>
-				{/* <NavLink
-					to="/admin"
-					style={() => ({
-						width: 'fit-content',
-						marginTop: '40px',
-					})}
-				>
-					<Flex align="center" ps={{ base: '25px', lg: '0px' }} pt={{ lg: '0px', xl: '0px' }} w="fit-content">
-						<Icon as={FaChevronLeft} me="12px" h="13px" w="8px" color="secondaryGray.600" />
-						<Text ms="0px" fontSize="sm" color="secondaryGray.600">
-							Back to Simmmple
-						</Text>
-					</Flex>
-				</NavLink> */}
 				{children}
 				<Footer />
 			</Flex>

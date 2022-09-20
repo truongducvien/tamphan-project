@@ -1,15 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { put, call, takeEvery, all, fork, StrictEffect, cancel } from 'redux-saga/effects';
 import { alert } from 'src/components/alertDialog/hook';
-import {
-	clearAccessToken,
-	loadAccessToken,
-	loadSessionAccessToken,
-	saveAccessToken,
-	saveRefreshToken,
-	saveSessionAccessToken,
-	saveSessionRefreshToken,
-} from 'src/helpers/storage';
+import { clearAccessToken, loadAccessToken, saveAccessToken, saveRefreshToken } from 'src/helpers/storage';
 import { BaseResponseDetail } from 'src/services/type';
 import { getByAccessToken, login, LoginResponse } from 'src/services/user';
 import { IUser } from 'src/services/user/type';
@@ -20,7 +12,6 @@ import * as actionTypes from '../actions';
 export function* requestLogin({
 	username,
 	password,
-	remember,
 }: actionTypes.LoginAction): Generator<StrictEffect, void, AxiosResponse<LoginResponse>> {
 	try {
 		const response = yield call(login, { username, password });
@@ -28,17 +19,12 @@ export function* requestLogin({
 			yield call(alert, {
 				title: 'Cảnh báo',
 				description: 'Bạn cần đổi mật khẩu trong lần đầu đăng nhập',
-				type: 'error',
+				type: 'message',
 			});
 		}
 		yield put(actionCreators.userLoginSuccess(response.data.operatorResponse));
-		if (remember) {
-			yield call(saveAccessToken, response.data.accessToken);
-			yield call(saveRefreshToken, response.data.refreshToken);
-		} else {
-			yield call(saveSessionRefreshToken, response.data.refreshToken);
-			yield call(saveSessionAccessToken, response.data.accessToken);
-		}
+		yield call(saveAccessToken, response.data.accessToken);
+		yield call(saveRefreshToken, response.data.refreshToken);
 	} catch (error) {
 		const err = error as AxiosError<{ message: string; code: string }>;
 		const meg =
@@ -55,11 +41,18 @@ function* watchOnRequesstLogin() {
 
 export function* requestGetUserInfo(): Generator<StrictEffect, void, BaseResponseDetail<IUser>> {
 	try {
-		const ascessToken = loadAccessToken() || loadSessionAccessToken();
+		const ascessToken = loadAccessToken();
 		if (!ascessToken) throw new Error("don't have ascessToken");
 		const response = yield call(getByAccessToken);
 		if (!response.data) {
 			throw new Error('Get init failure');
+		}
+		if (response.data.isFirstTimeLogin) {
+			yield call(alert, {
+				title: 'Cảnh báo',
+				description: 'Bạn cần đổi mật khẩu trong lần đầu đăng nhập',
+				type: 'message',
+			});
 		}
 		yield put(actionCreators.initialUserSuccess(response.data));
 	} catch (error) {

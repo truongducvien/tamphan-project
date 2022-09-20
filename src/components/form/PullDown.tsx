@@ -197,7 +197,9 @@ export const PullDownHookForm: React.FC<PullDownHookFormProps> = ({
 							noOptionsMessage={() => <Text fontSize="xs">Không có dữ liệu</Text>}
 						/>
 						<FormErrorMessage>
-							{(errors?.[name] as unknown as { value: FieldError })?.value?.message as unknown as string}
+							{((errors?.[name] as unknown as FieldError & { value: FieldError })?.value
+								?.message as unknown as string) ||
+								((errors?.[name] as unknown as FieldError)?.message as unknown as string)}
 						</FormErrorMessage>
 					</FormControl>
 				);

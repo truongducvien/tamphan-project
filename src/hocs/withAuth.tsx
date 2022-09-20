@@ -7,7 +7,7 @@ import { useAppSelector } from 'src/store';
 export const withAuth =
 	<P extends object>(WrappedComponent: React.FC<P>): React.FC<P> =>
 	props => {
-		const { logined, loading } = useAppSelector(state => state.user);
+		const { logined, loading, info } = useAppSelector(state => state.user);
 
 		if (loading)
 			return (
@@ -18,7 +18,7 @@ export const withAuth =
 				</Portal>
 			);
 
-		// if (!info?.isFirstTimeLogin) return <Redirect to="/auth/change-password" />;
+		if (info?.isFirstTimeLogin) return <Redirect to="/auth/change-password" />;
 
 		if (!logined) return <Redirect to="/auth/sign-in" />;
 

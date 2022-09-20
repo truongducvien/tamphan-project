@@ -106,7 +106,7 @@ const ResetPassword: React.FC = () => {
 		if (!reg.test(password || '')) {
 			setError({
 				username: '',
-				password: 'Mật khẩu tối thiểu 6 kí tự, ít nhất 1 chữ in và 1 chữ thường và 1 kí tự đặc biệt',
+				password: 'Mật khẩu tối thiểu 8 kí tự, ít nhất 1 chữ in và 1 chữ thường và 1 kí tự đặc biệt',
 				otp: '',
 			});
 			return;
