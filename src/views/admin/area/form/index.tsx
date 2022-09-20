@@ -19,7 +19,7 @@ import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên phân khu'),
-	code: Yup.string().required('Vui lòng nhập mã phân khu').length(3, 'Mã phân khu ít nhất 3 kí tự'),
+	code: Yup.string().required('Vui lòng nhập mã phân khu').min(3, 'Mã phân khu ít nhất 3 kí tự'),
 	contactPhone: Yup.string()
 		.required('Vui lòng nhập SDT')
 		.matches(/^[0-9]\d{9}$/, { message: 'Số điện thoại không hợp lệ' }),

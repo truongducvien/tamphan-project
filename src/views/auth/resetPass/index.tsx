@@ -93,7 +93,7 @@ const ResetPassword: React.FC = () => {
 			setOtp(data?.confirmToken || '');
 		} catch (err) {
 			const errResponse = err as AxiosError<BaseResponseAction>;
-			if (errResponse?.response?.data?.code === 'NOT_FOUND_OTP_TOKEN')
+			if (errResponse?.response?.data?.code === 'INVALID_OTP')
 				setError({ password: '', username: '', otp: 'Sai mã xác nhận, thử lại sau' });
 			else setError({ password: '', username: '', otp: 'Có lỗi xảy ra, thử lại sau' });
 		}
@@ -126,7 +126,7 @@ const ResetPassword: React.FC = () => {
 			history.replace('/auth/sign-in');
 		} catch (err) {
 			const errResponse = err as AxiosError<BaseResponseAction>;
-			if (errResponse?.response?.data?.code === 'NOT_FOUND_OTP_TOKEN')
+			if (errResponse?.response?.data?.code === 'INVALID_OTP')
 				setError({ password: 'Sai mã xác nhận, thử lại sau', username: '', otp: '' });
 			else setError({ password: 'Có lỗi xảy ra, thử lại sau', username: '', otp: '' });
 		}
