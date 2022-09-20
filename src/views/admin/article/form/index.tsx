@@ -37,6 +37,7 @@ import { loadImage, uploadFile } from 'src/services/file';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
+	shortContent: Yup.string().required('Vui lòng nhập mô tả ngắn'),
 	title: Yup.string().required('Vui lòng nhập tiêu đề'),
 	areaIds: Yup.array()
 		.of(Yup.object().shape({ label: Yup.string(), value: Yup.string() }))
@@ -44,7 +45,7 @@ const validationSchema = Yup.object({
 	notificationWays: Yup.array()
 		.of(Yup.object().shape({ label: Yup.string(), value: Yup.string() }))
 		.nullable(),
-	type: Yup.object({ label: Yup.string(), value: Yup.string() }).nullable(),
+	type: Yup.object({ label: Yup.string(), value: Yup.string() }),
 	status: Yup.object({ label: Yup.string(), value: Yup.string() }).nullable(),
 });
 
@@ -94,7 +95,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 		enabled: !!id,
 		onSuccess: ({ data }) => {
 			if (data?.type && typeArticles.find(i => i.value === data.type)) {
-				setType(typeArticles.find(i => i.value === data.type));
+				setType(typeArticles.find(i => i.value === data.type) || typeArticles[0]);
 			}
 			if (data?.contentLink) {
 				setPdf({ fileId: 'Tải xuống', link: data.contentLink });
@@ -140,6 +141,10 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 			content: editorRef.current?.submit() || '',
 			contentLink: pdf.link,
 		};
+		if (!prepareData.content) {
+			toast({ title: 'Vui lòng nhập nội dung', status: 'error' });
+			return;
+		}
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		action === 'create' ? handelCreate(prepareData, reset) : handleUpdate(prepareData);
@@ -223,7 +228,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 							onLoadMore={fetchMore}
 						/>
 
-						<FormControl>
+						<FormControl isRequired>
 							<FormLabel>Loại bài viết</FormLabel>
 							<PullDown
 								name="type"
@@ -256,7 +261,13 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 							isMulti
 							isClearable
 						/>
-						<TextFieldHookForm label="Ngày tạo" name="createdAt" isDisabled variant="admin" />
+						<TextFieldHookForm
+							label="Ngày tạo"
+							name="createdAt"
+							isDisabled
+							hidden={action === 'create'}
+							variant="admin"
+						/>
 						<PullDownHookForm
 							label="Trạng thái"
 							name="status"
@@ -265,6 +276,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 							options={statusArticle}
 						/>
 						<TextAreaFieldHookForm
+							isRequired
 							label="Mô tả ngắn"
 							isDisabled={action === 'detail'}
 							name="shortContent"
@@ -272,7 +284,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 						/>
 					</SimpleGrid>
 					<Box pb={3}>
-						<FormControl>
+						<FormControl isRequired>
 							<FormLabel>Nội dung</FormLabel>
 							<EditorWithRef ref={editorRef} contents={defaultValue.content || ''} isDisable={action === 'detail'} />
 						</FormControl>

@@ -18,7 +18,8 @@ import { Status, statusOption2 } from 'src/variables/status';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
-	name: Yup.string().required('Vui lòng nhập tên nhóm'),
+	name: Yup.string().required('Vui lòng nhập tên chức vụ'),
+	code: Yup.string().required('Vui lòng nhập mã chức vụ'),
 	status: Yup.object().shape({ label: Yup.string(), value: Yup.string() }),
 });
 
@@ -260,7 +261,7 @@ const DetailPosition: React.FC<BaseComponentProps> = ({ request }) => {
 						pb={3}
 					>
 						<TextFieldHookForm isRequired isDisabled={isDisable} label="Tên chức vụ" name="name" variant="admin" />
-						<TextFieldHookForm label="Mã chức vụ" isDisabled={isDisable} name="code" variant="admin" />
+						<TextFieldHookForm label="Mã chức vụ" isRequired isDisabled={isDisable} name="code" variant="admin" />
 					</Stack>
 					{action !== 'create' && (
 						<Stack pb={3} align="start" w={{ sm: '100%', md: '50%' }}>

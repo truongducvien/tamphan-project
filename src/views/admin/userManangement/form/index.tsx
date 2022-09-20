@@ -123,7 +123,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 			.find(i => i.value === detailData?.data?.organizationId),
 		roleId: { label: detailData?.data?.role?.name, value: detailData?.data?.role?.id },
 		gender: gender.find(i => i.value === detailData?.data?.gender),
-		state: statusOption2.find(i => i.value === detailData?.data?.state),
+		state: statusOption2.find(i => i.value === detailData?.data?.state) || statusOption2[0],
 		dateOfBirth: formatDate(detailData?.data?.dateOfBirth),
 	};
 
