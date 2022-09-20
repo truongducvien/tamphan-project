@@ -54,7 +54,9 @@ const validationSchema = Yup.object({
 	operatingTime: Yup.string().required('Vui lòng chọn giờ hoạt động'),
 	areaId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn phân khu') }),
 	capacity: Yup.number().typeError('Vui lòng nhập số').required('Vui lòng nhập sức chứa'),
-	phoneNumber: Yup.number().required('Vui lòng nhập số điện thoại').typeError('Vui lòng nhập số điện thoại'),
+	phoneNumber: Yup.string()
+		.required('Vui lòng nhập SDT')
+		.matches(/^[0-9]\d{9}$/, { message: 'Số điện thoại không hợp lệ' }),
 	facilityGroupId: Yup.object({
 		label: Yup.string(),
 		value: Yup.string().required('Vui lòng chọn loại tiện ích'),

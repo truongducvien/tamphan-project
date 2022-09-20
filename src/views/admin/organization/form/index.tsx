@@ -27,11 +27,12 @@ import { IOrganizationPayload } from 'src/services/organizations/type';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
-	name: Yup.string().required('Vui lòng nhập đơn vị'),
+	name: Yup.string().required('Vui lòng nhập tên đơn vị'),
 	parentId: Yup.object({ label: Yup.string(), value: Yup.string() }).nullable(),
 	areaIds: Yup.array()
-		.of(Yup.object().shape({ label: Yup.string(), value: Yup.string() }))
-		.nullable(),
+		.of(Yup.object().shape({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn phân khu quản lý') }))
+		.min(1, 'Vui lòng chọn phân khu quản lý')
+		.required('Vui lòng chọn phân khu quản lý'),
 });
 
 interface DataForm extends Omit<IOrganizationPayload, 'parentId' | 'areaIds'> {

@@ -25,6 +25,7 @@ export const DialogContext = React.createContext<(options: DialogServiceOption) 
 const DialogServiceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [dialogService, setDialogService] = useState<DialogServiceState>({
 		title: '',
+		type: 'error',
 		open: false,
 	});
 

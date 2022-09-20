@@ -4,11 +4,13 @@ import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { MdLibraryAdd } from 'react-icons/md';
+import importTemplate from 'src/assets/templates/resident.csv';
 import { alert } from 'src/components/alertDialog/hook';
 import Card from 'src/components/card/Card';
 import { FormContainer } from 'src/components/form';
 import { BaseOption, PullDownHookForm } from 'src/components/form/PullDown';
 import { TextFieldHookForm } from 'src/components/form/TextField';
+import { DownloadTemplate, ImportButton } from 'src/components/importButton';
 import Table, { IColumn } from 'src/components/table';
 import { useToastInstance } from 'src/components/toast';
 import { BaseComponentProps } from 'src/hocs/withPermission';
@@ -18,7 +20,7 @@ import { useDebounce } from 'src/hooks/useDebounce';
 import { useLoadMore } from 'src/hooks/useLoadMore';
 import { getArea } from 'src/services/area';
 import { IArea, IAreaParams } from 'src/services/area/type';
-import { deleteResident, getResident } from 'src/services/resident';
+import { deleteResident, getResident, importResident } from 'src/services/resident';
 import { gender as genderOptions, IResident, IResidentParams, residentType } from 'src/services/resident/type';
 import { PermistionAction } from 'src/variables/permission';
 import { statusOption2 } from 'src/variables/status';
@@ -81,6 +83,7 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 			...params,
 		}),
 	);
+	const mutationImport = useMutation(importResident);
 
 	const onSearch = (payload: Form) => {
 		const prepareData = { ...payload, areaId: payload.areaId?.value };
@@ -100,6 +103,20 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 			refetch();
 		} catch {
 			toast({ title: 'Xoá thất bại', status: 'error' });
+		}
+	};
+
+	const handleImport = async (file: File) => {
+		const payload = new FormData();
+		payload.append('file', file);
+		const type = file.name.split('.') || [];
+		payload.append('type', type[type.length - 1]?.toUpperCase());
+		try {
+			await mutationImport.mutateAsync(payload);
+			toast({ title: 'Import thành công' });
+			refetch();
+		} catch {
+			toast({ title: 'Import thất bại', status: 'error' });
 		}
 	};
 
@@ -138,6 +155,11 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 							<TextFieldHookForm label="Tên cư dân" name="fullName" />
 						</Stack>
 						<Flex mt="3" justifyContent="end">
+							<Box hidden={!permistionAction.IMPORT}>
+								<DownloadTemplate url={importTemplate} mr={3} />
+								{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+								<ImportButton onChangeFile={handleImport} />
+							</Box>
 							<Button type="submit" variant="lightBrand" leftIcon={<SearchIcon />}>
 								Tìm kiếm
 							</Button>

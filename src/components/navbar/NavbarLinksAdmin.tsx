@@ -18,6 +18,7 @@ import {
 import { FaEthereum } from 'react-icons/fa';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { MdNotificationsNone } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'src/store';
 import { logout } from 'src/store/actionCreators';
 
@@ -152,10 +153,12 @@ const HeaderLinks: React.FC<Props> = props => {
 						</Text>
 					</Flex>
 					<Flex flexDirection="column" p="10px">
-						{/* <MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} borderRadius="8px" px="14px">
-							<Text fontSize="sm">Cập nhật thông tin</Text>
-						</MenuItem>
 						<MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} borderRadius="8px" px="14px">
+							<Link to="/auth/change-password">
+								<Text fontSize="sm">Đổi mật khẩu</Text>
+							</Link>
+						</MenuItem>
+						{/* <MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} borderRadius="8px" px="14px">
 							<Text fontSize="sm">Cài đặt</Text>
 						</MenuItem> */}
 						<MenuItem

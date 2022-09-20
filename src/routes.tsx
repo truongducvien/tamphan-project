@@ -109,7 +109,7 @@ const routes: Route[] = [
 		action: PermistionAction.VIEW,
 		items: [
 			{
-				name: 'Quản lí đơn vị',
+				name: 'Thêm mới đơn vị',
 				layout: '/admin',
 				path: `/organization/form`,
 				requirePermission: FeatureModule.ORGANIZATIONS_MANAGEMENT,

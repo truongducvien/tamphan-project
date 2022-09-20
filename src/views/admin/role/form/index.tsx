@@ -18,7 +18,8 @@ import { Status, statusOption2 } from 'src/variables/status';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
-	name: Yup.string().required('Vui lòng nhập tên nhóm'),
+	name: Yup.string().required('Vui lòng nhập tên chức vụ'),
+	code: Yup.string().required('Vui lòng nhập mã chức vụ'),
 	status: Yup.object().shape({ label: Yup.string(), value: Yup.string() }),
 });
 
@@ -124,13 +125,13 @@ const permissions: Array<PermissionProps> = [
 		id: '5',
 		value: 'PROPERTIES_MANAGEMENT',
 		title: 'Quản lý căn hộ',
-		permistion: ['VIEW', 'ADD', 'UPDATE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE', 'IMPORT'],
 	},
 	{
 		id: '6',
 		value: 'RESIDENT_MANAGEMENT',
 		title: 'Quản lý cư dân',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE', 'IMPORT'],
 	},
 	{
 		id: '7',
@@ -260,7 +261,7 @@ const DetailPosition: React.FC<BaseComponentProps> = ({ request }) => {
 						pb={3}
 					>
 						<TextFieldHookForm isRequired isDisabled={isDisable} label="Tên chức vụ" name="name" variant="admin" />
-						<TextFieldHookForm label="Mã chức vụ" isDisabled={isDisable} name="code" variant="admin" />
+						<TextFieldHookForm label="Mã chức vụ" isRequired isDisabled={isDisable} name="code" variant="admin" />
 					</Stack>
 					{action !== 'create' && (
 						<Stack pb={3} align="start" w={{ sm: '100%', md: '50%' }}>

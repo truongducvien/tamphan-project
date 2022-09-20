@@ -30,6 +30,9 @@ const validationSchema = Yup.object({
 	fullName: Yup.string().required('Vui lòng nhập họ tên'),
 	organizationId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn đơn vị') }),
 	roleId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn vai trò người dùng') }),
+	phoneNumber: Yup.string()
+		.required('Vui lòng nhập SDT')
+		.matches(/^[0-9]\d{9}$/, { message: 'Số điện thoại không hợp lệ' }),
 	state: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn trạng thái') }),
 });
 
@@ -120,7 +123,7 @@ const UserForm: React.FC<BaseComponentProps> = ({ request }) => {
 			.find(i => i.value === detailData?.data?.organizationId),
 		roleId: { label: detailData?.data?.role?.name, value: detailData?.data?.role?.id },
 		gender: gender.find(i => i.value === detailData?.data?.gender),
-		state: statusOption2.find(i => i.value === detailData?.data?.state),
+		state: statusOption2.find(i => i.value === detailData?.data?.state) || statusOption2[0],
 		dateOfBirth: formatDate(detailData?.data?.dateOfBirth),
 	};
 
