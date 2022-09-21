@@ -161,7 +161,7 @@ const permissions: Array<PermissionProps> = [
 		id: '11',
 		value: 'FACILITY_MANAGEMENT',
 		title: 'Quản lý tiện ích',
-		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE'],
+		permistion: ['VIEW', 'ADD', 'UPDATE'],
 	},
 	{
 		id: '12',
