@@ -31,6 +31,7 @@ import { useHistory } from 'react-router-dom';
 import illustration from 'src/assets/img/auth/auth.png';
 import { alert } from 'src/components/alertDialog/hook';
 import { HSeparator } from 'src/components/separator/Separator';
+import { useCountdownTimer } from 'src/hooks/useCountdownTimer';
 import DefaultAuth from 'src/layouts/auth/Default';
 import { BaseResponseAction } from 'src/services/type';
 import { userForgotPass, userResetPass, userVerifyToken } from 'src/services/user';
@@ -38,6 +39,7 @@ import { userForgotPass, userResetPass, userVerifyToken } from 'src/services/use
 const ResetPassword: React.FC = () => {
 	const [step, setStep] = useState(0);
 	const [otpToken, setOtp] = useState('');
+	const { minutes, seconds, setMinutes, setSeconds, isDown } = useCountdownTimer({});
 
 	const history = useHistory();
 	const textColor = useColorModeValue('navy.700', 'white');
@@ -56,6 +58,8 @@ const ResetPassword: React.FC = () => {
 	const { mutateAsync: mutationResetPass, isLoading: reseting } = useMutation(userResetPass);
 
 	const handleSendmail = async () => {
+		setMinutes(0);
+		setSeconds(0);
 		const email = usernameRef.current?.value;
 		const reg = /^\S+@\S+\.\S+$/;
 		if (!email || !reg.test(email)) {
@@ -64,7 +68,11 @@ const ResetPassword: React.FC = () => {
 		}
 		setError({ username: '', password: '', otp: '' });
 		try {
-			await mutationSentMail(email);
+			const { data } = await mutationSentMail(email);
+			const m = data?.durationInSeconds ? Math.floor((data.durationInSeconds % 3600) / 60) : 0;
+			const s = data?.durationInSeconds ? Math.floor(data.durationInSeconds % 60) : 0;
+			setMinutes(m);
+			setSeconds(s);
 			setStep(1);
 		} catch (err) {
 			const errResponse = err as AxiosError<BaseResponseAction>;
@@ -129,7 +137,7 @@ const ResetPassword: React.FC = () => {
 		} catch (err) {
 			const errResponse = err as AxiosError<BaseResponseAction>;
 			if (errResponse?.response?.data?.code === 'INVALID_OTP')
-				setError({ password: 'Sai mã xác nhận, thử lại sau', username: '', otp: '' });
+				setError({ password: 'Sai mã xác thực, thử lại sau', username: '', otp: '' });
 			else setError({ password: 'Có lỗi xảy ra, thử lại sau', username: '', otp: '' });
 		}
 	};
@@ -271,13 +279,31 @@ const ResetPassword: React.FC = () => {
 										type="text"
 										variant="auth"
 									/>
-									<Text pb={3} textAlign="center" fontWeight="bold" fontSize="sm" color="red.600">
-										{errorMessage.otp}
-									</Text>
+									{isDown ? (
+										<Flex justify="center" pb={3} textAlign="center" fontWeight="bold" fontSize="sm" color="red.600">
+											<Text>Mã xác nhận đã hết hiệu lực, vui lòng</Text>
+											{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+											<Text color="blue.600" cursor="pointer" onClick={handleSendmail}>
+												&nbsp;Gửi lại mã&nbsp;
+											</Text>
+											<Text>để tiếp tục</Text>
+										</Flex>
+									) : (
+										<>
+											<Text pb={3} textAlign="center" fontWeight="bold" fontSize="sm" color="red.600">
+												{errorMessage.otp}
+											</Text>
+											<Text pb={3} textAlign="center" fontWeight="bold" fontSize="sm" color="red.600">
+												{minutes}: {seconds}
+											</Text>
+										</>
+									)}
+
 									<Button
 										// eslint-disable-next-line @typescript-eslint/no-misused-promises
 										onClick={handleVerifyToken}
 										isLoading={sendingToken}
+										disabled={isDown}
 										loadingText="Loading"
 										fontSize="sm"
 										variant="brand"

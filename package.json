@@ -49,8 +49,8 @@
 		"yup": "^0.32.11"
 	},
 	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
+		"start": " react-scripts start",
+		"build": "GENERATE_SOURCEMAP=false react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
 		"lint": "eslint ./src --ext .ts --ext .tsx --color",
