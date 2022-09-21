@@ -19,10 +19,12 @@ import {
 	TabPanels,
 	Tab,
 	TabPanel,
+	IconButton,
 } from '@chakra-ui/react';
 // Custom components
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { FaChevronLeft } from 'react-icons/fa';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { useHistory } from 'react-router-dom';
@@ -136,7 +138,21 @@ const ResetPassword: React.FC = () => {
 	const handleClick = () => setShow(!show);
 
 	return (
-		<DefaultAuth illustrationBackground={illustration}>
+		<DefaultAuth
+			illustrationBackground={illustration}
+			header={
+				<IconButton
+					margin={2}
+					aria-label="setting"
+					color="blue.500"
+					variant="unstyled"
+					as={FaChevronLeft}
+					size="xs"
+					onClick={() => history.goBack()}
+					cursor="pointer"
+				/>
+			}
+		>
 			<Flex
 				maxW={{ base: '100%', md: 'max-content' }}
 				w="100%"
