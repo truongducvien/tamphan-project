@@ -45,7 +45,7 @@ import { getArea } from 'src/services/area';
 import { IArea, IAreaParams } from 'src/services/area/type';
 import { createProperty, getPropertyById, updateProperty, updateOwner } from 'src/services/properties';
 import { IPropertyPayload, StatusProperty, statusProperty } from 'src/services/properties/type';
-import { getResident, getResidentOwner } from 'src/services/resident';
+import { getResidentOwner, getResidentV2 } from 'src/services/resident';
 import { gender, identityCardType, IResident, IResidentParams } from 'src/services/resident/type';
 import * as Yup from 'yup';
 
@@ -95,7 +95,6 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 	const history = useHistory();
 	const { mutateAsync: mutationCreate, isLoading: isCreating } = useMutation(createProperty);
 	const { mutateAsync: mutationUpdate, isLoading: isUpdateingProperty } = useMutation(updateProperty);
-
 	const { mutateAsync: mutationUpdateOwner, isLoading: isUpdatetingOwner } = useMutation(updateOwner);
 
 	const { changeAction, id, action, goback } = useActionPage();
@@ -115,9 +114,9 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 		data: dataResident,
 		isLoading: isLoadingResident,
 		fetchMore: fetchMoreResident,
-	} = useLoadMore<IResident, IResidentParams>({
+	} = useLoadMore<Omit<IResident, 'property'>, IResidentParams>({
 		id: ['listResident', keyworResidentdDebounce],
-		func: getResident,
+		func: getResidentV2,
 		payload: { fullName: keyworResidentdDebounce },
 	});
 

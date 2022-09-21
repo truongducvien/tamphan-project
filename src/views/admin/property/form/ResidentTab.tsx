@@ -27,7 +27,6 @@ import { alert } from 'src/components/alertDialog/hook';
 import { FormContainer } from 'src/components/form';
 import { BaseOption, PullDownHookForm } from 'src/components/form/PullDown';
 import { TextFieldHookForm } from 'src/components/form/TextField';
-import { PullDown } from 'src/components/pulldown';
 import Table, { IColumn } from 'src/components/table';
 import { useToastInstance } from 'src/components/toast';
 import { useActionPermission } from 'src/hooks/useActionPermission';
@@ -37,7 +36,7 @@ import { getArea } from 'src/services/area';
 import { IArea, IAreaParams } from 'src/services/area/type';
 import { addResident, removeResident } from 'src/services/properties';
 import { RelationshipWithOwner, relationshipWithOwner } from 'src/services/properties/type';
-import { getResidentByProperty, getResident } from 'src/services/resident';
+import { getResidentByProperty, getResident, getResidentV2 } from 'src/services/resident';
 import {
 	gender as genderOptions,
 	IResident,
@@ -55,7 +54,7 @@ const ResidentModal: React.FC<{
 	onClose: () => void;
 	onSubmit: () => void;
 }> = ({ isOpen, onClose, onSubmit, defaultArr, id }) => {
-	const [ids, setIds] = useState<Array<IResident>>([]);
+	const [ids, setIds] = useState<Array<Omit<IResident, 'property'>>>([]);
 	const { isOpen: isOpenSelected, onOpen: onOpenSelected, onClose: onCloseSelected } = useDisclosure();
 	interface Form {
 		areaId: BaseOption<string>;
@@ -76,6 +75,7 @@ const ResidentModal: React.FC<{
 			});
 			onSubmit();
 			setIds([]);
+			onCloseSelected();
 		} catch (error) {
 			toast({
 				title: 'Thêm cư dân thất bại!',
@@ -91,7 +91,7 @@ const ResidentModal: React.FC<{
 	const [currentPage, setCurrentPage] = useState(1);
 	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
 
-	const COLUMNS: Array<IColumn<IResident>> = [
+	const COLUMNS: Array<IColumn<Omit<IResident, 'property'>>> = [
 		{
 			key: 'id',
 			label: '',
@@ -119,7 +119,7 @@ const ResidentModal: React.FC<{
 		{ key: 'gender', label: 'Giới tính', cell: ({ gender }) => genderOptions.find(i => i.value === gender)?.label },
 		{ key: 'identityCardNumber', label: 'CMND/ CCCD/ HC' },
 		{ key: 'identityCreateDate', label: 'Ngày cấp' },
-		{ key: 'identityLocationIssued', label: 'Nơi cấp' },
+		{ key: 'identityLocationIssued', label: 'Nơi cấp' },
 		{ key: 'email', label: 'Email' },
 		{ key: 'phoneNumber', label: 'Số điện thoại' },
 		{ key: 'permanentAddress', label: 'Địa chỉ thường trú' },
@@ -127,7 +127,7 @@ const ResidentModal: React.FC<{
 		{ key: 'state', label: 'Trạng thái', tag: ({ state }) => statusOption2.find(i => i.value === state) },
 	];
 
-	const COLUMNS2: Array<IColumn<IResident>> = [
+	const COLUMNS2: Array<IColumn<Omit<IResident, 'property'>>> = [
 		{ key: 'fullName', label: 'Tên cư dân' },
 		{
 			key: 'relationship',
@@ -174,7 +174,7 @@ const ResidentModal: React.FC<{
 	});
 
 	const { data, isLoading } = useQuery(['listResident', params, currentPage, currentPageSize], () =>
-		getResident({
+		getResidentV2({
 			page: currentPage - 1,
 			size: currentPageSize,
 			...params,
@@ -361,13 +361,14 @@ export const ResidentTab: React.FC<{ id: string }> = ({ id: idProperty }) => {
 		{
 			key: 'relationship',
 			label: 'Quan hệ CSH',
-			cell: ({ relationship: relationShip }) => relationshipWithOwner.find(i => i.value === relationShip)?.label,
+			cell: ({ relationship: relationShip, type }) =>
+				type === ResidentType.RESIDENT ? relationshipWithOwner.find(i => i.value === relationShip)?.label : '-',
 		},
 		{ key: 'dateOfBirth', label: 'Ngày sinh', dateFormat: 'DD/MM/YYYY' },
 		{ key: 'gender', label: 'Giới tính', cell: ({ gender }) => genderOptions.find(i => i.value === gender)?.label },
 		{ key: 'identityCardNumber', label: 'CMND/ CCCD/ HC' },
 		{ key: 'identityCreateDate', label: 'Ngày cấp', dateFormat: 'DD/MM/YYYY' },
-		{ key: 'identityLocationIssued', label: 'Nơi cấp' },
+		{ key: 'identityLocationIssued', label: 'Nơi cấp' },
 		{ key: 'type', label: 'Vai trò', tag: ({ type }) => residentType.find(i => i.value === type) },
 		{ key: 'email', label: 'Email' },
 		{ key: 'phoneNumber', label: 'Số điện thoại' },
