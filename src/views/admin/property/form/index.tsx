@@ -203,7 +203,6 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 		...detailData?.data,
 		status: statusProperty.find(i => i.value === detailData?.data?.status),
 		areaId: { label: detailData?.data?.areaName, value: detailData?.data?.areaId },
-		block: detailData?.data?.block ? Number(detailData?.data?.block) : 0,
 	};
 
 	const defaultOwner = {
@@ -291,7 +290,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 										name="floorNumber"
 										variant="admin"
 									/>
-									<TextFieldHookForm isDisabled={isDisabled} type="number" label="Khối" name="block" variant="admin" />
+									<TextFieldHookForm isDisabled={isDisabled} label="Khối" name="block" variant="admin" />
 								</Stack>
 								<Stack
 									justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
