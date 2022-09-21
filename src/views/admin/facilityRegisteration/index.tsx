@@ -68,7 +68,9 @@ const FacilityReManagement: React.FC = () => {
 		{ key: 'userName', label: 'Tên người đặt' },
 		{ key: 'phoneNumber', label: 'Số điện thoại' },
 		{ key: 'bookingCode', label: 'Mã đặt chỗ' },
-		{ key: 'reservationDate', label: 'Ngày sử dụng' },
+		{ key: 'areaName', label: 'Tên phân khu' },
+		{ key: 'propertyCode', label: 'Mã căn hộ' },
+		{ key: 'reservationDate', label: 'Ngày sử dụng', dateFormat: 'DD/MM/YYYY' },
 		{
 			key: 'bookingTimeSlot',
 			label: 'Giờ sử dụng',

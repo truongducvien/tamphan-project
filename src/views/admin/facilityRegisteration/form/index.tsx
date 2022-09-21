@@ -12,6 +12,7 @@ import { TextFieldHookForm } from 'src/components/form/TextField';
 import { PullDown } from 'src/components/pulldown';
 import { useToastInstance } from 'src/components/toast';
 import { currency } from 'src/helpers/currency';
+import { formatDate } from 'src/helpers/dayjs';
 import { BaseComponentProps } from 'src/hocs/withPermission';
 import useActionPage from 'src/hooks/useActionPage';
 import { useActionPermission } from 'src/hooks/useActionPermission';
@@ -58,6 +59,9 @@ const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 		paymentMethod: paymentMethods.find(i => i.value === data?.data?.paymentMethod)?.label,
 		status: statusFacilityRe.find(i => i.value === data?.data?.status)?.label,
 		depositAmount: currency(data?.data?.depositAmount.amount || 0, data?.data?.depositAmount.currency),
+		reservationDate: formatDate(data?.data?.reservationDate),
+		createdAt: formatDate(data?.data?.createdAt),
+		paymentDate: formatDate(data?.data?.paymentDate),
 	};
 
 	// bookingCode
@@ -73,6 +77,15 @@ const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 					>
 						<TextFieldHookForm isDisabled label="Tên tiện ích" name="facilityName" variant="admin" />
 						<TextFieldHookForm isDisabled label="Mã đặt chỗ" name="bookingCode" variant="admin" />
+					</Stack>
+					<Stack
+						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
+						direction={{ base: 'column', md: 'row' }}
+						spacing={3}
+						pb={3}
+					>
+						<TextFieldHookForm isDisabled label="Tên phân khu" name="areaName" variant="admin" />
+						<TextFieldHookForm isDisabled label="Mã căn hộ" name="propertyCode" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -98,7 +111,7 @@ const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isDisabled label="Email" name="email" variant="admin" />
+						<TextFieldHookForm isDisabled label="Email" name="residentEmail" variant="admin" />
 						<TextFieldHookForm isDisabled label="Sô lượng" name="quantityOfPerson" variant="admin" />
 					</Stack>
 					<Stack
@@ -116,8 +129,8 @@ const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm isDisabled label="Ngày thanh toán" name="datePay" variant="admin" />
-						<TextFieldHookForm isDisabled label="Ngày đăng ký" name="reservationDate" variant="admin" />
+						<TextFieldHookForm isDisabled label="Ngày thanh toán" name="paymentDate" variant="admin" />
+						<TextFieldHookForm isDisabled label="Ngày đăng ký" name="createdAt" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}

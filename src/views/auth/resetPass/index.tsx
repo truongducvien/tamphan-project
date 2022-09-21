@@ -19,10 +19,12 @@ import {
 	TabPanels,
 	Tab,
 	TabPanel,
+	IconButton,
 } from '@chakra-ui/react';
 // Custom components
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { FaChevronLeft } from 'react-icons/fa';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { useHistory } from 'react-router-dom';
@@ -93,7 +95,7 @@ const ResetPassword: React.FC = () => {
 			setOtp(data?.confirmToken || '');
 		} catch (err) {
 			const errResponse = err as AxiosError<BaseResponseAction>;
-			if (errResponse?.response?.data?.code === 'NOT_FOUND_OTP_TOKEN')
+			if (errResponse?.response?.data?.code === 'INVALID_OTP')
 				setError({ password: '', username: '', otp: 'Sai mã xác nhận, thử lại sau' });
 			else setError({ password: '', username: '', otp: 'Có lỗi xảy ra, thử lại sau' });
 		}
@@ -126,7 +128,7 @@ const ResetPassword: React.FC = () => {
 			history.replace('/auth/sign-in');
 		} catch (err) {
 			const errResponse = err as AxiosError<BaseResponseAction>;
-			if (errResponse?.response?.data?.code === 'NOT_FOUND_OTP_TOKEN')
+			if (errResponse?.response?.data?.code === 'INVALID_OTP')
 				setError({ password: 'Sai mã xác nhận, thử lại sau', username: '', otp: '' });
 			else setError({ password: 'Có lỗi xảy ra, thử lại sau', username: '', otp: '' });
 		}
@@ -136,7 +138,21 @@ const ResetPassword: React.FC = () => {
 	const handleClick = () => setShow(!show);
 
 	return (
-		<DefaultAuth illustrationBackground={illustration}>
+		<DefaultAuth
+			illustrationBackground={illustration}
+			header={
+				<IconButton
+					margin={2}
+					aria-label="setting"
+					color="blue.500"
+					variant="unstyled"
+					as={FaChevronLeft}
+					size="xs"
+					onClick={() => history.goBack()}
+					cursor="pointer"
+				/>
+			}
+		>
 			<Flex
 				maxW={{ base: '100%', md: 'max-content' }}
 				w="100%"

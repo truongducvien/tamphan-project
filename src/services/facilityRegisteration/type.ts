@@ -62,11 +62,14 @@ export interface IFacilityRe {
 	};
 	bookingCode: string;
 	quantityOfPerson: number;
+	areaName: string;
 	note: string;
 	phoneNumber: string;
 	userName: string;
+	propertyCode: string;
 	facilityName: string;
 	reservationDate: string;
+	residentEmail: string;
 	cancelDate: string;
 	status: string;
 	depositAmount: {
@@ -74,7 +77,9 @@ export interface IFacilityRe {
 		currency: string;
 	};
 	paymentMethod: PaymentMethod;
+	paymentDate: string;
 	id: string;
+	createdAt: string;
 }
 
 export type IFacilityGroupResponse = BaseResponseList<IFacilityRe>;

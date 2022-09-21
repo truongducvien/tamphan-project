@@ -140,7 +140,7 @@ const SignIn: React.FC = () => {
 						<Text pb={3} textAlign="center" fontWeight="bold" fontSize="sm" color="red.600">
 							{errorMessase.password || errorMessase.username || (error['users/LOGIN'] as string)}
 						</Text>
-						<Flex justifyContent="space-between" align="center" mb="24px">
+						<Flex justify="end" mb="24px">
 							<NavLink to="/auth/forgot-password">
 								<Text color={textColorBrand} fontSize="sm" w="124px" fontWeight="500">
 									Quên mật khẩu?
