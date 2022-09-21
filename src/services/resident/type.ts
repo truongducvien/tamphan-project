@@ -94,6 +94,7 @@ export interface IResidentParams extends BaseParams {
 }
 
 export type IResidentResponse = BaseResponseList<IResident>;
+export type IResidentV2Response = BaseResponseList<Omit<IResident, 'property'>>;
 
 export interface IResidentPayload extends Omit<IResident, 'property'> {
 	propertyId: string;
