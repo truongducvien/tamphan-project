@@ -65,16 +65,32 @@ export const userRefreshToken = async (refreshToken: string) => {
 };
 
 export const userForgotPass = async (email: string) => {
-	const { data } = await http.put<BaseResponseDetail<{ durationInSeconds: number }>>('/v1/operators/forget-password', {
-		email,
-	});
+	const { data } = await http.put<BaseResponseDetail<{ durationInSeconds: number }>>(
+		'/v1/operators/forget-password',
+		{
+			email,
+		},
+		{
+			headers: {
+				authorization: false,
+			},
+		},
+	);
 	return data || null;
 };
 
 export const userVerifyToken = async (otp: string) => {
-	const { data } = await http.post<BaseResponseDetail<{ confirmToken: string }>>('/v1/operators/otp/verify', {
-		otp,
-	});
+	const { data } = await http.post<BaseResponseDetail<{ confirmToken: string }>>(
+		'/v1/operators/otp/verify',
+		{
+			otp,
+		},
+		{
+			headers: {
+				authorization: false,
+			},
+		},
+	);
 	return data || null;
 };
 
@@ -82,6 +98,11 @@ export const userResetPass = async (payload: { confirmToken: string; newPassword
 	const { data } = await http.put<BaseResponseDetail<{ durationInSeconds: number }>>(
 		'/v1/operators/reset-password',
 		payload,
+		{
+			headers: {
+				authorization: false,
+			},
+		},
 	);
 	return data || null;
 };
