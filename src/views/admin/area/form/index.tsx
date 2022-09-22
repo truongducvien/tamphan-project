@@ -2,6 +2,7 @@ import { useRef } from 'react';
 
 import { Box, Button, FormControl, FormLabel, HStack, Stack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useHistory } from 'react-router-dom';
 import Card from 'src/components/card/Card';
 import UploadImage, { UploadImageRef } from 'src/components/fileUpload';
@@ -62,8 +63,10 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 			cardImageRef.current?.onReset();
 			reset();
 			goback();
-		} catch {
-			toast({ title: 'Tạo mới thất bại', status: 'error' });
+		} catch (err) {
+			const error = err as AxiosError<{ message: string; code: string }>;
+			if (error?.response?.data?.code === 'AREA_ERROR') toast({ title: 'Mã phân khu đã tồn tại', status: 'error' });
+			else toast({ title: 'Tạo mới thất bại', status: 'error' });
 		}
 	};
 
@@ -129,7 +132,13 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 						pb={3}
 					>
 						<TextFieldHookForm isDisabled={isDisabled} isRequired label="Tên phân khu" name="name" variant="admin" />
-						<TextFieldHookForm isDisabled={isDisabled} isRequired label="Mã phân khu" name="code" variant="admin" />
+						<TextFieldHookForm
+							isDisabled={action !== 'create'}
+							isRequired
+							label="Mã phân khu"
+							name="code"
+							variant="admin"
+						/>
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}

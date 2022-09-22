@@ -164,6 +164,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 	} = useQuery(['detail', id], () => getFacilityById(id || ''), {
 		enabled: !!id,
 		onSuccess: ({ data }) => {
+			setTimeSlotType(timeSlotTypeOption.find(i => i.value === data?.timeSlotType) || timeSlotTypeOption[0]);
 			setPay(!!data?.depositAmount.amount);
 			setDayOffs(data?.dateOffs.map(i => formatDate(i)) || []);
 			setTimeSlots(data?.timeSlots?.map(i => `${i.start}-${i.end}`) || []);
