@@ -38,7 +38,7 @@ import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
 	shortContent: Yup.string().required('Vui lòng nhập mô tả ngắn'),
-	title: Yup.string().required('Vui lòng nhập tiêu đề'),
+	title: Yup.string().max(255, 'Tiêu đề tối đa 255 kí tự').required('Vui lòng nhập tiêu đề'),
 	areaIds: Yup.array()
 		.of(Yup.object().shape({ label: Yup.string(), value: Yup.string() }))
 		.nullable(),
@@ -77,7 +77,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 
 	const {
 		data: dataArea,
-		isLoading: isLoadingProperty,
+		isLoading: isLoadingArea,
 		fetchMore,
 	} = useLoadMore<IArea, IAreaParams>({
 		id: ['listArea', keywordDebounce],
@@ -224,7 +224,7 @@ const DetailArticle: React.FC<BaseComponentProps> = ({ request }) => {
 							isMulti
 							onInputChange={setKeyword}
 							isClearable
-							isLoading={isLoadingProperty}
+							isLoading={isLoadingArea}
 							onLoadMore={fetchMore}
 						/>
 

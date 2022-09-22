@@ -143,7 +143,10 @@ const FacilityGroupManagement: React.FC<BaseComponentProps> = ({ request }) => {
 						hasNextPage: pageInfo?.hasNextPage,
 						hasPreviousPage: pageInfo?.hasPreviousPage,
 						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => setCurrentPageSize(pageSize),
+						onPageSizeChange: pageSize => {
+							setCurrentPage(1);
+							setCurrentPageSize(pageSize);
+						},
 					}}
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises
 					onClickDelete={row => onDelete(row)}
