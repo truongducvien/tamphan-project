@@ -53,6 +53,27 @@ export interface InitiaFailurelAction {
 	error: Error | string;
 }
 
+export const CHANGE_AVARTAR = 'users/CHANGE_AVARTAR';
+
+export interface ChangeAvatarAction {
+	type: typeof CHANGE_AVARTAR;
+	link: string;
+}
+
+export const CHANGE_AVARTAR_SUCESS = 'users/CHANGE_AVARTAR_SUCESS';
+
+export interface ChangeAvatarSuscessAction {
+	type: typeof CHANGE_AVARTAR_SUCESS;
+	user: IUser;
+}
+
+export const CHANGE_AVARTAR_FAILURE = 'users/INITIAL_FAILURE';
+
+export interface ChangeAvatarFailurelAction {
+	type: typeof CHANGE_AVARTAR_FAILURE;
+	error: Error | string;
+}
+
 export type UserAction =
 	| LoginAction
 	| LoginSuccessAction
@@ -61,4 +82,7 @@ export type UserAction =
 	| InitialSuscessAction
 	| InitiaFailurelAction
 	| LogoutAction
-	| LogoutSuccessAction;
+	| LogoutSuccessAction
+	| ChangeAvatarAction
+	| ChangeAvatarSuscessAction
+	| ChangeAvatarFailurelAction;

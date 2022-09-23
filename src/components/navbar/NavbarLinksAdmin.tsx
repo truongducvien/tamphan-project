@@ -1,5 +1,5 @@
 // Chakra Imports
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
 	Avatar,
@@ -14,13 +14,28 @@ import {
 	useColorModeValue,
 	useColorMode,
 	Center,
+	Modal,
+	ModalBody,
+	useDisclosure,
+	ModalOverlay,
+	ModalContent,
+	ModalCloseButton,
+	ModalHeader,
+	Heading,
+	useForceUpdate,
 } from '@chakra-ui/react';
+import { useMutation } from '@tanstack/react-query';
 import { FaEthereum } from 'react-icons/fa';
 import { IoMdMoon, IoMdSunny } from 'react-icons/io';
 import { MdNotificationsNone } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { loadImage } from 'src/services/file';
+import { userChangeAvatar } from 'src/services/user';
 import { useAppDispatch, useAppSelector } from 'src/store';
-import { logout } from 'src/store/actionCreators';
+import { changeAvatar, logout } from 'src/store/actionCreators';
+
+import UploadImage, { UploadImageRef } from '../fileUpload';
+import { useToastInstance } from '../toast';
 
 export interface Props {
 	variant?: string;
@@ -30,6 +45,68 @@ export interface Props {
 	logoText?: string;
 	scrolled?: boolean;
 }
+
+export const AvatarUser: React.FC<{ size?: string }> = ({ size = 'sm' }) => {
+	const { info } = useAppSelector(state => state.user);
+	const dispatch = useAppDispatch();
+	const { avatarLink } = info || {};
+	const [avatar, setAvatar] = useState('');
+	const { isOpen, onClose, onOpen } = useDisclosure();
+	const inputRef = useRef<UploadImageRef>(null);
+	const [isDisabled, setIsDisabled] = useState(true);
+	const updateAvatar = () => {
+		const img = inputRef.current?.onSubmit()?.files?.[0];
+		if (!img) return;
+		dispatch(changeAvatar(img));
+		onClose();
+	};
+
+	useEffect(() => {
+		if (avatarLink) {
+			loadImage(avatarLink).then(d => setAvatar(d));
+		}
+	}, [avatarLink]);
+
+	return (
+		<>
+			<Avatar
+				_hover={{ cursor: 'pointer' }}
+				color="white"
+				bg="#11047A"
+				size={size}
+				name={info?.fullName}
+				src={avatar}
+				onClick={onOpen}
+			/>
+			<Modal isOpen={isOpen} onClose={onClose} closeOnEsc>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalCloseButton />
+					<ModalHeader>
+						<Heading as="h6" size="sm">
+							Cập nhật hình đại diện
+						</Heading>
+					</ModalHeader>
+					<ModalBody>
+						<Center>
+							<UploadImage
+								service="OPERATOR"
+								ref={inputRef}
+								defaultValue={avatarLink ? [avatarLink] : []}
+								onChange={() => setIsDisabled(false)}
+							/>
+						</Center>
+						<Flex mt="20px" justify="end">
+							<Button variant="brand" isDisabled={isDisabled} onClick={updateAvatar}>
+								Cập nhật
+							</Button>
+						</Flex>
+					</ModalBody>
+				</ModalContent>
+			</Modal>
+		</>
+	);
+};
 
 const HeaderLinks: React.FC<Props> = props => {
 	const dispatch = useAppDispatch();
@@ -126,30 +203,23 @@ const HeaderLinks: React.FC<Props> = props => {
 			</Button>
 			<Menu>
 				<MenuButton p="0px">
-					<Avatar
-						_hover={{ cursor: 'pointer' }}
-						color="white"
-						name="Adela Parkson"
-						bg="#11047A"
-						size="sm"
-						w="40px"
-						h="40px"
-					/>
+					<AvatarUser />
 				</MenuButton>
 				<MenuList boxShadow={shadow} p="0px" mt="10px" borderRadius="20px" bg={menuBg} border="none">
-					<Flex w="100%" mb="0px">
-						<Text
-							ps="20px"
-							pt="16px"
-							pb="10px"
-							w="100%"
-							borderBottom="1px solid"
-							borderColor={borderColor}
-							fontSize="sm"
-							fontWeight="700"
-							color={textColor}
-						>
-							👋&nbsp; {info?.fullName || 'Admin'}
+					<Flex
+						borderBottom="1px solid"
+						borderColor={borderColor}
+						w="100%"
+						mb="0px"
+						ps="10px"
+						pt="16px"
+						pb="10px"
+						justify="center"
+						align="center"
+					>
+						<AvatarUser size="xs" />
+						<Text ml="10px" flex={1} fontSize="sm" fontWeight="700" color={textColor}>
+							{info?.fullName || 'Admin'}
 						</Text>
 					</Flex>
 					<Flex flexDirection="column" p="10px">

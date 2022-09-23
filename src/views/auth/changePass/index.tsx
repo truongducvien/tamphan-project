@@ -58,7 +58,7 @@ const ChangePass: React.FC = () => {
 		const rePassword = rePassRef.current?.value;
 		const reg = /^(?=.*\d)(?=(.*\W){1})(?=.*[a-zA-Z])(?!.*\s).{8,}$/;
 		if (!reg.test(password || '')) {
-			setError('Mật khẩu tối thiểu 8 kí tự, ít nhất 1 chữ in và 1 chữ thường và 1 kí tự đặc biệt');
+			setError('Mật khẩu tối thiểu 8 kí tự, bao gồm ít nhất 1 chữ in hoa, 1 chữ thường, 1 chữ số và 1 kí tự đặc biệt.');
 			return;
 		}
 		if (password !== rePassword) {
@@ -67,6 +67,7 @@ const ChangePass: React.FC = () => {
 		}
 
 		setError('');
+		return;
 		try {
 			await mutationResetPass({
 				newPassword: password || '',
@@ -155,7 +156,7 @@ const ChangePass: React.FC = () => {
 							Đổi mật khẩu
 						</Heading>
 						<Text mb="36px" ms="4px" color={textColorSecondary} fontWeight="400" fontSize="md">
-							Mật khẩu Tối thiểu 6 kí tự, bao gồm ít nhất 1 chữ in hoa, 1 chữ thường và 1 kí tự đặc biệt!
+							Mật khẩu tối thiểu 8 kí tự, bao gồm ít nhất 1 chữ in hoa, 1 chữ thường, 1 chữ số và 1 kí tự đặc biệt!
 						</Text>
 					</Box>
 					<Flex align="center" mb="25px">
@@ -172,7 +173,6 @@ const ChangePass: React.FC = () => {
 							placeholder="Nhập lại mật khẩu"
 							mb="24px"
 							size="lg"
-							type={show ? 'text' : 'password'}
 							variant="auth"
 						/>
 						<FormLabel display="flex" ms="4px" fontSize="sm" fontWeight="500" color={textColor} mb="8px">

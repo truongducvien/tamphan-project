@@ -56,3 +56,24 @@ export function initialUserFalure(error: Error | string): actions.InitiaFailurel
 		error,
 	};
 }
+
+export function changeAvatar(link: string): actions.ChangeAvatarAction {
+	return {
+		type: actions.CHANGE_AVARTAR,
+		link,
+	};
+}
+
+export function changeAvatarSuccess(user: IUser): actions.ChangeAvatarSuscessAction {
+	return {
+		type: actions.CHANGE_AVARTAR_SUCESS,
+		user,
+	};
+}
+
+export function changeAvatarFalure(error: Error | string): actions.ChangeAvatarFailurelAction {
+	return {
+		type: actions.CHANGE_AVARTAR_FAILURE,
+		error,
+	};
+}
