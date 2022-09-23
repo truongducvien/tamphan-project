@@ -65,9 +65,7 @@ const ChangePass: React.FC = () => {
 			setError('Mật khẩu chưa giống nhau');
 			return;
 		}
-
 		setError('');
-		return;
 		try {
 			await mutationResetPass({
 				newPassword: password || '',
