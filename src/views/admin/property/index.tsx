@@ -56,8 +56,6 @@ const PropertyManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		{ key: 'code', label: 'Mã căn hộ' },
 		{ key: 'name', label: 'Tên căn hộ' },
 		{ key: 'type', label: 'Loại căn hộ' },
-		{ key: 'floorNumber', label: 'Tầng' },
-		{ key: 'block', label: 'Khối' },
 		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => statusProperty.find(i => i.value === status) },
 		{ key: 'acreage', label: 'Diện tích' },
 		{ key: 'numberOfBedRoom', label: 'SỐ PHÒNG NGỦ' },

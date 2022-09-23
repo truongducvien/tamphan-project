@@ -8,7 +8,6 @@ import { FormContainer } from 'src/components/form';
 import { DatePickerHookForm } from 'src/components/form/DatePicker';
 import { Loading } from 'src/components/form/Loading';
 import { BaseOption, Option, PullDownHookForm } from 'src/components/form/PullDown';
-import { SwitchHookForm } from 'src/components/form/SwitchHookForm';
 import { TextFieldHookForm } from 'src/components/form/TextField';
 import { PullDown } from 'src/components/pulldown';
 import { useToastInstance } from 'src/components/toast';
@@ -270,10 +269,6 @@ const ResidentForm: React.FC<BaseComponentProps> = ({ request }) => {
 						/>
 						<TextFieldHookForm isDisabled={isDisabled} label="Thông tin uỷ quyền" name="uyquyen" variant="admin" />
 					</SimpleGrid>
-					<Box mt={3}>
-						{/* <Swich label="Cho phép sử dụng NOVAID" id="useNovaId" /> */}
-						<SwitchHookForm label="Cho phép sử dụng NOVAID" isDisabled={isDisabled} name="useNovaId" variant="admin" />
-					</Box>
 					<HStack pb={3} justifyContent="flex-end">
 						<Button
 							hidden={!permistionAction.UPDATE || action !== 'detail'}

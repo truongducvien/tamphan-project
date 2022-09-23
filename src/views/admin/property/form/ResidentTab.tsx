@@ -209,7 +209,7 @@ const ResidentModal: React.FC<{
 										justify={{ base: 'center', md: 'space-around', xl: 'space-around' }}
 										direction={{ base: 'column', md: 'row' }}
 									>
-										<TextFieldHookForm label="Mã căn hộ" name="propertyId" />
+										<TextFieldHookForm label="Mã căn hộ" name="propertyCode" />
 										<PullDownHookForm
 											name="areaId"
 											label="Phân khu"
