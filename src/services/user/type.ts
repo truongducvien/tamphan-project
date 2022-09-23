@@ -10,6 +10,7 @@ export interface IUser {
 	createdAt: Date;
 	dateOfBirth: string;
 	areaId: string;
+	avatarLink: string;
 	email: string;
 	fullName: string;
 	gender: Gender;

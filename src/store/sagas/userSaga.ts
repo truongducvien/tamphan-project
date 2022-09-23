@@ -3,7 +3,7 @@ import { put, call, takeEvery, all, fork, StrictEffect, cancel } from 'redux-sag
 import { alert } from 'src/components/alertDialog/hook';
 import { clearAccessToken, loadAccessToken, saveAccessToken, saveRefreshToken } from 'src/helpers/storage';
 import { BaseResponseDetail } from 'src/services/type';
-import { getByAccessToken, login, LoginResponse } from 'src/services/user';
+import { getByAccessToken, login, LoginResponse, userChangeAvatar } from 'src/services/user';
 import { IUser } from 'src/services/user/type';
 
 import * as actionCreators from '../actionCreators';
@@ -65,7 +65,7 @@ function* watchOnRequesstInital() {
 	yield takeEvery(actionTypes.INITIAL, requestGetUserInfo);
 }
 
-export function* requestLogout() {
+function* requestLogout() {
 	try {
 		const clearStore = () => {
 			sessionStorage.clear();
@@ -78,10 +78,42 @@ export function* requestLogout() {
 	}
 }
 
+function* requestChangeAvatar({
+	link,
+}: actionTypes.ChangeAvatarAction): Generator<StrictEffect, void, BaseResponseDetail<IUser>> {
+	try {
+		const response = yield call(userChangeAvatar, link);
+		if (!response?.data) {
+			throw Error('No data User response');
+		}
+		yield put(actionCreators.userLoginSuccess(response?.data));
+		yield call(alert, {
+			title: 'Cập nhật hình đại diện thành công.',
+			type: 'message',
+		});
+	} catch (error) {
+		const err = error as AxiosError<{ message: string }>;
+		yield put(actionCreators.changeAvatarFalure(err));
+		yield call(alert, {
+			title: 'Cập nhật hình đại diện thất bại.',
+			type: 'message',
+		});
+	}
+}
+
 function* watchOnRequestLogout() {
 	yield takeEvery(actionTypes.LOGOUT_REQUEST, requestLogout);
 }
 
+function* watchOnRequestChangeAvatar() {
+	yield takeEvery(actionTypes.CHANGE_AVARTAR, requestChangeAvatar);
+}
+
 export default function* userSaga() {
-	yield all([fork(watchOnRequesstLogin), fork(watchOnRequesstInital), fork(watchOnRequestLogout)]);
+	yield all([
+		fork(watchOnRequesstLogin),
+		fork(watchOnRequesstInital),
+		fork(watchOnRequestLogout),
+		fork(watchOnRequestChangeAvatar),
+	]);
 }

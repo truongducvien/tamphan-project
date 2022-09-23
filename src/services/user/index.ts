@@ -111,3 +111,8 @@ export const userChangePass = async (payload: { oldPassword: string; newPassword
 	const { data } = await http.put<BaseResponseAction>('/v1/operators/change-password', payload);
 	return data || null;
 };
+
+export const userChangeAvatar = async (avatarLink: string) => {
+	const { data } = await http.put<BaseResponseDetail<IUser>>('/v1/operators/change-avatar', { avatarLink });
+	return data || null;
+};
