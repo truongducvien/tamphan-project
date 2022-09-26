@@ -71,7 +71,7 @@ const ResdidentCardManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		{ key: 'cardNumber', label: 'Mã số thẻ' },
 		{ key: 'property', label: 'Mã căn hộ', cell: ({ property }) => property?.code },
 		{ key: 'state', label: 'Trạng thái thẻ', tag: ({ state }) => statusOption2.find(i => i.value === state) },
-		{ key: 'updatedDate', label: 'Ngày cập nhật' },
+		{ key: 'modifiedAt', label: 'Ngày cập nhật', dateFormat: 'DD/MM/YYYY' },
 		{ key: 'modifyBy', label: 'Người cập nhật' },
 	];
 

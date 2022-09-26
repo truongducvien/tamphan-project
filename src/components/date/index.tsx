@@ -33,6 +33,7 @@ import {
 import dayjs from 'dayjs';
 import { MdClear } from 'react-icons/md';
 
+import { SliderThumbWithTooltip } from './SliderThumbWithTooltip';
 import { daysMap, getMonthDetails, getMonthStr } from './utils';
 
 const oneDay = 60 * 60 * 24 * 1000;
@@ -61,6 +62,7 @@ export const DatePicker = ({
 	const { onOpen, onClose, isOpen } = useDisclosure();
 	const [year, setYear] = useState(date.getFullYear());
 	const [month, setMonth] = useState(date.getMonth());
+	const [editting, setEditting] = useState<false | 'year'>(false);
 	const [monthDetails, setMonthDetails] = useState(getMonthDetails(year, month));
 	const [selectedDay, setSelectedDay] = useState<number | undefined>(
 		defaultDay ? new Date(defaultDay).setHours(0, 0, 0, 0) : undefined,
@@ -204,12 +206,29 @@ export const DatePicker = ({
 								onClick={() => setMonthAction(-1)}
 								icon={<ChevronLeftIcon color={color} />}
 							/>
-							<VStack align="center">
-								<Button variant="ghost" size="none">
-									<Heading color={color} m={0} fontWeight={200} as="h5">
-										{year}
-									</Heading>
-								</Button>
+							<VStack align="center" minH="65px">
+								{editting === 'year' ? (
+									<>
+										<Text color={color} m={0} fontWeight={200} textAlign="center" w="100%" lineHeight={0} fontSize={20}>
+											{year}
+										</Text>
+										<SliderThumbWithTooltip
+											defaultValue={year}
+											onChangeEnd={() => setEditting(false)}
+											onChange={e => setYear(e)}
+											min={1900}
+											max={2100}
+											step={1}
+										/>
+									</>
+								) : (
+									<Button variant="ghost" size="none" onClick={() => setEditting('year')}>
+										<Heading color={color} m={0} fontWeight={200} as="h5">
+											{year}
+										</Heading>
+									</Button>
+								)}
+
 								<Button variant="ghost" size="none" py="0px" color={color} margin="0px !important">
 									{getMonthStr(month).toUpperCase()}
 								</Button>
