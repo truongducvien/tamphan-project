@@ -12,6 +12,7 @@ export interface IResidentCard {
 	resident: IResident;
 	state: Status;
 	updatedDate: string;
+	modifiedAt: Date;
 }
 
 export interface IResidentCardParams extends BaseParams {
