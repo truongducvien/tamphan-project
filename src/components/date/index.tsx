@@ -214,7 +214,10 @@ export const DatePicker = ({
 										</Text>
 										<SliderThumbWithTooltip
 											defaultValue={year}
-											onChangeEnd={() => setEditting(false)}
+											onChangeEnd={e => {
+												setMonthDetails(getMonthDetails(e, month));
+												setEditting(false);
+											}}
 											onChange={e => setYear(e)}
 											min={1900}
 											max={2100}
