@@ -180,6 +180,10 @@ export const PullDownHookForm: React.FC<PullDownHookFormProps> = ({
 										borderColor: forcusBorder,
 										boxShadow: '0 0 0 0px',
 									},
+									_invalid: {
+										boxShadow: '0 0 0 0px',
+										borderColor: '#EE5D50',
+									},
 								}),
 								menuList: provided => ({
 									...provided,

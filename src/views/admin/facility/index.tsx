@@ -23,6 +23,7 @@ import { deleteFacility, getFacility } from 'src/services/facility';
 import { getFacilityGroup } from 'src/services/facility/group';
 import { IFacilityGroup, IFacilityGroupParams } from 'src/services/facility/group/type';
 import { IFacility } from 'src/services/facility/type';
+import { PermistionAction } from 'src/variables/permission';
 import { statusOption2 } from 'src/variables/status';
 
 const COLUMNS: Array<IColumn<IFacility>> = [
@@ -208,7 +209,7 @@ const FacilityManagement: React.FC<BaseComponentProps> = ({ request }) => {
 							setCurrentPageSize(pageSize);
 						},
 					}}
-					action={actions}
+					action={actions.filter(i => i === PermistionAction.UPDATE || i === PermistionAction.VIEW)}
 					onClickDetail={row => changeAction('detail', row.id)}
 					onClickEdit={row => changeAction('edit', row.id)}
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises
