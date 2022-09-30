@@ -254,11 +254,11 @@ export const DatePicker = ({
 							/>
 						</HStack>
 					</Center>
-					<Box p={3}>
+					<Box px={3}>
 						<Grid alignItems="center" templateColumns="repeat(7, 1fr)" gap={3}>
 							{daysMap.map((d, i) => (
-								<Text color={color} key={i} w="100%">
-									{d.substring(0, 3).toLocaleUpperCase()}
+								<Text color={color} key={i} w="100%" fontSize="14px" textAlign="center" fontWeight={700}>
+									{d.substring(0, 4)}
 								</Text>
 							))}
 						</Grid>
