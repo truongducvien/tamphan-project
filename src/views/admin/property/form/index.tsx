@@ -53,7 +53,7 @@ import { ResidentTab } from './ResidentTab';
 
 const validationProperty = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên căn hộ'),
-	code: Yup.string().required('Vui lòng nhập tên căn hộ'),
+	code: Yup.string().required('Vui lòng nhập mã căn hộ'),
 	areaId: Yup.object().shape({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn phân khu') }),
 	status: Yup.object().shape({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn trạng thái') }),
 	acreage: Yup.string().required('Vui lòng nhập diện tích đất'),
