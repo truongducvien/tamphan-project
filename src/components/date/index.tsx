@@ -28,6 +28,7 @@ import {
 	PopoverContent,
 	Portal,
 	useDisclosure,
+	useSlider,
 	Flex,
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
@@ -54,6 +55,7 @@ export const DatePicker = ({
 	isDisabled,
 	replaceInput,
 	defaultDays,
+	borderColor,
 	...rest
 }: IDatePickerProps) => {
 	const date = new Date();
@@ -121,7 +123,7 @@ export const DatePicker = ({
 	};
 	const color = useColorModeValue('gray', 'white');
 	const activeTextColor = useColorModeValue('white', 'white');
-	const borderColor = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
+	// const borderColor = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
 	const curentDayColor = useColorModeValue('blue.200', 'blue.600');
 	const activeBgColor = useColorModeValue('blue.500', 'blue.800');
 	const forcusBorder = useColorModeValue('blue.300', 'blue.700');

@@ -27,6 +27,7 @@ export const DatePickerHookForm: React.FC<DatePickerHookFormProps> = ({
 		setValue(name, getValues(name));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
 	return (
 		<Controller
 			control={control}
@@ -67,6 +68,7 @@ export const TimePickerHookForm: React.FC<DatePickerHookFormProps> = ({
 		setValue(name, getValues(name));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
 	return (
 		<Controller
 			control={control}

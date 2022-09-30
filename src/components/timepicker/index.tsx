@@ -95,6 +95,7 @@ export const TimePicker: React.FC<Props> = ({
 	variant = 'admin',
 	isDisabled,
 	rePlaceInput,
+	borderColor,
 	...innerProps
 }) => {
 	const { onOpen, onClose, isOpen } = useDisclosure();
@@ -130,7 +131,7 @@ export const TimePicker: React.FC<Props> = ({
 			{...innerProps}
 		>
 			<PopoverTrigger>
-				<InputGroup>
+				<InputGroup borderColor={borderColor}>
 					<Input value={`${selectH || `__`}:${selectM || `__`}`} {...innerProps} variant={variant} />
 					<InputRightElement hidden={!selectH && !selectM}>
 						<Icon
