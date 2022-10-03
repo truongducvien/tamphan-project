@@ -31,10 +31,9 @@ import Table, { IColumn } from 'src/components/table';
 import { useToastInstance } from 'src/components/toast';
 import { useActionPermission } from 'src/hooks/useActionPermission';
 import { usePagination } from 'src/hooks/usePagination';
-import { getArea } from 'src/services/area';
 import { addResident, removeResident } from 'src/services/properties';
 import { RelationshipWithOwner, relationshipWithOwner } from 'src/services/properties/type';
-import { getResidentByProperty, getResident, getResidentV2 } from 'src/services/resident';
+import { getResidentByProperty, getResidentV2 } from 'src/services/resident';
 import {
 	gender as genderOptions,
 	IResident,
