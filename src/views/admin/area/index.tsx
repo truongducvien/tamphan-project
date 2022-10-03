@@ -11,7 +11,7 @@ import useActionPage from 'src/hooks/useActionPage';
 import { useActionPermission } from 'src/hooks/useActionPermission';
 import { usePagination } from 'src/hooks/usePagination';
 import { getArea } from 'src/services/area';
-import { IArea, typeAreas } from 'src/services/area/type';
+import { IArea } from 'src/services/area/type';
 import { PermistionAction } from 'src/variables/permission';
 
 const AreaManagement: React.FC<BaseComponentProps> = ({ request }) => {
@@ -35,7 +35,6 @@ const AreaManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const COLUMNS: Array<IColumn<IArea>> = [
 		{ key: 'name', label: 'Tên phân khu' },
 		{ key: 'code', label: 'Mã phân khu' },
-		{ key: 'type', label: 'Loại hình BDS', cell: ({ type }) => typeAreas.find(i => i.value === type)?.label },
 		{ key: 'acreage', label: 'Diện tích (ha)' },
 		{ key: 'location', label: 'Vị trí' },
 		{ key: 'contactPhone', label: 'Số điện thoại' },

@@ -1,5 +1,4 @@
 import { Option } from 'src/components/form/PullDown';
-import { TypeArea } from 'src/services/area/type';
 import { BaseParams, BaseResponseList } from 'src/services/type';
 
 export enum NotificationWays {
@@ -31,7 +30,6 @@ export interface IArticle {
 			location: string;
 			mapLink: string;
 			name: string;
-			type: TypeArea;
 			updateDate: string;
 		},
 	];

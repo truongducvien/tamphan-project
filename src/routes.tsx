@@ -14,6 +14,7 @@ import {
 	MdManageAccounts,
 	MdOutlineArticle,
 	MdOutlineMarkunreadMailbox,
+	MdOutlineReceiptLong,
 	MdWindow,
 } from 'react-icons/md';
 import { FeatureModule } from 'src/services/role/type';
@@ -45,7 +46,7 @@ const RoleManagement = React.lazy(() => import('src/views/admin/role'));
 const SignInCentered = React.lazy(() => import('src/views/auth/signIn'));
 const UserManagement = React.lazy(() => import('src/views/admin/userManangement'));
 const UserManagementForm = React.lazy(() => import('src/views/admin/userManangement/form'));
-
+const HandoverManagement = React.lazy(() => import('src/views/admin/handover'));
 export interface Route {
 	action?: PermistionAction;
 	authIcon?: string;
@@ -427,6 +428,16 @@ const routes: Route[] = [
 				requirePermission: FeatureModule.RESIDENT_CARD_REQUEST_MANAGEMENT,
 			},
 		],
+	},
+	{
+		name: 'Quản lý tài sản bàn giao',
+		layout: '/admin',
+		path: `/handover`,
+		icon: <Icon as={MdOutlineReceiptLong} width="20px" height="20px" color="inherit" />,
+		component: HandoverManagement,
+		action: PermistionAction.VIEW,
+		// TODO: replace this permission
+		requirePermission: FeatureModule.RESIDENT_CARD_REQUEST_MANAGEMENT,
 	},
 	{
 		name: 'Đăng nhập',

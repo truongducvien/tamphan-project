@@ -119,6 +119,37 @@ export interface IProperty {
 
 export type IPropertyResponse = BaseResponseList<IProperty>;
 
+export enum TypeProperty {
+	VILLA = 'VILLA',
+	SHOP_HOUSE = 'SHOP_HOUSE',
+	SINGLE_VILLA = 'SINGLE_VILLA',
+	DOUBLE_VILLA = 'DOUBLE_VILLA',
+	TOWN_HOUSE = 'TOWN_HOUSE',
+}
+
+export const typeProperty: Array<Option> = [
+	{
+		label: 'Dinh thự',
+		value: TypeProperty.VILLA,
+	},
+	{
+		label: 'Shophouse',
+		value: TypeProperty.SHOP_HOUSE,
+	},
+	{
+		label: 'Biệt thự đơn lập',
+		value: TypeProperty.SINGLE_VILLA,
+	},
+	{
+		label: 'Biệt thự song lập',
+		value: TypeProperty.DOUBLE_VILLA,
+	},
+	{
+		label: 'Nhà Phố',
+		value: TypeProperty.TOWN_HOUSE,
+	},
+];
+
 export interface IPropertyPayload {
 	acreage: number;
 	address: string;

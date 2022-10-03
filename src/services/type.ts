@@ -25,3 +25,8 @@ export interface BaseParams {
 	page?: number;
 	size?: number;
 }
+
+export interface BaseImportPayload {
+	file: File;
+	type: 'CSV' | 'XLS' | 'XLSX';
+}
