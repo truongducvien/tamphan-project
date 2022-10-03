@@ -20,7 +20,7 @@ import * as Yup from 'yup';
 const validationSchema = Yup.object({
 	name: Yup.string().required('Vui lòng nhập tên chức vụ'),
 	code: Yup.string().required('Vui lòng nhập mã chức vụ'),
-	status: Yup.object().shape({ label: Yup.string(), value: Yup.string() }),
+	state: Yup.object().shape({ label: Yup.string(), value: Yup.string() }),
 });
 
 interface DataForm {

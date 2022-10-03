@@ -41,6 +41,7 @@ export const usePagination = (): ReturnProps => {
 	) => {
 		const page = {
 			total: data?.totalPages || 0,
+			totalItems: data?.totalItems || 0,
 			hasNextPage: data ? currentPage < data?.totalPages : false,
 			hasPreviousPage: data ? currentPage > 0 : false,
 		};

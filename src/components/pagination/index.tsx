@@ -10,7 +10,7 @@ import {
 	PaginationContainer,
 	PaginationSeparator,
 } from '@ajna/pagination';
-import { Icon, Select, useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, Icon, Select, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 
 const PAGE_SIZE_OPTIONS = [
@@ -33,6 +33,7 @@ export type PaginationProps = {
 	onPageChange?: (page: number) => void;
 	onPageSizeChange?: (pageSize: number) => void;
 	isLoading?: boolean;
+	totalItems?: number;
 };
 
 const Pagination = forwardRef<PaginationRef, PaginationProps>(
@@ -47,6 +48,7 @@ const Pagination = forwardRef<PaginationRef, PaginationProps>(
 			onPageSizeChange,
 			value = 1,
 			isLoading = false,
+			totalItems = 0,
 		},
 		ref,
 	) => {
@@ -96,77 +98,85 @@ const Pagination = forwardRef<PaginationRef, PaginationProps>(
 				onPageChange={handlePageChange}
 				isDisabled={isLoading}
 			>
-				<PaginationContainer mt={5} align="center" justify="center" w="full">
-					<Select
-						data-testid="page-size-dropdown"
-						onChange={handlePageSizeChange}
-						size="md"
-						ml={1}
-						value={pageSize === total ? 'ALL' : pageSize}
-						_hover={{ bg: 'made.80' }}
-						width={70}
-					>
-						{PAGE_SIZE_OPTIONS.map(option => (
-							<option key={option.value} value={option.value}>
-								{option.text}
-							</option>
-						))}
-					</Select>
-					<PaginationPrevious
-						data-testid="previous-button"
-						disabled={!hasPreviousPage}
-						color={textColor}
-						bg="made.100"
-						_hover={{ bg: 'made.80' }}
-						leftIcon={<Icon as={ChevronLeft} />}
-						size="lg"
-						mr={1}
-					/>
-					<PaginationPageGroup
-						isInline
-						align="center"
-						separator={
-							<PaginationSeparator
-								isDisabled={isLoading || (!hasNextPage && !hasPreviousPage)}
+				<PaginationContainer mt={5} flexDirection="column" align="center" justify="space-between" w="full">
+					<SimpleGrid spacing={3} columns={{ base: 1, md: 2 }}>
+						<Flex align="center" justify="center">
+							Hiển thị
+							<Select
+								data-testid="page-size-dropdown"
+								onChange={handlePageSizeChange}
+								size="md"
+								mx={2}
+								value={pageSize === total ? 'ALL' : pageSize}
+								_hover={{ bg: 'made.80' }}
+								width={70}
+							>
+								{PAGE_SIZE_OPTIONS.map(option => (
+									<option key={option.value} value={option.value}>
+										{option.text}
+									</option>
+								))}
+							</Select>
+							trong tổng số {totalItems}
+						</Flex>
+						<Flex align="center" justify="center">
+							<PaginationPrevious
+								data-testid="previous-button"
+								disabled={!hasPreviousPage}
 								color={textColor}
-								bg={bgColor}
+								bg="made.100"
 								_hover={{ bg: 'made.80' }}
-								size="md"
-								w={7}
-								jumpSize={3}
+								leftIcon={<Icon as={ChevronLeft} />}
+								size="lg"
+								mr={1}
 							/>
-						}
-					>
-						{pages.map((page: number) => (
-							<PaginationPage
-								key={`pagination_page_${page}`}
-								page={page}
-								size="md"
-								fontSize="sm"
-								w={10}
-								bg={bgColor}
+							<PaginationPageGroup
+								isInline
+								align="center"
+								separator={
+									<PaginationSeparator
+										isDisabled={isLoading || (!hasNextPage && !hasPreviousPage)}
+										color={textColor}
+										bg={bgColor}
+										_hover={{ bg: 'made.80' }}
+										size="md"
+										w={7}
+										jumpSize={3}
+									/>
+								}
+							>
+								{pages.map((page: number) => (
+									<PaginationPage
+										key={`pagination_page_${page}`}
+										page={page}
+										size="md"
+										fontSize="sm"
+										w={10}
+										bg={bgColor}
+										_hover={{ bg: 'made.80' }}
+										_current={{
+											color: activeTextColor,
+											bg: acticeBgColor,
+											fontSize: 'sm',
+											size: 'lg',
+											w: 10,
+										}}
+									/>
+								))}
+							</PaginationPageGroup>
+							<PaginationNext
+								data-testid="next-button"
+								isDisabled={!hasNextPage}
+								color={textColor}
+								bg="mediumslateblue.100"
 								_hover={{ bg: 'made.80' }}
-								_current={{
-									color: activeTextColor,
-									bg: acticeBgColor,
-									fontSize: 'sm',
-									size: 'lg',
-									w: 10,
-								}}
+								// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+								rightIcon={<Icon as={ChevronRight} />}
+								size="lg"
+								ml={1}
 							/>
-						))}
-					</PaginationPageGroup>
-					<PaginationNext
-						data-testid="next-button"
-						isDisabled={!hasNextPage}
-						color={textColor}
-						bg="mediumslateblue.100"
-						_hover={{ bg: 'made.80' }}
-						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-						rightIcon={<Icon as={ChevronRight} />}
-						size="lg"
-						ml={1}
-					/>
+						</Flex>
+					</SimpleGrid>
 				</PaginationContainer>
 			</ChakraPagination>
 		);
