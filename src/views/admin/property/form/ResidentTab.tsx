@@ -284,6 +284,7 @@ export const ResidentTab: React.FC<{ id: string }> = ({ id: idProperty }) => {
 			toast({
 				title: 'Xoá cư dân thành công!',
 			});
+			setIds([]);
 			refetch();
 		} catch (error) {
 			toast({
