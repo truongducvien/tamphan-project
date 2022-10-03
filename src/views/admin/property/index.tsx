@@ -14,6 +14,7 @@ import useActionPage from 'src/hooks/useActionPage';
 import { useActionPermission } from 'src/hooks/useActionPermission';
 import { useDebounce } from 'src/hooks/useDebounce';
 import { useLoadMore } from 'src/hooks/useLoadMore';
+import { usePagination } from 'src/hooks/usePagination';
 import { getArea } from 'src/services/area';
 import { IArea, IAreaParams } from 'src/services/area/type';
 import { getProperty } from 'src/services/properties';
@@ -32,8 +33,7 @@ const validationSchema = Yup.object({
 
 const PropertyManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction, actions } = useActionPermission(request);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
+	const { resetPage, dispatchInfo, value: currentPage, pageSize, ...pagination } = usePagination();
 	const [keywordArea, setKeywordArea] = useState('');
 	const keywordAreaDebound = useDebounce(keywordArea, 500);
 	const [param, setParams] = useState<IPropertyParams | null>(null);
@@ -48,8 +48,10 @@ const PropertyManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		payload: { code: keywordAreaDebound },
 	});
 
-	const { data, isLoading } = useQuery(['listProperty', param, currentPage, currentPageSize], () =>
-		getProperty({ ...param, page: currentPage - 1, size: currentPageSize }),
+	const { data, isLoading } = useQuery(
+		['listProperty', param, currentPage, pageSize],
+		() => getProperty({ ...param, page: currentPage - 1, size: pageSize }),
+		{ onSuccess: d => dispatchInfo(d) },
 	);
 
 	const COLUMNS: Array<IColumn<IProperty>> = [
@@ -64,13 +66,8 @@ const PropertyManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		{ key: 'areaName', label: 'Phân khu' },
 	];
 
-	const pageInfo = {
-		total: data?.totalPages,
-		hasNextPage: data ? currentPage < data?.totalPages : false,
-		hasPreviousPage: data ? currentPage > 0 : false,
-	};
-
 	const onSearch = (payload: SearchForm) => {
+		resetPage();
 		setParams({ ...payload, areaId: payload.areaId?.value as string });
 	};
 
@@ -130,18 +127,7 @@ const PropertyManagement: React.FC<BaseComponentProps> = ({ request }) => {
 					columns={COLUMNS}
 					data={data?.items || []}
 					loading={isLoading}
-					pagination={{
-						total: Number(pageInfo?.total || 0),
-						pageSize: currentPageSize,
-						value: currentPage,
-						hasNextPage: pageInfo?.hasNextPage,
-						hasPreviousPage: pageInfo?.hasPreviousPage,
-						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => {
-							setCurrentPage(1);
-							setCurrentPageSize(pageSize);
-						},
-					}}
+					pagination={{ value: currentPage, pageSize, ...pagination }}
 					action={actions}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}

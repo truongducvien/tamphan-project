@@ -9,22 +9,26 @@ import Table, { IColumn } from 'src/components/table';
 import { BaseComponentProps } from 'src/hocs/withPermission';
 import useActionPage from 'src/hooks/useActionPage';
 import { useActionPermission } from 'src/hooks/useActionPermission';
+import { usePagination } from 'src/hooks/usePagination';
 import { getArea } from 'src/services/area';
 import { IArea, typeAreas } from 'src/services/area/type';
 import { PermistionAction } from 'src/variables/permission';
 
 const AreaManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction, actions } = useActionPermission(request);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
+	const { resetPage, dispatchInfo, value: currentPage, pageSize, ...pagination } = usePagination();
+
 	const keywordRef = useRef<HTMLInputElement>(null);
 	const [keyword, setKeyword] = useState('');
-	const { data, isLoading } = useQuery(['listArea', keyword, currentPage, currentPageSize], () =>
-		getArea({
-			page: currentPage - 1,
-			size: currentPageSize,
-			code: keyword,
-		}),
+	const { data, isLoading } = useQuery(
+		['listArea', keyword, currentPage, pageSize],
+		() =>
+			getArea({
+				page: currentPage - 1,
+				size: pageSize,
+				code: keyword,
+			}),
+		{ onSuccess: d => dispatchInfo(d) },
 	);
 	const { changeAction } = useActionPage();
 
@@ -37,12 +41,6 @@ const AreaManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		{ key: 'contactPhone', label: 'Số điện thoại' },
 		{ key: 'contactEmail', label: 'email' },
 	];
-
-	const pageInfo = {
-		total: data?.totalPages,
-		hasNextPage: data ? currentPage < data?.totalPages : false,
-		hasPreviousPage: data ? currentPage > 0 : false,
-	};
 
 	return (
 		<Box pt="10px">
@@ -67,7 +65,10 @@ const AreaManagement: React.FC<BaseComponentProps> = ({ request }) => {
 					<Flex align="center">
 						<Button
 							variant="lightBrand"
-							onClick={() => setKeyword(keywordRef.current?.value || '')}
+							onClick={() => {
+								setKeyword(keywordRef.current?.value || '');
+								resetPage();
+							}}
 							leftIcon={<SearchIcon />}
 						>
 							Tìm kiếm
@@ -96,18 +97,7 @@ const AreaManagement: React.FC<BaseComponentProps> = ({ request }) => {
 					columns={COLUMNS}
 					data={data?.items || []}
 					loading={isLoading}
-					pagination={{
-						total: Number(pageInfo?.total || 0),
-						pageSize: currentPageSize,
-						value: currentPage,
-						hasNextPage: pageInfo?.hasNextPage,
-						hasPreviousPage: pageInfo?.hasPreviousPage,
-						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => {
-							setCurrentPage(1);
-							setCurrentPageSize(pageSize);
-						},
-					}}
+					pagination={{ value: currentPage, pageSize, ...pagination }}
 					action={actions.filter(i => [PermistionAction.UPDATE, PermistionAction.VIEW].some(ii => ii === i))}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}

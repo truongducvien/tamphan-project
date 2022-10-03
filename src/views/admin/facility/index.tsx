@@ -17,6 +17,7 @@ import useActionPage from 'src/hooks/useActionPage';
 import { useActionPermission } from 'src/hooks/useActionPermission';
 import { useDebounce } from 'src/hooks/useDebounce';
 import { useLoadMore } from 'src/hooks/useLoadMore';
+import { usePagination } from 'src/hooks/usePagination';
 import { getArea } from 'src/services/area';
 import { IArea, IAreaParams } from 'src/services/area/type';
 import { deleteFacility, getFacility } from 'src/services/facility';
@@ -64,8 +65,7 @@ interface DataForm {
 const FacilityManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction, actions } = useActionPermission(request);
 	const { toast } = useToastInstance();
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
+	const { resetPage, dispatchInfo, value: currentPage, pageSize, ...pagination } = usePagination();
 	const [param, setParams] = useState<{
 		name?: string;
 		facilityGroupId?: string;
@@ -77,8 +77,10 @@ const FacilityManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const keywordGroupDebound = useDebounce(keywordGroup, 500);
 	const keywordAreaDebound = useDebounce(keywordArea, 500);
 
-	const { data, isLoading, refetch } = useQuery(['listFacility', param, currentPage, currentPageSize], () =>
-		getFacility({ ...param, page: currentPage - 1, size: currentPageSize }),
+	const { data, isLoading, refetch } = useQuery(
+		['listFacility', param, currentPage, pageSize],
+		() => getFacility({ ...param, page: currentPage - 1, size: pageSize }),
+		{ onSuccess: d => dispatchInfo(d) },
 	);
 
 	const {
@@ -104,6 +106,7 @@ const FacilityManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const mutationDelete = useMutation(deleteFacility);
 
 	const handleApllyFilter = (payload: DataForm) => {
+		resetPage();
 		setParams({
 			...payload,
 			areaId: payload.areaId?.value,
@@ -125,12 +128,6 @@ const FacilityManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		} catch {
 			toast({ title: 'Xoá thất bại', status: 'error' });
 		}
-	};
-
-	const pageInfo = {
-		total: data?.totalPages,
-		hasNextPage: data ? currentPage < data?.totalPages : false,
-		hasPreviousPage: data ? currentPage > 0 : false,
 	};
 
 	const { changeAction } = useActionPage();
@@ -197,18 +194,7 @@ const FacilityManagement: React.FC<BaseComponentProps> = ({ request }) => {
 					columns={COLUMNS}
 					data={data?.items || []}
 					loading={isLoading}
-					pagination={{
-						total: Number(pageInfo?.total || 0),
-						pageSize: currentPageSize,
-						value: currentPage,
-						hasNextPage: pageInfo?.hasNextPage,
-						hasPreviousPage: pageInfo?.hasPreviousPage,
-						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => {
-							setCurrentPage(1);
-							setCurrentPageSize(pageSize);
-						},
-					}}
+					pagination={{ value: currentPage, pageSize, ...pagination }}
 					action={actions.filter(i => i === PermistionAction.UPDATE || i === PermistionAction.VIEW)}
 					onClickDetail={row => changeAction('detail', row.id)}
 					onClickEdit={row => changeAction('edit', row.id)}

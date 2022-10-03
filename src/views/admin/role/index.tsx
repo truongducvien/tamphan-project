@@ -11,6 +11,7 @@ import Table, { IColumn } from 'src/components/table';
 import { BaseComponentProps } from 'src/hocs/withPermission';
 import useActionPage from 'src/hooks/useActionPage';
 import { useActionPermission } from 'src/hooks/useActionPermission';
+import { usePagination } from 'src/hooks/usePagination';
 import { getRole } from 'src/services/role';
 import { IRole, IRoleParams } from 'src/services/role/type';
 import { PermistionAction } from 'src/variables/permission';
@@ -20,13 +21,14 @@ type DaraForm = Omit<IRoleParams, 'page' | 'size'>;
 
 const RoleManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { actions, permistionAction } = useActionPermission(request);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
+	const { resetPage, dispatchInfo, value: currentPage, pageSize, ...pagination } = usePagination();
 
 	const [params, setParams] = useState<DaraForm>({});
 
-	const { data, isLoading } = useQuery(['listRole', params, currentPage, currentPageSize], () =>
-		getRole({ page: currentPage - 1, size: currentPageSize, ...params }),
+	const { data, isLoading } = useQuery(
+		['listRole', params, currentPage, pageSize],
+		() => getRole({ page: currentPage - 1, size: pageSize, ...params }),
+		{ onSuccess: d => dispatchInfo(d) },
 	);
 
 	const COLUMNS: Array<IColumn<IRole>> = [
@@ -38,13 +40,8 @@ const RoleManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	];
 
 	const onSearch = (payload: DaraForm) => {
+		resetPage();
 		setParams(payload);
-	};
-
-	const pageInfo = {
-		total: data?.totalPages,
-		hasNextPage: data ? currentPage < data?.totalPages : false,
-		hasPreviousPage: data ? currentPage > 0 : false,
 	};
 
 	const { changeAction } = useActionPage();
@@ -93,18 +90,7 @@ const RoleManagement: React.FC<BaseComponentProps> = ({ request }) => {
 					columns={COLUMNS}
 					data={data?.items || []}
 					loading={isLoading}
-					pagination={{
-						total: Number(pageInfo?.total || 0),
-						pageSize: currentPageSize,
-						value: currentPage,
-						hasNextPage: pageInfo?.hasNextPage,
-						hasPreviousPage: pageInfo?.hasPreviousPage,
-						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => {
-							setCurrentPage(1);
-							setCurrentPageSize(pageSize);
-						},
-					}}
+					pagination={{ value: currentPage, pageSize, ...pagination }}
 					action={actions.filter(i => [PermistionAction.UPDATE, PermistionAction.VIEW].some(ii => ii === i))}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}

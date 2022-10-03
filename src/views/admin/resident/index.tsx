@@ -18,6 +18,7 @@ import useActionPage from 'src/hooks/useActionPage';
 import { useActionPermission } from 'src/hooks/useActionPermission';
 import { useDebounce } from 'src/hooks/useDebounce';
 import { useLoadMore } from 'src/hooks/useLoadMore';
+import { usePagination } from 'src/hooks/usePagination';
 import { getArea } from 'src/services/area';
 import { IArea, IAreaParams } from 'src/services/area/type';
 import { deleteResident, getResident, importResident } from 'src/services/resident';
@@ -39,8 +40,7 @@ const validation = Yup.object({
 const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction, actions } = useActionPermission(request);
 
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
+	const { resetPage, dispatchInfo, value: currentPage, pageSize, ...pagination } = usePagination();
 
 	const { toast } = useToastInstance();
 
@@ -76,16 +76,20 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		payload: { code: keywordDebounce },
 	});
 
-	const { data, isLoading, refetch } = useQuery(['listResident', params, currentPage, currentPageSize], () =>
-		getResident({
-			page: currentPage - 1,
-			size: currentPageSize,
-			...params,
-		}),
+	const { data, isLoading, refetch } = useQuery(
+		['listResident', params, currentPage, pageSize],
+		() =>
+			getResident({
+				page: currentPage - 1,
+				size: pageSize,
+				...params,
+			}),
+		{ onSuccess: d => dispatchInfo(d) },
 	);
 	const mutationImport = useMutation(importResident);
 
 	const onSearch = (payload: Form) => {
+		resetPage();
 		const prepareData = { ...payload, areaId: payload.areaId?.value };
 		setParams(prepareData);
 	};
@@ -118,12 +122,6 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		} catch {
 			toast({ title: 'Import thất bại', status: 'error' });
 		}
-	};
-
-	const pageInfo = {
-		total: data?.totalPages,
-		hasNextPage: data ? currentPage < data?.totalPages : false,
-		hasPreviousPage: data ? currentPage > 0 : false,
 	};
 
 	const { changeAction } = useActionPage();
@@ -188,18 +186,7 @@ const ResidentManagement: React.FC<BaseComponentProps> = ({ request }) => {
 					columns={COLUMNS}
 					data={data?.items || []}
 					loading={isLoading}
-					pagination={{
-						total: Number(pageInfo?.total || 0),
-						pageSize: currentPageSize,
-						value: currentPage,
-						hasNextPage: pageInfo?.hasNextPage,
-						hasPreviousPage: pageInfo?.hasPreviousPage,
-						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => {
-							setCurrentPage(1);
-							setCurrentPageSize(pageSize);
-						},
-					}}
+					pagination={{ value: currentPage, pageSize, ...pagination }}
 					action={actions.filter(i => [PermistionAction.UPDATE, PermistionAction.VIEW].some(ii => ii === i))}
 					onClickDetail={({ id, property }) => changeAction('detail', `${id},${property?.id}`)}
 					onClickEdit={({ id, property }) => changeAction('edit', `${id},${property?.id}`)}

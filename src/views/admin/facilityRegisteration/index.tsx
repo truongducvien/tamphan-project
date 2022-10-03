@@ -15,6 +15,7 @@ import { formatDate } from 'src/helpers/dayjs';
 import useActionPage from 'src/hooks/useActionPage';
 import { useDebounce } from 'src/hooks/useDebounce';
 import { useLoadMore } from 'src/hooks/useLoadMore';
+import { usePagination } from 'src/hooks/usePagination';
 import { getArea } from 'src/services/area';
 import { IArea, IAreaParams } from 'src/services/area/type';
 import { getFacilityGroup } from 'src/services/facility/group';
@@ -30,17 +31,17 @@ import {
 import { PermistionAction } from 'src/variables/permission';
 
 const FacilityReManagement: React.FC = () => {
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
+	const { resetPage, dispatchInfo, value: currentPage, pageSize, ...pagination } = usePagination();
 	const [param, setParams] = useState<Omit<IFacilityReSearchPayload, 'page' | 'size'>>({});
-
 	const [keyword, setKeywordGroup] = useState('');
 	const keywordDebound = useDebounce(keyword);
 	const [keywordArea, setKeywordArea] = useState('');
 	const keywordAreaDebound = useDebounce(keywordArea);
 
-	const { data, isLoading } = useQuery(['listFacilityRe', param, currentPage, currentPageSize], () =>
-		getFacilityRe({ ...param, page: currentPage - 1, size: currentPageSize }),
+	const { data, isLoading } = useQuery(
+		['listFacilityRe', param, currentPage, pageSize],
+		() => getFacilityRe({ ...param, page: currentPage - 1, size: pageSize }),
+		{ onSuccess: d => dispatchInfo(d) },
 	);
 
 	const {
@@ -91,12 +92,6 @@ const FacilityReManagement: React.FC = () => {
 		},
 	];
 
-	const pageInfo = {
-		total: data?.totalPages,
-		hasNextPage: data ? currentPage < data?.totalPages : false,
-		hasPreviousPage: data ? currentPage > 0 : false,
-	};
-
 	const onSearch = (dt: IFacilityReSearchForm) => {
 		const prepareData = {
 			...dt,
@@ -109,6 +104,7 @@ const FacilityReManagement: React.FC = () => {
 	};
 
 	const onReset = () => {
+		resetPage();
 		setParams({});
 	};
 
@@ -165,18 +161,7 @@ const FacilityReManagement: React.FC = () => {
 					columns={COLUMNS}
 					data={data?.items || []}
 					loading={isLoading}
-					pagination={{
-						total: Number(pageInfo?.total || 0),
-						pageSize: currentPageSize,
-						value: currentPage,
-						hasNextPage: pageInfo?.hasNextPage,
-						hasPreviousPage: pageInfo?.hasPreviousPage,
-						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => {
-							setCurrentPage(1);
-							setCurrentPageSize(pageSize);
-						},
-					}}
+					pagination={{ value: currentPage, pageSize, ...pagination }}
 					action={PermistionAction.VIEW}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 				/>

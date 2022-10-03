@@ -90,6 +90,7 @@ export interface IResident {
 export interface IResidentParams extends BaseParams {
 	code?: string;
 	areaId?: string;
+	phoneNumber?: string;
 	fullName?: string;
 }
 
