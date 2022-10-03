@@ -25,15 +25,13 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { MdDelete, MdLibraryAdd } from 'react-icons/md';
 import { alert } from 'src/components/alertDialog/hook';
 import { FormContainer } from 'src/components/form';
-import { BaseOption, PullDownHookForm } from 'src/components/form/PullDown';
+import { BaseOption } from 'src/components/form/PullDown';
 import { TextFieldHookForm } from 'src/components/form/TextField';
 import Table, { IColumn } from 'src/components/table';
 import { useToastInstance } from 'src/components/toast';
 import { useActionPermission } from 'src/hooks/useActionPermission';
-import { useDebounce } from 'src/hooks/useDebounce';
-import { useLoadMore } from 'src/hooks/useLoadMore';
+import { usePagination } from 'src/hooks/usePagination';
 import { getArea } from 'src/services/area';
-import { IArea, IAreaParams } from 'src/services/area/type';
 import { addResident, removeResident } from 'src/services/properties';
 import { RelationshipWithOwner, relationshipWithOwner } from 'src/services/properties/type';
 import { getResidentByProperty, getResident, getResidentV2 } from 'src/services/resident';
@@ -45,7 +43,6 @@ import {
 	IResidentParams,
 } from 'src/services/resident/type';
 import { statusOption2 } from 'src/variables/status';
-import * as Yup from 'yup';
 
 const ResidentModal: React.FC<{
 	isOpen: boolean;
@@ -84,12 +81,7 @@ const ResidentModal: React.FC<{
 		}
 	};
 
-	const validation = Yup.object({
-		areaId: Yup.object({ label: Yup.string(), value: Yup.string() }).nullable(),
-	});
-
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
+	const { resetPage, dispatchInfo, value: currentPage, pageSize, ...pagination } = usePagination();
 
 	const COLUMNS: Array<IColumn<Omit<IResident, 'property'>>> = [
 		{
@@ -158,38 +150,22 @@ const ResidentModal: React.FC<{
 	];
 
 	const [params, setParams] = useState<IResidentParams>();
-	const [keyword, setKeyword] = useState('');
-	const keywordDebounce = useDebounce(keyword);
 
-	const {
-		data: dataArea,
-		isLoading: isLoadingArea,
-		fetchMore: fetchMoreArea,
-	} = useLoadMore<IArea, IAreaParams>({
-		id: ['listArea', keywordDebounce],
-		func: getArea,
-		payload: {
-			code: keywordDebounce,
-		},
-	});
-
-	const { data, isLoading } = useQuery(['listResident', params, currentPage, currentPageSize], () =>
-		getResidentV2({
-			page: currentPage - 1,
-			size: currentPageSize,
-			...params,
-		}),
+	const { data, isLoading } = useQuery(
+		['listResident', params, currentPage, pageSize],
+		() =>
+			getResidentV2({
+				page: currentPage - 1,
+				size: pageSize,
+				...params,
+			}),
+		{ onSuccess: d => dispatchInfo(d) },
 	);
 
 	const onSearch = (payload: Form) => {
+		resetPage();
 		const prepareData = { ...payload, areaId: payload.areaId?.value };
 		setParams(prepareData);
-	};
-
-	const pageInfo = {
-		total: data?.totalPages,
-		hasNextPage: data ? currentPage < data?.totalPages : false,
-		hasPreviousPage: data ? currentPage > 0 : false,
 	};
 
 	return (
@@ -202,28 +178,15 @@ const ResidentModal: React.FC<{
 					<ModalBody>
 						<Box px={{ sm: 2, md: 5 }}>
 							<Box mb={5} display={{ base: 'none', md: 'block' }}>
-								<FormContainer onSubmit={onSearch} validationSchema={validation}>
+								<FormContainer onSubmit={onSearch}>
 									<Stack
 										spacing={5}
 										align="end"
 										justify={{ base: 'center', md: 'space-around', xl: 'space-around' }}
 										direction={{ base: 'column', md: 'row' }}
 									>
-										<TextFieldHookForm label="Mã căn hộ" name="propertyCode" />
-										<PullDownHookForm
-											name="areaId"
-											label="Phân khu"
-											options={dataArea.map(i => ({
-												label: i.name,
-												value: i.id,
-											}))}
-											onInputChange={setKeyword}
-											isClearable
-											isLoading={isLoadingArea}
-											onLoadMore={fetchMoreArea}
-											menuPortalTarget={false}
-										/>
 										<TextFieldHookForm label="Tên cư dân" name="fullName" />
+										<TextFieldHookForm label="Số điện thoại" name="phoneNumber" />
 										<Flex mt="3" justifyContent="end">
 											<Button type="submit" variant="lightBrand" leftIcon={<SearchIcon />}>
 												Tìm kiếm
@@ -241,18 +204,7 @@ const ResidentModal: React.FC<{
 								columns={COLUMNS}
 								data={data?.items || []}
 								loading={isLoading}
-								pagination={{
-									total: Number(pageInfo?.total || 0),
-									pageSize: currentPageSize,
-									value: currentPage,
-									hasNextPage: pageInfo?.hasNextPage,
-									hasPreviousPage: pageInfo?.hasPreviousPage,
-									onPageChange: page => setCurrentPage(page),
-									onPageSizeChange: pageSize => {
-										setCurrentPage(1);
-										setCurrentPageSize(pageSize);
-									},
-								}}
+								pagination={{ value: currentPage, pageSize, ...pagination }}
 							/>
 						</Box>
 					</ModalBody>

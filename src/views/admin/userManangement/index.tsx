@@ -12,6 +12,7 @@ import Table, { IColumn } from 'src/components/table';
 import { BaseComponentProps } from 'src/hocs/withPermission';
 import useActionPage from 'src/hooks/useActionPage';
 import { useActionPermission } from 'src/hooks/useActionPermission';
+import { usePagination } from 'src/hooks/usePagination';
 import { getAllOrganization } from 'src/services/organizations';
 import { getUser } from 'src/services/user';
 import { IUser, IUserParams } from 'src/services/user/type';
@@ -27,14 +28,15 @@ const validationSchema = Yup.object({
 
 const UserManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction, actions } = useActionPermission(request);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
+	const { resetPage, dispatchInfo, value: currentPage, pageSize, ...pagination } = usePagination();
 	const [params, setParams] = useState<Omit<IUserParams, 'page' | 'size'>>();
 
 	const { data: dataOrganization } = useQuery(['listOrganization'], getAllOrganization);
 
-	const { data, isLoading } = useQuery(['users', currentPage, currentPageSize, params], () =>
-		getUser({ page: currentPage - 1, size: currentPageSize, ...params }),
+	const { data, isLoading } = useQuery(
+		['users', currentPage, pageSize, params],
+		() => getUser({ page: currentPage - 1, size: pageSize, ...params }),
+		{ onSuccess: d => dispatchInfo(d) },
 	);
 
 	const COLUMNS: Array<IColumn<IUser>> = [
@@ -46,13 +48,8 @@ const UserManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		{ key: 'state', label: 'Trạng thái', tag: ({ state }) => statusOption2.find(i => i.value === state) },
 	];
 
-	const pageInfo = {
-		total: data?.totalPages,
-		hasNextPage: data ? currentPage < data?.totalPages : false,
-		hasPreviousPage: data ? currentPage > 0 : false,
-	};
-
 	const handleFillter = (payload: { fullName: string; organizationId: Option; username: string }) => {
+		resetPage();
 		setParams({ ...payload, organizationId: payload.organizationId?.value as string });
 	};
 
@@ -99,22 +96,9 @@ const UserManagement: React.FC<BaseComponentProps> = ({ request }) => {
 				</Center>
 				<Table
 					testId="consignments-dashboard"
-					// onSelectionChange={handleSelectionChange}
-
 					columns={COLUMNS}
 					data={data?.items || []}
-					pagination={{
-						total: Number(pageInfo?.total || 0),
-						pageSize: currentPageSize,
-						value: currentPage,
-						hasNextPage: pageInfo?.hasNextPage,
-						hasPreviousPage: pageInfo?.hasPreviousPage,
-						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => {
-							setCurrentPage(1);
-							setCurrentPageSize(pageSize);
-						},
-					}}
+					pagination={{ value: currentPage, pageSize, ...pagination }}
 					loading={isLoading}
 					action={actions.filter(i => [PermistionAction.UPDATE, PermistionAction.VIEW].some(ii => ii === i))}
 					onClickDetail={({ id }) => changeAction('detail', id)}

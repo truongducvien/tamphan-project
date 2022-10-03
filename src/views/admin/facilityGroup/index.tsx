@@ -12,19 +12,21 @@ import { useToastInstance } from 'src/components/toast';
 import { BaseComponentProps } from 'src/hocs/withPermission';
 import useActionPage from 'src/hooks/useActionPage';
 import { useActionPermission } from 'src/hooks/useActionPermission';
+import { usePagination } from 'src/hooks/usePagination';
 import { deleteFacilityGroup, getFacilityGroup } from 'src/services/facility/group';
 import { IFacilityGroup } from 'src/services/facility/group/type';
 import { statusOption2 } from 'src/variables/status';
 
 const FacilityGroupManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction, actions } = useActionPermission(request);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
+	const { resetPage, dispatchInfo, value: currentPage, pageSize, ...pagination } = usePagination();
 	const keywordRef = useRef<HTMLInputElement>(null);
 	const { toast } = useToastInstance();
 	const [keyword, setKeyword] = useState('');
-	const { data, isLoading, refetch } = useQuery(['listFacilityGroup', keyword, currentPage, currentPageSize], () =>
-		getFacilityGroup({ name: keyword, page: currentPage - 1, size: currentPageSize }),
+	const { data, isLoading, refetch } = useQuery(
+		['listFacilityGroup', keyword, currentPage, pageSize],
+		() => getFacilityGroup({ name: keyword, page: currentPage - 1, size: pageSize }),
+		{ onSuccess: d => dispatchInfo(d) },
 	);
 	const { changeAction } = useActionPage();
 
@@ -72,12 +74,6 @@ const FacilityGroupManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		{ key: 'updatedDate', label: 'Ngày cập nhật', dateFormat: 'DD/MM/YYYY' },
 	];
 
-	const pageInfo = {
-		total: data?.totalPages,
-		hasNextPage: data ? currentPage < data?.totalPages : false,
-		hasPreviousPage: data ? currentPage > 0 : false,
-	};
-
 	return (
 		<Box pt="10px">
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
@@ -105,7 +101,10 @@ const FacilityGroupManagement: React.FC<BaseComponentProps> = ({ request }) => {
 						<Flex flex={1} justifyContent="end">
 							<Button
 								variant="lightBrand"
-								onClick={() => setKeyword(keywordRef.current?.value || '')}
+								onClick={() => {
+									setKeyword(keywordRef.current?.value || '');
+									resetPage();
+								}}
 								leftIcon={<SearchIcon />}
 							>
 								Tìm kiếm
@@ -136,18 +135,7 @@ const FacilityGroupManagement: React.FC<BaseComponentProps> = ({ request }) => {
 					columns={COLUMNS}
 					data={data?.items || []}
 					action={actions}
-					pagination={{
-						total: Number(pageInfo?.total || 0),
-						pageSize: currentPageSize,
-						value: currentPage,
-						hasNextPage: pageInfo?.hasNextPage,
-						hasPreviousPage: pageInfo?.hasPreviousPage,
-						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => {
-							setCurrentPage(1);
-							setCurrentPageSize(pageSize);
-						},
-					}}
+					pagination={{ value: currentPage, pageSize, ...pagination }}
 					// eslint-disable-next-line @typescript-eslint/no-misused-promises
 					onClickDelete={row => onDelete(row)}
 					onClickEdit={row => onEdit(row.id)}

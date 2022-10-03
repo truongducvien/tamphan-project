@@ -11,6 +11,7 @@ import { useToastInstance } from 'src/components/toast';
 import { BaseComponentProps } from 'src/hocs/withPermission';
 import useActionPage from 'src/hooks/useActionPage';
 import { useActionPermission } from 'src/hooks/useActionPermission';
+import { usePagination } from 'src/hooks/usePagination';
 import { deleteArticle, getArticle } from 'src/services/article';
 import { IArticle, StatusArticle, statusArticle, typeArticles } from 'src/services/article/type';
 
@@ -18,17 +19,19 @@ const ArticleManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction, actions } = useActionPermission(request);
 
 	const { toast } = useToastInstance();
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
+	const { resetPage, dispatchInfo, value: currentPage, pageSize, ...pagination } = usePagination();
 	const keywordRef = useRef<HTMLInputElement>(null);
 	const [keyword, setKeyword] = useState('');
 
-	const { data, isLoading, refetch } = useQuery(['listArticle', keyword, currentPage, currentPageSize], () =>
-		getArticle({
-			keyword,
-			page: currentPage - 1,
-			size: currentPageSize,
-		}),
+	const { data, isLoading, refetch } = useQuery(
+		['listArticle', keyword, currentPage, pageSize],
+		() =>
+			getArticle({
+				keyword,
+				page: currentPage - 1,
+				size: pageSize,
+			}),
+		{ onSuccess: d => dispatchInfo(d) },
 	);
 	const mutationDelete = useMutation(deleteArticle);
 
@@ -69,12 +72,6 @@ const ArticleManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		}
 	};
 
-	const pageInfo = {
-		total: data?.totalPages,
-		hasNextPage: data ? currentPage < data?.totalPages : false,
-		hasPreviousPage: data ? currentPage > 0 : false,
-	};
-
 	const { changeAction } = useActionPage();
 
 	return (
@@ -100,7 +97,10 @@ const ArticleManagement: React.FC<BaseComponentProps> = ({ request }) => {
 						<Flex>
 							<Button
 								variant="lightBrand"
-								onClick={() => setKeyword(keywordRef.current?.value || '')}
+								onClick={() => {
+									setKeyword(keywordRef.current?.value || '');
+									resetPage();
+								}}
 								leftIcon={<SearchIcon />}
 							>
 								Tìm kiếm
@@ -129,18 +129,7 @@ const ArticleManagement: React.FC<BaseComponentProps> = ({ request }) => {
 					testId="consignments-dashboard"
 					columns={COLUMNS}
 					data={data?.items || []}
-					pagination={{
-						total: Number(pageInfo?.total || 0),
-						pageSize: currentPageSize,
-						value: currentPage,
-						hasNextPage: pageInfo?.hasNextPage,
-						hasPreviousPage: pageInfo?.hasPreviousPage,
-						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => {
-							setCurrentPage(1);
-							setCurrentPageSize(pageSize);
-						},
-					}}
+					pagination={{ value: currentPage, pageSize, ...pagination }}
 					action={actions}
 					onClickDetail={({ id }) => changeAction('detail', id)}
 					onClickEdit={({ id }) => changeAction('edit', id)}

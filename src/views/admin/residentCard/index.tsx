@@ -15,6 +15,7 @@ import { BaseComponentProps } from 'src/hocs/withPermission';
 import { useActionPermission } from 'src/hooks/useActionPermission';
 import { useDebounce } from 'src/hooks/useDebounce';
 import { useLoadMore } from 'src/hooks/useLoadMore';
+import { usePagination } from 'src/hooks/usePagination';
 import { getProperty } from 'src/services/properties';
 import { IProperty, IPropertyParams } from 'src/services/properties/type';
 import { getResidentCard, importResidentCard } from 'src/services/residentCard';
@@ -39,8 +40,7 @@ const validationSchema = Yup.object({
 
 const ResdidentCardManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction } = useActionPermission(request);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [currentPageSize, setCurrentPageSize] = useState<number>(10);
+	const { resetPage, dispatchInfo, value: currentPage, pageSize, ...pagination } = usePagination();
 	const { toast } = useToastInstance();
 	const [keyword, setKeyword] = useState('');
 	const keywordDebounce = useDebounce(keyword);
@@ -57,12 +57,15 @@ const ResdidentCardManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		payload: { code: keywordDebounce },
 	});
 
-	const { data, isLoading, refetch } = useQuery(['listResidentCard', params, currentPage, currentPageSize], () =>
-		getResidentCard({
-			page: currentPage - 1,
-			size: currentPageSize,
-			...params,
-		}),
+	const { data, isLoading, refetch } = useQuery(
+		['listResidentCard', params, currentPage, pageSize],
+		() =>
+			getResidentCard({
+				page: currentPage - 1,
+				size: pageSize,
+				...params,
+			}),
+		{ onSuccess: d => dispatchInfo(d) },
 	);
 
 	const mutationImport = useMutation(importResidentCard);
@@ -74,12 +77,6 @@ const ResdidentCardManagement: React.FC<BaseComponentProps> = ({ request }) => {
 		{ key: 'modifiedAt', label: 'Ngày cập nhật', dateFormat: 'DD/MM/YYYY' },
 		{ key: 'modifyBy', label: 'Người cập nhật' },
 	];
-
-	const pageInfo = {
-		total: data?.totalPages,
-		hasNextPage: data ? currentPage < data?.totalPages : false,
-		hasPreviousPage: data ? currentPage > 0 : false,
-	};
 
 	const onSearch = (payload: FormData) => {
 		const preData = {
@@ -151,18 +148,7 @@ const ResdidentCardManagement: React.FC<BaseComponentProps> = ({ request }) => {
 					testId="consignments-dashboard"
 					columns={COLUMNS}
 					data={data?.items || []}
-					pagination={{
-						total: Number(pageInfo?.total || 0),
-						pageSize: currentPageSize,
-						value: currentPage,
-						hasNextPage: pageInfo?.hasNextPage,
-						hasPreviousPage: pageInfo?.hasPreviousPage,
-						onPageChange: page => setCurrentPage(page),
-						onPageSizeChange: pageSize => {
-							setCurrentPage(1);
-							setCurrentPageSize(pageSize);
-						},
-					}}
+					pagination={{ value: currentPage, pageSize, ...pagination }}
 				/>
 			</Card>
 		</Box>

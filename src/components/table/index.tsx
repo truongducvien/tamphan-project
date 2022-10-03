@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Ref } from 'react';
 
 import {
 	Table as ChakraTable,
@@ -21,7 +21,7 @@ import dayjs from 'dayjs';
 import { FaTrashAlt } from 'react-icons/fa';
 import { MdBorderColor, MdPreview } from 'react-icons/md';
 import { Option } from 'src/components/form/PullDown';
-import Pagination, { PaginationProps } from 'src/components/pagination';
+import Pagination, { PaginationProps, PaginationRef } from 'src/components/pagination';
 import { Tag } from 'src/components/tag';
 import { PermistionAction } from 'src/variables/permission';
 
@@ -49,6 +49,7 @@ type TableProps<T> = {
 	onClickDetail?: (row: T) => void;
 	styleCss?: CSSObject;
 	editable?: (row: T) => boolean;
+	pagiantionRef?: Ref<PaginationRef>;
 } & BaseProps;
 
 const Table = <T,>({
@@ -63,6 +64,7 @@ const Table = <T,>({
 	onClickDelete,
 	onClickDetail,
 	editable,
+	pagiantionRef,
 	...innerProps
 }: TableProps<T>): JSX.Element => {
 	const textColor = useColorModeValue('gray.600', 'whiteSmoke.100');
@@ -199,7 +201,7 @@ const Table = <T,>({
 					</ChakraTable>
 				</Box>
 			</Box>
-			{pagination && <Pagination {...pagination} isLoading={loading} />}
+			{pagination && <Pagination ref={pagiantionRef} {...pagination} isLoading={loading} />}
 		</>
 	);
 };
