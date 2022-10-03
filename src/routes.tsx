@@ -416,7 +416,6 @@ const routes: Route[] = [
 		icon: <Icon as={MdCreditCardOff} width="20px" height="20px" color="inherit" />,
 		component: ResdidentCardReqManagement,
 		action: PermistionAction.VIEW,
-		// TODO: replace this permission
 		requirePermission: FeatureModule.RESIDENT_CARD_REQUEST_MANAGEMENT,
 		items: [
 			{
@@ -436,9 +435,7 @@ const routes: Route[] = [
 		icon: <Icon as={MdOutlineReceiptLong} width="20px" height="20px" color="inherit" />,
 		component: HandoverManagement,
 		action: PermistionAction.VIEW,
-		// TODO: replace this permission
-		requirePermission: FeatureModule.RESIDENT_CARD_REQUEST_MANAGEMENT,
-		// requirePermission: FeatureModule.HANOVER_MANAGEMENT,
+		requirePermission: FeatureModule.HANOVER_MANAGEMENT,
 	},
 	{
 		name: 'Đăng nhập',
