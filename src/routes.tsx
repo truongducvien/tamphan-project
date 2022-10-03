@@ -438,6 +438,7 @@ const routes: Route[] = [
 		action: PermistionAction.VIEW,
 		// TODO: replace this permission
 		requirePermission: FeatureModule.RESIDENT_CARD_REQUEST_MANAGEMENT,
+		// requirePermission: FeatureModule.HANOVER_MANAGEMENT,
 	},
 	{
 		name: 'Đăng nhập',

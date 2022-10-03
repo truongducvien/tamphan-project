@@ -7,6 +7,7 @@ export enum StatusProperty {
 	PREPARING_HANDOVER = 'PREPARING_HANDOVER',
 	WAITING_HANDOVER = 'WAITING_HANDOVER',
 	IN_USE = 'IN_USE',
+	PENDING_HANDOVER = 'PENDING_HANDOVER',
 }
 
 export enum Relationship {
@@ -92,6 +93,11 @@ export const statusProperty: Array<Option> = [
 		label: 'Đang sử dụng',
 		value: StatusProperty.IN_USE,
 		colorScheme: 'blue',
+	},
+	{
+		label: 'Đã huỷ bàn giao',
+		value: StatusProperty.PENDING_HANDOVER,
+		colorScheme: 'red',
 	},
 ];
 

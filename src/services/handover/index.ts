@@ -14,9 +14,17 @@ export const getHandover = async ({ code = '', page = 0, size = 10 }: IHandoverP
 	return data?.data ? { ...data?.data, nextPage: (data?.data?.pageNum || 0) + 1 } : null;
 };
 
-export const importHandover = async (payload: BaseImportPayload) => {
+export const importHandover = async (d: BaseImportPayload) => {
+	const payload = new FormData();
+	payload.append('file', d.file);
+	payload.append('type', d.type);
 	const { data } = await http.post<BaseResponseAction>('/v1/properties-handover', {
 		...payload,
 	});
+	return data || null;
+};
+
+export const removeHandover = async (id: string) => {
+	const { data } = await http.put<BaseResponseAction>(`/v1/properties/${id}/pending-handover`);
 	return data || null;
 };

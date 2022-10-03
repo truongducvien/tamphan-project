@@ -127,7 +127,7 @@ const Table = <T,>({
 						>
 							{columns && (
 								<Tr>
-									{action && (
+									{action && action.length > 0 && (
 										<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" textAlign="center">
 											Thao tác
 										</Th>
@@ -150,7 +150,7 @@ const Table = <T,>({
 							{data.map((row, index) => {
 								return (
 									<Tr key={index} bg="made.40" data-testid={`row-${index}`}>
-										{action && (
+										{action && action.length > 0 && (
 											<Td>
 												<HStack justify="center" align="center">
 													{action.includes(PermistionAction.VIEW) && (

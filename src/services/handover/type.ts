@@ -67,5 +67,5 @@ export interface IHandoverParams extends BaseParams {
 	code?: string;
 	fullName?: string;
 	status?: StatusProperty;
-	bookingStatus?: HandOverBookingStatus;
+	bookingStatus?: HandOverBookingStatusKey;
 }
