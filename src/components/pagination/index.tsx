@@ -12,7 +12,6 @@ import {
 } from '@ajna/pagination';
 import { Icon, Select, useColorModeValue } from '@chakra-ui/react';
 import { ChevronLeft, ChevronRight } from 'react-feather';
-import { useForceUpdate } from 'src/hooks/useForceUpdate';
 
 const PAGE_SIZE_OPTIONS = [
 	{ value: '10', text: '10' },
@@ -51,8 +50,6 @@ const Pagination = forwardRef<PaginationRef, PaginationProps>(
 		},
 		ref,
 	) => {
-		const update = useForceUpdate();
-
 		const totalPages = total;
 
 		const { currentPage, setCurrentPage, pages } = usePagination({

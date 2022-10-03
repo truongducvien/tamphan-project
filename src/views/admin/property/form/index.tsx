@@ -29,7 +29,7 @@ import { useHistory } from 'react-router-dom';
 import Card from 'src/components/card/Card';
 import { FormContainer } from 'src/components/form';
 import { Loading } from 'src/components/form/Loading';
-import { Option, PullDownHookForm } from 'src/components/form/PullDown';
+import { BaseOption, Option, PullDownHookForm } from 'src/components/form/PullDown';
 import { TextAreaFieldHookForm } from 'src/components/form/TextAreaField';
 import { TextFieldHookForm } from 'src/components/form/TextField';
 import { PullDown } from 'src/components/pulldown';
@@ -44,7 +44,13 @@ import { useLoadMore } from 'src/hooks/useLoadMore';
 import { getArea } from 'src/services/area';
 import { IArea, IAreaParams } from 'src/services/area/type';
 import { createProperty, getPropertyById, updateProperty, updateOwner } from 'src/services/properties';
-import { IPropertyPayload, StatusProperty, statusProperty } from 'src/services/properties/type';
+import {
+	IPropertyPayload,
+	StatusProperty,
+	statusProperty,
+	TypeProperty,
+	typeProperty,
+} from 'src/services/properties/type';
 import { getResidentOwner, getResidentV2 } from 'src/services/resident';
 import { gender, identityCardType, IResident, IResidentParams } from 'src/services/resident/type';
 import * as Yup from 'yup';
@@ -58,7 +64,7 @@ const validationProperty = Yup.object({
 	status: Yup.object().shape({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn trạng thái') }),
 	acreage: Yup.string().required('Vui lòng nhập diện tích đất'),
 	inUserAcreage: Yup.string().required('Vui lòng nhập diện tích sử dụng'),
-	type: Yup.string().required('Vui lòng nhập loại căn hộ'),
+	type: Yup.object().shape({ label: Yup.string(), value: Yup.string().required('Vui lòng nhập loại căn hộ') }),
 });
 
 interface DataForm {
@@ -77,7 +83,7 @@ interface DataForm {
 	numberOfBedRoom: string;
 	numberOfFloor: string;
 	status: Option;
-	type: string;
+	type: BaseOption<TypeProperty>;
 }
 
 const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
@@ -172,6 +178,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 			numberOfBathRoom: Number(data.numberOfBathRoom),
 			numberOfBedRoom: Number(data.numberOfBedRoom),
 			numberOfFloor: Number(data.numberOfFloor),
+			type: data.type?.value,
 			id: id || '',
 		};
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -202,6 +209,7 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 		...detailData?.data,
 		status: statusProperty.find(i => i.value === detailData?.data?.status),
 		areaId: { label: detailData?.data?.areaName, value: detailData?.data?.areaId },
+		type: typeProperty.find(i => i.value === detailData?.data?.type),
 	};
 
 	const defaultOwner = {
@@ -265,7 +273,13 @@ const AparmentForm: React.FC<BaseComponentProps> = ({ request }) => {
 									spacing={3}
 									pb={3}
 								>
-									<TextFieldHookForm isRequired isDisabled={isDisabled} label="Loại căn hộ" name="type" />
+									<PullDownHookForm
+										isRequired
+										isDisabled={isDisabled}
+										label="Loại căn hộ"
+										name="type"
+										options={typeProperty}
+									/>
 									<PullDownHookForm
 										isDisabled={isDisabled}
 										isRequired

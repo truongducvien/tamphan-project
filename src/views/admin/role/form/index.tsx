@@ -175,6 +175,18 @@ const permissions: Array<PermissionProps> = [
 		title: 'Quản lý bài viết',
 		permistion: ['VIEW', 'ADD', 'UPDATE', 'DELETE', 'APPROVE', 'REJECT', 'PUBLISH'],
 	},
+	{
+		id: '14',
+		value: 'HANOVER_MANAGEMENT',
+		title: 'Quản lý tài sản bàn giao',
+		permistion: ['VIEW', 'IMPORT', 'DELETE'],
+	},
+	{
+		id: '15',
+		value: 'HANOVER_BOOKING_MANAGEMENT',
+		title: 'Quản lý lịch bàn giao',
+		permistion: ['VIEW', 'UPDATE'],
+	},
 ];
 
 const DetailPosition: React.FC<BaseComponentProps> = ({ request }) => {

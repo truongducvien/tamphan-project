@@ -15,7 +15,7 @@ import { BaseComponentProps } from 'src/hocs/withPermission';
 import useActionPage from 'src/hooks/useActionPage';
 import { useActionPermission } from 'src/hooks/useActionPermission';
 import { createArea, getAreaById, updateArea } from 'src/services/area';
-import { IAreaPayload, TypeArea, typeAreas } from 'src/services/area/type';
+import { IAreaPayload } from 'src/services/area/type';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
@@ -102,7 +102,7 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 			});
 			return;
 		}
-		const prepareData = { ...data, type: data.type.value as TypeArea, ...dataImage };
+		const prepareData = { ...data, ...dataImage };
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		action === 'create' ? handelCreate(prepareData, reset) : handelUpdate(prepareData);
@@ -113,7 +113,6 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 	const defaultData = {
 		...detailData?.data,
 		contactEmail: detailData?.data?.contactEmail || '',
-		type: typeAreas.find(i => i.value === detailData?.data?.type),
 	};
 	const isDisabled = action === 'detail';
 
@@ -146,13 +145,6 @@ const DetailArea: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<PullDownHookForm
-							isDisabled={isDisabled}
-							label="Loại hình BDS"
-							name="type"
-							options={typeAreas}
-							isSearchable={false}
-						/>
 						<TextFieldHookForm
 							isDisabled={isDisabled}
 							isRequired
