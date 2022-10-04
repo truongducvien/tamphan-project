@@ -62,6 +62,8 @@ pipelines:
             - yarn tsc
             - yarn lint
 
+      - step:
+          <<: *sonarqube
   tags:
     ####################################
     ############ CI For STG ############
