@@ -87,7 +87,7 @@ const FacilityReManagement: React.FC = () => {
 		{ key: 'note', label: 'Mô tả' },
 		{
 			key: 'paymentMethod',
-			label: 'Phhương thức thanh toán',
+			label: 'Phương thức thanh toán',
 			tag: ({ paymentMethod }) => paymentMethods.find(i => i.value === paymentMethod),
 		},
 	];
