@@ -18,7 +18,7 @@ import { formatDate } from 'src/helpers/dayjs';
 import { BaseComponentProps } from 'src/hocs/withPermission';
 import { useActionPermission } from 'src/hooks/useActionPermission';
 import { usePagination } from 'src/hooks/usePagination';
-import { acceptHandover, completedHandover, getHandoverBooking, removeHandover } from 'src/services/handover';
+import { acceptHandover, completedHandover, getHandoverBooking } from 'src/services/handover';
 import {
 	handOverBookingStatus,
 	HandOverBookingStatusKey,
