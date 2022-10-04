@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { MdImportExport } from 'react-icons/md';
 import { useHistory } from 'react-router-dom';
@@ -115,6 +115,12 @@ const HandoverBooing: React.FC<BaseComponentProps> = () => {
 		{
 			key: 'note',
 			label: 'Ghi chú',
+			// eslint-disable-next-line react/no-unstable-nested-components
+			cell: ({ note }) => (
+				<Text fontSize={12} maxH={100} overflow="scroll">
+					{note}
+				</Text>
+			),
 		},
 		{
 			key: 'bookingStatus',
@@ -173,7 +179,7 @@ const HandoverBooing: React.FC<BaseComponentProps> = () => {
 				</Center>
 				<Table
 					testId="consignments-dashboard"
-					minWidth={1500}
+					minWidth={2000}
 					columns={COLUMNS}
 					data={data?.items || []}
 					loading={isLoading}
