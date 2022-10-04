@@ -71,7 +71,7 @@ const Table = <T,>({
 	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
 	const iconDelete = useColorModeValue('red.300', 'red.800');
 	const scrollColor = useColorModeValue('blue.500', 'blue.800');
-	const bg = useColorModeValue('gray.100', 'blue.800');
+	const bg = useColorModeValue('blue.500', 'blue.800');
 
 	return (
 		<>
@@ -128,7 +128,7 @@ const Table = <T,>({
 							{columns && (
 								<Tr>
 									{action && action.length > 0 && (
-										<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" textAlign="center">
+										<Th fontSize={{ sm: '10px', lg: '12px' }} color="whitesmoke" textAlign="center">
 											Thao tác
 										</Th>
 									)}
@@ -136,7 +136,7 @@ const Table = <T,>({
 										<Th
 											fontSize={{ sm: '10px', lg: '12px' }}
 											textAlign={column.tag || column?.isCenter ? 'center' : 'start'}
-											color="gray.400"
+											color="whitesmoke"
 											key={index}
 										>
 											{column.label}

@@ -151,7 +151,7 @@ const HandoverManagement: React.FC<BaseComponentProps> = ({ request }) => {
 				</Center>
 				<Table
 					testId="consignments-dashboard"
-					minWidth={1200}
+					minWidth={1500}
 					columns={COLUMNS}
 					data={data?.items || []}
 					loading={isLoading || isDeleting || isImporting}
