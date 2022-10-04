@@ -53,13 +53,14 @@ interface Form {
 
 const UpdateTag: React.FC<{ row: IHandoverBooking; onUpdate: () => void }> = ({ row, onUpdate }) => {
 	const { id, bookingStatus } = row;
+	const { permistionAction } = useActionPermission('HANOVER_BOOKING_MANAGEMENT');
 	const { toast } = useToastInstance();
 	const column = handOverBookingStatus.find(i => i.value === bookingStatus);
 	const { mutateAsync: acceptAsync, isLoading: isAccepting } = useMutation(acceptHandover);
 	const { mutateAsync: completedAsync, isLoading: isCompleting } = useMutation(completedHandover);
 
 	const handleUpdate = async () => {
-		if (!['WAITING', 'APPROVED'].includes(bookingStatus)) return;
+		if (!['WAITING', 'APPROVED'].includes(bookingStatus) || !permistionAction.UPDATE) return;
 		const next = await alert({
 			title: 'Cập nhật trạng thái',
 			description: `Bạn có muốn chuyển trạng thái hoàn tất cho mã booking ${id} không?`,
@@ -87,7 +88,7 @@ const UpdateTag: React.FC<{ row: IHandoverBooking; onUpdate: () => void }> = ({ 
 		<Center>
 			{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
 			<Tag
-				cursor={['WAITING', 'APPROVED'].includes(bookingStatus) ? 'pointer' : 'not-allowed'}
+				cursor={['WAITING', 'APPROVED'].includes(bookingStatus) || !permistionAction.UPDATE ? 'pointer' : 'not-allowed'}
 				colorScheme={column.colorScheme}
 				onClick={handleUpdate}
 			>
@@ -97,8 +98,7 @@ const UpdateTag: React.FC<{ row: IHandoverBooking; onUpdate: () => void }> = ({ 
 	) : null;
 };
 
-const HandoverBooing: React.FC<BaseComponentProps> = ({ request }) => {
-	const { permistionAction, actions } = useActionPermission(request);
+const HandoverBooing: React.FC<BaseComponentProps> = () => {
 	const { resetPage, dispatchInfo, value: currentPage, pageSize, ...pagination } = usePagination();
 
 	const [params, setParams] = useState<IHandoverBookingParams>({});
