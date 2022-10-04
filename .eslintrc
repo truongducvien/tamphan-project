@@ -47,6 +47,12 @@
 		"no-nested-ternary": 0,
 		"react/require-default-props": 0,
 		"react/no-unused-prop-types": 0,
+		"@typescript-eslint/no-misused-promises": [
+			"error",
+			{
+				"checksVoidReturn": false
+			}
+		],
 		"react/forbid-elements": [
 			2,
 			{

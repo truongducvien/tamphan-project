@@ -1,9 +1,10 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { MdLibraryAdd } from 'react-icons/md';
+import { MdLibraryBooks } from 'react-icons/md';
+import { useHistory } from 'react-router-dom';
 import importTemplate from 'src/assets/templates/handover-template.csv';
 import { alert } from 'src/components/alertDialog/hook';
 import Card from 'src/components/card/Card';
@@ -14,7 +15,6 @@ import { DownloadTemplate, ImportButton } from 'src/components/importButton';
 import Table, { IColumn } from 'src/components/table';
 import { useToastInstance } from 'src/components/toast';
 import { BaseComponentProps } from 'src/hocs/withPermission';
-import useActionPage from 'src/hooks/useActionPage';
 import { useActionPermission } from 'src/hooks/useActionPermission';
 import { usePagination } from 'src/hooks/usePagination';
 import { getHandover, importHandover, removeHandover } from 'src/services/handover';
@@ -49,7 +49,7 @@ const HandoverManagement: React.FC<BaseComponentProps> = ({ request }) => {
 			}),
 		{ onSuccess: d => dispatchInfo(d) },
 	);
-	const { changeAction } = useActionPage();
+	const history = useHistory();
 	const { mutateAsync: deleteAsync, isLoading: isDeleting } = useMutation(removeHandover);
 	const { mutateAsync: importAsync, isLoading: isImporting } = useMutation(importHandover);
 	const { toast } = useToastInstance();
@@ -69,8 +69,8 @@ const HandoverManagement: React.FC<BaseComponentProps> = ({ request }) => {
 			label: 'Trạng thái đặt lịch',
 			tag: ({ bookingStatus }) => handOverBookingStatus.find(i => i.value === bookingStatus),
 		},
-		{ key: 'createdDate', label: 'Ngày tạo' },
-		{ key: 'updatedDate', label: 'Ngày cập nhật' },
+		{ key: 'createdDate', label: 'Ngày tạo', dateFormat: 'DD/MM/YYYY' },
+		{ key: 'updatedDate', label: 'Ngày cập nhật', dateFormat: 'DD/MM/YYYY' },
 	];
 
 	const handleSearch = (payload: Form) => {
@@ -99,8 +99,11 @@ const HandoverManagement: React.FC<BaseComponentProps> = ({ request }) => {
 	};
 
 	const handleImport = async (file: File) => {
+		const payload = new FormData();
+		payload.append('file', file);
+		payload.append('type', 'CSV');
 		try {
-			await importAsync({ file, type: 'CSV' });
+			await importAsync(payload);
 			toast({ title: 'Import thành công' });
 			refetch();
 		} catch {
@@ -129,12 +132,12 @@ const HandoverManagement: React.FC<BaseComponentProps> = ({ request }) => {
 							</Button>
 							<Button
 								marginLeft={1}
-								hidden={!permistionAction.ADD}
-								onClick={() => changeAction('create')}
+								// hidden={!permistionAction.ADD}
+								onClick={() => history.push('/admin/handover/booking')}
 								variant="brand"
-								leftIcon={<MdLibraryAdd />}
+								leftIcon={<MdLibraryBooks />}
 							>
-								Thêm mới
+								Danh sách đặt lịch
 							</Button>
 						</Flex>
 					</FormContainer>
