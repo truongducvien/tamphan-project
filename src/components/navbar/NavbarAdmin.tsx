@@ -24,7 +24,7 @@ const AdminNavbar: React.FC<Props> = ({ secondary, message, fixed, logoText, onO
 	const navbarBorder = 'transparent';
 	const secondaryMargin = '0px';
 	const paddingX = '15px';
-	const gap = '0px';
+	const gap = '7px';
 	const shadow = useColorModeValue(
 		'0px 17px 40px -17px rgba(112, 144, 176, 0.18)',
 		'14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
