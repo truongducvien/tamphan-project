@@ -188,7 +188,7 @@ const Table = <T,>({
 														{column.key
 															? column.dateFormat && row[column.key]
 																? dayjs(row[column.key] as unknown as string).format(column.dateFormat)
-																: (row[column.key] as unknown as string)
+																: (row[column.key] as unknown as string) || '-'
 															: ''}
 													</Text>
 												)}

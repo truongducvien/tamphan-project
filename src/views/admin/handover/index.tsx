@@ -125,7 +125,7 @@ const HandoverManagement: React.FC<BaseComponentProps> = ({ request }) => {
 							<Box hidden={!permistionAction.IMPORT}>
 								<DownloadTemplate url={importTemplate} mr={3} />
 								{/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-								<ImportButton onChangeFile={handleImport} isLoading={isImporting} />
+								<ImportButton onChangeFile={handleImport} mr={3} isLoading={isImporting} />
 							</Box>
 							<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
 								Tìm kiếm

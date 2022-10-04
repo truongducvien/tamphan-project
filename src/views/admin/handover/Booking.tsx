@@ -1,23 +1,7 @@
 import React, { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import {
-	Box,
-	Button,
-	Center,
-	Flex,
-	Heading,
-	SimpleGrid,
-	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalHeader,
-	ModalFooter,
-	ModalBody,
-	ModalCloseButton,
-	FormControl,
-	FormLabel,
-} from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { MdImportExport } from 'react-icons/md';
 import { useHistory } from 'react-router-dom';
@@ -119,10 +103,10 @@ const HandoverBooing: React.FC<BaseComponentProps> = () => {
 			key: 'bookingDate',
 			label: 'Ngày hẹn bàn giao',
 		},
-		{ key: 'id', label: 'Mã booking' },
-		{ key: 'residentFullName', label: 'Họ tên khách hàng' },
-		{ key: 'residentEmail', label: 'Email khách hàng' },
-		{ key: 'residentPhoneNumber', label: 'Số điện thoại khách hàng' },
+		{ key: 'code', label: 'Mã booking' },
+		{ key: 'residentHandoverName', label: 'Họ tên khách hàng' },
+		{ key: 'residentHandoverEmail', label: 'Email khách hàng' },
+		{ key: 'residentHandoverPhoneNumber', label: 'Số điện thoại khách hàng' },
 		{
 			key: 'property',
 			label: 'Mã tài sản',
