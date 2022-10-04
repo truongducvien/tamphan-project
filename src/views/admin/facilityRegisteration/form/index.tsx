@@ -112,7 +112,7 @@ const FacilityReForm: React.FC<BaseComponentProps> = ({ request }) => {
 						pb={3}
 					>
 						<TextFieldHookForm isDisabled label="Email" name="residentEmail" variant="admin" />
-						<TextFieldHookForm isDisabled label="Sô lượng" name="quantityOfPerson" variant="admin" />
+						<TextFieldHookForm isDisabled label="Số lượng" name="quantityOfPerson" variant="admin" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}

@@ -20,6 +20,8 @@ import {
 import { FeatureModule } from 'src/services/role/type';
 import { PermistionAction } from 'src/variables/permission';
 
+const HandoverBooing = React.lazy(() => import('./views/admin/handover/Booking'));
+
 const AparmentForm = React.lazy(() => import('src/views/admin/property/form'));
 const AreaManagement = React.lazy(() => import('src/views/admin/area'));
 const ArticleManagement = React.lazy(() => import('src/views/admin/article'));
@@ -436,6 +438,16 @@ const routes: Route[] = [
 		component: HandoverManagement,
 		action: PermistionAction.VIEW,
 		requirePermission: FeatureModule.HANOVER_MANAGEMENT,
+		items: [
+			{
+				name: 'Danh sách đặt lịch bàn giao',
+				layout: '/admin',
+				path: '/handover/booking',
+				component: HandoverBooing,
+				action: PermistionAction.VIEW,
+				requirePermission: FeatureModule.HANOVER_BOOKING_MANAGEMENT,
+			},
+		],
 	},
 	{
 		name: 'Đăng nhập',

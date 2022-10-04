@@ -137,22 +137,27 @@ export const typeProperty: Array<Option> = [
 	{
 		label: 'Dinh thự',
 		value: TypeProperty.VILLA,
+		colorScheme: 'cyan',
 	},
 	{
 		label: 'Shophouse',
 		value: TypeProperty.SHOP_HOUSE,
+		colorScheme: 'messenger',
 	},
 	{
 		label: 'Biệt thự đơn lập',
 		value: TypeProperty.SINGLE_VILLA,
+		colorScheme: 'yellow',
 	},
 	{
 		label: 'Biệt thự song lập',
 		value: TypeProperty.DOUBLE_VILLA,
+		colorScheme: 'pink',
 	},
 	{
 		label: 'Nhà Phố',
 		value: TypeProperty.TOWN_HOUSE,
+		colorScheme: 'teal',
 	},
 ];
 

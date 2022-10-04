@@ -45,7 +45,7 @@ const AlertDialog: React.FC<Props> = ({
 			<AlertDialogContent>
 				<AlertDialogHeader
 					textAlign={centerTitle ? 'center' : 'start'}
-					color={type === 'error' || type === 'message' ? color : 'whitesmoke'}
+					color={type === 'error' || type === 'message' ? color : 'telegram.400'}
 				>
 					{title}
 				</AlertDialogHeader>

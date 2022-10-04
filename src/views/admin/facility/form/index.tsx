@@ -417,7 +417,7 @@ const FacilityForm: React.FC<BaseComponentProps> = ({ request }) => {
 						/>
 
 						<TextAreaFieldHookForm label="Mô tả" variant="admin" name="description" />
-						<TextAreaFieldHookForm label="Ghi chú đặc cọc" variant="admin" name="depositNote" />
+						<TextAreaFieldHookForm label="Ghi chú đặt cọc" variant="admin" name="depositNote" />
 						<FormControl>
 							<FormLabel>Hình ảnh</FormLabel>
 							<UploadImage

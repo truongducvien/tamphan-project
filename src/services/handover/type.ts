@@ -1,4 +1,4 @@
-import { BaseOption, Option } from 'src/components/form/PullDown';
+import { BaseOption } from 'src/components/form/PullDown';
 import { BaseParams, BaseResponseList } from 'src/services/type';
 
 import { StatusProperty, TypeProperty } from '../properties/type';
@@ -69,3 +69,49 @@ export interface IHandoverParams extends BaseParams {
 	status?: StatusProperty;
 	bookingStatus?: HandOverBookingStatusKey;
 }
+
+export interface IHandoverBooking {
+	bookingDate: string;
+	bookingStatus: HandOverBookingStatusKey;
+	bookingTimeSlot: {
+		end: {
+			hour: number;
+			minute: number;
+			nano: number;
+			second: number;
+		};
+		start: {
+			hour: number;
+			minute: number;
+			nano: number;
+			second: number;
+		};
+		valid: boolean;
+	};
+	id: string;
+	note: string;
+	property: {
+		areaCode: string;
+		areaImageLink: string;
+		areaName: string;
+		code: string;
+		id: string;
+		name: string;
+		status: StatusProperty;
+		type: TypeProperty;
+	};
+	createdDate: string;
+	updatedDate: string;
+	residentPhoneNumber: string;
+	residentEmail: string;
+	residentFullName: string;
+}
+
+export interface IHandoverBookingParams extends BaseParams {
+	residentFullName?: string;
+	propertyCode?: string;
+	bookingStatus?: string;
+	from?: string;
+	to?: string;
+}
+export type IHandoverBookingResponse = BaseResponseList<IHandoverBooking>;
