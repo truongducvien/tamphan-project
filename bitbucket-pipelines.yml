@@ -24,27 +24,20 @@ definitions:
   services:
     docker:
       memory: 7128
+  caches:
+    sonar: ~/.sonar
   steps:
-    - step: &deploy_service
-        name: Deploy Service
+    - step: &sonarqube
+        name: SonarQube analysis
+        image: maven:3.3.9
         script:
-          - *setenv
-          - sed 's#__DEPLOY_IMAGE_TAG__#'${DOCKER_REPO}:${BITBUCKET_TAG}'#' deploy/deployment.yaml > deploy/deployment.yml
-          - cat deploy/deployment.yml
-          - pipe: atlassian/aws-eks-kubectl-run:1.2.0
+          - echo "sonar.projectKey=${SONAR_PROJECT_KEY}" > sonar-project.properties
+          - pipe: sonarsource/sonarqube-scan:1.0.0
             variables:
-              AWS_ACCESS_KEY_ID: '${AWS_KEY}' # Optional if already defined in the context.
-              AWS_SECRET_ACCESS_KEY: '${AWS_SECRET}' # Optional if already defined in the context.
-              AWS_DEFAULT_REGION: 'ap-southeast-1' # Optional if already defined in the context.
-              CLUSTER_NAME: '${CLUSTER_NAME}'
-              KUBECTL_ARGS:
-                - '-n'
-                - 'data-api'
-              KUBECTL_COMMAND: 'apply'
-              RESOURCE_PATH: 'deploy/deployment.yml'
-        services:
-          - docker
-
+              SONAR_HOST_URL: ${SONAR_HOST_URL} # Get the value from the repository/workspace variable.
+              SONAR_TOKEN: ${SONAR_TOKEN} # Get the value from the repository/workspace variable. You shouldn't set secret in clear text here.
+        size: 2x 
+        
     - step: &deploy_service
         name: Deploy Service on Server
         script:
@@ -68,6 +61,7 @@ pipelines:
             - yarn install --frozen-lockfile --cache-folder .yarn
             - yarn tsc
             - yarn lint
+
   tags:
     ####################################
     ############ CI For STG ############
@@ -88,14 +82,6 @@ pipelines:
             - docker
           size: 2x
 
-      - step:
-          name: STG - Deploy Service
-          runs-on:
-            - self.hosted
-            - linux.shell
-            - aquacity
-          <<: *deploy_service
-
     ####################################
     ############ CI For UAT ############
     ####################################
@@ -115,43 +101,30 @@ pipelines:
             - docker
           size: 2x
 
+    ####################################
+    ######### CI For PREPRD,PRD ########
+    ####################################
+    '*.*.*':
       - step:
-          name: UAT - Deploy Service
-          runs-on:
-            - self.hosted
-            - linux.shell
-            - aquacity.uat
-          <<: *deploy_service
-
-      # - step:
-      #     name: READY FOR PRD - Update image tag
-      #     <<: *mark_image_ready_for_prd
-      #     trigger: manual
-
-    ###################################
-    ########## CI For PRE-PRD #########
-    ###################################
-    # '*.*.*-preprd':
-    #   - step:
-    #       name: PRD - Update image tag
-    #       script:
-    #         - *setenv
-    #         - export IMAGE_TAG=${DOCKER_REPO}:READY-FOR-PROD
-    #         - export NEW_IMAGE_TAG=${DOCKER_REPO}:${BITBUCKET_TAG}
-    #       services:
-    #         - docker
-    #       caches:
-    #         - docker
-
-    ####################################
-    ############ CI For PRD ############
-    ####################################
-    '*.*.*-prd':
+          name: PREPRD - Release Image On PREPRD
+          script:
+            - *setenv
+            - export NEW_IMAGE_TAG=${DOCKER_REPO}:${BITBUCKET_TAG}-preprd
+            - >-
+              docker build . --file ${DOCKERFILE_PATH} --tag ${IMAGE_TAG}
+              --build-arg REACT_APP_API_BASE_URL=https://aquacity.preprd.novaid.vn/web/api
+            - *retag_and_push_images
+          services:
+            - docker
+          caches:
+            - docker
+          size: 2x
+          
       - step:
           name: PRD - Release Image On PRD
           script:
             - *setenv
-            - export NEW_IMAGE_TAG=${DOCKER_REPO}:${BITBUCKET_TAG}
+            - export NEW_IMAGE_TAG=${DOCKER_REPO}:${BITBUCKET_TAG}-prd
             - >-
               docker build . --file ${DOCKERFILE_PATH} --tag ${IMAGE_TAG}
               --build-arg REACT_APP_API_BASE_URL=https://aquacity.novaid.vn/web/api
@@ -161,7 +134,4 @@ pipelines:
           caches:
             - docker
           size: 2x
-      # - step:
-      #     name: PRD - Deploy Service
-      #     deployment: prd
-      #     <<: *deploy_service
+          trigger: manual
