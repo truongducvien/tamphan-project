@@ -187,6 +187,18 @@ const permissions: Array<PermissionProps> = [
 		title: 'Quản lý lịch bàn giao',
 		permistion: ['VIEW', 'UPDATE'],
 	},
+	{
+		id: '16',
+		value: 'AUTHORIZATION_MANAGEMENT',
+		title: 'Quản lý uỷ quyền',
+		permistion: ['VIEW', 'UPDATE'],
+	},
+	{
+		id: '17',
+		value: 'AUTHORIZATION_REQUEST_MANAGEMENT',
+		title: 'Quản lý đăng kí uỷ quyền',
+		permistion: ['VIEW', 'APPROVE'],
+	},
 ];
 
 const DetailPosition: React.FC<BaseComponentProps> = ({ request }) => {
