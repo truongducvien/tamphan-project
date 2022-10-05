@@ -50,12 +50,12 @@ export const authorizationItemOption: Array<BaseOption<keyof typeof Authorizatio
 	{
 		label: 'Đăng kí thẻ',
 		value: 'RESIDENT_CARD_REGISTER',
-		colorScheme: 'orange',
+		colorScheme: 'cyan',
 	},
 	{
 		label: 'Khác',
 		value: 'OTHER',
-		colorScheme: 'cyan',
+		colorScheme: 'orange',
 	},
 ];
 
@@ -63,13 +63,15 @@ export interface IResidentAuthReq {
 	authorizationDetail: string;
 	authorizationItem: AuthorizationItem;
 	authorizedPerson: IResident;
+	code: string;
 	createdBy: string;
 	createdDate: Date;
 	effectiveDate: string;
 	expiredDate: string;
+	hardCopyLinks: string[];
+	mandator: IResident;
 	modifiedBy: string;
 	property: IProperty;
-	requestCode: string;
 	status: keyof typeof ResidentAuthReqStatus;
 	updatedDate: Date;
 	id: string;

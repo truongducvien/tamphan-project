@@ -4,6 +4,7 @@ import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { MdResetTv } from 'react-icons/md';
+import { useHistory } from 'react-router-dom';
 import Card from 'src/components/card/Card';
 import { FormContainer } from 'src/components/form';
 import { BaseOption, PullDownHookForm } from 'src/components/form/PullDown';
@@ -97,7 +98,7 @@ const ResdidentAuthReqManagement: React.FC = () => {
 		},
 		{ key: 'effectiveDate', label: 'Ngày hiệu lực', dateFormat: 'DD/MM/YYYY' },
 		{ key: 'expiredDate', label: 'Ngày kết thúc', dateFormat: 'DD/MM/YYYY' },
-		{ key: 'requestCode', label: 'Mã yêu cầu' },
+		{ key: 'code', label: 'Mã yêu cầu' },
 		{
 			key: 'status',
 			label: 'Trạng thái yêu cầu',
@@ -115,6 +116,7 @@ const ResdidentAuthReqManagement: React.FC = () => {
 		setParams(preData);
 	};
 
+	const history = useHistory();
 	const { changeAction } = useActionPage();
 
 	return (
@@ -150,8 +152,14 @@ const ResdidentAuthReqManagement: React.FC = () => {
 							<TextFieldHookForm name="authorizedPersonName" label="Người được uỷ quyền" />
 							<TextFieldHookForm label="Người yêu cầu" name="mandatorName" />
 							<Flex align="end" justify="end" mt={3}>
-								<Button variant="lightBrand" mr={3} type="reset" leftIcon={<MdResetTv />}>
-									Mặc định
+								<Button
+									variant="lightBrand"
+									onClick={() => history.push('/admin/authorization')}
+									mr={3}
+									type="reset"
+									leftIcon={<MdResetTv />}
+								>
+									Danh sách uỷ quyền
 								</Button>
 								<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
 									Tìm kiếm
