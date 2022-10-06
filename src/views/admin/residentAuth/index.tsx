@@ -3,70 +3,83 @@ import { useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import { MdResetTv } from 'react-icons/md';
+import { useHistory } from 'react-router-dom';
 import Card from 'src/components/card/Card';
 import { FormContainer } from 'src/components/form';
-import { DatePickerHookForm } from 'src/components/form/DatePicker';
 import { BaseOption, PullDownHookForm } from 'src/components/form/PullDown';
 import { TextFieldHookForm } from 'src/components/form/TextField';
 import Table, { IColumn } from 'src/components/table';
-import { formatDate } from 'src/helpers/dayjs';
 import useActionPage from 'src/hooks/useActionPage';
 import { useDebounce } from 'src/hooks/useDebounce';
 import { useLoadMore } from 'src/hooks/useLoadMore';
 import { usePagination } from 'src/hooks/usePagination';
-import { getProperty } from 'src/services/properties';
-import { IProperty, IPropertyParams } from 'src/services/properties/type';
-import { getResidentCardReq } from 'src/services/residentCardReq';
-import {
-	IResidentCardReq,
-	IResidentCardReqParams,
-	statusCardReq,
-	typeCardReq,
-} from 'src/services/residentCardReq/type';
+import { getArea } from 'src/services/area';
+import { IArea, IAreaParams } from 'src/services/area/type';
+import { IPropertyParams } from 'src/services/properties/type';
+import { getResidentAuth } from 'src/services/residentAuth';
+import { IResidentAuth } from 'src/services/residentAuth/type';
+import { authorizationItemOption, IResidentAuthReqParams } from 'src/services/residentAuthReq/type';
 import { PermistionAction } from 'src/variables/permission';
+import { Status, statusOption2 } from 'src/variables/status';
 import * as Yup from 'yup';
 
 interface FormData {
-	from?: string;
-	to?: string;
-	fullName?: string;
-	propertyId?: BaseOption<string>;
-	status?: typeof statusCardReq[0];
-	type?: typeof typeCardReq[0];
+	state?: BaseOption<Status>;
+	propertyCode?: BaseOption<string>;
+	authorizedPersonName?: string;
+	areaId?: BaseOption<string>;
+	mandatorName?: string;
 }
 
 const validationSchema = Yup.object({
-	cardNumber: Yup.string(),
-	propertyId: Yup.object({ label: Yup.string(), value: Yup.string() }).nullable(),
-	status: Yup.object({
+	propertyCode: Yup.object({
+		label: Yup.string(),
+		value: Yup.string(),
+	}).nullable(),
+	areaId: Yup.object({
+		label: Yup.string(),
+		value: Yup.string(),
+	}).nullable(),
+	state: Yup.object({
 		label: Yup.string(),
 		value: Yup.string(),
 	}).nullable(),
 });
 
-const ResdidentCardReqManagement: React.FC = () => {
+const ResdidentAuthReqManagement: React.FC = () => {
 	const { resetPage, dispatchInfo, value: currentPage, pageSize, ...pagination } = usePagination();
 
-	const [keyword, setKeyword] = useState('');
-	const keywordDebounce = useDebounce(keyword);
+	const [keywordArea, setKeywordArea] = useState('');
+	const keywordAreaDebounce = useDebounce(keywordArea);
+	const [keywordProperty, setKeywordProperty] = useState('');
+	const keywordPropertyDebounce = useDebounce(keywordProperty);
 
-	const [params, setParams] = useState<Omit<IResidentCardReqParams, 'page' | 'size'>>();
+	const [params, setParams] = useState<Omit<IResidentAuthReqParams, 'page' | 'size'>>();
+
+	const {
+		data: dataArea,
+		isLoading: isLoadingArea,
+		fetchMore: fetchMoreArea,
+	} = useLoadMore<IArea, IAreaParams>({
+		id: ['listArea', keywordAreaDebounce],
+		func: getArea,
+		payload: { code: keywordAreaDebounce },
+	});
 
 	const {
 		data: dataProperty,
 		isLoading: isLoadingProperty,
-		fetchMore,
-	} = useLoadMore<IProperty, IPropertyParams>({
-		id: ['listProperty', keywordDebounce],
-		func: getProperty,
-		payload: { code: keywordDebounce },
+		fetchMore: fetchMoreProperty,
+	} = useLoadMore<IArea, IPropertyParams>({
+		id: ['listAreaProperty', keywordPropertyDebounce],
+		func: getArea,
+		payload: { code: keywordPropertyDebounce },
 	});
 
 	const { data, isLoading } = useQuery(
-		['listResidentCard', params, currentPage, pageSize],
+		['listResidentAuth', params, currentPage, pageSize],
 		() =>
-			getResidentCardReq({
+			getResidentAuth({
 				page: currentPage - 1,
 				size: pageSize,
 				...params,
@@ -74,32 +87,44 @@ const ResdidentCardReqManagement: React.FC = () => {
 		{ onSuccess: d => dispatchInfo(d) },
 	);
 
-	const COLUMNS: Array<IColumn<IResidentCardReq>> = [
-		{ key: 'type', label: 'Loại yêu cầu', tag: ({ type }) => typeCardReq.find(i => i.value === type) },
-		{ key: 'propertyCode', label: 'Mã căn hộ' },
-		{ key: 'requesterPhoneNumber', label: 'Mã số thẻ yêu cầu' },
-		{ key: 'requesterName', label: 'Người yêu cầu' },
-		{ key: 'requesterPhoneNumber', label: 'Số điện thoại' },
-		{ key: 'note', label: 'Ghi chú' },
-		{ key: 'requestedDate', label: 'Ngày yêu cầu', dateFormat: 'DD/MM/YYYY' },
-		{ key: 'fee', label: 'Phí cấp thẻ' },
-		{ key: 'newCardNumber', label: 'Mã số thẻ cấp mới' },
-		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => statusCardReq.find(i => i.value === status) },
+	const COLUMNS: Array<IColumn<IResidentAuth>> = [
+		{ key: 'property', label: 'Mã căn hộ', cell: ({ property }) => property?.code },
+		{ key: 'property', label: 'Phân khu', cell: ({ property }) => property?.areaName },
+		{
+			key: 'authorizedPerson',
+			label: 'Người được uỷ quền',
+			cell: ({ authorizedPerson }) => authorizedPerson?.fullName,
+		},
+		{ key: 'authorizedPerson', label: 'Số điện thoại', cell: ({ authorizedPerson }) => authorizedPerson?.phoneNumber },
+		{
+			key: 'authorizationItem',
+			label: 'Hạng mục uỷ quyền',
+			tag: ({ authorizationItem }) => authorizationItemOption.find(i => i.value === authorizationItem),
+		},
+		{ key: 'effectiveDate', label: 'Ngày hiệu lực', dateFormat: 'DD/MM/YYYY' },
+		{ key: 'expiredDate', label: 'Ngày kết thúc', dateFormat: 'DD/MM/YYYY' },
+		{ key: 'code', label: 'Mã yêu cầu' },
+		{
+			key: 'status',
+			label: 'Trạng thái uỷ quyền',
+			tag: ({ status }) => statusOption2.find(i => i.value === status),
+		},
+		{ key: 'updatedDate', label: 'Ngày cập nhật', dateFormat: 'DD/MM/YYYY' },
+		{ key: 'modifiedBy', label: 'Người cập nhật' },
 	];
 
 	const onSearch = (payload: FormData) => {
 		resetPage();
 		const preData = {
 			...payload,
-			from: formatDate(payload.from, { type: 'BE' }),
-			to: formatDate(payload.to, { type: 'BE' }),
-			propertyId: payload.propertyId?.value,
-			status: payload.status?.value,
-			type: payload.type?.value,
+			state: payload.state?.value,
+			areaId: payload.areaId?.value,
+			propertyCode: payload.propertyCode?.value,
 		};
 		setParams(preData);
 	};
 
+	const history = useHistory();
 	const { changeAction } = useActionPage();
 
 	return (
@@ -107,26 +132,29 @@ const ResdidentCardReqManagement: React.FC = () => {
 			<Card flexDirection="column" w="100%" px="0px" overflowX={{ sm: 'scroll', lg: 'hidden' }} mb={5}>
 				<Box px={{ sm: 2, md: 5 }}>
 					<FormContainer onSubmit={onSearch} onReset={() => setParams({})} validationSchema={validationSchema}>
-						<SimpleGrid spacing={5} templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(3, 2fr)' }} gap={6}>
-							<PullDownHookForm label="Loại yêu cầu" name="type" colorScheme="red" isClearable options={typeCardReq} />
-							<TextFieldHookForm name="fullName" label="Họ và tên" />
-							<PullDownHookForm isClearable label="Trạng thái yêu cầu" name="status" options={statusCardReq} />
+						<SimpleGrid spacing={5} templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(4, 2fr)' }} gap={6}>
 							<PullDownHookForm
 								isClearable
-								label="Căn hộ"
-								name="propertyId"
+								label="Phân khu"
+								name="areaId"
+								options={dataArea?.map(i => ({ label: i.code, value: i.id })) || []}
+								onInputChange={setKeywordArea}
+								onLoadMore={fetchMoreArea}
+								isLoading={isLoadingArea}
+							/>
+							<PullDownHookForm
+								isClearable
+								label="Mã căn hộ"
+								name="propertyCode"
 								options={dataProperty?.map(i => ({ label: i.code, value: i.id })) || []}
-								onInputChange={setKeyword}
-								onLoadMore={fetchMore}
+								onInputChange={setKeywordProperty}
+								onLoadMore={fetchMoreProperty}
 								isLoading={isLoadingProperty}
 							/>
-							<DatePickerHookForm label="Từ ngày" name="from" />
-							<DatePickerHookForm label="Đến ngày" name="to" />
+							<PullDownHookForm isClearable label="Trạng thái yêu cầu" name="status" options={statusOption2} />
+							<TextFieldHookForm name="authorizedPersonName" label="Người được uỷ quyền" />
 						</SimpleGrid>
 						<Flex align="end" justify="end" mt={3}>
-							<Button variant="lightBrand" mr={3} type="reset" leftIcon={<MdResetTv />}>
-								Mặc định
-							</Button>
 							<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
 								Tìm kiếm
 							</Button>
@@ -137,7 +165,7 @@ const ResdidentCardReqManagement: React.FC = () => {
 			<Card flexDirection="column" w="100%" px="10px" overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 				<Center mb={5}>
 					<Heading as="h6" variant="admin" size="md">
-						Danh sách yêu cầu thẻ cư dân
+						Danh sách uỷ quyền
 					</Heading>
 				</Center>
 				<Table
@@ -155,4 +183,4 @@ const ResdidentCardReqManagement: React.FC = () => {
 	);
 };
 
-export default ResdidentCardReqManagement;
+export default ResdidentAuthReqManagement;

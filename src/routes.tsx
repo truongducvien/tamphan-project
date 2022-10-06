@@ -21,6 +21,7 @@ import {
 import { FeatureModule } from 'src/services/role/type';
 import { PermistionAction } from 'src/variables/permission';
 
+const ResdidentAuthManagement = React.lazy(() => import('./views/admin/residentAuth'));
 const ResdidentAuthReqManagement = React.lazy(() => import('./views/admin/residentAuthReq'));
 const ResdidentAuthReqDetail = React.lazy(() => import('./views/admin/residentAuthReq/form'));
 const HandoverBooing = React.lazy(() => import('./views/admin/handover/Booking'));
@@ -458,13 +459,21 @@ const routes: Route[] = [
 		icon: <Icon as={MdBrightnessAuto} width="20px" height="20px" color="inherit" />,
 		component: ResdidentAuthReqManagement,
 		action: PermistionAction.VIEW,
-		requirePermission: FeatureModule.AUTHORIZATION_MANAGEMENT,
+		requirePermission: FeatureModule.AUTHORIZATION_REQUEST_MANAGEMENT,
 		items: [
 			{
 				name: 'Chi tiêt yêu cầu uỷ quyền',
 				layout: '/admin',
 				path: '/resident-authorization-request/detail',
 				component: ResdidentAuthReqDetail,
+				action: PermistionAction.VIEW,
+				requirePermission: FeatureModule.AUTHORIZATION_REQUEST_MANAGEMENT,
+			},
+			{
+				name: 'Danh sách uỷ quyền',
+				layout: '/admin',
+				path: `/resident-authorization-request/authorization`,
+				component: ResdidentAuthManagement,
 				action: PermistionAction.VIEW,
 				requirePermission: FeatureModule.AUTHORIZATION_MANAGEMENT,
 			},

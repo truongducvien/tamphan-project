@@ -30,15 +30,21 @@ import * as Yup from 'yup';
 
 interface FormData {
 	status?: BaseOption<ResidentAuthReqStatus>;
-	propertyCode?: string;
+	propertyCode?: BaseOption<string>;
 	authorizedPersonName?: string;
 	areaId?: BaseOption<string>;
 	mandatorName?: string;
 }
 
 const validationSchema = Yup.object({
-	cardNumber: Yup.string(),
-	propertyId: Yup.string().nullable(),
+	areaId: Yup.object({
+		label: Yup.string(),
+		value: Yup.string(),
+	}).nullable(),
+	propertyCode: Yup.object({
+		label: Yup.string(),
+		value: Yup.string(),
+	}).nullable(),
 	status: Yup.object({
 		label: Yup.string(),
 		value: Yup.string(),
@@ -89,8 +95,8 @@ const ResdidentAuthReqManagement: React.FC = () => {
 	const COLUMNS: Array<IColumn<IResidentAuthReq>> = [
 		{ key: 'property', label: 'Mã căn hộ', cell: ({ property }) => property?.code },
 		{ key: 'property', label: 'Phân khu', cell: ({ property }) => property?.areaName },
-		{ key: 'authorizedPerson', label: 'Người yêu cầu', cell: ({ authorizedPerson }) => authorizedPerson?.fullName },
-		{ key: 'authorizedPerson', label: 'Số điện thoại', cell: ({ authorizedPerson }) => authorizedPerson?.phoneNumber },
+		{ key: 'mandator', label: 'Người yêu cầu', cell: ({ mandator }) => mandator?.fullName },
+		{ key: 'mandator', label: 'Số điện thoại', cell: ({ mandator }) => mandator?.phoneNumber },
 		{
 			key: 'authorizationItem',
 			label: 'Hạng mục uỷ quyền',
@@ -112,6 +118,7 @@ const ResdidentAuthReqManagement: React.FC = () => {
 			...payload,
 			status: payload.status?.value,
 			areaId: payload.areaId?.value,
+			propertyCode: payload.propertyCode?.value,
 		};
 		setParams(preData);
 	};
@@ -154,7 +161,7 @@ const ResdidentAuthReqManagement: React.FC = () => {
 							<Flex align="end" justify="end" mt={3}>
 								<Button
 									variant="lightBrand"
-									onClick={() => history.push('/admin/authorization')}
+									onClick={() => history.push('/admin/resident-authorization-request/authorization')}
 									mr={3}
 									type="reset"
 									leftIcon={<MdResetTv />}
