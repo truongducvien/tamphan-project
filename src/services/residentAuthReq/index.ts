@@ -10,12 +10,17 @@ export const getResidentAuthReq = async (params: IResidentAuthReqParams) => {
 };
 
 export const getResidentAuthReqById = async (id: string) => {
-	const { data } = await http.get<IResidentAuthReqDetail>(`/v1/authorizations-requests/${id}`);
+	const { data } = await http.get<IResidentAuthReqDetail>(`/v1/authorization-requests/${id}`);
 
 	return data?.data || null;
 };
 
-export const residentAuthReqVoid = async (id: string) => {
-	const { data } = await http.put<IResidentAuthReqDetail>(`/v1/authorizations-requests/${id}/void`);
+export const residentAuthReqAccept = async (id: string) => {
+	const { data } = await http.put<IResidentAuthReqDetail>(`/v1/authorization-requests/${id}/accept`);
+	return data?.data || null;
+};
+
+export const residentAuthReqReject = async (id: string) => {
+	const { data } = await http.put<IResidentAuthReqDetail>(`/v1/authorization-requests/${id}/reject`);
 	return data?.data || null;
 };
