@@ -27,7 +27,7 @@ const Dashboard: React.FC = props => {
 	} = useHistory();
 	const { ...rest } = props;
 	const [fixed] = useState(false);
-	const [toggleSidebar, setToggleSidebar] = useState(false);
+	const [toggleSidebar, setToggleSidebar] = useState(true);
 	const getRoute = () => {
 		return window.location.pathname !== '/admin/full-screen-maps';
 	};
