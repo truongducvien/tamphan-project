@@ -12,6 +12,7 @@ export type Props = LinkProps;
 
 export const SidebarContent: React.FC<Props> = props => {
 	const { routes } = props;
+
 	// SIDEBAR
 	return (
 		<Flex direction="column" height="100%" borderRadius="30px">

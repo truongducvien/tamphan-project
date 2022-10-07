@@ -1,7 +1,7 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
 
 export const SidebarContext = createContext<{
-	toggleSidebar?: boolean;
+	toggleSidebar: boolean;
 	sidebarWidth?: string;
 	setToggleSidebar?: Dispatch<SetStateAction<boolean>>;
 }>({
