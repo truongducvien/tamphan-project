@@ -370,7 +370,7 @@ export const AuthNavbar: React.FC<Props> = ({ logoText, secondary, sidebarWidth,
 
 	return (
 		// eslint-disable-next-line react/jsx-no-constructed-context-values
-		<SidebarContext.Provider value={{ sidebarWidth }}>
+		<SidebarContext.Provider value={{ sidebarWidth, toggleSidebar: true }}>
 			<Flex
 				position={navbarPosition}
 				top="16px"

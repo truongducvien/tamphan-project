@@ -110,6 +110,7 @@ export const SidebarLinks: React.FC<Props> = props => {
 						<Box ml={10} bg={activeRoute(route.path.toLowerCase()) ? bgActive : 'transparent'}>
 							<HStack spacing={activeRoute(route.path.toLowerCase()) ? '22px' : '26px'} py="5px" ps="10px">
 								<Text
+									overflowX="hidden"
 									me="auto"
 									bg={activeRoute(route.path.toLowerCase()) ? activeColor : inactiveColor}
 									fontWeight={activeRoute(route.path.toLowerCase()) ? 'bold' : 'normal'}

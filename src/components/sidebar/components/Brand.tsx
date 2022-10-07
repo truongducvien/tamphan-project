@@ -1,19 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-// Chakra imports
-import { Flex, Text, useColorModeValue } from '@chakra-ui/react';
+import { Flex, Icon, Text, useColorModeValue } from '@chakra-ui/react';
+import { IoMenuOutline } from 'react-icons/io5';
 import { HSeparator } from 'src/components/separator/Separator';
+import { SidebarContext } from 'src/contexts/SidebarContext';
 
 export const SidebarBrand: React.FC = () => {
-	//   Chakra color mode
 	const logoColor = useColorModeValue('navy.700', 'white');
-
+	const menuColor = useColorModeValue('gray.400', 'white');
+	const { toggleSidebar, setToggleSidebar } = useContext(SidebarContext);
 	return (
 		<Flex align="center" flexDirection="column" justify="center">
-			{/* <HorizonLogo h='26px' w='175px' my='32px' color={logoColor} /> */}
-			<Text color={logoColor} fontWeight={700} fontSize={45}>
-				Aqua City
-			</Text>
+			<Flex align="center" justify="center">
+				<Text color={logoColor} fontWeight={700} fontSize={45}>
+					Aqua City
+				</Text>
+				<Icon
+					display={{ base: 'none', xl: 'block' }}
+					onClick={() => setToggleSidebar?.(!toggleSidebar)}
+					ml="30px"
+					as={IoMenuOutline}
+					color={menuColor}
+					my="auto"
+					w="30px"
+					h="30px"
+					me="10px"
+					_hover={{ cursor: 'pointer' }}
+				/>
+			</Flex>
+
 			<HSeparator mb="20px" />
 		</Flex>
 	);

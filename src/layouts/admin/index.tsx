@@ -190,21 +190,19 @@ const Dashboard: React.FC = props => {
 					setToggleSidebar,
 				}}
 			>
-				<Sidebar {...rest} routes={routes} display="none" />
+				<Sidebar {...rest} routes={routes} display={toggleSidebar ? 'block' : 'none'} />
 				<Box
 					float="right"
 					overflow="auto"
 					minH="100vh"
 					position="relative"
-					display=" flex"
+					display="flex"
 					flexDirection="column"
 					justifyContent="space-between"
-					w={{ base: '100%', xl: 'calc( 100% - 290px )' }}
-					maxWidth={{ base: '100%', xl: 'calc( 100% - 290px )' }}
-					transition="all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)"
-					transitionDuration=".2s, .2s, .35s"
-					transitionProperty="top, bottom, width"
-					transitionTimingFunction="linear, linear, ease"
+					w={{ base: '100%', xl: toggleSidebar ? 'calc( 100% - 290px )' : '100%' }}
+					transitionDuration=".6s"
+					transitionProperty="width"
+					transitionTimingFunction="ease-in-out"
 				>
 					<Portal>
 						<Box>

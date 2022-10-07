@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 // chakra imports
 import {
@@ -12,11 +12,13 @@ import {
 	useDisclosure,
 	DrawerContent,
 	DrawerCloseButton,
+	keyframes,
 } from '@chakra-ui/react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { IoMenuOutline } from 'react-icons/io5';
 import { renderThumb, renderTrack, renderView } from 'src/components/scrollbar/Scrollbar';
 import Content, { Props as ContentProps } from 'src/components/sidebar/components/Content';
+import { SidebarContext } from 'src/contexts/SidebarContext';
 
 export interface Props extends ContentProps {
 	logo?: React.ReactNode;
@@ -29,22 +31,24 @@ const Sidebar: React.FC<Props> = props => {
 	const { routes } = props;
 
 	const variantChange = '0.2s linear';
-	// Chakra Color Mode
 	const sidebarBg = useColorModeValue('white', 'navy.800');
 	const sidebarMargins = '0px';
+	const { toggleSidebar } = useContext(SidebarContext);
 
-	// SIDEBAR
+	// const animation = `${animationKey} 2s ease-in-out`;
+
 	return (
-		<Box display={{ sm: 'none', xl: 'block' }} position="fixed" minH="100%" zIndex="docked">
-			<Box
-				bg={sidebarBg}
-				transition={variantChange}
-				w="300px"
-				h="100vh"
-				m={sidebarMargins}
-				minH="100%"
-				overflowX="hidden"
-			>
+		<Box
+			position="fixed"
+			minH="100%"
+			zIndex="docked"
+			width={{ base: '0px', xl: toggleSidebar ? '300px' : '0px' }}
+			transitionDuration=".6s"
+			transitionProperty="width"
+			transitionTimingFunction="ease-in-out"
+			overflowX="hidden"
+		>
+			<Box bg={sidebarBg} transition={variantChange} w="300px" h="100vh" m={sidebarMargins} minH="100%">
 				<Scrollbars
 					autoHide
 					renderTrackVertical={renderTrack}
