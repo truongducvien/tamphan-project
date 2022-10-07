@@ -6,6 +6,6 @@ export const SidebarContext = createContext<{
 	setToggleSidebar?: Dispatch<SetStateAction<boolean>>;
 }>({
 	sidebarWidth: '100',
-	toggleSidebar: false,
+	toggleSidebar: true,
 	setToggleSidebar: () => null,
 });
