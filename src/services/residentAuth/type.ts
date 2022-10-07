@@ -30,18 +30,20 @@ export const authorizationItemOption: Array<BaseOption<keyof typeof Authorizatio
 ];
 
 export interface IResidentAuth {
-	authorizationDetail: string;
+	areaName: string;
+	authoredPerson: string;
+	authoredPhoneNumber: string;
+	propertyCode: string;
+	requestCode: string;
 	authorizationItem: AuthorizationItem;
-	authorizedPerson: IResident;
 	code: string;
 	createdBy: string;
 	createdDate: Date;
 	effectiveDate: string;
 	expiredDate: string;
 	hardCopyLinks: string[];
-	mandator: IResident;
+	mandator: string;
 	modifiedBy: string;
-	property: IProperty;
 	status: keyof typeof Status;
 	updatedDate: Date;
 	id: string;

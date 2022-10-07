@@ -2,21 +2,21 @@ import { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
-import { useHistory } from 'react-router-dom';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { alert } from 'src/components/alertDialog/hook';
 import Card from 'src/components/card/Card';
 import { FormContainer } from 'src/components/form';
 import { BaseOption, PullDownHookForm } from 'src/components/form/PullDown';
 import { TextFieldHookForm } from 'src/components/form/TextField';
 import Table, { IColumn } from 'src/components/table';
-import useActionPage from 'src/hooks/useActionPage';
+import { useToastInstance } from 'src/components/toast';
 import { useDebounce } from 'src/hooks/useDebounce';
 import { useLoadMore } from 'src/hooks/useLoadMore';
 import { usePagination } from 'src/hooks/usePagination';
 import { getArea } from 'src/services/area';
 import { IArea, IAreaParams } from 'src/services/area/type';
 import { IPropertyParams } from 'src/services/properties/type';
-import { getResidentAuth } from 'src/services/residentAuth';
+import { getResidentAuth, residentAuthVoid } from 'src/services/residentAuth';
 import { IResidentAuth } from 'src/services/residentAuth/type';
 import { authorizationItemOption, IResidentAuthReqParams } from 'src/services/residentAuthReq/type';
 import { PermistionAction } from 'src/variables/permission';
@@ -76,7 +76,7 @@ const ResdidentAuthReqManagement: React.FC = () => {
 		payload: { code: keywordPropertyDebounce },
 	});
 
-	const { data, isLoading } = useQuery(
+	const { data, isLoading, refetch } = useQuery(
 		['listResidentAuth', params, currentPage, pageSize],
 		() =>
 			getResidentAuth({
@@ -87,15 +87,42 @@ const ResdidentAuthReqManagement: React.FC = () => {
 		{ onSuccess: d => dispatchInfo(d) },
 	);
 
+	const { mutateAsync, isLoading: isDeleing } = useMutation(residentAuthVoid);
+	const { toast } = useToastInstance();
+
+	const handleDelete = async (row: IResidentAuth) => {
+		try {
+			const next = await alert({
+				type: 'error',
+				title: `Bạn có chắn chắn Vô hiệu uy quyền của ${row.authoredPerson} - ${row.propertyCode}`,
+			});
+			if (!next) return;
+			await mutateAsync(row.id);
+			toast({ title: 'Vô hiệu thành công' });
+			refetch();
+		} catch {
+			toast({ title: 'Vô hiệu thất bại', status: 'error' });
+		}
+	};
+
 	const COLUMNS: Array<IColumn<IResidentAuth>> = [
-		{ key: 'property', label: 'Mã căn hộ', cell: ({ property }) => property?.code },
-		{ key: 'property', label: 'Phân khu', cell: ({ property }) => property?.areaName },
 		{
-			key: 'authorizedPerson',
-			label: 'Người được uỷ quền',
-			cell: ({ authorizedPerson }) => authorizedPerson?.fullName,
+			key: 'propertyCode',
+			label: 'Thao tác',
+			// eslint-disable-next-line react/no-unstable-nested-components
+			cell: row => (
+				<Button variant="link" colorScheme="blue" size="sm" onClick={() => handleDelete(row)}>
+					Vô hiệu
+				</Button>
+			),
 		},
-		{ key: 'authorizedPerson', label: 'Số điện thoại', cell: ({ authorizedPerson }) => authorizedPerson?.phoneNumber },
+		{ key: 'propertyCode', label: 'Mã căn hộ' },
+		{ key: 'areaName', label: 'Phân khu' },
+		{
+			key: 'authoredPerson',
+			label: 'Người được uỷ quền',
+		},
+		{ key: 'authoredPhoneNumber', label: 'Số điện thoại' },
 		{
 			key: 'authorizationItem',
 			label: 'Hạng mục uỷ quyền',
@@ -123,9 +150,6 @@ const ResdidentAuthReqManagement: React.FC = () => {
 		};
 		setParams(preData);
 	};
-
-	const history = useHistory();
-	const { changeAction } = useActionPage();
 
 	return (
 		<Box pt="10px">
@@ -175,8 +199,6 @@ const ResdidentAuthReqManagement: React.FC = () => {
 					columns={COLUMNS}
 					data={data?.items || []}
 					pagination={{ value: currentPage, pageSize, ...pagination }}
-					action={PermistionAction.VIEW}
-					onClickDetail={({ id }) => changeAction('detail', id)}
 				/>
 			</Card>
 		</Box>
