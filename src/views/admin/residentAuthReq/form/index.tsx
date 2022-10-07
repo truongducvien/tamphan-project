@@ -169,7 +169,7 @@ const ResdidentAuthReqDetail: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<TextAreaFieldHookForm label="Lý do" isDisabled name="note" variant="admin" />
+						<TextAreaFieldHookForm label="Lý do" isDisabled name="authorizationDetail" variant="admin" />
 						<TextFieldHookForm label="Ngày phê duyệt" isDisabled name="updatedDate" variant="admin" />
 					</Stack>
 					<Box mb={3}>
