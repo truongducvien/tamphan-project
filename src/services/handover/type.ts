@@ -102,9 +102,10 @@ export interface IHandoverBooking {
 	};
 	createdDate: string;
 	updatedDate: string;
-	residentPhoneNumber: string;
-	residentEmail: string;
-	residentFullName: string;
+	code: string;
+	residentHandoverPhoneNumber: string;
+	residentHandoverEmail: string;
+	residentHandoverName: string;
 }
 
 export interface IHandoverBookingParams extends BaseParams {

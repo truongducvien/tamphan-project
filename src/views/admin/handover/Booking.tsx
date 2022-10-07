@@ -1,23 +1,7 @@
 import React, { useState } from 'react';
 
 import { SearchIcon } from '@chakra-ui/icons';
-import {
-	Box,
-	Button,
-	Center,
-	Flex,
-	Heading,
-	SimpleGrid,
-	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalHeader,
-	ModalFooter,
-	ModalBody,
-	ModalCloseButton,
-	FormControl,
-	FormLabel,
-} from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { MdImportExport } from 'react-icons/md';
 import { useHistory } from 'react-router-dom';
@@ -34,7 +18,7 @@ import { formatDate } from 'src/helpers/dayjs';
 import { BaseComponentProps } from 'src/hocs/withPermission';
 import { useActionPermission } from 'src/hooks/useActionPermission';
 import { usePagination } from 'src/hooks/usePagination';
-import { acceptHandover, completedHandover, getHandoverBooking, removeHandover } from 'src/services/handover';
+import { acceptHandover, completedHandover, getHandoverBooking } from 'src/services/handover';
 import {
 	handOverBookingStatus,
 	HandOverBookingStatusKey,
@@ -119,10 +103,10 @@ const HandoverBooing: React.FC<BaseComponentProps> = () => {
 			key: 'bookingDate',
 			label: 'Ngày hẹn bàn giao',
 		},
-		{ key: 'id', label: 'Mã booking' },
-		{ key: 'residentFullName', label: 'Họ tên khách hàng' },
-		{ key: 'residentEmail', label: 'Email khách hàng' },
-		{ key: 'residentPhoneNumber', label: 'Số điện thoại khách hàng' },
+		{ key: 'code', label: 'Mã booking' },
+		{ key: 'residentHandoverName', label: 'Họ tên khách hàng' },
+		{ key: 'residentHandoverEmail', label: 'Email khách hàng' },
+		{ key: 'residentHandoverPhoneNumber', label: 'Số điện thoại khách hàng' },
 		{
 			key: 'property',
 			label: 'Mã tài sản',
@@ -131,6 +115,12 @@ const HandoverBooing: React.FC<BaseComponentProps> = () => {
 		{
 			key: 'note',
 			label: 'Ghi chú',
+			// eslint-disable-next-line react/no-unstable-nested-components
+			cell: ({ note }) => (
+				<Text fontSize={12} maxH={100} overflow="scroll">
+					{note}
+				</Text>
+			),
 		},
 		{
 			key: 'bookingStatus',
@@ -189,7 +179,7 @@ const HandoverBooing: React.FC<BaseComponentProps> = () => {
 				</Center>
 				<Table
 					testId="consignments-dashboard"
-					minWidth={1500}
+					minWidth={2000}
 					columns={COLUMNS}
 					data={data?.items || []}
 					loading={isLoading}

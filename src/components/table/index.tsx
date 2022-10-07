@@ -71,7 +71,7 @@ const Table = <T,>({
 	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
 	const iconDelete = useColorModeValue('red.300', 'red.800');
 	const scrollColor = useColorModeValue('blue.500', 'blue.800');
-	const bg = useColorModeValue('gray.100', 'blue.800');
+	const bg = useColorModeValue('blue.500', 'blue.800');
 
 	return (
 		<>
@@ -100,7 +100,11 @@ const Table = <T,>({
 				{(loading || !data?.[0]) && (
 					<Box width="100%" height={280} position="absolute" zIndex="auto">
 						<Center position="absolute" left="50%" top="40%" transform="translate(-50%, 0px)">
-							{loading ? <Spinner color="blue.500" emptyColor="gray.200" speed="0.65s" /> : 'Không có dữ liệu'}
+							{loading ? (
+								<Spinner color="blue.500" emptyColor="gray.200" speed="0.65s" />
+							) : (
+								<Text fontWeight={500}>Không có dữ liệu</Text>
+							)}
 						</Center>
 					</Box>
 				)}
@@ -128,7 +132,7 @@ const Table = <T,>({
 							{columns && (
 								<Tr>
 									{action && action.length > 0 && (
-										<Th fontSize={{ sm: '10px', lg: '12px' }} color="gray.400" textAlign="center">
+										<Th fontSize={{ sm: '10px', lg: '12px' }} color="whitesmoke" textAlign="center">
 											Thao tác
 										</Th>
 									)}
@@ -136,7 +140,7 @@ const Table = <T,>({
 										<Th
 											fontSize={{ sm: '10px', lg: '12px' }}
 											textAlign={column.tag || column?.isCenter ? 'center' : 'start'}
-											color="gray.400"
+											color="whitesmoke"
 											key={index}
 										>
 											{column.label}
@@ -188,7 +192,7 @@ const Table = <T,>({
 														{column.key
 															? column.dateFormat && row[column.key]
 																? dayjs(row[column.key] as unknown as string).format(column.dateFormat)
-																: (row[column.key] as unknown as string)
+																: (row[column.key] as unknown as string) || '-'
 															: ''}
 													</Text>
 												)}

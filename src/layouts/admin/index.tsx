@@ -1,6 +1,7 @@
 // Chakra imports
 import React, { Suspense, useState } from 'react';
 
+import { ChevronRightIcon } from '@chakra-ui/icons';
 import {
 	Portal,
 	Box,
@@ -10,7 +11,7 @@ import {
 	BreadcrumbLink,
 	useColorModeValue,
 } from '@chakra-ui/react';
-import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import { Link, Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import Footer from 'src/components/footer/FooterAdmin';
 // Layout components
 import { Loading } from 'src/components/form/Loading';
@@ -20,19 +21,17 @@ import { SidebarContext } from 'src/contexts/SidebarContext';
 import { withPermission } from 'src/hocs/withPermission';
 import routes, { Route as RootRoute } from 'src/routes';
 
-// Custom Chakra theme
 const Dashboard: React.FC = props => {
 	const {
 		location: { pathname },
 	} = useHistory();
 	const { ...rest } = props;
-	// states and functions
 	const [fixed] = useState(false);
 	const [toggleSidebar, setToggleSidebar] = useState(false);
-	// functions for changing the states from components
 	const getRoute = () => {
 		return window.location.pathname !== '/admin/full-screen-maps';
 	};
+
 	const getActiveRoute = (r: RootRoute[]): string => {
 		const activeRoute = '';
 		let parent = '';
@@ -59,6 +58,36 @@ const Dashboard: React.FC = props => {
 		}
 		return activeRoute;
 	};
+
+	const getActiveRoute2 = (
+		r: RootRoute[],
+		activeRoute: { title: string; path: string }[] = [],
+	): { title: string; path: string }[] => {
+		let parent: { title: string; path: string } | null = null;
+		for (const element of r) {
+			if (element.collapse) {
+				const collapseActiveRoute = getActiveRoute2(element?.items || []);
+				if (collapseActiveRoute !== activeRoute) {
+					return collapseActiveRoute;
+				}
+			} else if (element?.category) {
+				const categoryActiveRoute = getActiveRoute2(element?.items || []);
+				if (categoryActiveRoute !== activeRoute) {
+					return categoryActiveRoute;
+				}
+			} else if (pathname === element.layout + element.path) {
+				return [{ title: element.name, path: element.path }];
+			} else if (element.items) {
+				const name = getActiveRoute2(element?.items);
+				if (name.length > 0) {
+					parent = { title: element.name, path: element.path };
+					activeRoute = [{ title: parent.title, path: parent.path }, ...name];
+				}
+			}
+		}
+		return activeRoute;
+	};
+
 	const getActiveNavbar = (r: RootRoute[]): boolean => {
 		const activeNavbar = false;
 		for (const element of r) {
@@ -150,7 +179,7 @@ const Dashboard: React.FC = props => {
 	};
 	const { onOpen } = useDisclosure();
 	const secondaryText = useColorModeValue('gray.700', 'white');
-	const breadcrumb = getActiveRoute(routes)?.split('/');
+	const breadcrumb = getActiveRoute2(routes);
 
 	return (
 		<Box>
@@ -161,21 +190,19 @@ const Dashboard: React.FC = props => {
 					setToggleSidebar,
 				}}
 			>
-				<Sidebar {...rest} routes={routes} display="none" />
+				<Sidebar {...rest} routes={routes} display={toggleSidebar ? 'block' : 'none'} />
 				<Box
 					float="right"
 					overflow="auto"
 					minH="100vh"
 					position="relative"
-					display=" flex"
+					display="flex"
 					flexDirection="column"
 					justifyContent="space-between"
-					w={{ base: '100%', xl: 'calc( 100% - 290px )' }}
-					maxWidth={{ base: '100%', xl: 'calc( 100% - 290px )' }}
-					transition="all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)"
-					transitionDuration=".2s, .2s, .35s"
-					transitionProperty="top, bottom, width"
-					transitionTimingFunction="linear, linear, ease"
+					w={{ base: '100%', xl: toggleSidebar ? 'calc( 100% - 290px )' : '100%' }}
+					transitionDuration=".6s"
+					transitionProperty="width"
+					transitionTimingFunction="ease-in-out"
 				>
 					<Portal>
 						<Box>
@@ -191,9 +218,9 @@ const Dashboard: React.FC = props => {
 
 					{getRoute() ? (
 						<Box p={{ base: '20px', md: '30px' }}>
-							<Box mb={{ sm: '8px', xl: '0px' }} pt="70px">
+							<Box mb={{ sm: '8px', xl: '0px' }} pt="50px">
 								{/* Here we create navbar brand, based on route name */}
-								<Breadcrumb>
+								<Breadcrumb separator={<ChevronRightIcon color="gray.500" />}>
 									<BreadcrumbItem color={secondaryText} fontSize="sm">
 										<BreadcrumbLink href="#" color={secondaryText}>
 											Pages
@@ -202,7 +229,9 @@ const Dashboard: React.FC = props => {
 									{breadcrumb &&
 										breadcrumb.map((i, idx) => (
 											<BreadcrumbItem key={idx} color={secondaryText} fontSize="sm">
-												<BreadcrumbLink color={secondaryText}>{i}</BreadcrumbLink>
+												<BreadcrumbLink as={Link} to={`/admin${i.path}`} color={secondaryText}>
+													{i.title}
+												</BreadcrumbLink>
 											</BreadcrumbItem>
 										))}
 								</Breadcrumb>

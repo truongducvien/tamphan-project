@@ -42,7 +42,7 @@ const ArticleManagement: React.FC<BaseComponentProps> = ({ request }) => {
 			// eslint-disable-next-line react/no-unstable-nested-components
 			cell: ({ title, shortContent }) => (
 				<>
-					<Text fontWeight={700} maxH={50} overflow="hidden">
+					<Text fontWeight={700} maxH={50} textOverflow="ellipsis">
 						{title}
 					</Text>
 					<Text fontSize={12} textOverflow="ellipsis" maxH={100} overflow="hidden">

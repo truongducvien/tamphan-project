@@ -4,6 +4,7 @@ import { Icon } from '@chakra-ui/react';
 import { FaRegistered } from 'react-icons/fa';
 import {
 	MdAccountBox,
+	MdBrightnessAuto,
 	MdCreditCard,
 	MdCreditCardOff,
 	MdDeck,
@@ -20,8 +21,10 @@ import {
 import { FeatureModule } from 'src/services/role/type';
 import { PermistionAction } from 'src/variables/permission';
 
+const ResdidentAuthManagement = React.lazy(() => import('./views/admin/residentAuth'));
+const ResdidentAuthReqManagement = React.lazy(() => import('./views/admin/residentAuthReq'));
+const ResdidentAuthReqDetail = React.lazy(() => import('./views/admin/residentAuthReq/form'));
 const HandoverBooing = React.lazy(() => import('./views/admin/handover/Booking'));
-
 const AparmentForm = React.lazy(() => import('src/views/admin/property/form'));
 const AreaManagement = React.lazy(() => import('src/views/admin/area'));
 const ArticleManagement = React.lazy(() => import('src/views/admin/article'));
@@ -446,6 +449,33 @@ const routes: Route[] = [
 				component: HandoverBooing,
 				action: PermistionAction.VIEW,
 				requirePermission: FeatureModule.HANOVER_BOOKING_MANAGEMENT,
+			},
+		],
+	},
+	{
+		name: 'Quản lý uỷ quyền',
+		layout: '/admin',
+		path: `/resident-authorization-request`,
+		icon: <Icon as={MdBrightnessAuto} width="20px" height="20px" color="inherit" />,
+		component: ResdidentAuthReqManagement,
+		action: PermistionAction.VIEW,
+		requirePermission: FeatureModule.AUTHORIZATION_REQUEST_MANAGEMENT,
+		items: [
+			{
+				name: 'Chi tiêt yêu cầu uỷ quyền',
+				layout: '/admin',
+				path: '/resident-authorization-request/detail',
+				component: ResdidentAuthReqDetail,
+				action: PermistionAction.VIEW,
+				requirePermission: FeatureModule.AUTHORIZATION_REQUEST_MANAGEMENT,
+			},
+			{
+				name: 'Danh sách uỷ quyền',
+				layout: '/admin',
+				path: `/resident-authorization-request/authorization`,
+				component: ResdidentAuthManagement,
+				action: PermistionAction.VIEW,
+				requirePermission: FeatureModule.AUTHORIZATION_MANAGEMENT,
 			},
 		],
 	},
