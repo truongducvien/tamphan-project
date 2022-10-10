@@ -9,6 +9,7 @@ enum HandOverBookingStatus {
 	CANCEL = 'CANCEL',
 	DONE = 'DONE',
 	APPROVED = 'APPROVED',
+	EXPIRED = 'EXPIRED',
 }
 export type HandOverBookingStatusKey = keyof typeof HandOverBookingStatus;
 
@@ -27,6 +28,11 @@ export const handOverBookingStatus: Array<BaseOption<HandOverBookingStatusKey>> 
 		label: 'Đã huỷ',
 		value: 'CANCEL',
 		colorScheme: 'red',
+	},
+	{
+		label: 'Hết hạn',
+		value: 'EXPIRED',
+		colorScheme: 'blackAlpha',
 	},
 	{
 		label: 'Hoàn tất',
