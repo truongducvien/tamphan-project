@@ -16,7 +16,8 @@ import { useLoadMore } from 'src/hooks/useLoadMore';
 import { usePagination } from 'src/hooks/usePagination';
 import { getArea } from 'src/services/area';
 import { IArea, IAreaParams } from 'src/services/area/type';
-import { IPropertyParams } from 'src/services/properties/type';
+import { getProperty } from 'src/services/properties';
+import { IProperty, IPropertyParams } from 'src/services/properties/type';
 import { getResidentAuthReq } from 'src/services/residentAuthReq';
 import {
 	authorizationItemOption,
@@ -75,9 +76,9 @@ const ResdidentAuthReqManagement: React.FC = () => {
 		data: dataProperty,
 		isLoading: isLoadingProperty,
 		fetchMore: fetchMoreProperty,
-	} = useLoadMore<IArea, IPropertyParams>({
+	} = useLoadMore<IProperty, IPropertyParams>({
 		id: ['listAreaProperty', keywordPropertyDebounce],
-		func: getArea,
+		func: getProperty,
 		payload: { code: keywordPropertyDebounce },
 	});
 
