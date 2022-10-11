@@ -42,12 +42,12 @@ export const reportStatusOption: Array<BaseOption<keyof typeof ReportStatus>> = 
 
 export const reportTypeOptions: Array<BaseOption<keyof typeof ReportTypes>> = [
 	{
-		label: 'Đăng kí thi công',
+		label: 'Yêu cầu hỗ trợ',
 		value: 'CONSTRUCTION_REGISTER',
 		colorScheme: 'blue',
 	},
 	{
-		label: 'Đăng kí thẻ',
+		label: 'Phản ánh',
 		value: 'RESIDENT_CARD_REGISTER',
 		colorScheme: 'cyan',
 	},

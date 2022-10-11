@@ -20,14 +20,16 @@ import useEffectWithoutMounted from 'src/hooks/useEffectWithoutMounted';
 import { useForceUpdate } from 'src/hooks/useForceUpdate';
 import { getReportById } from 'src/services/report';
 import { reportStatusOption, reportTypeOptions } from 'src/services/report/type';
-import { getResidentAuthReqById, residentAuthReqAccept, residentAuthReqReject } from 'src/services/residentAuthReq';
+import { residentAuthReqAccept, residentAuthReqReject } from 'src/services/residentAuthReq';
 import { ResidentAuthReqStatus } from 'src/services/residentAuthReq/type';
+
+import ModalAddTask from '../modal/AddTask';
 
 const ReportDetailTab: React.FC<BaseComponentProps> = ({ request }) => {
 	const { permistionAction } = useActionPermission(request);
 	const { id } = useActionPage();
 	const { toast } = useToastInstance();
-
+	const { onClose, onOpen, isOpen } = useDisclosure();
 	const {
 		data: detailData,
 		isFetched,
@@ -35,7 +37,7 @@ const ReportDetailTab: React.FC<BaseComponentProps> = ({ request }) => {
 		refetch,
 		isLoading,
 		isRefetching,
-	} = useQuery(['getResidentCardReqById', id], () => getReportById(id || ''), {
+	} = useQuery(['getReportById', id], () => getReportById(id || ''), {
 		enabled: !!id,
 	});
 	const update = useForceUpdate();
@@ -119,10 +121,8 @@ const ReportDetailTab: React.FC<BaseComponentProps> = ({ request }) => {
 						</FormControl>
 					</Box>
 				</SimpleGrid>
-
 				<HStack pb={3} justifyContent="flex-end">
 					<Button
-						w="20"
 						hidden={detailData?.status !== ResidentAuthReqStatus.WAITING_APPROVED || !permistionAction.APPROVE}
 						// eslint-disable-next-line @typescript-eslint/no-misused-promises
 						onClick={onAccept}
@@ -131,8 +131,8 @@ const ReportDetailTab: React.FC<BaseComponentProps> = ({ request }) => {
 					>
 						Tiếp nhận
 					</Button>
+
 					<Button
-						w="20"
 						hidden={detailData?.status !== ResidentAuthReqStatus.WAITING_APPROVED || !permistionAction.APPROVE}
 						// eslint-disable-next-line @typescript-eslint/no-misused-promises
 						onClick={onReject}
@@ -141,11 +141,21 @@ const ReportDetailTab: React.FC<BaseComponentProps> = ({ request }) => {
 					>
 						Từ chối
 					</Button>
-					<Button w="20" onClick={() => history.goBack()} type="button" variant="gray">
+					<Button
+						// hidden={detailData?.status !== ResidentAuthReqStatus.WAITING_APPROVED || !permistionAction.APPROVE}
+						// eslint-disable-next-line @typescript-eslint/no-misused-promises
+						onClick={onOpen}
+						type="button"
+						variant="brand"
+					>
+						Thêm công việc
+					</Button>
+					<Button onClick={() => history.goBack()} type="button" variant="gray">
 						Quay lại
 					</Button>
 				</HStack>
 			</FormContainer>
+			<ModalAddTask isOpen={isOpen} onClose={onClose} />
 		</Box>
 	);
 };
