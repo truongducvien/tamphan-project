@@ -21,6 +21,8 @@ import {
 import { FeatureModule } from 'src/services/role/type';
 import { PermistionAction } from 'src/variables/permission';
 
+const ReportManagement = React.lazy(() => import('./views/admin/report'));
+const ReportDetail = React.lazy(() => import('./views/admin/report/form'));
 const ResdidentAuthManagement = React.lazy(() => import('./views/admin/residentAuth'));
 const ResdidentAuthReqManagement = React.lazy(() => import('./views/admin/residentAuthReq'));
 const ResdidentAuthReqDetail = React.lazy(() => import('./views/admin/residentAuthReq/form'));
@@ -476,6 +478,25 @@ const routes: Route[] = [
 				component: ResdidentAuthManagement,
 				action: PermistionAction.VIEW,
 				requirePermission: FeatureModule.AUTHORIZATION_MANAGEMENT,
+			},
+		],
+	},
+	{
+		name: 'Quản lý phản ánh',
+		layout: '/admin',
+		path: `/reports`,
+		icon: <Icon as={MdBrightnessAuto} width="20px" height="20px" color="inherit" />,
+		component: ReportManagement,
+		action: PermistionAction.VIEW,
+		requirePermission: FeatureModule.AUTHORIZATION_REQUEST_MANAGEMENT,
+		items: [
+			{
+				name: 'Chi tiêt phản ánh',
+				layout: '/admin',
+				path: '/reports/detail',
+				component: ReportDetail,
+				action: PermistionAction.VIEW,
+				requirePermission: FeatureModule.AUTHORIZATION_REQUEST_MANAGEMENT,
 			},
 		],
 	},
