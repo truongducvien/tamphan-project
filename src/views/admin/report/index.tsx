@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
+import { MdResetTv } from 'react-icons/md';
 import Card from 'src/components/card/Card';
 import { FormContainer } from 'src/components/form';
 import { DatePickerHookForm } from 'src/components/form/DatePicker';
@@ -176,6 +177,9 @@ const ReportManagement: React.FC = () => {
 							<DatePickerHookForm label="Đến ngày" name="to" />
 						</SimpleGrid>
 						<Flex align="end" justify="end" mt={3}>
+							<Button variant="lightBrand" type="reset" mr="3" leftIcon={<MdResetTv />}>
+								Mặc định
+							</Button>
 							<Button variant="lightBrand" type="submit" leftIcon={<SearchIcon />}>
 								Tìm kiếm
 							</Button>
