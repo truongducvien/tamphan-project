@@ -1,10 +1,7 @@
-import { useRef } from 'react';
-
 import { Box, Button, FormControl, FormLabel, HStack, SimpleGrid, Stack, useDisclosure } from '@chakra-ui/react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useHistory } from 'react-router-dom';
 import { alert } from 'src/components/alertDialog/hook';
-import Card from 'src/components/card/Card';
 import UploadImage from 'src/components/fileUpload';
 import { FormContainer } from 'src/components/form';
 import { Loading } from 'src/components/form/Loading';
@@ -18,11 +15,11 @@ import useActionPage from 'src/hooks/useActionPage';
 import { useActionPermission } from 'src/hooks/useActionPermission';
 import useEffectWithoutMounted from 'src/hooks/useEffectWithoutMounted';
 import { useForceUpdate } from 'src/hooks/useForceUpdate';
-import { getReportById } from 'src/services/report';
-import { reportStatusOption, reportTypeOptions } from 'src/services/report/type';
+import { feedbackStatusOption, feedbackTypeOptions } from 'src/services/feedback/type';
+import { residentType } from 'src/services/resident/type';
 import { residentAuthReqAccept, residentAuthReqReject } from 'src/services/residentAuthReq';
-import { ResidentAuthReqStatus } from 'src/services/residentAuthReq/type';
 
+import { useFeedbackAction, useFeedbackState } from '../context';
 import ModalAddTask from '../modal/AddTask';
 
 const ReportDetailTab: React.FC<BaseComponentProps> = ({ request }) => {
@@ -30,16 +27,9 @@ const ReportDetailTab: React.FC<BaseComponentProps> = ({ request }) => {
 	const { id } = useActionPage();
 	const { toast } = useToastInstance();
 	const { onClose, onOpen, isOpen } = useDisclosure();
-	const {
-		data: detailData,
-		isFetched,
-		isError,
-		refetch,
-		isLoading,
-		isRefetching,
-	} = useQuery(['getReportById', id], () => getReportById(id || ''), {
-		enabled: !!id,
-	});
+	const { feedbackData, loading } = useFeedbackState();
+	const { refetch } = useFeedbackAction(id || '');
+
 	const update = useForceUpdate();
 	const history = useHistory();
 	const mutationAcept = useMutation(residentAuthReqAccept);
@@ -78,52 +68,53 @@ const ReportDetailTab: React.FC<BaseComponentProps> = ({ request }) => {
 	};
 
 	useEffectWithoutMounted(() => {
-		if (!isRefetching) update();
-	}, [isRefetching]);
+		if (!loading) update();
+	}, [loading]);
 
-	if (!!id && (!isFetched || isError || isLoading || isRefetching)) return <Loading />;
+	if (!!id && loading) return <Loading />;
 
 	const defaultValue = {
-		...detailData,
-		type: reportTypeOptions.find(i => i.value === detailData?.type),
-		propertyCode: detailData?.property.code,
-		areaName: detailData?.property.areaName,
-		status: reportStatusOption.find(i => detailData?.status === i.value),
-		mandatorName: detailData?.mandator?.fullName,
-		mandatorPhone: detailData?.mandator?.phoneNumber,
-		effectiveDate: formatDate(detailData?.effectiveDate),
-		expiredDate: formatDate(detailData?.expiredDate),
-		createdDate: formatDate(detailData?.createdDate),
-		updatedDate: formatDate(detailData?.updatedDate),
+		...feedbackData,
+		type: feedbackTypeOptions.find(i => i.value === feedbackData?.type),
+		propertyCode: feedbackData?.propertyCode,
+		areaName: feedbackData?.areaName,
+		status: feedbackStatusOption.find(i => feedbackData?.status === i.value),
+		residentFullName: feedbackData?.residentFullName,
+		residentPhoneNumber: feedbackData?.residentPhoneNumber,
+		residentType: residentType.find(i => i.value === feedbackData?.residentType)?.label,
+		expectedDate: formatDate(feedbackData?.expectedDate),
+		actualDate: formatDate(feedbackData?.actualDate),
+		createdAt: formatDate(feedbackData?.createdAt),
 	};
 
 	return (
 		<Box pt="10px">
 			<FormContainer defaultValues={defaultValue as unknown as { [x: string]: string }}>
 				<SimpleGrid columns={{ base: 1, md: 2 }} spacing={3} pb={3}>
-					<TextFieldHookForm label="Mã phản ánh" name="code" isDisabled />
+					<TextFieldHookForm label="Mã phản ánh" name="id" isDisabled />
 					<PullDownHookForm options={[]} label="Loại hỗ trợ" isDisabled name="type" />
 					<TextFieldHookForm label="Mã căn hộ" isDisabled name="propertyCode" />
 					<PullDownHookForm label="Trạng thái xử lý" options={[]} isDisabled name="status" />
 					<TextFieldHookForm label="Phân khu" isDisabled name="areaName" />
-					<TextFieldHookForm label="Thời gian phản ánh" name="createdDate" isDisabled />
-					<TextFieldHookForm label="Người phản ánh" isDisabled name="mandatorName" />
-					<TextFieldHookForm label="Vai trò" isDisabled name="role" />
-					<TextFieldHookForm label="Thời gian dự kiến hoàn thành" name="createdDate" isDisabled />
-					<TextFieldHookForm label="SDT " isDisabled name="phone" />
-					<TextAreaFieldHookForm label="Nội dung" isDisabled name="authorizationDetail" />
-					<TextFieldHookForm label="Điểm đánh giá" isDisabled name="code" />
-					<TextAreaFieldHookForm label="Ý kiến cư dân" isDisabled name="authorizationDetail" />
+					<TextFieldHookForm label="Thời gian phản ánh" name="createdAt" isDisabled />
+					<TextFieldHookForm label="Người phản ánh" isDisabled name="residentFullName" />
+					<TextFieldHookForm label="Vai trò" isDisabled name="residentType" />
+					<TextFieldHookForm label="Thời gian dự kiến hoàn thành" name="expectedDate" isDisabled />
+					<TextFieldHookForm label="Thời gian hoàn thành thực tế" name="actualDate" isDisabled />
+					<TextFieldHookForm label="SDT" isDisabled name="residentPhoneNumber" />
+					<TextAreaFieldHookForm label="Nội dung" isDisabled name="content" />
+					{/* <TextFieldHookForm label="Điểm đánh giá" isDisabled name="code" />
+					<TextAreaFieldHookForm label="Ý kiến cư dân" isDisabled name="authorizationDetail" /> */}
 					<Box mb={3}>
 						<FormControl>
 							<FormLabel>File đính kèm</FormLabel>
-							<UploadImage isDisabled defaultValue={defaultValue?.hardCopyLinks} />
+							<UploadImage isDisabled defaultValue={defaultValue?.imageLink} />
 						</FormControl>
 					</Box>
 				</SimpleGrid>
 				<HStack pb={3} justifyContent="flex-end">
 					<Button
-						hidden={detailData?.status !== ResidentAuthReqStatus.WAITING_APPROVED || !permistionAction.APPROVE}
+						hidden={feedbackData?.status !== 'WAITING' || !permistionAction.APPROVE}
 						// eslint-disable-next-line @typescript-eslint/no-misused-promises
 						onClick={onAccept}
 						type="button"
@@ -133,7 +124,7 @@ const ReportDetailTab: React.FC<BaseComponentProps> = ({ request }) => {
 					</Button>
 
 					<Button
-						hidden={detailData?.status !== ResidentAuthReqStatus.WAITING_APPROVED || !permistionAction.APPROVE}
+						hidden={feedbackData?.status !== 'WAITING' || !permistionAction.APPROVE}
 						// eslint-disable-next-line @typescript-eslint/no-misused-promises
 						onClick={onReject}
 						type="button"

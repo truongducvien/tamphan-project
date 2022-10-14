@@ -1,6 +1,6 @@
 import { Box, Center, Heading, Text } from '@chakra-ui/react';
 import Table, { IColumn } from 'src/components/table';
-import { reportStatusOption } from 'src/services/report/type';
+import { feedbackStatusOption } from 'src/services/feedback/type';
 import { PermistionAction } from 'src/variables/permission';
 
 const dummyData = [
@@ -11,7 +11,7 @@ const dummyData = [
 		expizeDate: '2020-11-02',
 		content: 'Kiểm tra điện',
 		completedDate: '2020-11-02',
-		status: reportStatusOption[1].value,
+		status: feedbackStatusOption[1].value,
 	},
 	{
 		id: '2',
@@ -20,7 +20,7 @@ const dummyData = [
 		expizeDate: '2020-11-02',
 		content: 'Kiểm tra điện',
 		completedDate: '2020-11-02',
-		status: reportStatusOption[1].value,
+		status: feedbackStatusOption[1].value,
 	},
 ];
 
@@ -41,7 +41,7 @@ export const TaskTab: React.FC = () => {
 			),
 		},
 		{ key: 'completedDate', label: 'Hoàn thành', dateFormat: 'DD/MM/YYYY' },
-		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => reportStatusOption.find(i => i.value === status) },
+		{ key: 'status', label: 'Trạng thái', tag: ({ status }) => feedbackStatusOption.find(i => i.value === status) },
 	];
 
 	return (
