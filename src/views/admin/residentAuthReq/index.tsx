@@ -32,7 +32,7 @@ import * as Yup from 'yup';
 interface FormData {
 	status?: BaseOption<ResidentAuthReqStatus>;
 	propertyCode?: BaseOption<string>;
-	authorizedPersonName?: string;
+	authorizedName?: string;
 	areaId?: BaseOption<string>;
 	mandatorName?: string;
 }
@@ -157,7 +157,7 @@ const ResdidentAuthReqManagement: React.FC = () => {
 								name="status"
 								options={authorizationStatusOption}
 							/>
-							<TextFieldHookForm name="authorizedPersonName" label="Người được uỷ quyền" />
+							<TextFieldHookForm name="authorizedName" label="Người được uỷ quyền" />
 							<TextFieldHookForm label="Người yêu cầu" name="mandatorName" />
 							<Flex align="end" justify="end" mt={3}>
 								<Button

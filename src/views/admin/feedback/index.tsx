@@ -125,11 +125,11 @@ const FeedbackManagement: React.FC = () => {
 		},
 		{ key: 'createdAt', label: 'Thời gian tạo', dateFormat: 'DD/MM/YYYY' },
 		{ key: 'expectedDate', label: 'Thời gian dự kiến hoàn thành', dateFormat: 'DD/MM/YYYY' },
-		{ key: 'actualDate', label: 'Thời gian hoành thành thực tế', dateFormat: 'DD/MM/YYYY' },
+		{ key: 'actualDate', label: 'Thời gian hoàn thành thực tế', dateFormat: 'DD/MM/YYYY' },
 
 		{
 			key: 'status',
-			label: 'Trạng thái xử lí',
+			label: 'Trạng thái xử lý',
 			tag: ({ status }) => feedbackStatusOption.find(i => i.value === status),
 		},
 		{ key: 'id', label: 'Mã phản ánh' },
@@ -175,7 +175,7 @@ const FeedbackManagement: React.FC = () => {
 								onLoadMore={fetchMoreProperty}
 								isLoading={isLoadingProperty}
 							/>
-							<PullDownHookForm isClearable label="Trạng thái xử lí" name="status" options={feedbackStatusOption} />
+							<PullDownHookForm isClearable label="Trạng thái xử lý" name="status" options={feedbackStatusOption} />
 							<TextFieldHookForm name="fullName" label="Người phản ánh" />
 							<PullDownHookForm isClearable label="Loại yêu cầu" name="tyoe" options={feedbackTypeOptions} />
 							<DatePickerHookForm label="Từ ngày" name="from" />

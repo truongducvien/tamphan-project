@@ -32,7 +32,7 @@ const validationSchema = Yup.object({
 	roleId: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn vai trò người dùng') }),
 	dateOfBirth: Yup.string().required('Vui lòng chọn ngày sinh'),
 	phoneNumber: Yup.string()
-		.required('Vui lòng nhập SDT')
+		.required('Vui lòng nhập SĐT')
 		.matches(/^[0-9]\d{9}$/, { message: 'Số điện thoại không hợp lệ' }),
 	state: Yup.object({ label: Yup.string(), value: Yup.string().required('Vui lòng chọn trạng thái') }),
 });

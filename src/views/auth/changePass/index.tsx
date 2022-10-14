@@ -58,7 +58,7 @@ const ChangePass: React.FC = () => {
 		const rePassword = rePassRef.current?.value;
 		const reg = /^(?=.*\d)(?=(.*\W){1})(?=.*[a-zA-Z])(?!.*\s).{8,}$/;
 		if (!reg.test(password || '')) {
-			setError('Mật khẩu tối thiểu 8 kí tự, bao gồm ít nhất 1 chữ in hoa, 1 chữ thường, 1 chữ số và 1 kí tự đặc biệt.');
+			setError('Mật khẩu tối thiểu 8 ký tự, bao gồm ít nhất 1 chữ in hoa, 1 chữ thường, 1 chữ số và 1 ký tự đặc biệt.');
 			return;
 		}
 		if (password !== rePassword) {
@@ -154,7 +154,7 @@ const ChangePass: React.FC = () => {
 							Đổi mật khẩu
 						</Heading>
 						<Text mb="36px" ms="4px" color={textColorSecondary} fontWeight="400" fontSize="md">
-							Mật khẩu tối thiểu 8 kí tự, bao gồm ít nhất 1 chữ in hoa, 1 chữ thường, 1 chữ số và 1 kí tự đặc biệt!
+							Mật khẩu tối thiểu 8 ký tự, bao gồm ít nhất 1 chữ in hoa, 1 chữ thường, 1 chữ số và 1 ký tự đặc biệt!
 						</Text>
 					</Box>
 					<Flex align="center" mb="25px">

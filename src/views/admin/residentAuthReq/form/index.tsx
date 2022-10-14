@@ -119,7 +119,7 @@ const ResdidentAuthReqDetail: React.FC<BaseComponentProps> = ({ request }) => {
 						pb={3}
 					>
 						<TextFieldHookForm label="Mã căn hộ" isDisabled name="propertyCode" variant="admin" />
-						<TextFieldHookForm label="SDT người được uỷ quyền" isDisabled name="authorizedPersonPhone" />
+						<TextFieldHookForm label="SĐT người được uỷ quyền" isDisabled name="authorizedPersonPhone" />
 					</Stack>
 					<Stack
 						justify={{ base: 'center', md: 'space-around', xl: 'space-between' }}
@@ -142,7 +142,7 @@ const ResdidentAuthReqDetail: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm label="Người đăng kí" isDisabled name="mandatorName" variant="admin" />
+						<TextFieldHookForm label="Người đăng ký" isDisabled name="mandatorName" variant="admin" />
 						<TextFieldHookForm label="Ngày hiệu lực" isDisabled name="effectiveDate" />
 					</Stack>
 					<Stack
@@ -151,7 +151,7 @@ const ResdidentAuthReqDetail: React.FC<BaseComponentProps> = ({ request }) => {
 						spacing={3}
 						pb={3}
 					>
-						<TextFieldHookForm label="SĐT người đăng kí" isDisabled name="mandatorPhone" variant="admin" />
+						<TextFieldHookForm label="SĐT người đăng ký" isDisabled name="mandatorPhone" variant="admin" />
 						<TextFieldHookForm label="Ngày kết thúc" isDisabled name="expiredDate" />
 					</Stack>
 					<Stack

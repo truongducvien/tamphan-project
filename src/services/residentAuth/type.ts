@@ -13,12 +13,12 @@ export enum AuthorizationItem {
 
 export const authorizationItemOption: Array<BaseOption<keyof typeof AuthorizationItem>> = [
 	{
-		label: 'Đăng kí thi công',
+		label: 'Đăng ký thi công',
 		value: 'CONSTRUCTION_REGISTER',
 		colorScheme: 'blue',
 	},
 	{
-		label: 'Đăng kí thẻ',
+		label: 'Đăng ký thẻ',
 		value: 'RESIDENT_CARD_REGISTER',
 		colorScheme: 'cyan',
 	},

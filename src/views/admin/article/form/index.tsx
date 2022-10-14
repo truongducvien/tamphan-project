@@ -38,7 +38,7 @@ import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
 	shortContent: Yup.string().required('Vui lòng nhập mô tả ngắn'),
-	title: Yup.string().max(255, 'Tiêu đề tối đa 255 kí tự').required('Vui lòng nhập tiêu đề'),
+	title: Yup.string().max(255, 'Tiêu đề tối đa 255 ký tự').required('Vui lòng nhập tiêu đề'),
 	areaIds: Yup.array()
 		.of(Yup.object().shape({ label: Yup.string(), value: Yup.string() }))
 		.nullable(),

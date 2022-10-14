@@ -44,12 +44,12 @@ export const feedbackHistoryAction: Array<BaseOption<keyof typeof FeedbackHistor
 
 export const feedbackStatusOption: Array<BaseOption<keyof typeof FeedbackStatus>> = [
 	{
-		label: 'Chờ xử lí',
+		label: 'Chờ xử lý',
 		value: 'WAITING',
 		colorScheme: 'yellow',
 	},
 	{
-		label: 'Đang xử lí',
+		label: 'Đang xử lý',
 		value: 'PROGRESSING',
 		colorScheme: 'teal',
 	},

@@ -464,7 +464,7 @@ const routes: Route[] = [
 		requirePermission: FeatureModule.AUTHORIZATION_REQUEST_MANAGEMENT,
 		items: [
 			{
-				name: 'Chi tiêt yêu cầu uỷ quyền',
+				name: 'Chi tiết yêu cầu uỷ quyền',
 				layout: '/admin',
 				path: '/resident-authorization-request/detail',
 				component: ResdidentAuthReqDetail,
@@ -491,7 +491,7 @@ const routes: Route[] = [
 		requirePermission: FeatureModule.AUTHORIZATION_REQUEST_MANAGEMENT,
 		items: [
 			{
-				name: 'Chi tiêt phản ánh',
+				name: 'Chi tiết phản ánh',
 				layout: '/admin',
 				path: '/reports/detail',
 				component: FeedbackDetail,

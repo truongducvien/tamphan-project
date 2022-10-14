@@ -101,7 +101,7 @@ const ReportDetailTab: React.FC<BaseComponentProps> = ({ request }) => {
 					<TextFieldHookForm label="Vai trò" isDisabled name="residentType" />
 					<TextFieldHookForm label="Thời gian dự kiến hoàn thành" name="expectedDate" isDisabled />
 					<TextFieldHookForm label="Thời gian hoàn thành thực tế" name="actualDate" isDisabled />
-					<TextFieldHookForm label="SDT" isDisabled name="residentPhoneNumber" />
+					<TextFieldHookForm label="SĐT" isDisabled name="residentPhoneNumber" />
 					<TextAreaFieldHookForm label="Nội dung" isDisabled name="content" />
 					{/* <TextFieldHookForm label="Điểm đánh giá" isDisabled name="code" />
 					<TextAreaFieldHookForm label="Ý kiến cư dân" isDisabled name="authorizationDetail" /> */}

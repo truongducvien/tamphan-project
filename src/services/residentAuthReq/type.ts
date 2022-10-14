@@ -20,7 +20,7 @@ export enum AuthorizationItem {
 
 export const authorizationStatusOption: Array<BaseOption<keyof typeof ResidentAuthReqStatus>> = [
 	{
-		label: 'Chờ xử lí',
+		label: 'Chờ xử lý',
 		value: 'WAITING_APPROVED',
 		colorScheme: 'yellow',
 	},
@@ -43,12 +43,12 @@ export const authorizationStatusOption: Array<BaseOption<keyof typeof ResidentAu
 
 export const authorizationItemOption: Array<BaseOption<keyof typeof AuthorizationItem>> = [
 	{
-		label: 'Đăng kí thi công',
+		label: 'Đăng ký thi công',
 		value: 'CONSTRUCTION_REGISTER',
 		colorScheme: 'blue',
 	},
 	{
-		label: 'Đăng kí thẻ',
+		label: 'Đăng ký thẻ',
 		value: 'RESIDENT_CARD_REGISTER',
 		colorScheme: 'cyan',
 	},
@@ -80,7 +80,7 @@ export interface IResidentAuthReq {
 export interface IResidentAuthReqParams extends BaseParams {
 	status?: keyof typeof ResidentAuthReqStatus;
 	propertyCode?: string;
-	authorizedPersonName?: string;
+	authorizedName?: string;
 	areaId?: string;
 	mandatorName?: string;
 }

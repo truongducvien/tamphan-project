@@ -1,6 +1,5 @@
 import { createContext, Dispatch, useContext, useMemo, useReducer } from 'react';
 
-import axios from 'axios';
 import { getFeedbackById } from 'src/services/feedback';
 import { IFeedback } from 'src/services/feedback/type';
 
